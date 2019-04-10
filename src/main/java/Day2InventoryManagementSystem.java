@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Day2InventoryManagementSystem {
 
@@ -45,5 +46,29 @@ public class Day2InventoryManagementSystem {
             threes += result.numberOfThrees;
         }
         return twos * threes;
+    }
+
+    String findBoxes(String input) {
+        // Split string into a list
+        List<String> inputStrings = Arrays.stream(input.trim().split("\\s+"))
+                .collect(Collectors.toList());
+
+        // loop through all strings
+        // compare string char by char and count the number of differences
+        for (String str1 : inputStrings) {
+            for (String str2 : inputStrings) {
+                // copy strings by char if they are equal. The one that differs one in length is the one
+                StringBuilder result = new StringBuilder();
+                for (int i = 0; i < str1.length(); i++) {
+                    if (str1.charAt(i) == str2.charAt(i)) {
+                        result.append(str1.charAt(i));
+                    }
+                }
+                if (result.length() == (str1.length() - 1)) {
+                    return result.toString();
+                }
+            }
+        }
+        return null;
     }
 }

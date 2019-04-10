@@ -42,4 +42,21 @@ class Day2InventoryManagementSystemTest {
 
         assertEquals(8296, day2InventoryManagementSystem.computeChecksum(input));
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "abcde fghij klmno pqrst fguij axcye wvxyz, fgij"
+    })
+    void findBoxes(String input, String expected) {
+        Day2InventoryManagementSystem day2InventoryManagementSystem = new Day2InventoryManagementSystem();
+        assertEquals(expected, day2InventoryManagementSystem.findBoxes(input));
+    }
+
+    @Test
+    void findBoxesFromFile() throws IOException {
+        Day2InventoryManagementSystem day2InventoryManagementSystem = new Day2InventoryManagementSystem();
+        String input = new String((Files.readAllBytes(Paths.get("build/resources/test/day2.txt"))));
+        assertEquals("pazvmqbftrbeosiecxlghkwud", day2InventoryManagementSystem.findBoxes(input));
+    }
+
 }
