@@ -78,7 +78,7 @@ class Day4ReposeRecord {
         Guard sleepiestGuard = null;
         int longestSleep = -1;
 
-        for (Guard guard: guardList) {
+        for (Guard guard : guardList) {
             int sleepTime = 0;
             for (SleepInterval sleepInterval : guard.getSleepIntervals()) {
                 sleepTime += sleepInterval.getEnd() - sleepInterval.getStart();
@@ -112,4 +112,32 @@ class Day4ReposeRecord {
 
         return sleepiestGuard.getId() * sleepiestMinute;
     }
+
+
+    int computeChecksum2(String input) {
+        loadData(input);
+
+        // For each minute, find out how many guards that are asleep. Save the one that has the most hits
+        Guard sleepiestGuard = null;
+        int sleepiestMinuteHits = -1;
+        int sleepiestMinute = 0;
+        for (int i = 0; i < 60; i++) {
+            for (Guard guard : guardList) {
+                int hits = 0;
+                for (SleepInterval sleepInterval : guard.getSleepIntervals()) {
+                    if (sleepInterval.asleep(i)) {
+                        hits++;
+                    }
+                    if (hits > sleepiestMinuteHits) {
+                        sleepiestGuard = guard;
+                        sleepiestMinuteHits = hits;
+                        sleepiestMinute = i;
+                    }
+                }
+            }
+        }
+        return sleepiestMinute * sleepiestGuard.getId();
+    }
+
 }
+
