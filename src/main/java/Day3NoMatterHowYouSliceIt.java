@@ -1,8 +1,5 @@
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -11,7 +8,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class Day3NoMatterHowYouSliceIt {
+class Day3NoMatterHowYouSliceIt {
 
     @Data
     @AllArgsConstructor
@@ -24,7 +21,7 @@ public class Day3NoMatterHowYouSliceIt {
     }
 
 
-    private Set[][] fabric = new HashSet[1000][1000];
+    private final Set[][] fabric = new HashSet[1000][1000];
     private List<Claim> claimList;
 
 

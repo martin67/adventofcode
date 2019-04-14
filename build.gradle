@@ -18,6 +18,7 @@ test {
 dependencies {
     compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.26'
     compile group: 'org.slf4j', name:'slf4j-simple', version: '1.7.26'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
     testCompile("org.junit.jupiter:junit-jupiter-api:5.4.2")
     testCompile("org.junit.jupiter:junit-jupiter-params:5.4.2")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.2")

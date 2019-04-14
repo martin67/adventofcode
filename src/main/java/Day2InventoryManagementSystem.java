@@ -3,9 +3,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class Day2InventoryManagementSystem {
+class Day2InventoryManagementSystem {
 
     class Checksum {
         int numberOfTwos;

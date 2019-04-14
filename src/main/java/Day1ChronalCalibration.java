@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Day1ChronalCalibration {
+class Day1ChronalCalibration {
     int computeFrequency(String input) {
         return Arrays.stream(input.trim().split("\\s+"))
                 .mapToInt(Integer::parseInt)
