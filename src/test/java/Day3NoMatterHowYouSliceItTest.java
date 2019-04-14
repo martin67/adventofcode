@@ -23,4 +23,19 @@ class Day3NoMatterHowYouSliceItTest {
         Day3NoMatterHowYouSliceIt day3NoMatterHowYouSliceIt = new Day3NoMatterHowYouSliceIt();
         assertEquals(111630, day3NoMatterHowYouSliceIt.countSlices(input));
     }
+
+    @Test
+    void getSingleClaim() {
+        String input = "#1 @ 1,3: 4x4\n#2 @ 3,1: 4x4\n#3 @ 5,5: 2x2";
+        Day3NoMatterHowYouSliceIt day3NoMatterHowYouSliceIt = new Day3NoMatterHowYouSliceIt();
+        assertEquals(3, day3NoMatterHowYouSliceIt.getSingleClaim(input));
+    }
+
+    @Test
+    void getSingleClaimFromFile() throws IOException {
+        String input = new String((Files.readAllBytes(Paths.get("build/resources/test/day3.txt"))));
+        Day3NoMatterHowYouSliceIt day3NoMatterHowYouSliceIt = new Day3NoMatterHowYouSliceIt();
+        assertEquals(724, day3NoMatterHowYouSliceIt.getSingleClaim(input));
+    }
+
 }
