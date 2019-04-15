@@ -26,6 +26,14 @@ class Day8MemoryManeuverTest {
     void computeRootNode() {
         String input = "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2";
         Day8MemoryManeuver day8MemoryManeuver = new Day8MemoryManeuver();
-        assertEquals(138, day8MemoryManeuver.computeRootNode(input));
+        assertEquals(66, day8MemoryManeuver.computeRootNode(input));
     }
+
+    @Test
+    void computeRootNodeFromFile() throws IOException {
+        String input = new String((Files.readAllBytes(Paths.get("build/resources/test/day8.txt"))));
+        Day8MemoryManeuver day8MemoryManeuver = new Day8MemoryManeuver();
+        assertEquals(20815, day8MemoryManeuver.computeRootNode(input));
+    }
+
 }

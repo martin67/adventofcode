@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import static java.lang.Math.abs;
 
 @Slf4j
-public class Day6ChronalCoordinates {
+class Day6ChronalCoordinates {
 
     @Data
     @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class Day6ChronalCoordinates {
         int right;
     }
 
-    private List<Point> pointList = new ArrayList<>();
+    private final List<Point> pointList = new ArrayList<>();
 
 
     private void readData(String input) {

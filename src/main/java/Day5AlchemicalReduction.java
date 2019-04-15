@@ -4,9 +4,9 @@ import static java.lang.Character.isLowerCase;
 import static java.lang.Character.isUpperCase;
 
 @Slf4j
-public class Day5AlchemicalReduction {
+class Day5AlchemicalReduction {
 
-    String reducePolymer(String input) {
+    private String reducePolymer(String input) {
 
         StringBuilder output = new StringBuilder();
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class Day7TheSumofItsParts {
+class Day7TheSumofItsParts {
 
     @Data
     @RequiredArgsConstructor
@@ -24,10 +24,10 @@ public class Day7TheSumofItsParts {
         int timeLeft;
     }
 
-    List<Step> stepList = new ArrayList<>();
+    private final List<Step> stepList = new ArrayList<>();
 
 
-    void readData(String input, int duration) {
+    private void readData(String input, int duration) {
         // Split string into a list
         List<String> inputStrings = Arrays.stream(input.trim().split("\\n")).collect(Collectors.toList());
         for (String string : inputStrings) {
