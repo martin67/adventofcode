@@ -21,10 +21,10 @@ public class Day9MarbleMania {
     @RequiredArgsConstructor
     class Player {
         final int id;
-        int score;
+        long score;
     }
 
-    int computeScore(int players, int points) {
+    long computeScore(int players, int points) {
 
         List<Player> playerList = new ArrayList<>();
         for (int i = 0; i < players; i++) {
@@ -79,7 +79,7 @@ public class Day9MarbleMania {
         }
 
         // Find max score
-        Player highScore = playerList.stream().max(Comparator.comparingInt(Player::getScore)).get();
+        Player highScore = playerList.stream().max(Comparator.comparingLong(Player::getScore)).get();
         return highScore.getScore();
     }
 

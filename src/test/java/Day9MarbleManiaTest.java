@@ -15,9 +15,9 @@ class Day9MarbleManiaTest {
             "21, 6111, 54718",
             "30, 5807, 37305",
             "424, 71144, 405143",
-            "424, 7114400, 0"
+            "424, 7114400, 3411514667"
     })
-    void computeScore(int players, int points, int expected) {
+    void computeScore(int players, int points, long expected) {
         Day9MarbleMania day9MarbleMania = new Day9MarbleMania();
         assertEquals(expected, day9MarbleMania.computeScore(players, points));
     }
