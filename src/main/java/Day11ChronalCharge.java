@@ -1,14 +1,12 @@
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
-public class Day11ChronalCharge {
+class Day11ChronalCharge {
 
     @Data
     @AllArgsConstructor
@@ -35,7 +33,7 @@ public class Day11ChronalCharge {
         int xsize;
         int ysize;
         int serial;
-        final List<FuelCell> fuelCells = new ArrayList<FuelCell>();
+        final List<FuelCell> fuelCells = new ArrayList<>();
 
         void init() {
             for (int x = 0; x < xsize; x++) {

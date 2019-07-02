@@ -128,8 +128,7 @@ class Day6ChronalCoordinates {
         }
 
         // Find the point with biggest area
-        int i = pointList.stream().filter(p -> !p.isInfinite()).mapToInt(Point::getArea).max().orElse(0);
-        return i;
+        return pointList.stream().filter(p -> !p.isInfinite()).mapToInt(Point::getArea).max().orElse(0);
     }
 
     int sizeOfRegion(String input, int totalDistance) {

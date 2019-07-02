@@ -1,7 +1,5 @@
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,14 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class Day10TheStarsAlign {
+class Day10TheStarsAlign {
 
-    Sky sky = new Sky();
+    private final Sky sky = new Sky();
 
     @Data
     @AllArgsConstructor
@@ -29,7 +25,7 @@ public class Day10TheStarsAlign {
 
     @Data
     class Sky {
-        List<Point> pointList = new ArrayList<>();
+        final List<Point> pointList = new ArrayList<>();
 
         void addPoint(Point point) {
             pointList.add(point);
@@ -37,7 +33,7 @@ public class Day10TheStarsAlign {
 
         Sky movePointsForward() {
             // Move all points
-            pointList.stream().forEach(p -> {
+            pointList.forEach(p -> {
                 p.setXpos(p.getXpos() + p.getXvel());
                 p.setYpos(p.getYpos() + p.getYvel());
             });
@@ -46,7 +42,7 @@ public class Day10TheStarsAlign {
 
         Sky movePointsBackward() {
             // Move all points
-            pointList.stream().forEach(p -> {
+            pointList.forEach(p -> {
                 p.setXpos(p.getXpos() - p.getXvel());
                 p.setYpos(p.getYpos() - p.getYvel());
             });
@@ -123,7 +119,7 @@ public class Day10TheStarsAlign {
     }
 
 
-    void readData(String input) {
+    private void readData(String input) {
         log.debug("Reading data");
 
         // Split string into a list

@@ -59,7 +59,7 @@ class Day7TheSumofItsParts {
         Step aStep;
         do {
             aStep = stepList.stream().
-                    filter(s -> s.isAvailable()).
+                    filter(Step::isAvailable).
                     filter(s -> s.getBeforeSteps().isEmpty()).
                     sorted(Comparator.comparing(Step::getName)).findAny().orElse(null);
             // Process aStep
@@ -84,7 +84,7 @@ class Day7TheSumofItsParts {
         StringBuilder result = new StringBuilder();
         int totalTime = 0;
 
-        Step aStep = null;
+        Step aStep;
         do {
             // Find out how many free workers available
             int freeWorkers = numberOfWorkers - (int) stepList.stream().filter(s -> s.busy).count();
@@ -93,7 +93,7 @@ class Day7TheSumofItsParts {
             // assign work for each free worker
             for (int i = 0; i < freeWorkers; i++) {
                 aStep = stepList.stream().
-                        filter(s -> s.isAvailable()).
+                        filter(Step::isAvailable).
                         filter(s -> !s.isBusy()).
                         filter(s -> s.getBeforeSteps().isEmpty()).
                         sorted(Comparator.comparing(Step::getName)).findAny().orElse(null);
@@ -105,23 +105,22 @@ class Day7TheSumofItsParts {
             }
 
             // Decrease time left for all busy steps
-            stepList.stream().filter(s -> s.isBusy()).forEach(s -> s.timeLeft--);
+            stepList.stream().filter(Step::isBusy).forEach(s -> s.timeLeft--);
 
             // Check of any busy step is finished
             // in that case, remove it
-            stepList.stream().filter(s -> s.isBusy()).
+            stepList.stream().filter(Step::isBusy).
                     filter(s -> s.getTimeLeft() == 0).
                     forEach(s -> {
                         result.append(s.getName());
                         log.info("Step " +  s.getName() + " finished");
                         s.setBusy(false);
                         s.setAvailable(false);
-                        Step finalAStep = s;
-                        stepList.stream().filter(s2 -> s2.getBeforeSteps().contains(finalAStep)).forEach(s2 -> s2.getBeforeSteps().remove(finalAStep));
+                        stepList.stream().filter(s2 -> s2.getBeforeSteps().contains(s)).forEach(s2 -> s2.getBeforeSteps().remove(s));
                     });
 
             totalTime++;
-        } while (stepList.stream().filter(s -> s.isAvailable()).count() > 0);
+        } while (stepList.stream().anyMatch(Step::isAvailable));
 
         return totalTime;
     }

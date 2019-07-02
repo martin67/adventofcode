@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
-public class Day9MarbleMania {
+class Day9MarbleMania {
 
     @Data
     @RequiredArgsConstructor

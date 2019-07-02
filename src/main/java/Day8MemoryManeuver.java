@@ -11,13 +11,13 @@ class Day8MemoryManeuver {
 
     @Data
     class Node {
-        int id;
+        final int id;
         int length; // length of node
-        int numberOfChildNodes = 0;
-        int numberOfMetadataEntries = 0;
+        int numberOfChildNodes;
+        int numberOfMetadataEntries;
         int value = -1;
-        List<Node> childNodes = new ArrayList<>();
-        List<Integer> metadata = new ArrayList<>();
+        final List<Node> childNodes = new ArrayList<>();
+        final List<Integer> metadata = new ArrayList<>();
 
         Node(int id, List<Integer> numbers, int start) {
             this.id = id;
@@ -53,9 +53,7 @@ class Day8MemoryManeuver {
                 map(Integer::parseInt).
                 collect(Collectors.toList());
 
-        Node start = new Node(1, inputList, 0);
-
-        return start;
+        return new Node(1, inputList, 0);
     }
 
 
@@ -75,9 +73,7 @@ class Day8MemoryManeuver {
         Node start = readData(input);
 
         // first, compute all leaf nodes (the one without children)
-        nodeList.stream().filter(node -> node.getNumberOfChildNodes() == 0).forEach(node -> {
-            node.setValue(node.getMetadata().stream().mapToInt(n -> n).sum());
-        });
+        nodeList.stream().filter(node -> node.getNumberOfChildNodes() == 0).forEach(node -> node.setValue(node.getMetadata().stream().mapToInt(n -> n).sum()));
 
         // find nodes that have values = -1 and all their children have values != -1
         // those nodes can be computed
