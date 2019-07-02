@@ -26,7 +26,7 @@ public class Day11ChronalCharge {
     class FuelCell {
         Coordinate coordinate;
         int powerLevel;
-        int powerGridLevel;
+        int maxPowerGridSize;
     }
 
     @Data
@@ -40,14 +40,17 @@ public class Day11ChronalCharge {
         void init() {
             for (int x = 0; x < xsize; x++) {
                 for (int y = 0; y < ysize; y++) {
-                    Coordinate c = new Coordinate(x, y);
-                    fuelCells.add(new FuelCell(new Coordinate(x, y), 0, 0));
+                    Coordinate coordinate = new Coordinate(x, y);
+                    int maxWidth = xsize - x;
+                    int maxHeight = ysize - y;
+                    int maxSize = maxWidth < maxHeight ? maxWidth : maxHeight;
+                    fuelCells.add(new FuelCell(coordinate, 0, maxSize));
                 }
             }
         }
 
         FuelCell getFuelCell(Coordinate coordinate) {
-            return fuelCells.get(coordinate.getX()*this.getXsize() + coordinate.getY());
+            return fuelCells.get(coordinate.getX() * this.getXsize() + coordinate.getY());
         }
 
         void setPowerLevel() {
@@ -67,57 +70,73 @@ public class Day11ChronalCharge {
             }
         }
 
-        void computePowerGrid() {
-            //for (FuelCell fuelCell : fuelCells) {
-            for (int i = 0; i < fuelCells.size(); i++) {
+        int computePowerGrid(FuelCell fuelCell, int gridSize) {
 
-                FuelCell fuelCell = fuelCells.get(i);
+            // check so that the grid will fit
+            if (gridSize > fuelCell.getMaxPowerGridSize()) {
+                return 0;
+            }
 
-                // Skip the Fuel Cells that are on the edge
-                if (((fuelCell.getCoordinate().getX() % (this.getXsize()-2)) == 0) ||
-                        ((fuelCell.getCoordinate().getX() % (this.getXsize()-1)) == 0) ||
-                        (fuelCell.getCoordinate().getY() > (this.getYsize() - 3))) {
-                    //log.info("skipping border, " + fuelCell.getCoordinate());
-                } else {
-                    //log.info("Computing powergrid for cell at " + fuelCell.getCoordinate());
-                    fuelCell.setPowerGridLevel(fuelCell.getPowerLevel() +
-                            fuelCells.get(i + 1).getPowerLevel() +
-                            fuelCells.get(i + 2).getPowerLevel() +
-                            fuelCells.get(i + this.getXsize()).getPowerLevel() +
-                            fuelCells.get(i + this.getXsize() + 1).getPowerLevel() +
-                            fuelCells.get(i + this.getXsize() + 2).getPowerLevel() +
-                            fuelCells.get(i + this.getXsize() * 2).getPowerLevel() +
-                            fuelCells.get(i + this.getXsize() * 2 + 1).getPowerLevel() +
-                            fuelCells.get(i + this.getXsize() * 2 + 2).getPowerLevel());
+            int gridPower = 0;
+            for (int x = fuelCell.getCoordinate().getX(); x < fuelCell.getCoordinate().getX() + gridSize; x++) {
+                for (int y = fuelCell.getCoordinate().getY(); y < fuelCell.getCoordinate().getY() + gridSize; y++) {
+                    gridPower += getFuelCell(new Coordinate(x, y)).getPowerLevel();
                 }
             }
+            return gridPower;
         }
 
-        Coordinate getLargestPowerGrid() {
-            FuelCell maxPower = fuelCells.stream().max(Comparator.comparingInt(FuelCell::getPowerGridLevel)).get();
-            return maxPower.getCoordinate();
-        }
     }
 
-
-    Coordinate findLargestTotalPower(int serial) {
-
-        FuelGrid fuelGrid = new FuelGrid(300, 300, serial);
-
-        fuelGrid.init();
-        fuelGrid.setPowerLevel();
-        fuelGrid.computePowerGrid();
-        Coordinate answer = fuelGrid.getLargestPowerGrid();
-
-        return answer;
-    }
-
+    // OK!
     int getPowerLevel(Coordinate coordinate, int serial) {
         FuelGrid fuelGrid = new FuelGrid(300, 300, serial);
         fuelGrid.init();
         fuelGrid.setPowerLevel();
+
         return fuelGrid.getFuelCell(coordinate).getPowerLevel();
     }
 
-}
+    // OK!
+    Coordinate findLargestTotalPower(int serial) {
+        FuelGrid fuelGrid = new FuelGrid(300, 300, serial);
+        fuelGrid.init();
+        fuelGrid.setPowerLevel();
 
+        int maxPower = 0;
+        FuelCell maxFuelCell = null;
+        for (FuelCell fuelCell : fuelGrid.getFuelCells()) {
+            int gridPower = fuelGrid.computePowerGrid(fuelCell, 3);
+            if (gridPower > maxPower) {
+                maxPower = gridPower;
+                maxFuelCell = fuelCell;
+            }
+        }
+
+        return maxFuelCell.getCoordinate();
+    }
+
+
+    String findLargestTotalPowerAnySize(int serial) {
+        FuelGrid fuelGrid = new FuelGrid(300, 300, serial);
+        fuelGrid.init();
+        fuelGrid.setPowerLevel();
+
+        int maxPower = 0;
+        int maxGridSize = 0;
+        FuelCell maxFuelCell = null;
+        for (FuelCell fuelCell : fuelGrid.getFuelCells()) {
+            for (int gridSize = 1; gridSize < 301; gridSize++) {
+                int gridPower = fuelGrid.computePowerGrid(fuelCell, gridSize);
+                if (gridPower > maxPower) {
+                    maxPower = gridPower;
+                    maxFuelCell = fuelCell;
+                    maxGridSize = gridSize;
+                    log.info("Found max: " + maxPower + " at " + maxFuelCell.getCoordinate() + " size " + maxGridSize);
+                }
+            }
+        }
+        return maxFuelCell.getCoordinate().toString() + "," + maxGridSize;
+    }
+
+}

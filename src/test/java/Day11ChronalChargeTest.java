@@ -8,6 +8,7 @@ class Day11ChronalChargeTest {
 
     @ParameterizedTest
     @CsvSource({
+            "3,5, 8, 4",
             "122,79, 57, -5",
             "217,196, 39, 0",
             "101,153, 71, 4"
@@ -25,9 +26,21 @@ class Day11ChronalChargeTest {
             "42, '21,61'",
             "9445, '233,36'"
     })
-    void findGrid(int serial, String coord) {
+    void findGridFixedSize(int serial, String coord) {
         Day11ChronalCharge day11ChronalCharge = new Day11ChronalCharge();
         Day11ChronalCharge.Coordinate answer = day11ChronalCharge.findLargestTotalPower(serial);
         assertEquals(coord, answer.toString());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "18, '90,269,16'",
+            "42, '232,251,12'",
+            "9445, '231,107,14'"
+    })
+    void findGridAnySize(int serial, String expected) {
+        Day11ChronalCharge day11ChronalCharge = new Day11ChronalCharge();
+        String answer = day11ChronalCharge.findLargestTotalPowerAnySize(serial);
+        assertEquals(expected, answer);
     }
 }
