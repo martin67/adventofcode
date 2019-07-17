@@ -46,9 +46,10 @@ public class Day12SubterraneanSustainability {
             }
             log.info("Reading " + pots.size() + " states.");
 
+
             // Then it's the growth patterns
             // ...## => #
-            for (String line : inputStrings.subList(1, inputStrings.size())) {
+            for (String line : inputStrings.subList(2, inputStrings.size())) {
                 notes.add(new Note(line.substring(0, 5), line.charAt(9)));
             }
             log.info("Reading " + notes.size() + " notes.");
@@ -190,9 +191,9 @@ public class Day12SubterraneanSustainability {
         return tunnel.sumOfPlantsWithOffset();
     }
 
-    public int ComputeBigPlantSum(BigInteger generations) {
+    public String ComputeBigPlantSum(BigInteger generations) {
         // After a while, the pattern is constant, only moving to the right
-        tunnel.print();
+        //tunnel.print();
         int previousSum = -1;
         int currentSum = tunnel.sumOfPlants(0);
         ;
@@ -207,16 +208,21 @@ public class Day12SubterraneanSustainability {
         // Now the tunnel does not change. Check how many plants there are
         int numberOfPlants = tunnel.numberOfPlants();
 
-        int total = numberOfPlants;
         log.info("After " + (generation-1) + " generations, the plant pattern does not change");
         log.info("There are now " + numberOfPlants + " plants in the pattern");
+        log.info("For generation " + generation + ", the value is " + currentSum);
+        log.info("With offset " + tunnel.getPotOffset());
+        log.info("bigsum: " + tunnel.sumOfPlantsWithOffset());
         BigInteger generationsLeft = generations.subtract(new BigInteger(String.valueOf(generation)));
         log.info("Generations left to go: " + generationsLeft);
 
         BigInteger sumLeft = generationsLeft.multiply(new BigInteger(String.valueOf(numberOfPlants)));
         log.info("Final sum: " + sumLeft);
 
-        return tunnel.sumOfPlantsWithOffset();
+        BigInteger totalSum = sumLeft.add(new BigInteger(String.valueOf(tunnel.sumOfPlantsWithOffset())));
+        log.info("Total sum: " + totalSum);
+
+        return totalSum.toString();
 
     }
 
