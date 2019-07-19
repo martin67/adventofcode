@@ -27,6 +27,7 @@ enum Turn {Left, Straight, Right}
 @AllArgsConstructor
 @Slf4j
 class Cart implements Comparable<Cart> {
+    int serial;
     Position position;
     char direction;
     Turn nextTurn;
@@ -57,13 +58,14 @@ class Day13MineCartMadness {
     }
 
     private void readMap(String input) {
-        List<String> inputStrings = Arrays.stream(input.trim().split("\\n+"))
+        List<String> inputStrings = Arrays.stream(input.split("\\n+"))
                 .collect(Collectors.toList());
 
         int xSize = 0;
         int ySize = inputStrings.size();
         int x;
         int y = 0;
+        int serial = 0;
 
         for (String row : inputStrings) {
             if (row.length() > xSize) {
@@ -72,7 +74,7 @@ class Day13MineCartMadness {
             x = 0;
             for (char c : row.toCharArray()) {
                 if (c == 'v' || c == '^' || c == '<' || c == '>') {
-                    carts.add(new Cart(new Position(x, y), c, Turn.Left));
+                    carts.add(new Cart(serial++, new Position(x, y), c, Turn.Left));
                     // add underlying track
                     if (c == 'v' || c == '^') {
                         tracks.add(new Track(new Position(x, y), '|'));
@@ -112,7 +114,10 @@ class Day13MineCartMadness {
         //log.info("Moved cart: " + cart);
 
         // Check if we need to turn
-        Track newTrack = tracks.stream().filter(p -> p.getPosition().equals(cart.getPosition())).findFirst().orElse(null);
+        Track newTrack = tracks.stream().filter(t -> t.getPosition().equals(cart.getPosition())).findFirst().orElse(null);
+        if (newTrack == null) {
+            log.error("Could not find track for cart: " + cart);
+        }
         switch (newTrack.getTrack()) {
             case '+':
                 if (cart.getNextTurn() == Turn.Left && cart.getDirection() == '<') {
@@ -217,5 +222,25 @@ class Day13MineCartMadness {
 
     Position getFirstCollision() {
         return moveAllCarts();
+    }
+
+    Position lastCart() {
+        Position collision = null;
+        int ticks = 0;
+        while (carts.size() > 1) {
+            log.info("Moving " + carts.size() + " carts, tick: " + ticks);
+
+            for (Cart cart : carts.stream().sorted().collect(Collectors.toList())) {
+                //log.info("Moving cart: " + cart);
+                moveCart(cart);
+                collision = checkForCollision(cart);
+                if (collision != null) {
+                    log.info("Collision after " + ticks + " ticks for cart: " + cart);
+                    carts.removeIf(c -> c.getPosition().equals(cart.getPosition()));
+                }
+            }
+            ticks++;
+        }
+        return carts.get(0).getPosition();
     }
 }
