@@ -196,7 +196,6 @@ public class Day12SubterraneanSustainability {
         //tunnel.print();
         int previousSum = -1;
         int currentSum = tunnel.sumOfPlants(0);
-        ;
         while (previousSum != currentSum) {
             previousSum = currentSum;
             tunnel.grow();
