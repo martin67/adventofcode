@@ -21,4 +21,17 @@ class Day14ChocolateChartsTest {
         Day14ChocolateCharts day14ChocolateCharts = new Day14ChocolateCharts();
         assertEquals(score, day14ChocolateCharts.computeScore(numberOfRecipes));
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "51589, 9",
+            "01245, 5",
+            "92510, 18",
+            "59414, 2018",
+            "147061, 20283721"
+    })
+    void ComputeRecipes(String score, int numberOfRecipes) throws IOException {
+        Day14ChocolateCharts day14ChocolateCharts = new Day14ChocolateCharts();
+        assertEquals(numberOfRecipes, day14ChocolateCharts.computeRecipes(score));
+    }
 }
