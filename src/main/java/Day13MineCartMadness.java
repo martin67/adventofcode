@@ -7,12 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
-@AllArgsConstructor
-class Position {
-    int x;
-    int y;
-}
 
 @Data
 @AllArgsConstructor
