@@ -21,6 +21,7 @@ class BfsNode {
 class Unit {
     Position position;
     Day15BeverageBandits.Type type;
+    int attackPower;
     int hitPoints;
 }
 
@@ -39,17 +40,28 @@ public class Day15BeverageBandits {
         int hitPoints;
     }
 
-    private final Set<Position> walls = new HashSet<>();
-    private final List<Unit> units = new ArrayList<>();
+    private Set<Position> walls;
+    private List<Unit> units;
     private int mapWidth;
     private int mapHeight;
-    private boolean gameOver = false;
-    private int finalHitPoints = 0;
+    private boolean gameOver;
+    private int finalHitPoints;
     private int numberOfElves;
     private int numberOfGoblins;
 
-    Day15BeverageBandits(String input) {
+
+    private void init(String input) {
+        walls = new HashSet<>();
+        units = new ArrayList<>();
+        gameOver = false;
+        finalHitPoints = 0;
+        numberOfElves = 0;
+        numberOfGoblins = 0;
         readMap(input);
+    }
+
+    private void setElvesAttackPower(int attackPower) {
+        units.stream().filter(u -> u.getType().equals(Type.Elf)).forEach(u -> u.setAttackPower(attackPower));
     }
 
     private void readMap(String input) {
@@ -67,11 +79,11 @@ public class Day15BeverageBandits {
                         walls.add(position);
                         break;
                     case 'E':
-                        units.add(new Unit(position, Type.Elf, 200));
+                        units.add(new Unit(position, Type.Elf, 3, 200));
                         numberOfElves++;
                         break;
                     case 'G':
-                        units.add(new Unit(position, Type.Goblin, 200));
+                        units.add(new Unit(position, Type.Goblin, 3, 200));
                         numberOfGoblins++;
                         break;
                 }
@@ -108,7 +120,12 @@ public class Day15BeverageBandits {
         }
     }
 
-    int computeCombatOutcome() {
+    int computeCombatOutcome(String input) {
+        init(input);
+        return computeCombat();
+    }
+
+    private int computeCombat() {
         int rounds = 1;
         while (!gameOver) {
             System.out.println("------------------- Starting game round " + rounds);
@@ -118,14 +135,14 @@ public class Day15BeverageBandits {
                 // Exit if there are no more targets remaining
                 if ((unit.getType() == Type.Elf && numberOfGoblins == 0) ||
                         (unit.getType() == Type.Goblin && numberOfElves == 0)) {
-                    System.out.println("exit before!!!!!!!!!");
+                    //System.out.println("exit before!!!!!!!!!");
                     gameOver = true;
                     finalHitPoints = units.stream().mapToInt(Unit::getHitPoints).sum();
                     //printGameOver(rounds);
                 } else if (unit.getHitPoints() > 0) {
 
-                    printMap(null, ' ');
-                    System.out.println("Processing unit: " + unit);
+                    //printMap(null, ' ');
+                    //System.out.println("Processing unit: " + unit);
 
                     // attack if possible
                     if (!attack(unit)) {
@@ -162,13 +179,13 @@ public class Day15BeverageBandits {
                                         superShort = shortestPath;
                                     }
                                 }
-                                System.out.println("Shortest path from " + unit.getPosition() + " to " + pos + " distance: " + shortestPath.size());
+                                //System.out.println("Shortest path from " + unit.getPosition() + " to " + pos + " distance: " + shortestPath.size());
                             }
                         }
 
                         // Move unit
                         if (superShort != null) {
-                            System.out.println("Moving unit " + unit + " to " + superShort.get(0));
+                            //System.out.println("Moving unit " + unit + " to " + superShort.get(0));
                             unit.setPosition(superShort.get(0));
 
                             // Attack
@@ -225,12 +242,12 @@ public class Day15BeverageBandits {
         return null;
     }
 
-    Unit getUnit(Position position) {
+    private Unit getUnit(Position position) {
         return units.stream().filter(unit -> unit.getPosition().equals(position))
                 .findFirst().orElse(null);
     }
 
-    List<Unit> getAdjacentUnits(Position position) {
+    private List<Unit> getAdjacentUnits(Position position) {
         List<Unit> unitList = new ArrayList<>();
 
         for (Position p : position.adjacent()) {
@@ -247,24 +264,12 @@ public class Day15BeverageBandits {
         Type targetType = attacker.getType() == Type.Elf ? Type.Goblin : Type.Elf;
         boolean attacked = false;
 
-        //                .filter(p -> units.stream().map(Unit::getType).equals(targetType))
-        //for (Position p : attacker.position.adjacent()) {
-        //    if (units.stream().filter(unit -> unit.getPosition().equals(p)).count()
-        //}
-        //                 .filter(p -> units.stream().map(Unit::getPosition).collect(Collectors.toSet()).contains(p))
-        // find target with lowest hitpoints and closest in order
-        Position targetPosition = attacker.position.adjacent().stream()
-                .filter(pos -> units.stream().anyMatch(unit -> unit.getPosition().equals(pos) &&
-                        unit.getType().equals(targetType)))
-                .min(Comparator.naturalOrder()).orElse(null);
-
         Unit defender = getAdjacentUnits(attacker.position).stream()
                 .filter(unit -> unit.getType().equals(targetType))
-                .sorted(Comparator.comparing(Unit::getHitPoints).thenComparing(Unit::getPosition))
-                .findFirst()
+                .min(Comparator.comparing(Unit::getHitPoints).thenComparing(Unit::getPosition))
                 .orElse(null);
 
-        List<Unit> adjacentTargets = getAdjacentUnits(attacker.position).stream()
+        /*List<Unit> adjacentTargets = getAdjacentUnits(attacker.position).stream()
                 .filter(unit -> unit.getType().equals(targetType)).collect(Collectors.toList());
         if (adjacentTargets.size() > 1) {
             System.out.println("**  Number of adjacent targets: " + adjacentTargets.size());
@@ -273,30 +278,20 @@ public class Day15BeverageBandits {
                 System.out.println("**  Defender: " + u);
             }
             System.out.println("**  Selected defender: " + defender);
-        }
+        }*/
 
-        if (targetPosition != null && defender != null && !targetPosition.equals(defender.getPosition())) {
-            System.out.println("Diff in target selection!");
-        }
-
-        if (targetPosition != null) {
-            Unit target = defender;
-            System.out.println("Attack! " + attacker + " attacking " + target);
-            target.hitPoints -= 3;
-            if (target.hitPoints <= 0) {
-                System.out.println("Target " + target + " eliminated!");
-                if (target.getType() == Type.Elf) {
+        if (defender != null) {
+            System.out.println("Attack! " + attacker + " attacking " + defender);
+            defender.hitPoints -= attacker.getAttackPower();
+            if (defender.hitPoints <= 0) {
+                System.out.println("Target " + defender + " eliminated!");
+                if (defender.getType() == Type.Elf) {
                     numberOfElves--;
                 }
-                if (target.getType() == Type.Goblin) {
+                if (defender.getType() == Type.Goblin) {
                     numberOfGoblins--;
                 }
-                units.remove(target);
-                // check if all units are gone, then quit
-                //if (units.stream().noneMatch(u -> u.getType().equals(targetType))) {
-                //    //gameOver = true;
-                //   finalHitPoints = units.stream().mapToInt(Unit::getHitPoints).sum();
-                //}
+                units.remove(defender);
             }
             attacked = true;
         }
@@ -309,5 +304,22 @@ public class Day15BeverageBandits {
         System.out.println("Score: " + score + " ( " + rounds + " x " + finalHitPoints + " )");
         System.out.println("Remaining units:");
         units.stream().sorted(Comparator.comparing(Unit::getPosition)).forEach(System.out::println);
+    }
+
+    int computeCombatOutcomeNoDeadElves(String input) {
+        int elvesAttackPower = 3;
+        int numberOfDeadElves = 0;
+        int result;
+        do {
+            int startingNumberOfElves;
+
+            init(input);
+            startingNumberOfElves = numberOfElves;
+            setElvesAttackPower(elvesAttackPower++);
+            result = computeCombat();
+            numberOfDeadElves = startingNumberOfElves - numberOfElves;
+        } while (numberOfDeadElves > 0);
+
+        return result;
     }
 }
