@@ -1,18 +1,16 @@
-import com.sun.org.glassfish.gmbal.ManagedAttribute;
+import com.sun.corba.se.impl.protocol.INSServerRequestDispatcher;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
 class OpCode {
     int[] register;
     private String name;
+    int sampleId;
 
     OpCode(String name) {
         this.name = name;
@@ -39,10 +37,21 @@ class Sample {
     int[] registerAfter;
 }
 
+@Data
+@AllArgsConstructor
+class Instruction {
+    int sampleIndex;
+    int a;
+    int b;
+    int c;
+}
+
 public class Day16ChronalClassification {
 
     private List<OpCode> opCodes;
     private List<Sample> samples;
+    private List<Instruction> instructions;
+    Map<Integer, Integer> mappingTable = new HashMap<>();
 
     public Day16ChronalClassification(String input) {
         setupOpCodes();
@@ -171,6 +180,7 @@ public class Day16ChronalClassification {
 
         Iterator<String> inputString = inputStrings.listIterator();
         samples = new ArrayList<>();
+        instructions = new ArrayList<>();
 
         while (inputString.hasNext()) {
             String firstLine = inputString.next();
@@ -188,6 +198,9 @@ public class Day16ChronalClassification {
                 sample.setB(instruction[2]);
                 sample.setC(instruction[3]);
                 samples.add(sample);
+            } else {
+                int[] row = Arrays.stream(firstLine.split(" ")).mapToInt(Integer::parseInt).toArray();
+                instructions.add(new Instruction(row[0], row[1], row[2], row[3]));
             }
         }
     }
@@ -211,4 +224,74 @@ public class Day16ChronalClassification {
         }
         return threeorMoreOpCodes;
     }
+
+    int remainingRegister() {
+
+        List<OpCode> opCodesToResolve = new ArrayList<>(opCodes);
+        List<Sample> samplesToResolve = new ArrayList<>(samples);
+
+        while (opCodesToResolve.size() > 0) {
+            Map<Integer, List<String>> matches = new HashMap<>();
+            for (OpCode opCode : opCodesToResolve) {
+                // find all samples with opcode = i
+
+                for (int i = 0; i < 16; i++) {
+                    boolean foundSomething = false;
+                    boolean foundMismatch = false;
+                    int finalI = i;
+                    for (Sample sample : samplesToResolve.stream().filter(s -> s.getOpCode() == finalI).collect(Collectors.toList())) {
+                        foundSomething = true;
+                        opCode.setRegister(sample.getRegisterBefore().clone());
+                        opCode.operator(sample.getA(), sample.getB(), sample.getC());
+                        if (!Arrays.equals(opCode.getRegister(), sample.getRegisterAfter())) {
+                            foundMismatch = true;
+                        }
+                        //System.out.println("Match for sample " + sample + " and opcode " + opCode.getName());
+                    }
+                    if (foundSomething && !foundMismatch) {
+                        System.out.println("Match for opcode " + opCode + " and sample " + i);
+                        // add sample index to matches map
+                        if (!matches.containsKey(i)) {
+                            matches.put(i, new ArrayList<>());
+                        }
+                        matches.get(i).add(opCode.getName());
+                    }
+                }
+
+
+            }
+            // check which opcode and sample that matches
+            System.out.println("Matches: " + matches);
+            for (int sampleId : matches.keySet()) {
+                System.out.println(sampleId + ": " + matches.get(sampleId));
+            }
+            // Find key where length of the valuelist is 1
+            for (int key : matches.keySet()) {
+                if (matches.get(key).size() == 1) {
+                    String opCodeName = matches.get(key).get(0);
+                    System.out.println("Found match for " + key + " for opcode " + opCodeName);
+                    System.out.println("saving and removing from");
+                    OpCode opCode = opCodesToResolve.stream().filter(o -> o.getName().equals(opCodeName)).findFirst().orElse(null);
+                    assert opCode != null;
+                    opCode.setSampleId(key);
+                    opCodesToResolve.remove(opCode);
+                    samplesToResolve.removeIf(s -> s.getOpCode() == key);
+                }
+            }
+        }
+
+
+        // evaluate instructions
+        int[] register = new int[4];
+        for (Instruction instruction : instructions) {
+            OpCode opCode = opCodes.stream().filter(o -> o.getSampleId() == instruction.sampleIndex).findFirst().orElse(null);
+            assert opCode != null;
+            opCode.setRegister(register);
+            opCode.operator(instruction.getA(), instruction.getB(), instruction.getC());
+        }
+        System.out.println("Final register: " + Arrays.toString(register));
+        return register[0];
+    }
 }
+
+
