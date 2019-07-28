@@ -1,7 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module version="4">
-  <component name="AppEngineStandardGradleModuleComponent">
-    <option name="gradleBuildDir" value="C:\Users\marhag\IdeaProjects\adventofcode2018\build" />
-    <option name="gradleModuleDir" value="C:\Users\marhag\IdeaProjects\adventofcode2018" />
-  </component>
-</module>
+<module type="JAVA_MODULE" version="4" />
