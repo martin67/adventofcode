@@ -1,4 +1,3 @@
-import com.sun.corba.se.impl.protocol.INSServerRequestDispatcher;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -7,60 +6,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
-class OpCode {
-    int[] register;
-    private String name;
-    int sampleId;
-
-    OpCode(String name) {
-        this.name = name;
-    }
-
-    void operator(int a, int b, int c) {
-    }
-
-    void printRegister() {
-        for (int i = 0; i < 4; i++) {
-            System.out.print(register[i] + " ");
-        }
-        System.out.println();
-    }
-}
-
-@Data
-class Sample {
-    int[] registerBefore;
-    int opCode;
-    int a;
-    int b;
-    int c;
-    int[] registerAfter;
-}
-
-@Data
-@AllArgsConstructor
-class Instruction {
-    int sampleIndex;
-    int a;
-    int b;
-    int c;
-}
-
-public class Day16ChronalClassification {
-
+class Processor {
     private List<OpCode> opCodes;
-    private List<Sample> samples;
-    private List<Instruction> instructions;
-    Map<Integer, Integer> mappingTable = new HashMap<>();
+    int[] register;
+    int instructionPointer;
+    int instructionPointerIndex;
 
-    public Day16ChronalClassification(String input) {
+    Processor(int numberOfRegisters) {
+        opCodes = new ArrayList<>();
+        register = new int[numberOfRegisters];
+
         setupOpCodes();
-        readData(input);
     }
 
     private void setupOpCodes() {
-        opCodes = new ArrayList<>();
-        //int[] register = new int[4];
 
         opCodes.add(new OpCode("addr") {
             @Override
@@ -174,6 +133,86 @@ public class Day16ChronalClassification {
         });
     }
 
+    Optional<OpCode> getOpCode(String opCodeName) {
+        return opCodes.stream().filter(opCode -> opCode.getName().equals(opCodeName)).findFirst();
+    }
+
+    String registerToString() {
+        StringBuilder output = new StringBuilder();
+
+        output.append("[");
+        for (int i = 0; i < register.length; i++) {
+            if (i == register.length - 1) {
+                output.append(register[i]).append("] ");
+            } else {
+                output.append(register[i]).append(", ");
+            }
+        }
+        return output.toString();
+    }
+
+    void saveInstructionPointer() {
+        register[instructionPointerIndex] = instructionPointer;
+    }
+
+    void loadInstructionPointer() {
+        instructionPointer = register[instructionPointerIndex];
+    }
+
+    void incrementInstructionPointer() {
+        instructionPointer++;
+    }
+}
+
+@Data
+class OpCode {
+    private String name;
+    int sampleId;
+
+    OpCode(String name) {
+        this.name = name;
+    }
+
+    void operator(int a, int b, int c) {
+    }
+}
+
+
+@Data
+class Sample {
+    int[] registerBefore;
+    int opCode;
+    int a;
+    int b;
+    int c;
+    int[] registerAfter;
+}
+
+
+@Data
+@AllArgsConstructor
+class Instruction {
+    int sampleIndex;
+    int a;
+    int b;
+    int c;
+
+}
+
+
+public class Day16ChronalClassification {
+
+    private Processor processor;
+    private List<Sample> samples;
+    private List<Instruction> instructions;
+    Map<Integer, Integer> mappingTable = new HashMap<>();
+
+    public Day16ChronalClassification(String input) {
+        processor = new Processor(4);
+        readData(input);
+    }
+
+
     private void readData(String input) {
         List<String> inputStrings = Arrays.stream(input.split("\\n+"))
                 .collect(Collectors.toList());
@@ -210,10 +249,10 @@ public class Day16ChronalClassification {
 
         for (Sample sample : samples) {
             int numberOfCorrectOpCodes = 0;
-            for (OpCode opCode : opCodes) {
-                opCode.setRegister(sample.getRegisterBefore().clone());
+            for (OpCode opCode : processor.getOpCodes()) {
+                processor.setRegister(sample.getRegisterBefore().clone());
                 opCode.operator(sample.getA(), sample.getB(), sample.getC());
-                if (Arrays.equals(opCode.getRegister(), sample.getRegisterAfter())) {
+                if (Arrays.equals(processor.getRegister(), sample.getRegisterAfter())) {
                     //System.out.println("Match for sample " + sample + " and opcode " + opCode.getName());
                     numberOfCorrectOpCodes++;
                 }
@@ -227,7 +266,7 @@ public class Day16ChronalClassification {
 
     int remainingRegister() {
 
-        List<OpCode> opCodesToResolve = new ArrayList<>(opCodes);
+        List<OpCode> opCodesToResolve = new ArrayList<>(processor.getOpCodes());
         List<Sample> samplesToResolve = new ArrayList<>(samples);
 
         while (opCodesToResolve.size() > 0) {
@@ -241,9 +280,9 @@ public class Day16ChronalClassification {
                     int finalI = i;
                     for (Sample sample : samplesToResolve.stream().filter(s -> s.getOpCode() == finalI).collect(Collectors.toList())) {
                         foundSomething = true;
-                        opCode.setRegister(sample.getRegisterBefore().clone());
+                        processor.setRegister(sample.getRegisterBefore().clone());
                         opCode.operator(sample.getA(), sample.getB(), sample.getC());
-                        if (!Arrays.equals(opCode.getRegister(), sample.getRegisterAfter())) {
+                        if (!Arrays.equals(processor.getRegister(), sample.getRegisterAfter())) {
                             foundMismatch = true;
                         }
                         //System.out.println("Match for sample " + sample + " and opcode " + opCode.getName());
@@ -284,9 +323,9 @@ public class Day16ChronalClassification {
         // evaluate instructions
         int[] register = new int[4];
         for (Instruction instruction : instructions) {
-            OpCode opCode = opCodes.stream().filter(o -> o.getSampleId() == instruction.sampleIndex).findFirst().orElse(null);
+            OpCode opCode = processor.getOpCodes().stream().filter(o -> o.getSampleId() == instruction.sampleIndex).findFirst().orElse(null);
             assert opCode != null;
-            opCode.setRegister(register);
+            processor.setRegister(register);
             opCode.operator(instruction.getA(), instruction.getB(), instruction.getC());
         }
         System.out.println("Final register: " + Arrays.toString(register));
