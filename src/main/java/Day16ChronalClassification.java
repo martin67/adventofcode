@@ -26,12 +26,26 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] + register[b];
             }
+
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                if (a > b) {
+                    return "r" + c + " = r" + b + " + r" + a;
+                } else {
+                    return "r" + c + " = r" + a + " + r" + b;
+                }
+            }
         });
 
         opCodes.add(new OpCode("addi") {
             @Override
             void operator(int a, int b, int c) {
                 register[c] = register[a] + b;
+            }
+
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "r" + c + " = r" + a + " + " + b;
             }
         });
 
@@ -40,12 +54,24 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] * register[b];
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                if (a > b) {
+                    return "r" + c + " = r" + b + " * r" + a;
+                } else {
+                    return "r" + c + " = r" + a + " * r" + b;
+                }
+            }
         });
 
         opCodes.add(new OpCode("muli") {
             @Override
             void operator(int a, int b, int c) {
                 register[c] = register[a] * b;
+            }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "r" + c + " = r" + a + " * " + b;
             }
         });
 
@@ -54,12 +80,24 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] & register[b];
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                if (a > b) {
+                    return "r" + c + " = r" + b + " AND r" + a;
+                } else {
+                    return "r" + c + " = r" + a + " AND r" + b;
+                }
+            }
         });
 
         opCodes.add(new OpCode("bani") {
             @Override
             void operator(int a, int b, int c) {
                 register[c] = register[a] & b;
+            }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "r" + c + " = r" + a + " AND " + b;
             }
         });
 
@@ -68,12 +106,24 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] | register[b];
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                if (a > b) {
+                    return "r" + c + " = r" + b + " OR r" + a;
+                } else {
+                    return "r" + c + " = r" + a + " OR r" + b;
+                }
+            }
         });
 
         opCodes.add(new OpCode("bori") {
             @Override
             void operator(int a, int b, int c) {
                 register[c] = register[a] | b;
+            }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "r" + c + " = r" + a + " OR " + b;
             }
         });
 
@@ -82,12 +132,20 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a];
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "r" + c + " = r" + a;
+            }
         });
 
         opCodes.add(new OpCode("seti") {
             @Override
             void operator(int a, int b, int c) {
                 register[c] = a;
+            }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "r" + c + " = " + a;
             }
         });
 
@@ -96,6 +154,10 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = a > register[b] ? 1 : 0;
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "if " + a + " > r" + b + " then r" + c + " = 1 else r" + c + " = 0";
+            }
         });
 
         opCodes.add(new OpCode("gtri") {
@@ -103,6 +165,11 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] > b ? 1 : 0;
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "if r" + a + " > " + b + " then r" + c + " = 1 else r" + c + " = 0";
+            }
+
         });
 
         opCodes.add(new OpCode("gtrr") {
@@ -110,6 +177,11 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] > register[b] ? 1 : 0;
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "if r" + a + " > r" + b + " then r" + c + " = 1 else r" + c + " = 0";
+            }
+
         });
 
         opCodes.add(new OpCode("eqir") {
@@ -117,12 +189,22 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = a == register[b] ? 1 : 0;
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "if " + a + " == r" + b + " then r" + c + " = 1 else r" + c + " = 0";
+            }
+
         });
 
         opCodes.add(new OpCode("eqri") {
             void operator(int a, int b, int c) {
                 register[c] = register[a] == b ? 1 : 0;
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "if r" + a + " == " + b + " then r" + c + " = 1 else r" + c + " = 0";
+            }
+
         });
 
         opCodes.add(new OpCode("eqrr") {
@@ -130,6 +212,11 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] == register[b] ? 1 : 0;
             }
+            @Override
+            public String pseudoCode(int a, int b, int c) {
+                return "if r" + a + " == r" + b + " then r" + c + " = 1 else r" + c + " = 0";
+            }
+
         });
     }
 
@@ -175,6 +262,9 @@ class OpCode {
 
     void operator(int a, int b, int c) {
     }
+
+    String pseudoCode(int a, int b, int c) { return null; }
+
 }
 
 

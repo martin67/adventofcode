@@ -16,4 +16,23 @@ class Day19GoWithTheFlowTest {
         Day19GoWithTheFlow day19GoWithTheFlow = new Day19GoWithTheFlow(fileName);
         assertEquals(outcome, day19GoWithTheFlow.getLeftInRegister());
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1836, out/test/resources/day19.txt"
+    })
+    void getLeftInRegister2(int outcome, String fileName) throws IOException {
+        Day19GoWithTheFlow day19GoWithTheFlow = new Day19GoWithTheFlow(fileName);
+        assertEquals(outcome, day19GoWithTheFlow.getLeftInRegister2());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1836, out/test/resources/day19.txt"
+    })
+    void implementPseudoCode(int outcome, String fileName) throws IOException {
+        Day19GoWithTheFlow day19GoWithTheFlow = new Day19GoWithTheFlow(fileName);
+        assertEquals(outcome, day19GoWithTheFlow.implementPseudoCode());
+    }
+
 }
