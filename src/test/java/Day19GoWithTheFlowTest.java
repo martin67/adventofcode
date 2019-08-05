@@ -32,7 +32,7 @@ class Day19GoWithTheFlowTest {
     })
     void implementPseudoCode(int outcome, String fileName) throws IOException {
         Day19GoWithTheFlow day19GoWithTheFlow = new Day19GoWithTheFlow(fileName);
-        assertEquals(outcome, day19GoWithTheFlow.implementPseudoCode());
+        assertEquals(outcome, day19GoWithTheFlow.findFactors(10551410));
     }
 
 }

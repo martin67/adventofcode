@@ -122,12 +122,12 @@ public class Day19GoWithTheFlow {
     }
 
     int implementPseudoCode() {
-        int r0 = 0;
-        int r1 = 10551410;
-        int r2 = 0;
-        int r3 = 0;
-        int r4 = 10550400;
-        int r5 = 0;
+        long r0 = 0;
+        long r1 = 10551410;
+        long r2 = 0;
+        long r3 = 0;
+        long r4 = 10550400;
+        long r5 = 0;
 
 //        2:  r2 = 1
 //        3:  r4 = r2 * r3
@@ -138,14 +138,15 @@ public class Day19GoWithTheFlow {
 //        12: r3 = r3 + 1
 //        13: if r3 > r1 exit else goto 2
 
+        // divide r1 into factors and add them = will give r0
 
         // all possible combinations of r2 and r3 where r2*r3 = r1
         while (r1 > r3) {
             r2 = 1;
             while (r2 <= r1) {
                 r4 = r2 * r3;
-                if (r1 == r4) {
-                    System.out.println(r0 + " " + r1 + " " + r2 + " " + r3);
+                if (r4 == r1) {
+                    System.out.println("r0: " + r0 + ", r1: " + r1 + ", r2: " + r2 + ", r3: " + r3 + ", r4: " + r4);
                     r0 = r0 + r3;
                 }
                 r2 = r2 + 1;
@@ -153,7 +154,22 @@ public class Day19GoWithTheFlow {
             r3 = r3 + 1;
         }
 
-        return r0;
+        return (int)r0;
     }
 
+    int findFactors(int number) {
+
+        List<Integer> factors = new ArrayList<>();
+
+        System.out.print("Factors of " + number + " are: ");
+        for(int i = 1; i <= number; ++i) {
+            if (number % i == 0) {
+                factors.add(i);
+                System.out.print(i + " ");
+            }
+        }
+        System.out.println ("Factors of " + number + " are: " + factors.size());
+
+        return factors.stream().mapToInt(Integer::intValue).sum();
+    }
 }
