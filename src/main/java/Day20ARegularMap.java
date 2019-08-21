@@ -20,13 +20,6 @@ class DAG {
             idCounter++;
         }
 
-        Node add(char direction) {
-            Node node = new Node(direction);
-            this.children.add(node);
-            node.parents.add(this);
-            return node;
-        }
-
         public String toString() {
             return id + " (" + direction + ")";
         }
@@ -36,7 +29,7 @@ class DAG {
         List<Node> parents;
         List<Node> children;
 
-        public AddNodesResult(List<Node> parents, List<Node> children) {
+        AddNodesResult(List<Node> parents, List<Node> children) {
             this.parents = parents;
             this.children = children;
         }
@@ -82,7 +75,7 @@ class DAG {
     //   next = new Node(queue.poll)
     //   next.parents = children
     //   last = next
-    AddNodesResult addNodes(Node parent, Queue<Character> queue) {
+    private AddNodesResult addNodes(Node parent, Queue<Character> queue) {
 
         // currentNode
         Node currentNode;
@@ -158,15 +151,15 @@ class DAG {
         return null;
     }
 
-    void dumpNodes(char found, Node currentNode, Node parent, List<Node> nextNodeParents, List<Node> newChildren) {
-        System.out.println("Found: " + found);
-        System.out.println("Current node:" + currentNode + ", parents: " + currentNode.parents + ", children: " + currentNode.children);
-        System.out.println("parent: " + parent + ", parent.parents: " + parent.parents + ", parent.children: " + parent.children);
-        System.out.println("nextNodeParents: " + nextNodeParents + ", newChildren: " + newChildren);
+    private void dumpNodes(char found, Node currentNode, Node parent, List<Node> nextNodeParents, List<Node> newChildren) {
+//        System.out.println("Found: " + found);
+//        System.out.println("Current node:" + currentNode + ", parents: " + currentNode.parents + ", children: " + currentNode.children);
+//        System.out.println("parent: " + parent + ", parent.parents: " + parent.parents + ", parent.children: " + parent.children);
+//        System.out.println("nextNodeParents: " + nextNodeParents + ", newChildren: " + newChildren);
     }
 
     int longestPath() {
-        return getLongestPathLength(start) ;
+        return getLongestPathLength(start);
     }
 
     private int getLongestPathLength(Node node) {
@@ -184,12 +177,14 @@ class DAG {
 public class Day20ARegularMap {
 
     // Structure is a (unweighted) directed acyclic graph (DAG)
-    DAG dag;
+    private DAG dag;
 
     public Day20ARegularMap(String fileName, String output) throws IOException {
         dag = new DAG();
         readData(fileName);
-        dag.toGML(output);
+        if (output != null) {
+            dag.toGML(output);
+        }
     }
 
     private void readData(String fileName) throws IOException {
@@ -207,13 +202,15 @@ public class Day20ARegularMap {
             }
         }
 
-        //dag.addNodes(null, queue);
         dag.setup(queue);
-
         System.out.println("Read queue, size: " + queue.size());
     }
 
     int largestNumberOfDoors() {
         return dag.longestPath();
+    }
+
+    int countRooms(int minNumberOfDoors) {
+        return 0;
     }
 }
