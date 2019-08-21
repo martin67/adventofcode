@@ -28,7 +28,7 @@ class Day19GoWithTheFlowTest {
 
     @ParameterizedTest
     @CsvSource({
-            "1836, out/test/resources/day19.txt"
+            "18992556, out/test/resources/day19.txt"
     })
     void implementPseudoCode(int outcome, String fileName) throws IOException {
         Day19GoWithTheFlow day19GoWithTheFlow = new Day19GoWithTheFlow(fileName);
