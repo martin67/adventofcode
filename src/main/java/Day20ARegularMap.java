@@ -6,22 +6,29 @@ import java.util.*;
 class DAG {
     private Node start;
     private Set<Node> nodeSet = new HashSet<>();
+    private boolean blockDetours;
+
+    DAG(boolean blockDetours) {
+        this.blockDetours = blockDetours;
+    }
 
     static class Node {
         private static int idCounter = 0;
         int id;
         char direction;
+        int distanceToStart;
         List<Node> parents = new ArrayList<>();
         List<Node> children = new ArrayList<>();
 
-        Node(char direction) {
+        Node(char direction, int distanceToStart) {
             this.direction = direction;
+            this.distanceToStart = distanceToStart;
             id = idCounter;
             idCounter++;
         }
 
         public String toString() {
-            return id + " (" + direction + ")";
+            return id + " (" + direction + ")/" + distanceToStart;
         }
     }
 
@@ -40,7 +47,7 @@ class DAG {
 
         output.append("graph [ ");
         for (Node node : nodeSet) {
-            output.append(String.format("node [ id %d label \"%d - %s\" ]\n", node.id, node.id, node.direction));
+            output.append(String.format("node [ id %d label \"%d - %s - %d\" ]\n", node.id, node.id, node.direction, node.distanceToStart));
         }
 
         for (Node node : nodeSet) {
@@ -87,7 +94,7 @@ class DAG {
 
         System.out.println("****************** Starting addNodes,  queue: " + queue);
         if (parent == null) {
-            parent = new Node(queue.poll());
+            parent = new Node(queue.poll(), 0);
             nodeSet.add(parent);
             start = parent;
         }
@@ -112,12 +119,16 @@ class DAG {
                     dumpNodes(queue.peek(), currentNode, parent, nextNodeParents, newChildren);
                     // The node just before a '| will be a parent to a node that will come later (when it's closed)
                     queue.poll(); // Skip the '|'
-                    // if the | is followed by a ), the whole detour should be skipped
-                    if (queue.peek() == ')') {
-                        System.out.println("**** detour, removing");
-                        parent.children.clear();
+                    if (blockDetours) {
+                        // if the | is followed by a ), the whole detour should be skipped
+                        if (queue.peek() == ')') {
+                            System.out.println("**** detour, removing");
+                            parent.children.clear();
+                        } else {
+                            //  nextNodeParents.add(currentNode);
+                        }
                     } else {
-                        nextNodeParents.add(currentNode);
+                        //nextNodeParents.add(currentNode);
                     }
                     currentNode = parent; // start on next child. this will also add
                     break;
@@ -138,7 +149,7 @@ class DAG {
                     // A new node will be added to the list. It's parent is the currentNode, unless the currentNode
                     // has had a branch recently - in that case use the nextNodeParents list.
                     // It will also
-                    Node newNode = new Node(queue.poll());
+                    Node newNode = new Node(queue.poll(), currentNode.distanceToStart + 1);
                     nodeSet.add(newNode);
                     newNode.parents.add(currentNode);
                     currentNode.children.add(newNode);
@@ -171,6 +182,10 @@ class DAG {
         }
         return 1 + max;
     }
+
+    int getRooms(int minNumberOfDoors) {
+        return Math.toIntExact(nodeSet.stream().filter(node -> node.distanceToStart >= minNumberOfDoors).count());
+    }
 }
 
 
@@ -179,8 +194,8 @@ public class Day20ARegularMap {
     // Structure is a (unweighted) directed acyclic graph (DAG)
     private DAG dag;
 
-    public Day20ARegularMap(String fileName, String output) throws IOException {
-        dag = new DAG();
+    public Day20ARegularMap(String fileName, String output, boolean blockDetours) throws IOException {
+        dag = new DAG(blockDetours);
         readData(fileName);
         if (output != null) {
             dag.toGML(output);
@@ -201,7 +216,6 @@ public class Day20ARegularMap {
                 queue.add(c);
             }
         }
-
         dag.setup(queue);
         System.out.println("Read queue, size: " + queue.size());
     }
@@ -211,6 +225,8 @@ public class Day20ARegularMap {
     }
 
     int countRooms(int minNumberOfDoors) {
-        return 0;
+        dag.longestPath();
+
+        return dag.getRooms(minNumberOfDoors);
     }
 }
