@@ -5,8 +5,9 @@ import java.util.*;
 
 class DAG {
     private Node start;
-    private Set<Node> nodeSet = new HashSet<>();
-    private boolean blockDetours;
+    private final Set<Node> nodeSet = new HashSet<>();
+    private final HashMap<Position, Node> nodeMap = new HashMap<>();
+    private final boolean blockDetours;
 
     DAG(boolean blockDetours) {
         this.blockDetours = blockDetours;
@@ -14,27 +15,41 @@ class DAG {
 
     static class Node {
         private static int idCounter = 0;
-        int id;
-        char direction;
-        int distanceToStart;
-        List<Node> parents = new ArrayList<>();
-        List<Node> children = new ArrayList<>();
+        final int id;
+        Position position;
+        final char direction;
+        final int distanceToStart;
+        final List<Node> children = new ArrayList<>();
 
-        Node(char direction, int distanceToStart) {
+        Node(char direction, int distanceToStart, Position parent) {
             this.direction = direction;
             this.distanceToStart = distanceToStart;
+            switch (direction) {
+                case 'N':
+                    this.position = new Position(parent.x, parent.y - 2);
+                    break;
+                case 'S':
+                    this.position = new Position(parent.x, parent.y + 2);
+                    break;
+                case 'E':
+                    this.position = new Position(parent.x + 2, parent.y);
+                    break;
+                case 'W':
+                    this.position = new Position(parent.x - 2, parent.y);
+                    break;
+            }
             id = idCounter;
             idCounter++;
         }
 
         public String toString() {
-            return id + " (" + direction + ")/" + distanceToStart;
+            return id + " (" + direction + ")/" + distanceToStart + ", pos: " + position;
         }
     }
 
     static class AddNodesResult {
-        List<Node> parents;
-        List<Node> children;
+        final List<Node> parents;
+        final List<Node> children;
 
         AddNodesResult(List<Node> parents, List<Node> children) {
             this.parents = parents;
@@ -53,11 +68,6 @@ class DAG {
         for (Node node : nodeSet) {
             for (Node child : node.children) {
                 output.append(String.format("edge [ source %d target %d ]\n", node.id, child.id));
-            }
-        }
-        for (Node node : nodeSet) {
-            for (Node parent : node.parents) {
-                output.append(String.format("edge [ source %d target %d ]\n", node.id, parent.id));
             }
         }
 
@@ -92,10 +102,11 @@ class DAG {
 
         AddNodesResult addNodesResult;
 
-        System.out.println("****************** Starting addNodes,  queue: " + queue);
+        //System.out.println("****************** Starting addNodes,  queue: " + queue);
         if (parent == null) {
-            parent = new Node(queue.poll(), 0);
+            parent = new Node(queue.poll(), 1, new Position(0,0));
             nodeSet.add(parent);
+            nodeMap.put(parent.position, parent);
             start = parent;
         }
         currentNode = parent;
@@ -122,13 +133,9 @@ class DAG {
                     if (blockDetours) {
                         // if the | is followed by a ), the whole detour should be skipped
                         if (queue.peek() == ')') {
-                            System.out.println("**** detour, removing");
+//                            System.out.println("**** detour, removing");
                             parent.children.clear();
-                        } else {
-                            //  nextNodeParents.add(currentNode);
                         }
-                    } else {
-                        //nextNodeParents.add(currentNode);
                     }
                     currentNode = parent; // start on next child. this will also add
                     break;
@@ -149,11 +156,16 @@ class DAG {
                     // A new node will be added to the list. It's parent is the currentNode, unless the currentNode
                     // has had a branch recently - in that case use the nextNodeParents list.
                     // It will also
-                    Node newNode = new Node(queue.poll(), currentNode.distanceToStart + 1);
-                    nodeSet.add(newNode);
-                    newNode.parents.add(currentNode);
-                    currentNode.children.add(newNode);
-                    currentNode = newNode;
+                    Node newNode = new Node(queue.poll(), currentNode.distanceToStart + 1, currentNode.position);
+                    if (nodeMap.containsKey(newNode.position)) {
+                        //System.out.println("Found duplicate: " + newNode);
+                        currentNode.position = newNode.position;
+                    } else {
+                        nodeSet.add(newNode);
+                        nodeMap.put(newNode.position, newNode);
+                        currentNode.children.add(newNode);
+                        currentNode = newNode;
+                    }
                     break;
             }
         }
@@ -192,7 +204,7 @@ class DAG {
 public class Day20ARegularMap {
 
     // Structure is a (unweighted) directed acyclic graph (DAG)
-    private DAG dag;
+    private final DAG dag;
 
     public Day20ARegularMap(String fileName, String output, boolean blockDetours) throws IOException {
         dag = new DAG(blockDetours);
