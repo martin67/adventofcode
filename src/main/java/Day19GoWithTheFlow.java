@@ -67,7 +67,7 @@ public class Day19GoWithTheFlow {
 
     }
 
-    private void printPseudoCode() {
+    void printPseudoCode() {
         int index = 0;
         for (Instruction instruction : instructions) {
             System.out.print(index + ": ");
