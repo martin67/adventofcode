@@ -240,7 +240,7 @@ class Processor {
         });
     }
 
-    Optional<OpCode> getOpCode(String opCodeName) {
+    private Optional<OpCode> getOpCode(String opCodeName) {
         return opCodes.stream().filter(opCode -> opCode.getName().equals(opCodeName)).findFirst();
     }
 
