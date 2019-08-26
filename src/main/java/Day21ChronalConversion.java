@@ -11,36 +11,12 @@ public class Day21ChronalConversion {
     int lowestInteger() {
         int[] newRegister = {1, 0, 0, 0, 0, 0};
         processor.setRegister(newRegister);
-        int iterations = getLeftInRegister(0);
         //implementPseudoCode();
         //processor.printPseudoCode();
 
-        return iterations;
+        return processor.runCode(10000);
     }
 
-    int getLeftInRegister(int r0) {
-
-        boolean programEnd = false;
-        int iterations = 0;
-        while (!programEnd && iterations < 1000) {
-            processor.saveInstructionPointer();
-            System.out.print("ip=" + processor.getInstructionPointer() + " " + processor.registerToString());
-            Instruction instruction = processor.getInstructions().get(processor.getInstructionPointer());
-            System.out.print(instruction + " ");
-            // update the instruction pointer register to the current value of the instruction pointer
-
-            instruction.getOpCode().operator(instruction.getA(), instruction.getB(), instruction.getC());
-            System.out.println(processor.registerToString());
-
-            processor.loadInstructionPointer();
-            processor.incrementInstructionPointer();
-            if (processor.getInstructionPointer() >= processor.getInstructions().size()) {
-                programEnd = true;
-            }
-            iterations++;
-        }
-        return iterations;
-    }
 
 //            0: r4 = 123
 //            1: r4 = r4 AND 456
@@ -89,17 +65,18 @@ public class Day21ChronalConversion {
         r4 = 0;
 
         do {
-            r3 = r4 | 65536;
+            r3 = r4 | 65536;   // r3 | 0x10000
             r4 = 10283511;
 
             do {
+                // r4 = F(r3)
                 r1 = r3 & 255;
                 r4 = r1 + r4;
                 r4 = r4 & 16777215;
                 r4 = r4 * 65899;
                 r4 = r4 & 16777215;
 
-                if (256 > r3) {
+                if (r3 < 256) {
                     break;
                 }
 
