@@ -1,4 +1,7 @@
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Day21ChronalConversion {
     private Processor processor;
@@ -16,16 +19,6 @@ public class Day21ChronalConversion {
         return runCodeUntilIp(28);
     }
 
-    int mostInstructions() {
-        int[] newRegister = {0, 0, 0, 0, 0, 0};
-        processor.setRegister(newRegister);
-
-        int iterations = runCodeUntilCheck(28, 99999999);
-        // Look for repeating pattern
-        System.out.println(processor.registerToString());
-        return iterations;
-    }
-
     // The solution is to see what the value of r4 is when we get to ip=28
     //   28: if r4 == r0 then r1 = 1 else r1 = 0
     private int runCodeUntilIp(int ip) {
@@ -39,13 +32,30 @@ public class Day21ChronalConversion {
         return processor.getRegister()[4];
     }
 
+    int mostInstructions() {
+        int[] newRegister = {0, 0, 0, 0, 0, 0};
+        processor.setRegister(newRegister);
+
+        int iterations = runCodeUntilCheck(28, Integer.MAX_VALUE);
+        // Look for repeating pattern
+        System.out.println(processor.registerToString());
+        return iterations;
+    }
+
     private int runCodeUntilCheck(int ip, int maxIterations) {
         boolean programEnd = false;
         int iterations = 0;
+        List<Integer> r4list = new ArrayList<>();
 
         while (!programEnd && iterations < maxIterations) {
             if (processor.getInstructionPointer() == ip) {
-                System.out.printf("(%4d) ip=%-6d %35s\n", iterations, processor.getInstructionPointer(), processor.registerToString());
+//                System.out.printf("(%4d) ip=%-6d %35s\n", iterations, processor.getInstructionPointer(), processor.registerToString());
+                if (r4list.contains(processor.getRegister()[4])) {
+                    System.out.printf("(%4d) ip=%-6d %35s\n", iterations, processor.getInstructionPointer(), processor.registerToString());
+                    System.out.printf("Found match for r4 = %d at ip ? %d\n", processor.getRegister()[4], processor.getInstructionPointer());
+                } else {
+                    r4list.add(processor.getRegister()[4]);
+                }
             }
             processor.saveInstructionPointer();
 //            System.out.printf("(%4d) ip=%-6d %35s", iterations, getInstructionPointer(), registerToString());
@@ -62,6 +72,10 @@ public class Day21ChronalConversion {
                 programEnd = true;
             }
             iterations++;
+        }
+        Collections.sort(r4list);
+        for (int r4 : r4list) {
+            System.out.println(r4);
         }
         return iterations;
     }
