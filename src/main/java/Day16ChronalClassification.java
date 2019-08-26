@@ -2,12 +2,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Data
 class Processor {
     private List<OpCode> opCodes;
+    private List<Instruction> instructions;
     int[] register;
     int instructionPointer;
     int instructionPointerIndex;
@@ -54,6 +60,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] * register[b];
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 if (a > b) {
@@ -69,6 +76,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] * b;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "r" + c + " = r" + a + " * " + b;
@@ -80,6 +88,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] & register[b];
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 if (a > b) {
@@ -95,6 +104,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] & b;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "r" + c + " = r" + a + " AND " + b;
@@ -106,6 +116,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] | register[b];
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 if (a > b) {
@@ -121,6 +132,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] | b;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "r" + c + " = r" + a + " OR " + b;
@@ -132,6 +144,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a];
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "r" + c + " = r" + a;
@@ -143,6 +156,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = a;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "r" + c + " = " + a;
@@ -154,6 +168,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = a > register[b] ? 1 : 0;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "if " + a + " > r" + b + " then r" + c + " = 1 else r" + c + " = 0";
@@ -165,6 +180,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] > b ? 1 : 0;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "if r" + a + " > " + b + " then r" + c + " = 1 else r" + c + " = 0";
@@ -177,6 +193,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] > register[b] ? 1 : 0;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "if r" + a + " > r" + b + " then r" + c + " = 1 else r" + c + " = 0";
@@ -189,6 +206,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = a == register[b] ? 1 : 0;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "if " + a + " == r" + b + " then r" + c + " = 1 else r" + c + " = 0";
@@ -200,6 +218,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] == b ? 1 : 0;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "if r" + a + " == " + b + " then r" + c + " = 1 else r" + c + " = 0";
@@ -212,6 +231,7 @@ class Processor {
             void operator(int a, int b, int c) {
                 register[c] = register[a] == register[b] ? 1 : 0;
             }
+
             @Override
             public String pseudoCode(int a, int b, int c) {
                 return "if r" + a + " == r" + b + " then r" + c + " = 1 else r" + c + " = 0";
@@ -220,7 +240,7 @@ class Processor {
         });
     }
 
-    Optional<OpCode> getOpCode(String opCodeName) {
+    private Optional<OpCode> getOpCode(String opCodeName) {
         return opCodes.stream().filter(opCode -> opCode.getName().equals(opCodeName)).findFirst();
     }
 
@@ -249,6 +269,46 @@ class Processor {
     void incrementInstructionPointer() {
         instructionPointer++;
     }
+
+    void readInstructions(String fileName) throws IOException {
+        List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
+        Iterator<String> inputIterator = inputStrings.iterator();
+
+        int ip = Integer.parseInt(StringUtils.substringAfter(inputIterator.next(), "#ip "));
+        setInstructionPointerIndex(ip);
+
+        String regexStr = "(\\w+) (\\d+) (\\d+) (\\d+)";
+        // Compile the regex String into a Pattern
+        Pattern pattern = Pattern.compile(regexStr);
+
+        instructions = new ArrayList<>();
+        while (inputIterator.hasNext()) {
+            String line = inputIterator.next();
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                String opCodeName = matcher.group(1);
+                int a = Integer.parseInt(matcher.group(2));
+                int b = Integer.parseInt(matcher.group(3));
+                int c = Integer.parseInt(matcher.group(4));
+                Optional<OpCode> opCode = getOpCode(opCodeName);
+
+                opCode.ifPresent(o -> {
+                    instructions.add(new Instruction(o, a, b, c));
+                });
+            }
+        }
+
+    }
+
+    void printPseudoCode() {
+        int index = 0;
+        for (Instruction instruction : instructions) {
+            System.out.print(index + ": ");
+            System.out.println(instruction.getOpCode().pseudoCode(instruction.getA(),
+                    instruction.getB(), instruction.getC()));
+            index++;
+        }
+    }
 }
 
 @Data
@@ -263,10 +323,25 @@ class OpCode {
     void operator(int a, int b, int c) {
     }
 
-    String pseudoCode(int a, int b, int c) { return null; }
+    String pseudoCode(int a, int b, int c) {
+        return null;
+    }
 
 }
 
+@Data
+@AllArgsConstructor
+class Instruction {
+    OpCode opCode;
+    int a;
+    int b;
+    int c;
+
+    @Override
+    public String toString() {
+        return opCode.getName() + " " + a + " " + b + " " + c;
+    }
+}
 
 @Data
 class Sample {
@@ -278,23 +353,20 @@ class Sample {
     int[] registerAfter;
 }
 
-
 @Data
 @AllArgsConstructor
-class Instruction {
+class UnknownInstruction {
     int sampleIndex;
     int a;
     int b;
     int c;
-
 }
-
 
 public class Day16ChronalClassification {
 
     private Processor processor;
     private List<Sample> samples;
-    private List<Instruction> instructions;
+    private List<UnknownInstruction> unknownInstructions;
     Map<Integer, Integer> mappingTable = new HashMap<>();
 
     public Day16ChronalClassification(String input) {
@@ -309,7 +381,7 @@ public class Day16ChronalClassification {
 
         Iterator<String> inputString = inputStrings.listIterator();
         samples = new ArrayList<>();
-        instructions = new ArrayList<>();
+        unknownInstructions = new ArrayList<>();
 
         while (inputString.hasNext()) {
             String firstLine = inputString.next();
@@ -329,7 +401,7 @@ public class Day16ChronalClassification {
                 samples.add(sample);
             } else {
                 int[] row = Arrays.stream(firstLine.split(" ")).mapToInt(Integer::parseInt).toArray();
-                instructions.add(new Instruction(row[0], row[1], row[2], row[3]));
+                unknownInstructions.add(new UnknownInstruction(row[0], row[1], row[2], row[3]));
             }
         }
     }
@@ -412,11 +484,11 @@ public class Day16ChronalClassification {
 
         // evaluate instructions
         int[] register = new int[4];
-        for (Instruction instruction : instructions) {
-            OpCode opCode = processor.getOpCodes().stream().filter(o -> o.getSampleId() == instruction.sampleIndex).findFirst().orElse(null);
+        for (UnknownInstruction unknownInstruction : unknownInstructions) {
+            OpCode opCode = processor.getOpCodes().stream().filter(o -> o.getSampleId() == unknownInstruction.sampleIndex).findFirst().orElse(null);
             assert opCode != null;
             processor.setRegister(register);
-            opCode.operator(instruction.getA(), instruction.getB(), instruction.getC());
+            opCode.operator(unknownInstruction.getA(), unknownInstruction.getB(), unknownInstruction.getC());
         }
         System.out.println("Final register: " + Arrays.toString(register));
         return register[0];
