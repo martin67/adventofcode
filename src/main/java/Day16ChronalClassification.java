@@ -314,16 +314,18 @@ class Processor {
         boolean programEnd = false;
         int iterations = 0;
         while (!programEnd && iterations < maxIterations) {
+//            if (getInstructionPointer() == 28) {
+//                break;
+//            }
             saveInstructionPointer();
-            System.out.printf("(%4d) ip=%-6d %35s", iterations, getInstructionPointer(), registerToString());
+//            System.out.printf("(%4d) ip=%-6d %35s", iterations, getInstructionPointer(), registerToString());
             Instruction instruction = getInstructions().get(getInstructionPointer());
             // update the instruction pointer register to the current value of the instruction pointer
 
             instruction.getOpCode().operator(instruction.getA(), instruction.getB(), instruction.getC());
-//                System.out.print(" => " + registerToString());
-            System.out.printf(" => %-35s  %-40s %s", registerToString(), instruction.getOpCode().pseudoCode(instruction.getA(),
-                    instruction.getB(), instruction.getC()), instruction);
-            System.out.println();
+//            System.out.printf(" => %-35s  %-40s %s", registerToString(), instruction.getOpCode().pseudoCode(instruction.getA(),
+//                    instruction.getB(), instruction.getC()), instruction);
+//            System.out.println();
             loadInstructionPointer();
             incrementInstructionPointer();
             if (getInstructionPointer() >= getInstructions().size()) {

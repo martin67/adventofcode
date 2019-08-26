@@ -6,17 +6,65 @@ public class Day21ChronalConversion {
     public Day21ChronalConversion(String fileName) throws IOException {
         processor = new Processor(6);
         processor.readInstructions(fileName);
-    }
-
-    int lowestInteger() {
-        int[] newRegister = {1, 0, 0, 0, 0, 0};
-        processor.setRegister(newRegister);
-        //implementPseudoCode();
         //processor.printPseudoCode();
-
-        return processor.runCode(10000);
     }
 
+    int fewestInstructions() {
+        int[] newRegister = {0, 0, 0, 0, 0, 0};
+        processor.setRegister(newRegister);
+
+        return runCodeUntilIp(28);
+    }
+
+    int mostInstructions() {
+        int[] newRegister = {0, 0, 0, 0, 0, 0};
+        processor.setRegister(newRegister);
+
+        int iterations = runCodeUntilCheck(28, 99999999);
+        // Look for repeating pattern
+        System.out.println(processor.registerToString());
+        return iterations;
+    }
+
+    // The solution is to see what the value of r4 is when we get to ip=28
+    //   28: if r4 == r0 then r1 = 1 else r1 = 0
+    private int runCodeUntilIp(int ip) {
+        while (processor.getInstructionPointer() != ip) {
+            processor.saveInstructionPointer();
+            Instruction instruction = processor.getInstructions().get(processor.getInstructionPointer());
+            instruction.getOpCode().operator(instruction.getA(), instruction.getB(), instruction.getC());
+            processor.loadInstructionPointer();
+            processor.incrementInstructionPointer();
+        }
+        return processor.getRegister()[4];
+    }
+
+    private int runCodeUntilCheck(int ip, int maxIterations) {
+        boolean programEnd = false;
+        int iterations = 0;
+
+        while (!programEnd && iterations < maxIterations) {
+            if (processor.getInstructionPointer() == ip) {
+                System.out.printf("(%4d) ip=%-6d %35s\n", iterations, processor.getInstructionPointer(), processor.registerToString());
+            }
+            processor.saveInstructionPointer();
+//            System.out.printf("(%4d) ip=%-6d %35s", iterations, getInstructionPointer(), registerToString());
+            Instruction instruction = processor.getInstructions().get(processor.getInstructionPointer());
+            // update the instruction pointer register to the current value of the instruction pointer
+
+            instruction.getOpCode().operator(instruction.getA(), instruction.getB(), instruction.getC());
+//            System.out.printf(" => %-35s  %-40s %s", registerToString(), instruction.getOpCode().pseudoCode(instruction.getA(),
+//                    instruction.getB(), instruction.getC()), instruction);
+//            System.out.println();
+            processor.loadInstructionPointer();
+            processor.incrementInstructionPointer();
+            if (processor.getInstructionPointer() >= processor.getInstructions().size()) {
+                programEnd = true;
+            }
+            iterations++;
+        }
+        return iterations;
+    }
 
 //            0: r4 = 123
 //            1: r4 = r4 AND 456
@@ -50,6 +98,8 @@ public class Day21ChronalConversion {
 //            29: r2 = r1 + r2
 //         <- 30: r2 = 5
 
+    // when IP = 28, r4 = 13443200
+
     void implementPseudoCode() {
         int r0 = 0;
         int r1 = 0;
@@ -81,8 +131,9 @@ public class Day21ChronalConversion {
                 }
 
                 for (r1 = 0; r3 > r5; r1++) {
-                    r5 = r1 + 1;
-                    r5 = r5 * 256;
+//                    r5 = r1 + 1;
+//                    r5 = r5 * 256;
+                    r5 = 256 * r1 + 256;
                 }
 
                 r3 = r1;
