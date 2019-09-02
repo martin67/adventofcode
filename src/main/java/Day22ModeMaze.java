@@ -14,20 +14,25 @@ public class Day22ModeMaze {
     }
 
     private final HashMap<Position, Region> cave = new HashMap<>();
+    private final Position mouth;
     private final Position target;
+    private final Position maxCave;
 
     public Day22ModeMaze(int depth, Position target) {
-        this.target = new Position(target.x + 1, target.y + 1);
-        initCave(depth, this.target);
+        this.mouth = new Position(0, 0);
+        this.target = target;
+        int extraCave = 6;
+        this.maxCave = new Position(target.x + extraCave, target.y + extraCave);
+        initCave(depth, target, maxCave);
     }
 
-    private void initCave(int depth, Position target) {
+    private void initCave(int depth, Position target, Position maxCave) {
 
-        for (int x = 0; x < target.x; x++) {
-            for (int y = 0; y < target.y; y++) {
+        for (int x = 0; x < maxCave.x; x++) {
+            for (int y = 0; y < maxCave.y; y++) {
                 Region r = new Region(new Position(x, y));
 
-                if ((x == 0 && y == 0) || ((x == target.x - 1 && y == target.y - 1))) {
+                if ((x == 0 && y == 0) || ((x == target.x && y == target.y))) {
                     r.geologicIndex = 0;
                 } else if (x == 0) {
                     r.geologicIndex = y * 48271;
@@ -45,10 +50,14 @@ public class Day22ModeMaze {
     }
 
     private void printCave() {
-        for (int y = 0; y < target.y; y++) {
-            for (int x = 0; x < target.x; x++) {
+        for (int y = 0; y < maxCave.y; y++) {
+            for (int x = 0; x < maxCave.x; x++) {
                 Region r = cave.get(new Position(x, y));
-                if (r.type == 0) {
+                if (r.position.equals(mouth)) {
+                    System.out.print('M');
+                } else if (r.position.equals(target)) {
+                    System.out.print('T');
+                } else if (r.type == 0) {
                     System.out.print('.');
                 } else if (r.type == 1) {
                     System.out.print('=');
@@ -65,7 +74,9 @@ public class Day22ModeMaze {
 
         int riskLevel = 0;
         for (Region r : cave.values()) {
-            riskLevel += r.type;
+            if (r.position.x <= target.x && r.position.y <= target.y) {
+                riskLevel += r.type;
+            }
         }
         return riskLevel;
     }
