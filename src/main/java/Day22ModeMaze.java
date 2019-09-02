@@ -3,7 +3,7 @@ import java.util.HashMap;
 public class Day22ModeMaze {
 
     static class Region {
-        Position position;
+        final Position position;
         int geologicIndex;
         int erosionLevel;
         int type;
@@ -13,8 +13,8 @@ public class Day22ModeMaze {
         }
     }
 
-    private HashMap<Position, Region> cave = new HashMap<>();
-    private Position target;
+    private final HashMap<Position, Region> cave = new HashMap<>();
+    private final Position target;
 
     public Day22ModeMaze(int depth, Position target) {
         this.target = new Position(target.x + 1, target.y + 1);
