@@ -16,6 +16,6 @@ class Day21ChronalConversionTest {
     void mostInstructions() throws IOException {
         String fileName = "out/test/resources/day21.txt";
         Day21ChronalConversion day21ChronalConversion = new Day21ChronalConversion(fileName);
-        assertEquals(0, day21ChronalConversion.mostInstructions());
+        assertEquals(7717135, day21ChronalConversion.mostInstructions());
     }
 }

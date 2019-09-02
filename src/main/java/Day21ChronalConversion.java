@@ -32,30 +32,34 @@ public class Day21ChronalConversion {
         return processor.getRegister()[4];
     }
 
-    int mostInstructions() {
+    long mostInstructions() {
         int[] newRegister = {0, 0, 0, 0, 0, 0};
         processor.setRegister(newRegister);
 
-        int iterations = runCodeUntilCheck(28, Integer.MAX_VALUE);
+        long iterations = runCodeUntilCheck(28, Long.MAX_VALUE);
         // Look for repeating pattern
         System.out.println(processor.registerToString());
         return iterations;
     }
 
-    private int runCodeUntilCheck(int ip, int maxIterations) {
+    private long runCodeUntilCheck(int ip, long maxIterations) {
         boolean programEnd = false;
-        int iterations = 0;
+        long iterations = 0;
         List<Integer> r4list = new ArrayList<>();
+        int previous_r4 = 0;
 
         while (!programEnd && iterations < maxIterations) {
             if (processor.getInstructionPointer() == ip) {
+                Integer r4 = processor.getRegister()[4];
 //                System.out.printf("(%4d) ip=%-6d %35s\n", iterations, processor.getInstructionPointer(), processor.registerToString());
-                if (r4list.contains(processor.getRegister()[4])) {
+                if (r4list.contains(r4)) {
                     System.out.printf("(%4d) ip=%-6d %35s\n", iterations, processor.getInstructionPointer(), processor.registerToString());
-                    System.out.printf("Found match for r4 = %d at ip ? %d\n", processor.getRegister()[4], processor.getInstructionPointer());
+                    System.out.printf("Found match for r4 = %d at ip ? %d, prev: %d\n", r4, processor.getInstructionPointer(), previous_r4);
+                    return previous_r4;
                 } else {
-                    r4list.add(processor.getRegister()[4]);
+                    r4list.add(r4);
                 }
+                previous_r4 = r4;
             }
             processor.saveInstructionPointer();
 //            System.out.printf("(%4d) ip=%-6d %35s", iterations, getInstructionPointer(), registerToString());
@@ -73,11 +77,8 @@ public class Day21ChronalConversion {
             }
             iterations++;
         }
-        Collections.sort(r4list);
-        for (int r4 : r4list) {
-            System.out.println(r4);
-        }
-        return iterations;
+
+        return previous_r4;
     }
 
 //            0: r4 = 123
