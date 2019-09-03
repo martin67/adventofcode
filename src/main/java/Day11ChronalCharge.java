@@ -21,6 +21,7 @@ class Day11ChronalCharge {
 
     @Data
     @AllArgsConstructor
+    static
     class FuelCell {
         Coordinate coordinate;
         int powerLevel;
@@ -29,6 +30,7 @@ class Day11ChronalCharge {
 
     @Data
     @AllArgsConstructor
+    static
     class FuelGrid {
         int xsize;
         int ysize;
@@ -41,7 +43,7 @@ class Day11ChronalCharge {
                     Coordinate coordinate = new Coordinate(x, y);
                     int maxWidth = xsize - x;
                     int maxHeight = ysize - y;
-                    int maxSize = maxWidth < maxHeight ? maxWidth : maxHeight;
+                    int maxSize = Math.min(maxWidth, maxHeight);
                     fuelCells.add(new FuelCell(coordinate, 0, maxSize));
                 }
             }
@@ -62,7 +64,7 @@ class Day11ChronalCharge {
                 if (powerLevel.length() < 3) {
                     hundredDigit = 0;
                 } else {
-                    hundredDigit = Integer.valueOf(powerLevel.substring(powerLevel.length() - 3, powerLevel.length() - 2));
+                    hundredDigit = Integer.parseInt(powerLevel.substring(powerLevel.length() - 3, powerLevel.length() - 2));
                 }
                 fuelCell.setPowerLevel(hundredDigit - 5);
             }

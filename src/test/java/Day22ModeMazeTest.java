@@ -13,4 +13,15 @@ class Day22ModeMazeTest {
         Day22ModeMaze day22ModeMaze = new Day22ModeMaze(depth, new Position(x, y));
         assertEquals(riskLevel, day22ModeMaze.computeRiskLevel());
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "45, 510, 10, 10",
+            "0, 5616, 10, 785"
+    })
+    void fewestMinutes(int minutes, int depth, int x, int y) {
+        Day22ModeMaze day22ModeMaze = new Day22ModeMaze(depth, new Position(x, y));
+        assertEquals(minutes, day22ModeMaze.fewestMinutes());
+    }
+
 }
