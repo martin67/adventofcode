@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -14,4 +13,12 @@ class Day23ExperimentalEmergencyTeleportationTest {
     void nanoBotsInRange(int expected, String fileName) throws IOException {
         assertEquals(expected, new Day23ExperimentalEmergencyTeleportation(fileName).nanoBotsInRange());
     }
+
+    @ParameterizedTest
+    @CsvSource({"36, out/test/resources/day23-demo1.txt",
+            "0, out/test/resources/day23.txt"})
+    void shortestDistance(int expected, String fileName) throws IOException {
+        assertEquals(expected, new Day23ExperimentalEmergencyTeleportation(fileName).shortestDistance());
+    }
+
 }

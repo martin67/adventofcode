@@ -19,6 +19,10 @@ public class Position implements Comparable<Position> {
         } else return Integer.compare(x, p.x);
     }
 
+    int distance(Position p) {
+        return Math.abs(x - p.x) + Math.abs(y - p.y);
+    }
+
     Set<Position> adjacent() {
         Set<Position> adjacent = new HashSet<>();
         adjacent.add(new Position(x, y - 1)); // up

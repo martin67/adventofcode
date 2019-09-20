@@ -6,23 +6,27 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class SpacePosition {
+class SpacePosition {
     int x;
     int y;
     int z;
 
-    int distance(SpacePosition s) {
+    long distance(SpacePosition s) {
         return Math.abs(x - s.x) + Math.abs(y - s.y) + Math.abs(z - s.z);
     }
 
     Set<SpacePosition> adjacent() {
+        return adjacent(1);
+    }
+
+    Set<SpacePosition> adjacent(int offset) {
         Set<SpacePosition> adjacent = new HashSet<>();
-        adjacent.add(new SpacePosition(x, y - 1, z)); // up
-        adjacent.add(new SpacePosition(x - 1, y, z)); // left
-        adjacent.add(new SpacePosition(x + 1, y, z)); // right
-        adjacent.add(new SpacePosition(x, y + 1, z)); // down
-        adjacent.add(new SpacePosition(x, y, z - 1)); // back
-        adjacent.add(new SpacePosition(x, y, z + 1)); // forward
+        adjacent.add(new SpacePosition(x, y - offset, z)); // up
+        adjacent.add(new SpacePosition(x - offset, y, z)); // left
+        adjacent.add(new SpacePosition(x + offset, y, z)); // right
+        adjacent.add(new SpacePosition(x, y + offset, z)); // down
+        adjacent.add(new SpacePosition(x, y, z - offset)); // back
+        adjacent.add(new SpacePosition(x, y, z + offset)); // forward
         return adjacent;
     }
 }
