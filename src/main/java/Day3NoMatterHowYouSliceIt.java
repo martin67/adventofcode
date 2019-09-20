@@ -24,7 +24,6 @@ class Day3NoMatterHowYouSliceIt {
     private final Set[][] fabric = new HashSet[1000][1000];
     private List<Claim> claimList;
 
-
     private void printFabric() {
         for (int y = 0; y < fabric.length; y++) {
             StringBuilder row = new StringBuilder();
@@ -35,7 +34,6 @@ class Day3NoMatterHowYouSliceIt {
         }
         System.out.println();
     }
-
 
     private List<Claim> createClaimList(String input) {
         // Input string: #1 @ 1,3: 4x4
@@ -74,7 +72,6 @@ class Day3NoMatterHowYouSliceIt {
         fillFabric(claimList);
     }
 
-
     private void fillFabric(List<Claim> claimList) {
 
         for (Claim claim : claimList) {
@@ -88,7 +85,6 @@ class Day3NoMatterHowYouSliceIt {
             }
         }
     }
-
 
     int countSlices(String input) {
 
@@ -105,26 +101,24 @@ class Day3NoMatterHowYouSliceIt {
         return overlaps;
     }
 
-
     int getSingleClaim(String input) {
         setup(input);
 
         log.info("Starting singleClaim search");
 
-        for (Claim claim: claimList) {
+        for (Claim claim : claimList) {
             //log.info("Checking claim, " + claim.getId());
 
             boolean discardClaim = false;
             // Check if every piece of the claim is alone on the fabric
-             for (int y = claim.getStarty(); y < claim.getEndy() ; y++) {
-                for (int x = claim.getStartx(); x <claim.getEndx(); x++) {
+            for (int y = claim.getStarty(); y < claim.getEndy(); y++) {
+                for (int x = claim.getStartx(); x < claim.getEndx(); x++) {
                     if (fabric[x][y].size() != 1) {
                         log.debug("more than 1 slice on position [" + x + ", " + y + "], id: " + claim.getId());
                         discardClaim = true;
                         break;
                     }
                 }
-
             }
             // check if found
             if (!discardClaim) {
@@ -134,5 +128,4 @@ class Day3NoMatterHowYouSliceIt {
         }
         return 0;
     }
-
 }

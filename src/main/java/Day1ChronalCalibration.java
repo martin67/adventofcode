@@ -17,9 +17,8 @@ class Day1ChronalCalibration {
         int sum = 0;
         previousFrequencies.add(0);
 
-        while(true) {
+        while (true) {
             for (int i : changes) {
-
                 sum += i;
                 if (previousFrequencies.contains(sum)) {
                     return sum;

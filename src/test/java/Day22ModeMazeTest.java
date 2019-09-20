@@ -17,7 +17,7 @@ class Day22ModeMazeTest {
     @ParameterizedTest
     @CsvSource({
             "45, 510, 10, 10",
-            "1107, 5616, 10, 785"
+            "1070, 5616, 10, 785"
     })
     void fewestMinutes(int minutes, int depth, int x, int y) {
         Day22ModeMaze day22ModeMaze = new Day22ModeMaze(depth, new Position(x, y));
