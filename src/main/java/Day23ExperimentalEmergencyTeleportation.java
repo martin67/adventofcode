@@ -1,13 +1,16 @@
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.clique.BronKerboschCliqueFinder;
+import org.jgrapht.alg.clique.DegeneracyBronKerboschCliqueFinder;
+import org.jgrapht.alg.clique.PivotBronKerboschCliqueFinder;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -20,9 +23,17 @@ public class Day23ExperimentalEmergencyTeleportation {
         SpacePosition pos;
         int r;
 
+        boolean overlapping(Nanobot n) {
+            // distance between n1 and n2
+            // 1...r...r......2
+            // distance 1 -2 : 15
+            // r1 = 4, r2 = 7. 15 > 4+7
+            return pos.distance(n.pos) <= r + n.r;
+        }
+
         @Override
         public String toString() {
-            return "{(x=" + pos.x + ", y=" + pos.y + ", z=" + pos.z + "), r=" + r + "}";
+            return "(" + pos.x + "," + pos.y + "," + pos.z + ")/" + r;
         }
     }
 
@@ -53,6 +64,8 @@ public class Day23ExperimentalEmergencyTeleportation {
     private Range xRange = new Range();
     private Range yRange = new Range();
     private Range zRange = new Range();
+    private Graph<Nanobot, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
 
     public Day23ExperimentalEmergencyTeleportation(String fileName) throws IOException {
         readData(fileName);
@@ -77,7 +90,6 @@ public class Day23ExperimentalEmergencyTeleportation {
             }
         }
         System.out.printf("Read %d nanobots from %s\n", nanobots.size(), fileName);
-
         System.out.printf("X:  min: %d, max: %d, size: %d\n", xRange.min, xRange.max, xRange.size());
         System.out.printf("Y:  min: %d, max: %d, size: %d\n", yRange.min, yRange.max, yRange.size());
         System.out.printf("Z:  min: %d, max: %d, size: %d\n", zRange.min, zRange.max, zRange.size());
@@ -118,20 +130,23 @@ public class Day23ExperimentalEmergencyTeleportation {
         return onRadius;
     }
 
-    long shortestDistance() {
+    SpacePosition findCenterPosition(Set<Nanobot> nanobotSet) {
 
         SpacePosition currentPos = new SpacePosition(xRange.middle(), yRange.middle(), zRange.middle());
         //SpacePosition currentPos = new SpacePosition(0, 0, 0);
         boolean quit = false;
         int offset = 1000000;
 
-        // Find the adjacent point that has the shortest distance to all nanobots
+        // Find the adjacent point that has the shortest distance to all nanobots in the set
         while (!quit) {
-            SpacePosition newPos = currentPos.adjacent(offset).stream().min(Comparator.comparing(this::distanceToAllNanobots)).get();
-            if (distanceToAllNanobots(newPos) < distanceToAllNanobots(currentPos)) {
-                System.out.printf("Moving from %s (%d) to %s (%d) with offset\n",
-                        currentPos, distanceToAllNanobots(currentPos),
-                        newPos, distanceToAllNanobots(newPos), offset);
+            //SpacePosition newPos = currentPos.adjacent(offset).stream().min(Comparator.comparing(this::distanceToNanobots)).get();
+            SpacePosition newPos = currentPos.adjacent(offset).stream()
+                    .min(Comparator.comparing(sp -> distanceToNanobots(sp, nanobotSet))).get();
+            //SpacePosition newPos = null;
+            if (distanceToNanobots(newPos, nanobotSet) < distanceToNanobots(currentPos, nanobotSet)) {
+//                System.out.printf("Moving from %s (%d) to %s (%d) with offset %d\n",
+//                        currentPos, distanceToNanobots(currentPos, nanobotSet),
+//                        newPos, distanceToNanobots(newPos, nanobotSet), offset);
                 currentPos = newPos;
             } else {
 
@@ -141,21 +156,77 @@ public class Day23ExperimentalEmergencyTeleportation {
                     quit = true;
                 } else {
                     offset = offset / 10;
-                    System.out.printf("Decreasing offset to %d\n", offset);
+                    // System.out.printf("Decreasing offset to %d\n", offset);
                 }
             }
         }
 
-        System.out.printf("Ending at %s (%d)\n", currentPos, distanceToAllNanobots(currentPos));
-        return currentPos.distance(new SpacePosition(0, 0, 0));
+        System.out.printf("Ending at %s (%d)\n", currentPos, distanceToNanobots(currentPos, nanobots));
+        return currentPos;
     }
 
-    private long distanceToAllNanobots(SpacePosition sp) {
+    private Long distanceToNanobots(SpacePosition sp, Set<Nanobot> nanobotSet) {
         long dist = 0;
-        for (Nanobot nanobot : nanobots) {
+        for (Nanobot nanobot : nanobotSet) {
             dist += Math.abs(sp.distance(nanobot.pos) - nanobot.r);
         }
         return dist;
+    }
+
+    long shortestDistance() {
+        setupGraph();
+        findClosestNanobots();
+        return 0;
+    }
+
+    private void setupGraph() {
+        System.out.println("Setting up graph; adding vertices");
+        nanobots.forEach(n -> graph.addVertex(n));
+
+        System.out.println("Setting up graph; adding edges");
+        for (Nanobot nanobot : nanobots) {
+            for (Nanobot n2 : nanobots) {
+                if (nanobot.overlapping(n2) && !nanobot.equals(n2)) {
+                    graph.addEdge(nanobot, n2);
+                }
+            }
+        }
+        System.out.println("Number of vertexes: " + (long) graph.vertexSet().size());
+        System.out.println("Number of edges: " + (long) graph.edgeSet().size());
+
+//        graph.vertexSet().forEach(v -> {
+//                    System.out.printf("Vertex: %s: ", v);
+//                    System.out.printf("[Edges: %d]", graph.outgoingEdgesOf(v).size());
+//                    graph.outgoingEdgesOf(v).forEach(e -> System.out.printf(" %s", e));
+//                    System.out.println();
+//                }
+//        );
+
+        System.out.println();
+        //graph.edgeSet().forEach(e -> System.out.printf("Edge: %s\n", e));
+    }
+
+    private void findClosestNanobots() {
+        System.out.println("Finding cliques");
+        //BronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new BronKerboschCliqueFinder<>(graph);
+        //PivotBronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new PivotBronKerboschCliqueFinder<>(graph);
+        DegeneracyBronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new DegeneracyBronKerboschCliqueFinder<>(graph);
+
+        System.out.println("Iterating");
+        Iterator<Set<Nanobot>> iterator = bronKerboschCliqueFinder.maximumIterator();
+        while (iterator.hasNext()) {
+            Set<Nanobot> closestNanobots = iterator.next();
+            System.out.printf("Number of close nanobots: %d\n", closestNanobots.size());
+//            for (Nanobot n : closestNanobots) {
+//                System.out.println(n);
+//            }
+            System.out.println("Finding center point");
+            SpacePosition center = findCenterPosition(closestNanobots);
+            System.out.println("Center point at " + center);
+            System.out.println("Distance to (0,0,0): " + center.distance(new SpacePosition(0, 0, 0)));
+
+        }
+
     }
 }
 
