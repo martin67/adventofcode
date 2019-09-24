@@ -11,7 +11,7 @@ class Day23ExperimentalEmergencyTeleportationTest {
     @CsvSource({"7, out/test/resources/day23-demo0.txt",
             "935, out/test/resources/day23.txt"})
     void nanoBotsInRange(int expected, String fileName) throws IOException {
-        assertEquals(expected, new Day23ExperimentalEmergencyTeleportation(fileName).nanoBotsInRange());
+        assertEquals(expected, new Day23ExperimentalEmergencyTeleportation(fileName).nanobotsInRange());
     }
 
     @ParameterizedTest

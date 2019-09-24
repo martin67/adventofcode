@@ -1,8 +1,6 @@
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jgrapht.Graph;
-import org.jgrapht.alg.clique.BronKerboschCliqueFinder;
-import org.jgrapht.alg.clique.DegeneracyBronKerboschCliqueFinder;
 import org.jgrapht.alg.clique.PivotBronKerboschCliqueFinder;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
@@ -96,18 +94,20 @@ public class Day23ExperimentalEmergencyTeleportation {
         System.out.printf("Number of coordinates: %d\n", xRange.size() * yRange.size() * zRange.size());
     }
 
-    int nanoBotsInRange() {
+    int nanobotsInRange() {
         Nanobot strongestNanobot = nanobots.stream().max(Comparator.comparing(Nanobot::getR)).get();
 
         System.out.printf("Strongest nanobot: %s\n", strongestNanobot);
 
-        Set<Nanobot> inRange = nanoBotsInRange(strongestNanobot);
-
-        return inRange.size();
+        return nanobotsInRange(strongestNanobot).size();
     }
 
-    private Set<Nanobot> nanoBotsInRange(Nanobot nanoBot) {
-        return nanobots.stream().filter(n -> n.pos.distance(nanoBot.pos) <= nanoBot.r).collect(Collectors.toSet());
+    private Set<Nanobot> nanobotsInRange(Nanobot nanoBot) {
+        return nanobots.stream().filter(n -> n.pos.distance(nanoBot.pos) <= n.r).collect(Collectors.toSet());
+    }
+
+    private Long nanobotsInRange(SpacePosition sp) {
+        return nanobots.stream().filter(n -> n.pos.distance(sp) <= n.r).count();
     }
 
     private Set<SpacePosition> positionsOnRadius(Nanobot nanobot) {
@@ -130,7 +130,7 @@ public class Day23ExperimentalEmergencyTeleportation {
         return onRadius;
     }
 
-    SpacePosition findCenterPosition(Set<Nanobot> nanobotSet) {
+    private SpacePosition findCenterPosition(Set<Nanobot> nanobotSet) {
 
         SpacePosition currentPos = new SpacePosition(xRange.middle(), yRange.middle(), zRange.middle());
         //SpacePosition currentPos = new SpacePosition(0, 0, 0);
@@ -165,10 +165,31 @@ public class Day23ExperimentalEmergencyTeleportation {
         return currentPos;
     }
 
+    private SpacePosition findMostNanobots(SpacePosition currentPos) {
+
+        boolean quit = false;
+
+        // Find the adjacent point that has the most nanobots in range
+        while (!quit) {
+            SpacePosition newPos = currentPos.adjacent().stream()
+                    .max(Comparator.comparing(this::nanobotsInRange)).get();
+            if (nanobotsInRange(newPos) > nanobotsInRange(currentPos)) {
+//                System.out.printf("Moving from %s (%d) to %s (%d) with offset %d\n",
+//                        currentPos, distanceToNanobots(currentPos, nanobotSet),
+//                        newPos, distanceToNanobots(newPos, nanobotSet), offset);
+                currentPos = newPos;
+            } else {
+                quit = true;
+            }
+        }
+        System.out.printf("Ending at %s (%d)\n", currentPos, nanobotsInRange(currentPos));
+        return currentPos;
+    }
+
     private Long distanceToNanobots(SpacePosition sp, Set<Nanobot> nanobotSet) {
         long dist = 0;
         for (Nanobot nanobot : nanobotSet) {
-            dist += Math.abs(sp.distance(nanobot.pos) - nanobot.r);
+            dist += sp.distance(nanobot.pos);
         }
         return dist;
     }
@@ -209,8 +230,8 @@ public class Day23ExperimentalEmergencyTeleportation {
     private void findClosestNanobots() {
         System.out.println("Finding cliques");
         //BronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new BronKerboschCliqueFinder<>(graph);
-        //PivotBronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new PivotBronKerboschCliqueFinder<>(graph);
-        DegeneracyBronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new DegeneracyBronKerboschCliqueFinder<>(graph);
+        PivotBronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new PivotBronKerboschCliqueFinder<>(graph);
+        //DegeneracyBronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new DegeneracyBronKerboschCliqueFinder<>(graph);
 
         System.out.println("Iterating");
         Iterator<Set<Nanobot>> iterator = bronKerboschCliqueFinder.maximumIterator();
@@ -224,7 +245,19 @@ public class Day23ExperimentalEmergencyTeleportation {
             SpacePosition center = findCenterPosition(closestNanobots);
             System.out.println("Center point at " + center);
             System.out.println("Distance to (0,0,0): " + center.distance(new SpacePosition(0, 0, 0)));
+            System.out.println("Number of nanobots in range: " + nanobotsInRange(center));
 
+            System.out.println("Closest positions and nanobots in range:");
+            center.adjacent().forEach(sp -> {
+                System.out.printf("%s - %d\n", sp, nanobotsInRange(sp));
+            });
+
+            // Start searching from center point
+            System.out.println("Searching from center point");
+            SpacePosition target = findMostNanobots(center);
+            System.out.println("Target point at " + target);
+            System.out.println("Distance to (0,0,0): " + target.distance(new SpacePosition(0, 0, 0)));
+            System.out.println("Number of nanobots in range: " + nanobotsInRange(target));
         }
 
     }
@@ -232,3 +265,5 @@ public class Day23ExperimentalEmergencyTeleportation {
 
 // 114918899 -- too low...
 // 138697264 -- too low...
+// (x=53643024, y=42478793, z=42575462) (681): 138697279 -- too low
+// 159386817 -- fel
