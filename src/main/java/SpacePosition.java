@@ -7,9 +7,9 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 class SpacePosition {
-    int x;
-    int y;
-    int z;
+    long x;
+    long y;
+    long z;
 
     long distance(SpacePosition s) {
         return Math.abs(x - s.x) + Math.abs(y - s.y) + Math.abs(z - s.z);

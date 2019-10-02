@@ -2,7 +2,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.clique.DegeneracyBronKerboschCliqueFinder;
-import org.jgrapht.alg.clique.PivotBronKerboschCliqueFinder;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
@@ -20,14 +19,15 @@ public class Day23ExperimentalEmergencyTeleportation {
     @AllArgsConstructor
     static class Nanobot {
         SpacePosition pos;
-        Integer r;
+        Long r;
 
         boolean overlapping(Nanobot n) {
+            // true if then nanobot overlaps n
             // distance between n1 and n2
             // 1...r...r......2
             // distance 1 -2 : 15
             // r1 = 4, r2 = 7. 15 > 4+7
-            return pos.distance(n.pos) <= r + n.r;
+            return pos.distance(n.pos) <= (r + n.r);
         }
 
         @Override
@@ -38,10 +38,10 @@ public class Day23ExperimentalEmergencyTeleportation {
 
     @Data
     static class Range {
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
+        long min = Long.MAX_VALUE;
+        long max = Long.MIN_VALUE;
 
-        void add(int value) {
+        void add(long value) {
             if (value > max) {
                 max = value;
             }
@@ -50,11 +50,11 @@ public class Day23ExperimentalEmergencyTeleportation {
             }
         }
 
-        int size() {
+        long size() {
             return max - min;
         }
 
-        int middle() {
+        long middle() {
             return min + (max - min) / 2;
         }
     }
@@ -78,10 +78,10 @@ public class Day23ExperimentalEmergencyTeleportation {
         for (String row : inputStrings) {
             Matcher matcher = pattern.matcher(row);
             if (matcher.find()) {
-                int x = Integer.parseInt(matcher.group(1));
-                int y = Integer.parseInt(matcher.group(2));
-                int z = Integer.parseInt(matcher.group(3));
-                int r = Integer.parseInt(matcher.group(4));
+                long x = Long.parseLong(matcher.group(1));
+                long y = Long.parseLong(matcher.group(2));
+                long z = Long.parseLong(matcher.group(3));
+                long r = Long.parseLong(matcher.group(4));
                 nanobots.add(new Nanobot(new SpacePosition(x, y, z), r));
                 xRange.add(x);
                 yRange.add(y);
@@ -117,9 +117,9 @@ public class Day23ExperimentalEmergencyTeleportation {
         Set<SpacePosition> onRadius = new HashSet<>();
 
         // Only add values that are inside the "box"
-        for (int x = Math.max(xRange.min, nanobot.pos.x - nanobot.r); x < Math.min(xRange.max, nanobot.pos.x + nanobot.r) + 1; x++) {
-            for (int y = Math.max(yRange.min, nanobot.pos.y - nanobot.r); y < Math.min(yRange.max, nanobot.pos.y + nanobot.r) + 1; y++) {
-                for (int z = Math.max(zRange.min, nanobot.pos.z - nanobot.r); z < Math.min(zRange.max, nanobot.pos.z + nanobot.r) + 1; z++) {
+        for (long x = Math.max(xRange.min, nanobot.pos.x - nanobot.r); x < Math.min(xRange.max, nanobot.pos.x + nanobot.r) + 1; x++) {
+            for (long y = Math.max(yRange.min, nanobot.pos.y - nanobot.r); y < Math.min(yRange.max, nanobot.pos.y + nanobot.r) + 1; y++) {
+                for (long z = Math.max(zRange.min, nanobot.pos.z - nanobot.r); z < Math.min(zRange.max, nanobot.pos.z + nanobot.r) + 1; z++) {
                     SpacePosition pos = new SpacePosition(x, y, z);
                     if (nanobot.pos.distance(pos) == nanobot.r) {
                         onRadius.add(pos);
@@ -195,8 +195,7 @@ public class Day23ExperimentalEmergencyTeleportation {
 
     long shortestDistance() {
         setupGraph();
-        findClosestNanobots();
-        return 0;
+        return findClosestNanobots();
     }
 
     private void setupGraph() {
@@ -206,13 +205,13 @@ public class Day23ExperimentalEmergencyTeleportation {
         System.out.println("Setting up graph; adding edges");
         for (Nanobot nanobot : nanobots) {
             for (Nanobot n2 : nanobots) {
-                if (nanobot.overlapping(n2) && !nanobot.equals(n2)) {
+                if (!nanobot.equals(n2) && nanobot.overlapping(n2)) {
                     graph.addEdge(nanobot, n2);
                 }
             }
         }
-        System.out.println("Number of vertexes: " + (long) graph.vertexSet().size());
-        System.out.println("Number of edges: " + (long) graph.edgeSet().size());
+        System.out.println("Number of vertexes: " + graph.vertexSet().size());
+        System.out.println("Number of edges: " + graph.edgeSet().size());
 
 //        graph.vertexSet().forEach(v -> {
 //                    System.out.printf("Vertex: %s: ", v);
@@ -226,10 +225,30 @@ public class Day23ExperimentalEmergencyTeleportation {
         //graph.edgeSet().forEach(e -> System.out.printf("Edge: %s\n", e));
     }
 
-    private void findBruteForce() {
+    private SpacePosition findBruteForceInCube(Set<Nanobot> closestNanobots) {
+        // Brute force, does not work...
+        SpacePosition target = null;
+        long nanoBotsInRangeFromTarget = 0;
+//        for (int x = Math.min(foundStart.pos.x, foundEnd.pos.x); x <= Math.max(foundStart.pos.x, foundEnd.pos.x); x++) {
+//            for (int y = Math.min(foundStart.pos.y, foundEnd.pos.y); y <= Math.max(foundStart.pos.y, foundEnd.pos.y); y++) {
+//                for (int z = Math.min(foundStart.pos.z, foundEnd.pos.z); z <= Math.max(foundStart.pos.z, foundEnd.pos.z); z++) {
+//                    SpacePosition sp = new SpacePosition(x, y, z);
+//                    long nanoBotsInRangeFromSp = nanobotsInRange(sp);
+////                        System.out.printf("%s - %d\n", sp, nanobotsInRange(sp));
+//                    if (nanoBotsInRangeFromSp > nanoBotsInRangeFromTarget) {
+//                        target = sp;
+//                        nanoBotsInRangeFromTarget = nanoBotsInRangeFromSp;
+//                    }
+//                }
+//            }
+//        }
+
+        return target;
+    }
+
+    private SpacePosition findBruteForceInRadius(Set<Nanobot> closestNanobots) {
         // Find nanobot with smallest radius
-        //Nanobot smallestNanobot = closestNanobots.stream().min(Comparator.comparing(Nanobot::getR)).get();
-        Nanobot smallestNanobot = null;
+        Nanobot smallestNanobot = closestNanobots.stream().min(Comparator.comparing(Nanobot::getR)).get();
         System.out.println("Smallest nanobot in clique: " + smallestNanobot);
 
         // Closest point must be in the smallest nanobot. Brute force search there
@@ -239,9 +258,9 @@ public class Day23ExperimentalEmergencyTeleportation {
         SpacePosition target = null;
         long nanoBotsInRangeFromTarget = 0;
         long radiusSquare = (long) Math.pow(smallestNanobot.r, 2);
-        for (int x = smallestNanobot.pos.x - smallestNanobot.r; x < smallestNanobot.pos.x + smallestNanobot.r + 1; x++) {
-            for (int y = smallestNanobot.pos.y - smallestNanobot.r; y < smallestNanobot.pos.y + smallestNanobot.r + 1; y++) {
-                for (int z = smallestNanobot.pos.z - smallestNanobot.r; z < smallestNanobot.pos.z + smallestNanobot.r + 1; z++) {
+        for (long x = smallestNanobot.pos.x - smallestNanobot.r; x < smallestNanobot.pos.x + smallestNanobot.r + 1; x++) {
+            for (long y = smallestNanobot.pos.y - smallestNanobot.r; y < smallestNanobot.pos.y + smallestNanobot.r + 1; y++) {
+                for (long z = smallestNanobot.pos.z - smallestNanobot.r; z < smallestNanobot.pos.z + smallestNanobot.r + 1; z++) {
                     if (Math.pow(x - smallestNanobot.pos.x, 2) + Math.pow(y - smallestNanobot.pos.y, 2) + Math.pow(z - smallestNanobot.pos.z, 2) <= radiusSquare) {
                         SpacePosition sp = new SpacePosition(x, y, z);
                         long nanoBotsInRangeFromSp = nanobotsInRange(sp);
@@ -254,85 +273,74 @@ public class Day23ExperimentalEmergencyTeleportation {
                 }
             }
         }
-        System.out.println("Target point at " + target);
-        System.out.println("Distance to (0,0,0): " + target.distance(new SpacePosition(0, 0, 0)));
-        System.out.println("Number of nanobots in range: " + nanobotsInRange(target));
+        return target;
     }
 
-    private void findClosestNanobots() {
+    private SpacePosition findBruteForceManhattanTunnel(Set<Nanobot> closestNanobots) {
+
+        // Find the two closest nanobots and brute force in the "manhattan" tunnel between the two
+        System.out.println("Finding the two closest nanobots");
+        long distance = Long.MAX_VALUE;
+        Nanobot foundStart = null;
+        Nanobot foundEnd = null;
+        for (Nanobot start : nanobots) {
+            for (Nanobot end : nanobots) {
+                if (start != end && start.pos.distance(end.pos) < distance) {
+                    foundStart = start;
+                    foundEnd = end;
+                    distance = start.pos.distance(end.pos);
+                }
+            }
+        }
+        System.out.printf("Closest nanobots: %s - %s, distance %d\n", foundStart, foundEnd, distance);
+
+        // go from start to end, finding the node that has the shortest distance and check all adjacent nodes for
+        // the largest number of nanobots in range. The target should be on the straight line between start and end
+        SpacePosition target = null;
+        long nanoBotsInRangeFromTarget = 0;
+        SpacePosition currentPosition = foundStart.pos;
+        while (!currentPosition.equals(foundEnd.pos)) {
+            // check all neighbors for best cover
+            SpacePosition found = currentPosition.adjacent().stream().max(Comparator.comparing(this::nanobotsInRange)).get();
+            if (nanobotsInRange(found) > nanoBotsInRangeFromTarget) {
+                target = found;
+                nanoBotsInRangeFromTarget = nanobotsInRange(found);
+            }
+            // move to next position
+            Nanobot finalFoundEnd = foundEnd;
+            currentPosition = currentPosition.adjacent().stream().min(Comparator.comparing(sp -> (int) sp.distance(finalFoundEnd.pos))).get();
+        }
+
+        return target;
+    }
+
+    private long findClosestNanobots() {
         System.out.println("Finding cliques");
         //BronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new BronKerboschCliqueFinder<>(graph);
         //PivotBronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new PivotBronKerboschCliqueFinder<>(graph);
         DegeneracyBronKerboschCliqueFinder<Nanobot, DefaultEdge> bronKerboschCliqueFinder = new DegeneracyBronKerboschCliqueFinder<>(graph);
 
-        System.out.println("Iterating");
+        System.out.println("Iterating 1");
         Iterator<Set<Nanobot>> iterator = bronKerboschCliqueFinder.maximumIterator();
+        System.out.println("Iterating 2");
+        long longest = 0;
         while (iterator.hasNext()) {
             Set<Nanobot> closestNanobots = iterator.next();
-            System.out.printf("Number of nanobots in clique: %d\n", closestNanobots.size());
-//            for (Nanobot n : closestNanobots) {
-//                System.out.println(n);
-//            }
-            // Find the two closest nanobots and brute force in the "manhattan" tunnel between the two
-            System.out.println("Finding the two closest nanobots");
-            long distance = Long.MAX_VALUE;
-            Nanobot foundStart = null;
-            Nanobot foundEnd = null;
-            for (Nanobot start : nanobots) {
-                for (Nanobot end : nanobots) {
-                    if (start != end && start.pos.distance(end.pos) < distance) {
-                        foundStart = start;
-                        foundEnd = end;
-                        distance = start.pos.distance(end.pos);
-                    }
+            System.out.printf("Number of nanobots in maximum clique: %d\n", closestNanobots.size());
+
+            // target = findBruteForceManhattanTunnel(closestNanobots);
+            // target = findBruteForceInRadius(closestNanobots);
+            SpacePosition origin = new SpacePosition(0, 0, 0);
+
+            // This was the tricky part!!!
+            // the position is not the interesting part, only the distance
+            for (Nanobot n : closestNanobots) {
+                long dist = n.pos.distance(origin) - n.r;
+                if (dist > longest) {
+                    longest = dist;
                 }
             }
-            System.out.printf("Closest nanobots: %s - %s, distance %d\n", foundStart, foundEnd, distance);
-
-            // go from start to end, finding the node that has the shortest distance and check all adjacent nodes for
-            // the largest number of nanobots in range. The target should be on the straight line between start and end
-            SpacePosition target = null;
-            long nanoBotsInRangeFromTarget = 0;
-            SpacePosition currentPosition = foundStart.pos;
-            while (!currentPosition.equals(foundEnd.pos)) {
-                // check all neighbors for best cover
-                SpacePosition found = currentPosition.adjacent().stream().max(Comparator.comparing(this::nanobotsInRange)).get();
-                if (nanobotsInRange(found) > nanoBotsInRangeFromTarget) {
-                    target = found;
-                    nanoBotsInRangeFromTarget = nanobotsInRange(found);
-                }
-                // move to next position
-                Nanobot finalFoundEnd = foundEnd;
-                currentPosition = currentPosition.adjacent().stream().min(Comparator.comparing(sp -> (int) sp.distance(finalFoundEnd.pos))).get();
-            }
-
-            // Brute force, does not work...
-//            SpacePosition target = null;
-//            long nanoBotsInRangeFromTarget = 0;
-//            for (int x = Math.min(foundStart.pos.x, foundEnd.pos.x); x <= Math.max(foundStart.pos.x, foundEnd.pos.x); x++) {
-//                for (int y = Math.min(foundStart.pos.y, foundEnd.pos.y); y <= Math.max(foundStart.pos.y, foundEnd.pos.y); y++) {
-//                    for (int z = Math.min(foundStart.pos.z, foundEnd.pos.z); z <= Math.max(foundStart.pos.z, foundEnd.pos.z); z++) {
-//                        SpacePosition sp = new SpacePosition(x, y, z);
-//                        long nanoBotsInRangeFromSp = nanobotsInRange(sp);
-////                        System.out.printf("%s - %d\n", sp, nanobotsInRange(sp));
-//                        if (nanoBotsInRangeFromSp > nanoBotsInRangeFromTarget) {
-//                            target = sp;
-//                            nanoBotsInRangeFromTarget = nanoBotsInRangeFromSp;
-//                        }
-//                    }
-//                }
-//            }
-
-            System.out.println("Target point at " + target);
-            System.out.println("Distance to (0,0,0): " + target.distance(new SpacePosition(0, 0, 0)));
-            System.out.println("Number of nanobots in range: " + nanobotsInRange(target));
-
-
         }
+        return longest;
     }
 }
-
-// 114918899 -- too low...
-// 138697264 -- too low...
-// (x=53643024, y=42478793, z=42575462) (681): 138697279 -- too low
-// 159386817 -- fel

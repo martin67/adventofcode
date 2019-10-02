@@ -16,7 +16,7 @@ class Day23ExperimentalEmergencyTeleportationTest {
 
     @ParameterizedTest
     @CsvSource({"36, out/test/resources/day23-demo1.txt",
-            "0, out/test/resources/day23.txt"})
+            "138697281, out/test/resources/day23.txt"})
     void shortestDistance(int expected, String fileName) throws IOException {
         assertEquals(expected, new Day23ExperimentalEmergencyTeleportation(fileName).shortestDistance());
     }
