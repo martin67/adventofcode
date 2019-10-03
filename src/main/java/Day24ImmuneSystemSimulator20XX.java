@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -112,10 +111,6 @@ public class Day24ImmuneSystemSimulator20XX {
         Optional<Group> getDefender(Group attacker) {
             Optional<Battle> battle = battles.stream().filter(b -> b.attacker == attacker).findFirst();
             return battle.map(d -> d.defender);
-        }
-
-        Stream<Battle> stream() {
-            return battles.stream();
         }
     }
 
@@ -284,7 +279,7 @@ public class Day24ImmuneSystemSimulator20XX {
             Optional<Group> defender = orderOfBattle.getDefender(attacker);
             defender.ifPresent(def -> {
                 int damage = attacker.computeDamage(def);
-                int killedUnits = def.takeDamage(damage);
+//                int killedUnits = def.takeDamage(damage);
 //                System.out.println(attacker.side + " group " + attacker.id + " attacks defending group " + def.id + ", killing " + killedUnits + " units");
             });
         });
