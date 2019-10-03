@@ -20,7 +20,7 @@ class Day1NoTimeForATaxicabTest {
 
     @ParameterizedTest
     @CsvSource({"4, out/test/resources/2016/day1-demo4.txt",
-            "0, out/test/resources/2016/day1.txt"})
+            "151, out/test/resources/2016/day1.txt"})
     void visitedTwice(int expected, String fileName) throws IOException {
         assertEquals(expected, new Day1NoTimeForATaxicab(fileName).visitedTwice());
     }

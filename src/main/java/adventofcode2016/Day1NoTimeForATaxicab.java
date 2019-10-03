@@ -1,20 +1,15 @@
 package adventofcode2016;
 
-import javafx.geometry.Pos;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Day1NoTimeForATaxicab {
 
-    enum Direction {N, S, E, W}
-
     private List<String> instructions = new ArrayList<>();
-    private List<Position> positionsVisited = new ArrayList<>();
+    private Set<Position> positionsVisited = new HashSet<>();
+    private int distanceToVisitTwice = 0;
 
     public Day1NoTimeForATaxicab(String fileName) throws IOException {
         readData(fileName);
@@ -28,38 +23,44 @@ public class Day1NoTimeForATaxicab {
         }
     }
 
+    private Direction turnDirection(Direction currentDirection, char turn) {
+        switch (currentDirection) {
+            case North:
+                currentDirection = (turn == 'R') ? Direction.East : Direction.West;
+                break;
+            case East:
+                currentDirection = (turn == 'R') ? Direction.South : Direction.North;
+                break;
+            case South:
+                currentDirection = (turn == 'R') ? Direction.West : Direction.East;
+                break;
+            case West:
+                currentDirection = (turn == 'R') ? Direction.North : Direction.South;
+                break;
+        }
+        return currentDirection;
+    }
+
     int shortestPath() {
         Position pos = new Position(0, 0);
-        Direction currentDirection = Direction.N;
+        Direction currentDirection = Direction.North;
 
         for (String instruction : instructions) {
             char turn = instruction.charAt(0);
             int distance = Integer.parseInt(instruction.substring(1));
+            currentDirection = turnDirection(currentDirection, turn);
+
             switch (currentDirection) {
-                case N:
-                    currentDirection = (turn == 'R') ? Direction.E : Direction.W;
-                    break;
-                case E:
-                    currentDirection = (turn == 'R') ? Direction.S : Direction.N;
-                    break;
-                case S:
-                    currentDirection = (turn == 'R') ? Direction.W : Direction.E;
-                    break;
-                case W:
-                    currentDirection = (turn == 'R') ? Direction.N : Direction.S;
-                    break;
-            }
-            switch (currentDirection) {
-                case N:
+                case North:
                     pos.y -= distance;
                     break;
-                case E:
+                case East:
                     pos.x += distance;
                     break;
-                case S:
+                case South:
                     pos.y += distance;
                     break;
-                case W:
+                case West:
                     pos.x -= distance;
                     break;
             }
@@ -67,7 +68,37 @@ public class Day1NoTimeForATaxicab {
         return pos.distance(new Position(0, 0));
     }
 
+    private Position walkUntilSecondVisit(Position startPosition, Direction walkingDirection, int distance) {
+        Position current = startPosition;
+        for (int i = 0; i < distance; i++) {
+            Position next = current.adjacent(walkingDirection);
+            if (positionsVisited.contains(next)) {
+                distanceToVisitTwice = next.distance(new Position(0, 0));
+                return null;
+            } else {
+                positionsVisited.add(next);
+                current = next;
+            }
+        }
+        return current;
+    }
+
     int visitedTwice() {
+        Position currentPosition = new Position(0, 0);
+        positionsVisited.add(currentPosition);
+        Direction currentDirection = Direction.North;
+
+        for (String instruction : instructions) {
+            char turn = instruction.charAt(0);
+            int distance = Integer.parseInt(instruction.substring(1));
+            currentDirection = turnDirection(currentDirection, turn);
+
+            currentPosition = walkUntilSecondVisit(currentPosition, currentDirection, distance);
+            if (currentPosition == null) {
+                return distanceToVisitTwice;
+            }
+        }
         return 0;
     }
+
 }
