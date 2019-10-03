@@ -40,7 +40,7 @@ public class Day25FourDimensionalAdventure {
         List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
 
         for (String row : inputStrings) {
-            String s[] = row.split(",");
+            String[] s = row.split(",");
             spacetime.add(new SpaceTimePosition(Integer.parseInt(s[0]), Integer.parseInt(s[1]), Integer.parseInt(s[2]), Integer.parseInt(s[3])
             ));
         }
