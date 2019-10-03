@@ -9,6 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+
 public class Day24ImmuneSystemSimulator20XX {
 
     enum Side {
@@ -37,9 +39,23 @@ public class Day24ImmuneSystemSimulator20XX {
         String attackType;
         Set<String> weaknesses;
         Set<String> immunities;
+        int boost;
+
+        Group(Group group) {
+            id = group.id;
+            side = group.side;
+            units = group.units;
+            hitPoints = group.hitPoints;
+            initiative = group.initiative;
+            damage = group.damage;
+            attackType = group.attackType;
+            weaknesses = group.weaknesses;
+            immunities = group.immunities;
+            boost = group.boost;
+        }
 
         int effectivePower() {
-            return units * damage;
+            return units * (damage + boost);
         }
 
         int computeDamage(Group opponent) {
@@ -103,8 +119,6 @@ public class Day24ImmuneSystemSimulator20XX {
         }
     }
 
-
-//    private Set<Group> groups = new HashSet<>();
     private List<Group> groups = new ArrayList<>();
 
     public Day24ImmuneSystemSimulator20XX(String fileName) throws IOException {
@@ -153,7 +167,7 @@ public class Day24ImmuneSystemSimulator20XX {
                     int initiative = Integer.parseInt(matcher.group("initiative"));
 
                     numberOfSystems++;
-                    groups.add(new Group(numberOfSystems, activeSide, units, hitPoints, initiative, damage, attackType, weaknesses, immunities));
+                    groups.add(new Group(numberOfSystems, activeSide, units, hitPoints, initiative, damage, attackType, weaknesses, immunities, 0));
                 }
             }
         }
@@ -161,42 +175,77 @@ public class Day24ImmuneSystemSimulator20XX {
 
     int winningArmyUnits() {
         int round = 1;
+        List<Group> groupList = groups;
+
         do {
             System.out.printf("Round: %d\n----------------------------\n", round);
-            OrderOfBattle oob = targetSelection();
-            attack(oob);
+            OrderOfBattle oob = targetSelection(groupList);
+            attack(groupList, oob);
 
             // Remove dead units
-            groups.removeIf(g -> g.units == 0);
+            groupList.removeIf(g -> g.units == 0);
 
             round++;
-        } while (groups.stream().filter(g -> g.side == Side.IMMUNE_SYSTEM).mapToInt(Group::getUnits).sum() > 0 &&
-                groups.stream().filter(g -> g.side == Side.INFECTION).mapToInt(Group::getUnits).sum() > 0);
+        } while (groupList.stream().filter(g -> g.side == Side.IMMUNE_SYSTEM).mapToInt(Group::getUnits).sum() > 0 &&
+                groupList.stream().filter(g -> g.side == Side.INFECTION).mapToInt(Group::getUnits).sum() > 0);
 
-        return groups.stream().mapToInt(Group::getUnits).sum();
+        return groupList.stream().mapToInt(Group::getUnits).sum();
     }
 
-    private OrderOfBattle targetSelection() {
+    int immuneSystemUnitsLeft() {
+        int boost = 49; // trial and error. The original stopped for numbers between 42 and 48
+
+        while (true) {
+            List<Group> groupList = groups.stream().map(Group::new).collect(toList());
+
+            System.out.print("Setting boost to: " + boost);
+            setImmuneBoost(groupList, boost);
+
+            do {
+                OrderOfBattle oob = targetSelection(groupList);
+                attack(groupList, oob);
+
+                // Remove dead units
+                groupList.removeIf(g -> g.units == 0);
+
+            } while (groupList.stream().filter(g -> g.side == Side.IMMUNE_SYSTEM).mapToInt(Group::getUnits).sum() > 0 &&
+                    groupList.stream().filter(g -> g.side == Side.INFECTION).mapToInt(Group::getUnits).sum() > 0);
+
+            if (groupList.stream().filter(g -> g.side == Side.IMMUNE_SYSTEM).mapToInt(Group::getUnits).sum() > 0) {
+                System.out.println(" -- Immune system victorious!");
+                return groupList.stream().mapToInt(Group::getUnits).sum();
+            } else {
+                System.out.println(" -- Infection victory");
+            }
+            boost++;
+        }
+    }
+
+    private void setImmuneBoost(List<Group> groupList, int boost) {
+        groupList.stream().filter(g -> g.side == Side.IMMUNE_SYSTEM).forEach(g -> g.setBoost(boost));
+    }
+
+    private OrderOfBattle targetSelection(List<Group> groupList) {
         OrderOfBattle orderOfBattle = new OrderOfBattle();
 
         // Print stats
-        for (Side side : Side.values()) {
-            System.out.println(side + ":");
-            groups.stream().filter(g -> g.getSide() == side)
-                    .sorted(Comparator.comparing(Group::getId))
-                    .forEach(g -> System.out.println("Group " + g.id + " contains " + g.units + " units"));
-        }
-        System.out.println();
+//        for (Side side : Side.values()) {
+//            System.out.println(side + ":");
+//            groupList.stream().filter(g -> g.getSide() == side)
+//                    .sorted(Comparator.comparing(Group::getId))
+//                    .forEach(g -> System.out.println("Group " + g.id + " contains " + g.units + " units"));
+//        }
+//        System.out.println();
 
         // Choose attacker in descending order of effective power, then initiative
-        groups.stream().sorted(Comparator
+        groupList.stream().sorted(Comparator
                 .comparing(Group::effectivePower)
                 .thenComparing(Group::getInitiative).reversed())
                 .forEach(attacker -> {
                     // System.out.println("Attacker: " + attacker + ", EP: " + attacker.effectivePower());
                     // Chose enemy to attack. Should not have been targeted for attack earlier.
                     // order by most damage, then largest effective power, then highest initiative
-                    Optional<Group> defender = groups.stream()
+                    Optional<Group> defender = groupList.stream()
                             .filter(g -> g.getSide() != attacker.getSide())
                             .filter(orderOfBattle::isUnattacked)
                             .max(Comparator
@@ -211,35 +260,35 @@ public class Day24ImmuneSystemSimulator20XX {
                         }
                     });
 
-//                    for (Group d : groups) {
+//                    for (Group d : groupList) {
 //                        if (d.side != attacker.side) {
 //                            System.out.println("---Damage: " + attacker.computeDamage(d) + ", defender: " + d + ", EP: " + d.effectivePower() + ", Unattacked: " + orderOfBattle.isUnattacked(d));
 //                        }
 //                    }
                 });
 
-        for (Side side : Side.values()) {
-            orderOfBattle.stream()
-                    .filter(b -> b.attacker.side == side)
-                    .sorted(Comparator.comparing(b -> b.attacker.getId()))
-                    .forEach(b -> System.out.println(b.attacker.side + " group " + b.attacker.id + " would deal defending group " + b.defender.id + " " + b.attacker.computeDamage(b.defender) + " damage"));
-        }
-        System.out.println();
+//        for (Side side : Side.values()) {
+//            orderOfBattle.stream()
+//                    .filter(b -> b.attacker.side == side)
+//                    .sorted(Comparator.comparing(b -> b.attacker.getId()))
+//                    .forEach(b -> System.out.println(b.attacker.side + " group " + b.attacker.id + " would deal defending group " + b.defender.id + " " + b.attacker.computeDamage(b.defender) + " damage"));
+//        }
+//        System.out.println();
 
         return orderOfBattle;
     }
 
-    private void attack(OrderOfBattle orderOfBattle) {
+    private void attack(List<Group> groupList, OrderOfBattle orderOfBattle) {
         // Groups attack in decreasing order of initiative
-        groups.stream().sorted(Comparator.comparing(Group::getInitiative).reversed()).forEach(attacker -> {
+        groupList.stream().sorted(Comparator.comparing(Group::getInitiative).reversed()).forEach(attacker -> {
             Optional<Group> defender = orderOfBattle.getDefender(attacker);
             defender.ifPresent(def -> {
                 int damage = attacker.computeDamage(def);
                 int killedUnits = def.takeDamage(damage);
-                System.out.println(attacker.side + " group " + attacker.id + " attacks defending group " + def.id + ", killing " + killedUnits + " units");
+//                System.out.println(attacker.side + " group " + attacker.id + " attacks defending group " + def.id + ", killing " + killedUnits + " units");
             });
         });
-        System.out.println();
+        //System.out.println();
     }
 
 }
