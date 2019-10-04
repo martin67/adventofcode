@@ -10,8 +10,9 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import static java.util.Comparator.reverseOrder;
 
 public class Day4SecurityThroughObscurity {
 
@@ -28,18 +29,38 @@ public class Day4SecurityThroughObscurity {
 
         String computeChecksum() {
             Map<Character, Integer> characterFrequency = new HashMap<>();
-            for (char c : name.toCharArray()) {
+
+            for (char c : name.replace("-", "").toCharArray()) {
                 if (characterFrequency.containsKey(c)) {
                     characterFrequency.put(c, characterFrequency.get(c) + 1);
                 } else {
                     characterFrequency.put(c, 1);
                 }
             }
-            List<Character> checksum = characterFrequency.entrySet().stream()
-                    .sorted(Comparator.comparing(Entry::getValue).reversed())
-                    .map(Entry::getKey).collect(Collectors.toList());
+            String checksum = characterFrequency.entrySet().stream()
+                    .sorted(Comparator.comparing(Entry<Character, Integer>::getValue, reverseOrder())
+                            .thenComparing(Entry::getKey))
+                    .map(Entry::getKey)
+                    .map(Object::toString)
+                    .collect(Collectors.joining());
 
-            return checksum.toString();
+            return checksum.substring(0, 5);
+        }
+
+        String shiftDecipher() {
+            StringBuilder sb = new StringBuilder();
+            for (char c : name.toCharArray()) {
+                if (c == '-') {
+                    sb.append(' ');
+                } else {
+                    int newCharCode = c + (sectorId % 26);
+                    if (newCharCode > 122) {
+                        newCharCode -= 26;
+                    }
+                    sb.append((char) newCharCode);
+                }
+            }
+            return sb.toString().trim();
         }
     }
 
@@ -52,12 +73,12 @@ public class Day4SecurityThroughObscurity {
     private void readData(String fileName) throws IOException {
         List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
 
-        Pattern pattern = Pattern.compile("^([\\w-]+)(\\d\\d\\d)\\[(\\w+)\\]$");
+        Pattern pattern = Pattern.compile("^([\\w-]+)(\\d\\d\\d)\\[(\\w+)]$");
 
         for (String row : inputStrings) {
             Matcher matcher = pattern.matcher(row);
             if (matcher.find()) {
-                String name = matcher.group(1).replace("-", "");
+                String name = matcher.group(1);
                 int sectorId = Integer.parseInt(matcher.group(2));
                 String checksum = matcher.group(3);
                 rooms.add(new Room(name, sectorId, checksum));
@@ -66,7 +87,13 @@ public class Day4SecurityThroughObscurity {
     }
 
     long sectorIdSum() {
-        return rooms.stream().filter(Room::real).count();
+        return rooms.stream().filter(Room::real).mapToInt(Room::getSectorId).sum();
     }
 
+    int northPoleObjectsSectorId() {
+        // Room to look for: northpole object storage
+
+        return rooms.stream().filter(r -> r.shiftDecipher().equals("northpole object storage"))
+                .mapToInt(Room::getSectorId).findFirst().orElse(0);
+    }
 }

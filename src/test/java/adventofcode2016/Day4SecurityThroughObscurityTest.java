@@ -11,9 +11,15 @@ class Day4SecurityThroughObscurityTest {
 
     @ParameterizedTest
     @CsvSource({"1514, out/test/resources/2016/day4-demo1.txt",
-    "0, out/test/resources/2016/day4.txt"})
+            "185371, out/test/resources/2016/day4.txt"})
     void sectorIdSum(long expected, String fileName) throws IOException {
         assertEquals(expected, new Day4SecurityThroughObscurity(fileName).sectorIdSum());
     }
 
+    @ParameterizedTest
+    @CsvSource({"0, out/test/resources/2016/day4-demo2.txt",
+            "984, out/test/resources/2016/day4.txt"})
+    void northPoleObjectsSectorId(long expected, String fileName) throws IOException {
+        assertEquals(expected, new Day4SecurityThroughObscurity(fileName).northPoleObjectsSectorId());
+    }
 }
