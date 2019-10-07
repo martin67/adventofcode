@@ -19,36 +19,49 @@ public class Day9ExplosivesInCyberspace {
         messages = Files.readAllLines(Paths.get(fileName));
     }
 
-    int decompressedLength() {
-        StringBuilder output = new StringBuilder();
+    long decompressedVersion1() {
 
+        long length = 0;
         for (String message : messages) {
-            Pattern pattern = Pattern.compile("^(\\((\\d+)x(\\d+)\\))");
-            int index = 0;
+            length = decompress(message, false);
+        }
+        return length;
+    }
 
-            while (index < message.length()) {
-                String input = message.substring(index);
-                Matcher matcher = pattern.matcher(input);
-                if (matcher.find()) {
-                    String everything = matcher.group(1);
-                    int length = Integer.parseInt(matcher.group(2));
-                    int repeat = Integer.parseInt(matcher.group(3));
-                    int start = index + everything.length();
-                    String addString = message.substring(start, start + length);
-                    for (int i = 0; i < repeat; i++) {
-                        output.append(addString);
-                    }
-                    index += everything.length() + length;
+    long decompressedVersion2() {
+
+        long length = 0;
+        for (String message : messages) {
+            length = decompress(message, true);
+        }
+        return length;
+    }
+
+    private long decompress(String message, boolean version2) {
+        Pattern pattern = Pattern.compile("^(\\((\\d+)x(\\d+)\\))");
+        int index = 0;
+        long length = 0;
+
+        while (index < message.length()) {
+            String input = message.substring(index);
+            Matcher matcher = pattern.matcher(input);
+            if (matcher.find()) {
+                String header = matcher.group(1);
+                int decompressedLength = Integer.parseInt(matcher.group(2));
+                int decompressedRepeat = Integer.parseInt(matcher.group(3));
+                if (version2) {
+                    int start = index + header.length();
+                    length += decompress(message.substring(start, start + decompressedLength), true) * decompressedRepeat;
                 } else {
-                    output.append(message.charAt(index));
-                    index++;
+                    length += decompressedLength * decompressedRepeat;
                 }
+                index += header.length() + decompressedLength;
+            } else {
+                index++;
+                length++;
             }
         }
-        return output.length();
+        return length;
     }
 
-    int longerDecompressedLength() {
-        return 0;
-    }
 }

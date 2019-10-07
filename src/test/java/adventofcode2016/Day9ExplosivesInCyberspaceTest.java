@@ -17,8 +17,8 @@ class Day9ExplosivesInCyberspaceTest {
             "6, out/test/resources/2016/day9-demo5.txt",
             "18, out/test/resources/2016/day9-demo6.txt",
             "70186, out/test/resources/2016/day9.txt"})
-    void decompressedLength(int expected, String fileName) throws IOException {
-        assertEquals(expected, new Day9ExplosivesInCyberspace(fileName).decompressedLength());
+    void decompressedVersion1(long expected, String fileName) throws IOException {
+        assertEquals(expected, new Day9ExplosivesInCyberspace(fileName).decompressedVersion1());
     }
 
     @ParameterizedTest
@@ -26,9 +26,9 @@ class Day9ExplosivesInCyberspaceTest {
             "20, out/test/resources/2016/day9-demo6.txt",
             "241920, out/test/resources/2016/day9-demo7.txt",
             "445, out/test/resources/2016/day9-demo8.txt",
-            "0, out/test/resources/2016/day9.txt"})
-    void longerDecompressedLength(int expected, String fileName) throws IOException {
-        assertEquals(expected, new Day9ExplosivesInCyberspace(fileName).longerDecompressedLength());
+            "10915059201, out/test/resources/2016/day9.txt"})
+    void decompressedVersion2(long expected, String fileName) throws IOException {
+        assertEquals(expected, new Day9ExplosivesInCyberspace(fileName).decompressedVersion2());
     }
 
 }
