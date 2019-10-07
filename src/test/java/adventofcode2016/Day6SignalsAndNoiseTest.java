@@ -11,9 +11,15 @@ class Day6SignalsAndNoiseTest {
 
     @ParameterizedTest
     @CsvSource({"easter, out/test/resources/2016/day6-demo1.txt",
-            "0, out/test/resources/2016/day6.txt"})
-    void correctedVersion(String expected, String fileName) throws IOException {
-        assertEquals(expected, new Day6SignalsAndNoise(fileName).correctedVersion());
+            "tkspfjcc, out/test/resources/2016/day6.txt"})
+    void bathroomCode(String expected, String fileName) throws IOException {
+        assertEquals(expected, new Day6SignalsAndNoise(fileName).errorCorrectedVersion());
     }
 
+    @ParameterizedTest
+    @CsvSource({"advent, out/test/resources/2016/day6-demo1.txt",
+            "xrlmbypn, out/test/resources/2016/day6.txt"})
+    void originalMessage(String expected, String fileName) throws IOException {
+        assertEquals(expected, new Day6SignalsAndNoise(fileName).originalMessage());
+    }
 }
