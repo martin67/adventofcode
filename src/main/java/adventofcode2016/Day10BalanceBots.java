@@ -35,13 +35,21 @@ public class Day10BalanceBots {
 
     @Data
     @AllArgsConstructor
+    static class Destination {
+        String type;
+        int destination;
+    }
+
+    @Data
+    @AllArgsConstructor
     static class Instruction {
         int sourceBot;
-        int lowDestination;
-        int highDestination;
+        Destination low;
+        Destination high;
     }
 
     private HashMap<Integer, Bot> bots = new HashMap<>();
+    private HashMap<Integer, Integer> outputs = new HashMap<>();
     private Set<Instruction> instructions = new HashSet<>();
 
     public Day10BalanceBots(String fileName) throws IOException {
@@ -55,6 +63,7 @@ public class Day10BalanceBots {
 
         for (String row : inputStrings) {
             Matcher matcher = initPattern.matcher(row);
+            // value 41 goes to bot 12
             if (matcher.find()) {
                 int value = Integer.parseInt(matcher.group(1));
                 int botNumber = Integer.parseInt(matcher.group(2));
@@ -65,26 +74,17 @@ public class Day10BalanceBots {
                 }
             }
             matcher = instructionPattern.matcher(row);
-            if (matcher.find()) {
-                int sourceBot = Integer.parseInt(matcher.group(1));
-                int lowDestination = -1;
-                if (matcher.group(2).equals("bot")) {
-                    lowDestination = Integer.parseInt(matcher.group(3));
-                }
-                int highDestination = -1;
-                if (matcher.group(4).equals("bot")) {
-                    highDestination = Integer.parseInt(matcher.group(5));
-                }
-                instructions.add(new Instruction(sourceBot, lowDestination, highDestination));
-            }
-            // value 41 goes to bot 12
-
             //bot 113 gives low to bot 127 and high to bot 196
             //bot 169 gives low to output 20 and high to bot 83
+            if (matcher.find()) {
+                instructions.add(new Instruction(Integer.parseInt(matcher.group(1)),
+                        new Destination(matcher.group(2), Integer.parseInt(matcher.group(3))),
+                        new Destination(matcher.group(4), Integer.parseInt(matcher.group(5)))));
+            }
         }
     }
 
-    int botNumber(int compareOne, int compareTwo) {
+    private void runFactory() {
 
         boolean done = false;
         while (!done) {
@@ -93,27 +93,27 @@ public class Day10BalanceBots {
                 // Find sourceBots that have both chips available
                 if (bots.containsKey(instruction.sourceBot) && bots.get(instruction.sourceBot).chips.size() == 2) {
                     Bot sourceBot = bots.get(instruction.sourceBot);
-                    int lowDestination = instruction.lowDestination;
-                    int highDestination = instruction.highDestination;
-                    System.out.printf("Bot: %d, putting lower chip %d to bot %d and higher chip %d to bot %d.\n",
-                            instruction.sourceBot,
-                            sourceBot.lower(), lowDestination,
-                            sourceBot.higher(), highDestination);
+                    Destination lowDestination = instruction.low;
+                    Destination highDestination = instruction.high;
 
-                    if (lowDestination != -1) {
-                        if (bots.containsKey(lowDestination)) {
-                            bots.get(lowDestination).add(sourceBot.lower());
+                    if (lowDestination.type.equals("bot")) {
+                        if (bots.containsKey(lowDestination.destination)) {
+                            bots.get(lowDestination.destination).add(sourceBot.lower());
                         } else {
-                            bots.put(lowDestination, new Bot(sourceBot.lower()));
+                            bots.put(lowDestination.destination, new Bot(sourceBot.lower()));
                         }
+                    } else {
+                        outputs.put(lowDestination.destination, sourceBot.lower());
                     }
 
-                    if (highDestination != -1) {
-                        if (bots.containsKey(highDestination)) {
-                            bots.get(highDestination).add(sourceBot.higher());
+                    if (highDestination.type.equals("bot")) {
+                        if (bots.containsKey(highDestination.destination)) {
+                            bots.get(highDestination.destination).add(sourceBot.higher());
                         } else {
-                            bots.put(highDestination, new Bot(sourceBot.higher()));
+                            bots.put(highDestination.destination, new Bot(sourceBot.higher()));
                         }
+                    } else {
+                        outputs.put(highDestination.destination, sourceBot.higher());
                     }
 
                     i.remove();
@@ -124,12 +124,18 @@ public class Day10BalanceBots {
                 done = true;
             }
         }
+    }
 
-        // Find target bot
-        List target = new ArrayList<>();
-        target.add(compareOne);
-        target.add(compareTwo);
-        Optional<Map.Entry<Integer, Bot>> tt = Optional.ofNullable(bots.entrySet().stream().filter(e -> e.getValue().chips.containsAll(target)).findFirst().orElse(null));
-        return tt.get().getKey();
+    int botNumber(int compareOne, int compareTwo) {
+        runFactory();
+        List target = Arrays.asList(compareOne, compareTwo);
+        return bots.entrySet().stream()
+                .filter(e -> e.getValue().chips.containsAll(target))
+                .findFirst().map(Map.Entry::getKey).get();
+    }
+
+    int multiplyOutput() {
+        runFactory();
+        return outputs.get(0) * outputs.get(1) * outputs.get(2);
     }
 }

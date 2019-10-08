@@ -16,5 +16,9 @@ class Day10BalanceBotsTest {
         assertEquals(expected, new Day10BalanceBots(fileName).botNumber(compareOne, compareTwo));
     }
 
-
+    @ParameterizedTest
+    @CsvSource({"47101, out/test/resources/2016/day10.txt"})
+    void multiplyOutput(int expected, String fileName) throws IOException {
+        assertEquals(expected, new Day10BalanceBots(fileName).multiplyOutput());
+    }
 }
