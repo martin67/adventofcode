@@ -61,7 +61,7 @@ public class Day11RadioisotopeThermoelectricGenerators {
             for (int i = NUMBER_OF_FLOORS; i > 0; i--) {
                 output.append(String.format("F%d ", i));
                 for (Device device : sortedDeviceList) {
-                    if (deviceStates.get(device) == i-1) {
+                    if (deviceStates.get(device) == i - 1) {
                         output.append(" ").append(device);
                     } else {
                         output.append(" . ");
@@ -149,6 +149,7 @@ public class Day11RadioisotopeThermoelectricGenerators {
     }
 
     private Set<State> validStates(State start) {
+        System.out.printf("Checking:\n-------------\n%s\n", start);
         Set<State> validStates = new HashSet<>();
 
         // Go from floor to floor and pick all possible combinations at that floor to put in the elevator
@@ -157,24 +158,44 @@ public class Day11RadioisotopeThermoelectricGenerators {
             Set<Device> devicesOnCurrentFloor = start.deviceStates.entrySet().stream()
                     .filter(e -> e.getValue() == finalStartFloor)
                     .map(Map.Entry::getKey).collect(Collectors.toSet());
-            Set<Set<Device>> possibleElevatorContents = Sets.powerSet(devicesOnCurrentFloor);
+            // Remove all sets with more than two devices
+            Set<Set<Device>> possibleElevatorContents = Sets.powerSet(devicesOnCurrentFloor).stream().filter(s -> s.size() < 3).collect(Collectors.toSet());
+            System.out.printf("Starting at floor: %d with %s\n", startFloor, devicesOnCurrentFloor);
 
-            // Now move try all these combinations to all floors to get valid states
-            for (int endFloor = 0; endFloor < NUMBER_OF_FLOORS; endFloor++) {
-
-                for (Set<Device> elevatorContent : possibleElevatorContents) {
+            for (Set<Device> elevatorContent : possibleElevatorContents) {
+                System.out.printf("Moving %s\n", elevatorContent);
+                // First go up
+                for (int endFloor = startFloor + 1; endFloor < NUMBER_OF_FLOORS; endFloor++) {
                     State newState = new State(start);
                     for (Device device : elevatorContent) {
                         newState.deviceStates.put(device, endFloor);
                     }
-                    // Find same state in allStates
-                    State s2 = getStateFromAllStates(newState);
+                    if (validState(newState)) {
+                        validStates.add(getStateFromAllStates(newState));
+                    } else {
+                        System.out.printf("Illegal state:\n%s\n", newState);
+                        break;
+                    }
+                }
 
-                    if (validState(s2)) {
-                        validStates.add(s2);
+                // then go down
+                for (int endFloor = startFloor - 1; endFloor >= 0; endFloor--) {
+                    State newState = new State(start);
+                    for (Device device : elevatorContent) {
+                        newState.deviceStates.put(device, endFloor);
+                    }
+                    if (validState(newState)) {
+                        validStates.add(getStateFromAllStates(newState));
+                    } else {
+                        System.out.printf("Illegal state:\n%s\n", newState);
+                        break;
                     }
                 }
             }
+        }
+        System.out.printf("Result:\n-------------\n");
+        for(State s : validStates) {
+            System.out.printf("%s\n", s);
         }
         return validStates;
     }
@@ -198,15 +219,15 @@ public class Day11RadioisotopeThermoelectricGenerators {
 
             // if there are no generators or microchips on the floor, move on to next floor
             if (generatorsOnFloor.isEmpty() || microchipsOnFloor.isEmpty()) {
-                break;
+                continue;
             }
 
             // if all microchips have a corresponding generator, move on to the next floor
             Set<String> microchipMaterials = microchipsOnFloor.stream().map(Device::getMaterial).collect(Collectors.toSet());
             Set<String> generatorMaterials = generatorsOnFloor.stream().map(Device::getMaterial).collect(Collectors.toSet());
 
-            if (microchipMaterials.containsAll(generatorMaterials)) {
-                break;
+            if (generatorMaterials.containsAll(microchipMaterials)) {
+                continue;
             }
 
             return false;
@@ -246,7 +267,11 @@ public class Day11RadioisotopeThermoelectricGenerators {
         DijkstraShortestPath<State, DefaultEdge> dijkstraAlg =
                 new DijkstraShortestPath<>(graph);
         ShortestPathAlgorithm.SingleSourcePaths<State, DefaultEdge> iPaths = dijkstraAlg.getPaths(initialState);
-        System.out.println(iPaths.getPath(finalState) + "\n");
+//        System.out.println(iPaths.getPath(finalState) + "\n");
+
+        for(State s: iPaths.getPath(finalState).getVertexList()) {
+            System.out.printf("%s\n", s);
+        }
 
         return iPaths.getPath(finalState).getLength();
     }
