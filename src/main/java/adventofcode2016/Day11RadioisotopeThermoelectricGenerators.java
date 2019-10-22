@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.shortestpath.AStarShortestPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
@@ -18,63 +21,103 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+
 public class Day11RadioisotopeThermoelectricGenerators {
 
     private static final int NUMBER_OF_FLOORS = 4;
 
     @Data
-    @AllArgsConstructor
-    static class Device {
-        String type;
-        String material;
-
-        @Override
-        public String toString() {
-            return material.substring(0, 1).toUpperCase() + type.substring(0, 1).toUpperCase();
-        }
-    }
-
-    @Data
     @NoArgsConstructor
     static class State {
-        int elevator;
-        Map<Device, Integer> deviceStates = new HashMap<>();
+        String name;        // E1-HM1-PG3-HG2 etc.
 
         State(State state) {
-            this.elevator = state.elevator;
-            this.deviceStates = new HashMap<>(state.getDeviceStates());
+            this.name = state.name;
         }
 
-        void put(Device device, Integer floor) {
-            deviceStates.put(device, floor);
+        State(String name) {
+            this.name = name;
         }
 
-        String shortName() {
-            List<Device> sortedDeviceList = deviceStates.keySet().stream()
-                    .sorted(Comparator.comparing(Device::toString))
-                    .collect(Collectors.toList());
-            StringBuilder output = new StringBuilder();
-            output.append(String.format("E%d", elevator + 1));
-            for (Device device : sortedDeviceList) {
-                output.append(String.format("-%s%d", device, deviceStates.get(device) + 1));
+        State(int floor, State currentState, Set<String> update) {
+            // save all the devices in order to a state
+            StringBuilder istate = new StringBuilder("E" + floor);
+
+            // copy old state
+            name = currentState.name;
+
+            for (String device : currentState.getAllDevices()) {
+                String currentDevice = device + currentState.getFloor(device);
+                if (update.contains(device)) {
+                    istate.append("-").append(device).append(floor);
+                } else {
+                    istate.append("-").append(currentDevice);
+                }
             }
-            return output.toString();
+            name = istate.toString();
+        }
+
+        int getElevator() {
+            return Integer.parseInt(name.substring(1, 2));
+        }
+
+        List<String> getAllDevices() {
+            List<String> deviceNames = new ArrayList<>();
+            Pattern pattern = Pattern.compile("([A-Z][A-Z])\\d");
+            Matcher matcher = pattern.matcher(name);
+            while (matcher.find()) {
+                deviceNames.add(matcher.group(1));
+            }
+            return deviceNames;
+        }
+
+        int getFloor(String device) {
+            return getDeviceFloor().get(device);
+        }
+
+        Map<String, Integer> getDeviceFloor() {
+            Map<String, Integer> deviceFloor = new HashMap<>();
+            for (String s : name.split("-")) {
+                String[] part = s.split("(?<=\\D)(?=\\d)");
+                deviceFloor.put(part[0], Integer.parseInt(part[1]));
+            }
+            return deviceFloor;
+        }
+
+        List<String> getDeviceNamesFromFloor(int floor) {
+            List<String> deviceNames = new ArrayList<>();
+            Pattern pattern = Pattern.compile("(\\w\\w)" + floor);
+            Matcher matcher = pattern.matcher(name);
+            while (matcher.find()) {
+                deviceNames.add(matcher.group(1));
+            }
+            return deviceNames;
+        }
+
+        Map<Integer, String> getFloorDevice() {
+            Map<Integer, String> floorDevice = new HashMap<>();
+            for (String s : name.split("-")) {
+                String[] part = s.split("(?<=\\D)(?=\\d)");
+                floorDevice.put(Integer.parseInt(part[1]), part[0]);
+            }
+            return floorDevice;
         }
 
         String longName() {
-            List<Device> sortedDeviceList = deviceStates.keySet().stream()
-                    .sorted(Comparator.comparing(Device::toString))
-                    .collect(Collectors.toList());
             StringBuilder output = new StringBuilder();
+            Map<String, Integer> floorMap = getDeviceFloor();
+
             for (int i = NUMBER_OF_FLOORS; i > 0; i--) {
                 output.append(String.format("F%d ", i));
-                if (elevator == i - 1) {
+                if (floorMap.get("E") == i) {
                     output.append(" E ");
                 } else {
                     output.append(" . ");
                 }
-                for (Device device : sortedDeviceList) {
-                    if (deviceStates.get(device) == i - 1) {
+                for (String device : getAllDevices()) {
+                    if (floorMap.get(device) == i) {
                         output.append(" ").append(device);
                     } else {
                         output.append(" . ");
@@ -85,27 +128,13 @@ public class Day11RadioisotopeThermoelectricGenerators {
             return output.toString();
         }
 
-        int cost() {
-            return (NUMBER_OF_FLOORS - elevator) + (NUMBER_OF_FLOORS * deviceStates.size() - deviceStates.values().stream().mapToInt(Integer::intValue).sum());
-        }
-
-        boolean valid() {
-            String name = shortName();
-
+        boolean isValid() {
             // Check all floors for correct setup
-            for (int floor = 0; floor < NUMBER_OF_FLOORS; floor++) {
-                // Floor is not valid if it contains a microchip without a corresponding generator, unless there is no
+            for (int floor = 1; floor <= NUMBER_OF_FLOORS; floor++) {
+                // Floor is not isValid if it contains a microchip without a corresponding generator, unless there is no
                 // generators on the floor at all
-
-                int finalFloor = floor;
-                Set<Device> microchipsOnFloor = deviceStates.entrySet().stream()
-                        .filter(e -> e.getValue() == finalFloor)
-                        .filter(e -> e.getKey().getType().equals("microchip"))
-                        .map(Map.Entry::getKey).collect(Collectors.toSet());
-                Set<Device> generatorsOnFloor = deviceStates.entrySet().stream()
-                        .filter(e -> e.getValue() == finalFloor)
-                        .filter(e -> e.getKey().getType().equals("generator"))
-                        .map(Map.Entry::getKey).collect(Collectors.toSet());
+                Set<String> microchipsOnFloor = getDeviceNamesFromFloor(floor).stream().filter(n -> n.charAt(1) == 'M').collect(Collectors.toSet());
+                Set<String> generatorsOnFloor = getDeviceNamesFromFloor(floor).stream().filter(n -> n.charAt(1) == 'G').collect(Collectors.toSet());
 
                 // if there are no generators or microchips on the floor, move on to next floor
                 if (generatorsOnFloor.isEmpty() || microchipsOnFloor.isEmpty()) {
@@ -113,18 +142,12 @@ public class Day11RadioisotopeThermoelectricGenerators {
                 }
 
                 // if all microchips have a corresponding generator, move on to the next floor
-                Set<String> microchipMaterials = microchipsOnFloor.stream().map(Device::getMaterial).collect(Collectors.toSet());
-                Set<String> generatorMaterials = generatorsOnFloor.stream().map(Device::getMaterial).collect(Collectors.toSet());
+                Set<String> microchipMaterials = microchipsOnFloor.stream().map(n -> n.substring(0, 1)).collect(Collectors.toSet());
+                Set<String> generatorMaterials = generatorsOnFloor.stream().map(n -> n.substring(0, 1)).collect(Collectors.toSet());
 
                 if (generatorMaterials.containsAll(microchipMaterials)) {
                     continue;
                 }
-                // check for a microchip without generator
-//                for (String microchipMaterial : microchipMaterials) {
-//                    if (!generatorMaterials.contains(microchipMaterial)) {
-//                        return false;
-//                    }
-//                }
                 return false;
             }
             return true;
@@ -135,40 +158,29 @@ public class Day11RadioisotopeThermoelectricGenerators {
 
             // One state equals one move of the elevator, meaning going up or down one level
 
-            // devices on current floor (where the elevator is)
-            Set<Device> devicesOnCurrentFloor = deviceStates.entrySet().stream()
-                    .filter(e -> e.getValue() == elevator)
-                    .map(Map.Entry::getKey).collect(Collectors.toSet());
-            Set<Set<Device>> possibleElevatorContents = Sets.powerSet(devicesOnCurrentFloor).stream()
-                    .filter(s -> s.size() < 3 && s.size() > 0).collect(Collectors.toSet());
+            int currentFloor = getElevator();
+            List<String> devicesOnCurrentFloor = getDeviceNamesFromFloor(currentFloor);
+            Set<Set<String>> combinations = Sets.powerSet(new HashSet<>(devicesOnCurrentFloor));
 
             // go up
-            if (elevator < NUMBER_OF_FLOORS - 1) {
-                for (Set<Device> elevatorContent : possibleElevatorContents) {
-                    int newFloor = elevator + 1;
-                    State newState = new State(this);
-                    newState.elevator = newFloor;
+            if (currentFloor < NUMBER_OF_FLOORS) {
+                for (Set<String> elevatorContent : combinations) {
+                    int newFloor = currentFloor + 1;
+                    State newState = new State(newFloor, this, elevatorContent);
 
-                    for (Device device : elevatorContent) {
-                        newState.deviceStates.put(device, newFloor);
-                    }
-                    if (newState.valid()) {
+                    if (newState.isValid()) {
                         validStates.add(newState);
                     }
                 }
             }
 
             // go down
-            if (elevator > 0) {
-                for (Set<Device> elevatorContent : possibleElevatorContents) {
-                    int newFloor = elevator - 1;
-                    State newState = new State(this);
-                    newState.elevator = newFloor;
+            if (currentFloor > 1) {
+                for (Set<String> elevatorContent : combinations) {
+                    int newFloor = currentFloor - 1;
+                    State newState = new State(newFloor, this, elevatorContent);
 
-                    for (Device device : elevatorContent) {
-                        newState.deviceStates.put(device, newFloor);
-                    }
-                    if (newState.valid()) {
+                    if (newState.isValid()) {
                         validStates.add(newState);
                     }
                 }
@@ -177,28 +189,31 @@ public class Day11RadioisotopeThermoelectricGenerators {
             return validStates;
         }
 
+        String getSignature() {
+            String[] deviceArray = name.split("-");
+            List<String> signature = new ArrayList<>();
+            String elevator = deviceArray[0];
+            for (int i = 1; i < deviceArray.length; i += 2) {
+                String sig = deviceArray[i].substring(2, 3) + deviceArray[i + 1].substring(2, 3);
+                signature.add(sig);
+            }
+            return elevator + signature.stream().sorted().collect(Collectors.joining());
+        }
+
+        Set<String> validSignatures() {
+            return validStates().stream().map(State::getSignature).collect(Collectors.toSet());
+        }
+
         @Override
         public String toString() {
-            return shortName();
-        }
-
-        @Override
-        public int hashCode() {
-            return shortName().hashCode();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            State state = (State) o;
-            return shortName().equals(state.shortName());
+            return name;
         }
     }
 
 
-    private Set<Device> allDevices = new HashSet<>();
+    //private Set<String> allDevices = new HashSet<>();
     private Set<State> allStates = new HashSet<>();
+    private Set<String> allSignatures = new HashSet<>();
     private State initialState;
     private State finalState;
     private Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
@@ -206,12 +221,15 @@ public class Day11RadioisotopeThermoelectricGenerators {
 
     public Day11RadioisotopeThermoelectricGenerators(String fileName) throws IOException {
         initialState = readData(fileName);
-        finalState = createFinalState();
+        finalState = createFinalState(initialState);
+        // kommer aldrig att gå att skapa alla tillstånd i förväg. I fall 2 är det +4M stycken
+        graph.addVertex(initialState.getSignature());
         //createAllStatesRecursive(initialState);
-        //createAllStates();
-        createAllStates2();
-        System.out.printf("%s\n%s\n", initialState, finalState);
-        setupGraph();
+        createAllStates();
+        //createAllStates2();
+        System.out.printf("Initial state: %s\nFinal state:   %s\n", initialState, finalState);
+
+        //setupGraph();
         //setupNewGraph(initialState, finalState);
     }
 
@@ -219,32 +237,49 @@ public class Day11RadioisotopeThermoelectricGenerators {
         List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
         Pattern pattern = Pattern.compile("(a|, a| and a|, and a) (\\w+)(-compatible)? (generator|microchip)");
 
-        // First floor will be number 0!
-        int floor = 0;
-
-        State initialState = new State();
-        initialState.elevator = 0;
+        int floor = 1;
+        Set<String> newDevices = new HashSet<>();
+        Set<String> newDeviceNames = new HashSet<>();
 
         for (String row : inputStrings) {
             Matcher matcher = pattern.matcher(row);
             while (matcher.find()) {
-                Device device = new Device(matcher.group(4), matcher.group(2));
-                allDevices.add(device);
-                initialState.put(device, floor);
+                // hydrogen generator on 3rd floor => HG3
+                String material = matcher.group(2).substring(0, 1).toUpperCase();
+                String type = matcher.group(4).substring(0, 1).toUpperCase();
+                newDevices.add(material + type + floor);
+                newDeviceNames.add(material + type);
             }
             floor++;
         }
+
+        // save all the devices in order to a state
+        StringBuilder istate = new StringBuilder("E1");
+        newDevices.stream().sorted().forEach(d -> istate.append("-").append(d));
+        State initialState = new State(istate.toString());
+
+        // Some tests
+        List<String> devicesOnFloor1 = initialState.getDeviceNamesFromFloor(1);
+        boolean ok = initialState.isValid();
+        Set<State> validStates = initialState.validStates();
+        String t2 = initialState.getSignature();
+        Set<String> validSignatures = initialState.validSignatures();
         return initialState;
     }
 
     private void createAllStatesRecursive(State start) {
         // does not work with large graphs...
         allStates.add(start);
+        allSignatures.add(start.getSignature());
+
         if (allStates.size() % 1000 == 0) {
             System.out.printf("allStates; %d\n", allStates.size());
         }
         for (State nextState : start.validStates()) {
-            if (!allStates.contains(nextState)) {
+            if (!allSignatures.contains(nextState.getSignature())) {
+                allSignatures.add(nextState.getSignature());
+                graph.addVertex(nextState.getSignature());
+                graph.addEdge(start.getSignature(), nextState.getSignature());
                 createAllStatesRecursive(nextState);
             }
         }
@@ -265,72 +300,41 @@ public class Day11RadioisotopeThermoelectricGenerators {
             combinationWithExtra.add(extra);
             return combinationWithExtra;
         }))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
-       private void createAllStates2() {
-        List<Device> deviceList = new ArrayList<>(allDevices);
-        int size = deviceList.size();
-        List<String> aList = Arrays.asList("AG", "AM");
-        List<String> bList = Arrays.asList("BG", "BM");
-        List<String> cList = Arrays.asList("CG", "CM");
-        List<List<String>> allLists = Arrays.asList(aList, bList, cList);
-
-        List<List<String>> hej = computeCombinations(allLists);
-    }
-
-    private void createAllStates3() {
-        List<Device> deviceList = new ArrayList<>(allDevices);
-        int size = deviceList.size();
-        List<String> aList = Arrays.asList("AG", "AM");
-        List<String> bList = Arrays.asList("BG", "BM");
-        List<String> cList = Arrays.asList("CG", "CM");
-        List<List<String>> allLists = Arrays.asList(aList, bList, cList);
-
-        List<List<String>> hej = computeCombinations(allLists);
-    }
 
     private void createAllStates() {
+        Set<String> done = new HashSet<>();
+        Queue<State> todo = new LinkedList<>();
 
-        List<Device> deviceList = new ArrayList<>(allDevices);
-        int size = deviceList.size();
+        todo.add(initialState);
+        //graph.addVertex(initialState.getSignature());
 
-        List<Set<Integer>> intlist = new LinkedList<>();
-        for (int i = 0; i < size; i++) {
-            Set<Integer> set = new HashSet<>();
-            for (int j = 0; j < size; j++) {
-                set.add(j);
-            }
-            intlist.add(set);
-        }
-        for (List<Integer> integerList : Sets.cartesianProduct(intlist)) {
-            for (int floor = 0; floor < NUMBER_OF_FLOORS; floor++) {
-                State state = new State();
-                state.elevator = floor;
-                for (int i = 0; i < integerList.size(); i++) {
-                    state.put(deviceList.get(i), integerList.get(i));
-                }
 
-                if (state.valid()) {
-                    allStates.add(state);
+        while (!todo.isEmpty()) {
+            State current = todo.poll();
+            graph.addVertex(current.getSignature());
+
+            for (State next : current.validStates()) {
+                if (!done.contains(next.getSignature())) {
+                    done.add(next.getSignature());
+                    todo.add(next);
+                    graph.addVertex(next.getSignature());
+                    graph.addEdge(current.getSignature(), next.getSignature());
                 }
             }
         }
     }
 
-    private State createFinalState() {
-        State state = new State();
-        state.elevator = NUMBER_OF_FLOORS - 1;
-        for (Device device : allDevices) {
-            state.deviceStates.put(device, NUMBER_OF_FLOORS - 1);
-        }
-        return state;
+    private State createFinalState(State state) {
+        return new State(NUMBER_OF_FLOORS, state, new HashSet<>(state.getAllDevices()));
     }
 
 
     private void setupNewGraph(State start, State end) {
-        graph.addVertex(start.shortName());
-        graph.addVertex((end.shortName()));
+        graph.addVertex(start.toString());
+        graph.addVertex(end.toString());
 
         State current = new State(start);
 
@@ -338,28 +342,30 @@ public class Day11RadioisotopeThermoelectricGenerators {
             // create new neighbors
             current.validStates()
                     .forEach(s -> {
-                        graph.addVertex(s.shortName());
-                        graph.addEdge(start.shortName(), s.shortName());
+                        graph.addVertex(s.toString());
+                        graph.addEdge(start.toString(), s.toString());
                     });
-            System.out.printf("Round: %d, cost: %d\n%s\n", i, current.cost(), current.longName());
+//            System.out.printf("Round: %d, cost: %d\n%s\n", i, current.cost(), current.longName());
 
 
-//            ALTAdmissibleHeuristic<String, DefaultEdge> heuristic = new ALTAdmissibleHeuristic<>(g, landmarks);
-//            AStarShortestPath<String, DefaultEdge> shortestPath = new AStarShortestPath<>(graph, heuristic);
+            MyHeuristic heuristic = new MyHeuristic();
+            AStarShortestPath shortestPath = new AStarShortestPath<>(graph, heuristic);
 
-            current = current.validStates().stream().min(Comparator.comparing(State::cost)).get();
+            GraphPath path = shortestPath.getPath(start.toString(), end.toString());
+
+//            current = current.validStates().stream().min(Comparator.comparing(State::cost)).get();
         }
     }
 
     private void setupGraph() {
         System.out.println("Setting up graph; adding vertices");
-        allStates.forEach(s -> graph.addVertex(s.shortName()));
+        allStates.forEach(s -> graph.addVertex(s.toString()));
 
         System.out.println("Setting up graph; adding edges");
         for (State startState : allStates) {
             Set<State> endStates = startState.validStates();
             for (State endState : endStates) {
-                graph.addEdge(startState.shortName(), endState.shortName());
+                graph.addEdge(startState.toString(), endState.toString());
             }
         }
 
@@ -371,14 +377,31 @@ public class Day11RadioisotopeThermoelectricGenerators {
 
         System.out.println("Shortest path from i to c:");
         DijkstraShortestPath<String, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
-        ShortestPathAlgorithm.SingleSourcePaths<String, DefaultEdge> iPaths = dijkstraAlg.getPaths(initialState.shortName());
-        System.out.println(iPaths.getPath(finalState.shortName()) + "\n");
+        ShortestPathAlgorithm.SingleSourcePaths<String, DefaultEdge> iPaths = dijkstraAlg.getPaths(initialState.getSignature());
+        System.out.println(iPaths.getPath(finalState.getSignature()) + "\n");
 
-        for (String node : iPaths.getPath(finalState.shortName()).getVertexList()) {
+        for (String node : iPaths.getPath(finalState.getSignature()).getVertexList()) {
             System.out.printf("%s\n\n", node);
-            System.out.printf("%s\n\n", allStates.stream().filter(s -> s.shortName().equals(node)).findFirst().get().longName());
+//            System.out.printf("%s\n\n", allStates.stream().filter(s -> s.toString().equals(node)).findFirst().get().longName());
 
         }
-        return iPaths.getPath(finalState.shortName()).getLength();
+        return iPaths.getPath(finalState.getSignature()).getLength();
+    }
+
+    static class MyHeuristic implements AStarAdmissibleHeuristic {
+
+        @Override
+        public double getCostEstimate(Object sourceVertex, Object targetVertex) {
+            State src = (State) sourceVertex;
+            State dst = (State) targetVertex;
+//            return src.cost() - dst.cost();
+            return 0;
+        }
+
+        @Override
+        public boolean isConsistent(Graph graph) {
+            return false;
+        }
     }
 }
+
