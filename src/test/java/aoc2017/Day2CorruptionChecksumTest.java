@@ -20,7 +20,7 @@ class Day2CorruptionChecksumTest {
 
     @ParameterizedTest
     @CsvSource({"9, src/test/resources/2017/day2-demo2.txt",
-            "32121, src/test/resources/2017/day2.txt"})
+            "197, src/test/resources/2017/day2.txt"})
     void computeDivisibleChecksum(int expected, String fileName) throws IOException {
         assertEquals(expected, new Day2CorruptionChecksum().computeDivisibleChecksum(Files.readAllLines(Paths.get(fileName))));
     }

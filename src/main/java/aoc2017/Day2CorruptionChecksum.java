@@ -1,5 +1,6 @@
 package aoc2017;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,10 +27,11 @@ public class Day2CorruptionChecksum {
                     .sorted(Comparator.reverseOrder())
                     .collect(Collectors.toList());
             for (Integer numerator : sortedRow) {
-                for (Integer denominator : sortedRow) {
+                List<Integer> sortedRowWithoutNumerator = new ArrayList<>(sortedRow);
+                sortedRowWithoutNumerator.remove(numerator);
+                for (Integer denominator : sortedRowWithoutNumerator) {
                     if (numerator % denominator == 0) {
                         checkSum += numerator / denominator;
-                        break;
                     }
                 }
             }
