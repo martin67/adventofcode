@@ -23,7 +23,7 @@ class Day7TheSumofItsParts {
         boolean available = true;
         boolean busy = false;
         @NonNull
-        int timeLeft;
+        Integer timeLeft;
     }
 
     private final List<Step> stepList = new ArrayList<>();
