@@ -46,8 +46,7 @@ public class Day2ProgramAlarm {
     int nounAndVerb(String opcodeString) {
         for (int noun = 0; noun < 100; noun++) {
             for (int verb = 0; verb < 100; verb++) {
-                int result = valueAtProgramHalt(opcodeString, noun, verb);
-                if (result == 19690720) {
+                if (valueAtProgramHalt(opcodeString, noun, verb) == 19690720) {
                     return 100 * noun + verb;
                 }
             }
