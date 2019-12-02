@@ -220,8 +220,7 @@ public class Day11RadioisotopeThermoelectricGenerators {
 
     public Day11RadioisotopeThermoelectricGenerators(String fileName) throws IOException {
         initialState = readData(fileName);
-        finalState = createFinalState(initialState);
-        // kommer aldrig att gå att skapa alla tillstånd i förväg. I fall 2 är det +4M stycken
+        finalState = createFinalState(initialState);// kommer aldrig att gå att skapa alla tillstånd i förväg. I fall 2 är det +4M stycken
         graph.addVertex(initialState.getSignature());
         //createAllStatesRecursive(initialState);
         createAllStates();
