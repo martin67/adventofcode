@@ -30,7 +30,26 @@ public class Day3CrossedWires {
                 int distance = Integer.parseInt(step.substring(1));
                 log.info("Dir: " + direction + " dist: " + distance);
 
+                for (int i = 0; i < distance; i++) {
+                    switch (direction) {
+                        case "U":
+                            pos = new Position(pos.getX(), pos.getY() - 1);
+                            break;
+                        case "D":
+                            pos = new Position(pos.getX(), pos.getY() + 1);
+                            break;
+                        case "R":
+                            pos = new Position(pos.getX() + 1, pos.getY());
+                            break;
+                        case "L":
+                            pos = new Position(pos.getX() - 1, pos.getY());
+                            break;
+                    }
+                    wire.positions.add(pos);
+                }
             }
+
+            // Find crossings
         }
         return 0;
     }
