@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day3SpiralMemoryTest {
     @ParameterizedTest
-    @CsvSource({"0, 1",
+    @CsvSource({"0, 10",
             "3, 12",
             "2, 23",
             "31, 1024"})

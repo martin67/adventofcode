@@ -4,13 +4,15 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Day3CrossedWires {
 
     @Data
-    class Wire {
+    static class Wire {
         List<Position> positions = new ArrayList<>();
     }
 
@@ -25,10 +27,8 @@ public class Day3CrossedWires {
             wire.positions.add(pos);
 
             for (String step : line.split(",")) {
-                log.info("Step: " + step);
                 String direction = step.substring(0, 1);
                 int distance = Integer.parseInt(step.substring(1));
-                log.info("Dir: " + direction + " dist: " + distance);
 
                 for (int i = 0; i < distance; i++) {
                     switch (direction) {
@@ -48,9 +48,27 @@ public class Day3CrossedWires {
                     wire.positions.add(pos);
                 }
             }
-
-            // Find crossings
         }
+
+        // Find crossings
+        List<Position> crossings = new ArrayList<>();
+        for (Position posLine1 : wires.get(0).positions) {
+            for (Position posLine2 : wires.get(1).positions) {
+                if (posLine1.equals(posLine2)) {
+                    crossings.add(posLine1);
+                }
+            }
+        }
+
+        // Order by distance
+        Position closest = crossings.stream()
+                .sorted(Comparator.comparingInt(p -> p.distance(new Position(0, 0))))
+                .collect(Collectors.toList()).get(1);
+        return closest.distance(new Position(0,0));
+    }
+
+    int stepsToClosestIntersection(List<String> inputLines) {
+
         return 0;
     }
 }
