@@ -3,32 +3,29 @@ package aoc2019;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 public class Day3CrossedWires {
 
     @Data
-    class Wire {
-        List<Position> positions = new ArrayList<>();
+    static class Wire {
+        Map<Position, Integer> positions = new HashMap<>();
     }
 
-    List<Wire> wires = new ArrayList<>();
+    private List<Wire> wires = new ArrayList<>();
 
-    int distanceToClosestIntersection(List<String> inputLines) {
+    public Day3CrossedWires(List<String> inputLines) {
         for (String line : inputLines) {
             Wire wire = new Wire();
             wires.add(wire);
 
             Position pos = new Position(0, 0);
-            wire.positions.add(pos);
+            int totalDistance = 0;
 
             for (String step : line.split(",")) {
-                log.info("Step: " + step);
                 String direction = step.substring(0, 1);
                 int distance = Integer.parseInt(step.substring(1));
-                log.info("Dir: " + direction + " dist: " + distance);
 
                 for (int i = 0; i < distance; i++) {
                     switch (direction) {
@@ -45,12 +42,34 @@ public class Day3CrossedWires {
                             pos = new Position(pos.getX() - 1, pos.getY());
                             break;
                     }
-                    wire.positions.add(pos);
+                    totalDistance++;
+                    if (!wire.positions.containsKey(pos)) {
+                        wire.positions.put(pos, totalDistance);
+                    }
                 }
             }
-
-            // Find crossings
         }
-        return 0;
+    }
+
+    int distanceToClosestIntersection() {
+        // Find crossings
+        Map<Position, Integer> crossings = new HashMap<>();
+        for (Position pos : wires.get(0).positions.keySet()) {
+            if (wires.get(1).positions.containsKey(pos)) {
+                crossings.put(pos, pos.distance(new Position(0, 0)));
+            }
+        }
+        return Collections.min(crossings.values());
+    }
+
+    int stepsToClosestIntersection() {
+        // Find crossings
+        Map<Position, Integer> crossings = new HashMap<>();
+        for (Position pos : wires.get(0).positions.keySet()) {
+            if (wires.get(1).positions.containsKey(pos)) {
+                crossings.put(pos, wires.get(0).positions.get(pos) + wires.get(1).positions.get(pos));
+            }
+        }
+        return Collections.min(crossings.values());
     }
 }
