@@ -17,18 +17,18 @@ class Day3CrossedWiresTest {
             "159, src/test/resources/2019/day3-demo2.txt",
             "135, src/test/resources/2019/day3-demo3.txt",
             "865, src/test/resources/2019/day3.txt"})
-    void distanceToClosestIntersection(int distance, String fileName) throws IOException {
+    void distanceToClosestIntersection(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(distance, new Day3CrossedWires().distanceToClosestIntersection(inputLines));
+        assertEquals(expected, new Day3CrossedWires(inputLines).distanceToClosestIntersection());
     }
 
     @ParameterizedTest
     @CsvSource({"30, src/test/resources/2019/day3-demo1.txt",
             "610, src/test/resources/2019/day3-demo2.txt",
             "410, src/test/resources/2019/day3-demo3.txt",
-            "0, src/test/resources/2019/day3.txt"})
-    void stepsToClosestIntersection(int distance, String fileName) throws IOException {
+            "35038, src/test/resources/2019/day3.txt"})
+    void stepsToClosestIntersection(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(distance, new Day3CrossedWires().stepsToClosestIntersection(inputLines));
+        assertEquals(expected, new Day3CrossedWires(inputLines).stepsToClosestIntersection());
     }
 }
