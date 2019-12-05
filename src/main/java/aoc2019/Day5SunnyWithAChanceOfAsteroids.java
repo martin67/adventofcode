@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 @Slf4j
 public class Day5SunnyWithAChanceOfAsteroids {
 
-    int instructionPointer;
-    List<Integer> opcodes;
+    private int instructionPointer;
+    private List<Integer> opcodes;
 
     int diagnosticCode(String opcodeStrings, int input) {
         opcodes = Stream.of(opcodeStrings.split(","))
@@ -24,32 +24,37 @@ public class Day5SunnyWithAChanceOfAsteroids {
         while (!quit) {
             switch (getOpcode()) {
                 case "01":
-                    log.info("{} {}: Adding {} + {} and storing in position {}", instructionPointer, getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer + 3));
+                    log.info("{} {}: Adding {} + {} and storing in position {}", instructionPointer,
+                            getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer + 3));
                     opcodes.set(opcodes.get(instructionPointer + 3), getP1() + getP2());
                     instructionPointer += 4;
                     break;
 
                 case "02":
-                    log.info("{} {}: Multiplying {} * {} and storing in position {}", instructionPointer, getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer + 3));
+                    log.info("{} {}: Multiplying {} * {} and storing in position {}", instructionPointer,
+                            getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer + 3));
                     opcodes.set(opcodes.get(instructionPointer + 3), getP1() * getP2());
                     instructionPointer += 4;
                     break;
 
                 case "03":
-                    log.info("{} {}: Reading {} and storing in position {}", instructionPointer, getOpcodeString(), input, opcodes.get(instructionPointer + 1));
+                    log.info("{} {}: Reading {} and storing in position {}", instructionPointer,
+                            getOpcodeString(), input, opcodes.get(instructionPointer + 1));
                     opcodes.set(opcodes.get(instructionPointer + 1), input);
                     instructionPointer += 2;
                     break;
 
                 case "04":
-                    log.info("{} {}: Printing {} from position {}", instructionPointer, getOpcodeString(), opcodes.get(opcodes.get(instructionPointer + 1)), instructionPointer + 1);
+                    log.info("{} {}: Printing {} from position {}", instructionPointer,
+                            getOpcodeString(), opcodes.get(opcodes.get(instructionPointer + 1)), instructionPointer + 1);
                     System.out.printf("Output: %d\n", opcodes.get(opcodes.get(instructionPointer + 1)));
                     lastCode = opcodes.get(opcodes.get(instructionPointer + 1));
                     instructionPointer += 2;
                     break;
 
                 case "05":
-                    log.info("{} {}: Jumping to {} if {} != 0", instructionPointer, getOpcodeString(), getP2(), getP1());
+                    log.info("{} {}: Jumping to {} if {} != 0", instructionPointer,
+                            getOpcodeString(), getP2(), getP1());
                     if (getP1() != 0) {
                         instructionPointer = getP2();
                     } else {
@@ -95,23 +100,20 @@ public class Day5SunnyWithAChanceOfAsteroids {
         return lastCode;
     }
 
-
-    String getOpcodeString() {
+    private String getOpcodeString() {
         return StringUtils.leftPad(opcodes.get(instructionPointer).toString(), 4, '0');
     }
 
-    String getOpcode() {
+    private String getOpcode() {
         return getOpcodeString().substring(2, 4);
     }
 
-    int getP1() {
-        String opcodeString = getOpcodeString();
-        return opcodeString.charAt(1) == '1' ? opcodes.get(instructionPointer + 1) : opcodes.get(opcodes.get(instructionPointer + 1));
+    private int getP1() {
+        return getOpcodeString().charAt(1) == '1' ? opcodes.get(instructionPointer + 1) : opcodes.get(opcodes.get(instructionPointer + 1));
     }
 
-    int getP2() {
-        String opcodeString = getOpcodeString();
-        return opcodeString.charAt(0) == '1' ? opcodes.get(instructionPointer + 2) : opcodes.get(opcodes.get(instructionPointer + 2));
+    private int getP2() {
+        return getOpcodeString().charAt(0) == '1' ? opcodes.get(instructionPointer + 2) : opcodes.get(opcodes.get(instructionPointer + 2));
     }
 
 }
