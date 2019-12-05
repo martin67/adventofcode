@@ -18,6 +18,19 @@ class Day4SecureContainerTest {
 
     @Test
     void validPasswordRange() {
-        assertEquals(0, new Day4SecureContainer().validPasswordRange(402328, 864247));
+        assertEquals(454, new Day4SecureContainer().validPasswordRange(402328, 864247));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"true, 112233",
+            "false, 123444",
+            "true, 111122"})
+    void validPasswordNoGroup(boolean expected, int password) {
+        assertEquals(expected, new Day4SecureContainer().validPasswordNoGroup(password));
+    }
+
+    @Test
+    void validPasswordNoGroupRange() {
+        assertEquals(288, new Day4SecureContainer().validPasswordNoGroupRange(402328, 864247));
     }
 }
