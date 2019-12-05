@@ -111,7 +111,7 @@ public class Day5SunnyWithAChanceOfAsteroids {
 
     int getP2() {
         String opcodeString = getOpcodeString();
-        return opcodeString.charAt(0) == '2' ? opcodes.get(instructionPointer + 2) : opcodes.get(opcodes.get(instructionPointer + 2));
+        return opcodeString.charAt(0) == '1' ? opcodes.get(instructionPointer + 2) : opcodes.get(opcodes.get(instructionPointer + 2));
     }
 
 }
