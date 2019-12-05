@@ -15,7 +15,7 @@ class Day5SunnyWithAChanceOfAsteroidsTest {
     void diagnosticCodeFromFile() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day5.txt"));
         for (String opcodes : inputLines) {
-            assertEquals(5064, new Day5SunnyWithAChanceOfAsteroids().diagnosticCode(opcodes, 1));
+            assertEquals(13933662, new Day5SunnyWithAChanceOfAsteroids().diagnosticCode(opcodes, 1));
         }
     }
 
