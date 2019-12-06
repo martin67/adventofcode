@@ -21,7 +21,7 @@ class Day6UniversalOrbitMapTest {
 
     @ParameterizedTest
     @CsvSource({"4, src/test/resources/2019/day6-demo2.txt",
-            "0, src/test/resources/2019/day6.txt"})
+            "322, src/test/resources/2019/day6.txt"})
     void minimumNumberOfOrbits(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day6UniversalOrbitMap(inputLines).minimumNumberOfOrbits());

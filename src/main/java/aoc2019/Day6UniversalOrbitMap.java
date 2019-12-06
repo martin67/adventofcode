@@ -26,7 +26,6 @@ public class Day6UniversalOrbitMap {
 
     int numberOfOrbits() {
         int totalDistance = 0;
-
         log.info("Computing distances");
         for (String object : g.vertexSet()) {
             DijkstraShortestPath<String, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(g);
@@ -35,18 +34,16 @@ public class Day6UniversalOrbitMap {
             log.info("Distance from {} to COM is {}", object, distance);
             totalDistance += distance;
         }
-
         return totalDistance;
     }
 
     int minimumNumberOfOrbits() {
         log.info("Computing distances");
         DijkstraShortestPath<String, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(g);
-        ShortestPathAlgorithm.SingleSourcePaths<String, DefaultEdge> iPaths = dijkstraAlg.getPaths("COM");
+        ShortestPathAlgorithm.SingleSourcePaths<String, DefaultEdge> iPaths = dijkstraAlg.getPaths("SAN");
         int distance = iPaths.getPath("YOU").getLength();
-        log.info("Distance from YOU to COM is {}", distance);
-        distance -= 3;
-
+        log.info("Distance from YOU to SAN is {}", distance);
+        distance -= 2;
         return distance;
     }
 }
