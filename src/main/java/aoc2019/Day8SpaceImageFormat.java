@@ -7,14 +7,20 @@ import java.util.*;
 @Slf4j
 public class Day8SpaceImageFormat {
 
-    private final static int LAYER_SIZE = 25 * 6;
+    private final static int LAYER_WIDTH = 25;
+    private final static int LAYER_HEIGHT = 6;
+    private final static int LAYER_SIZE = LAYER_WIDTH * LAYER_HEIGHT;
 
     static class Layer {
-        Map<Integer, Integer> digitFrequency;
+        String pixels;
 
         Layer(String line) {
-            digitFrequency = new HashMap<>();
-            for (char c : line.toCharArray()) {
+            this.pixels = line;
+        }
+
+        Map<Integer, Integer> getDigitFrequency() {
+            Map<Integer, Integer> digitFrequency = new HashMap<>();
+            for (char c : this.pixels.toCharArray()) {
                 int digit = Character.getNumericValue(c);
                 if (digitFrequency.containsKey(digit)) {
                     digitFrequency.put(digit, digitFrequency.get(digit) + 1);
@@ -22,6 +28,16 @@ public class Day8SpaceImageFormat {
                     digitFrequency.put(digit, 1);
                 }
             }
+            return digitFrequency;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder output = new StringBuilder();
+            for (int i = 0; i < LAYER_HEIGHT; i++) {
+                output.append(this.pixels, i * LAYER_WIDTH, (i + 1) * LAYER_WIDTH).append("\n");
+            }
+            return output.toString().replaceAll("0", ".");
         }
     }
 
@@ -39,11 +55,28 @@ public class Day8SpaceImageFormat {
         }
     }
 
-    int digitChecksum() {
+    int digitChecksum() throws Exception {
         Layer fewestZeros = layers.stream()
-                .min(Comparator.comparing(layer -> layer.digitFrequency.get(0))).get();
-
-        return fewestZeros.digitFrequency.get(1) * fewestZeros.digitFrequency.get(2);
+                .min(Comparator.comparing(layer -> layer.getDigitFrequency().get(0)))
+                .orElseThrow(() -> new Exception("No min found!"));
+        printMessage();
+        return fewestZeros.getDigitFrequency().get(1) * fewestZeros.getDigitFrequency().get(2);
     }
 
+    private void printMessage() {
+        StringBuilder finalString = new StringBuilder();
+
+        for (int i = 0; i < LAYER_SIZE; i++) {
+            char pixel = 'X';
+            for (Layer layer : layers) {
+                pixel = layer.pixels.charAt(i);
+                if (pixel == '0' || pixel == '1') {
+                    break;
+                }
+            }
+            finalString.append(pixel);
+        }
+        Layer finalLayer = new Layer(finalString.toString());
+        System.out.println(finalLayer);
+    }
 }
