@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class Day7AmplificationCircuit {
 
-    private List<Integer> opcodes;
+    private final List<Integer> opcodes;
     private int highestSignal;
 
     public Day7AmplificationCircuit(List<String> inputLines) {

@@ -12,7 +12,7 @@ public class Day8SpaceImageFormat {
     private final static int LAYER_SIZE = LAYER_WIDTH * LAYER_HEIGHT;
 
     static class Layer {
-        String pixels;
+        final String pixels;
 
         Layer(String line) {
             this.pixels = line;
@@ -41,7 +41,7 @@ public class Day8SpaceImageFormat {
         }
     }
 
-    private List<Layer> layers;
+    private final List<Layer> layers;
 
     public Day8SpaceImageFormat(List<String> inputLines) {
         layers = new ArrayList<>();

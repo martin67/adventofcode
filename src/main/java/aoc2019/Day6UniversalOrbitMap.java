@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 public class Day6UniversalOrbitMap {
 
-    private Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
+    private final Graph<String, DefaultEdge> g = new SimpleGraph<>(DefaultEdge.class);
 
     public Day6UniversalOrbitMap(List<String> inputLines) {
         log.info("Adding nodes");

@@ -13,7 +13,7 @@ public class Day3CrossedWires {
         Map<Position, Integer> positions = new HashMap<>();
     }
 
-    private List<Wire> wires = new ArrayList<>();
+    private final List<Wire> wires = new ArrayList<>();
 
     public Day3CrossedWires(List<String> inputLines) {
         for (String line : inputLines) {
