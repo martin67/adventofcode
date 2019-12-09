@@ -1,5 +1,6 @@
 package aoc2019;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -8,14 +9,13 @@ import java.util.stream.Stream;
 
 public class Day7AmplificationCircuit {
 
-    private final List<Integer> opcodes;
+    private final List<String> opcodes;
     private int highestSignal;
 
     public Day7AmplificationCircuit(List<String> inputLines) {
 
         highestSignal = 0;
         opcodes = Stream.of(inputLines.get(0).split(","))
-                .map(Integer::parseInt)
                 .collect(Collectors.toList());
     }
 
@@ -38,7 +38,7 @@ public class Day7AmplificationCircuit {
             ampC.setOutputQueue(ampD.getInputQueue());
             ampD.setOutputQueue(ampE.getInputQueue());
 
-            ampA.getInputQueue().add(0);
+            ampA.getInputQueue().add(new BigInteger("0"));
 
             new Thread(ampA).start();
             new Thread(ampB).start();
@@ -49,8 +49,8 @@ public class Day7AmplificationCircuit {
             // Wait until all threads have completed. last entry in the ampE.outputqueue is the signal
             countDownLatch.await();
 
-            Integer[] output = ampE.getOutputQueue().toArray(new Integer[0]);
-            int signal = output[output.length - 1];
+            BigInteger[] output = ampE.getOutputQueue().toArray(new BigInteger[0]);
+            int signal = output[output.length - 1].intValue();
 
             if (signal > highestSignal) {
                 highestSignal = signal;
@@ -78,7 +78,7 @@ public class Day7AmplificationCircuit {
             ampD.setOutputQueue(ampE.getInputQueue());
             ampE.setOutputQueue(ampA.getInputQueue());
 
-            ampA.getInputQueue().add(0);
+            ampA.getInputQueue().add(new BigInteger("0"));
 
             new Thread(ampA).start();
             new Thread(ampB).start();
@@ -88,8 +88,8 @@ public class Day7AmplificationCircuit {
 
             countDownLatch.await();
 
-            Integer[] output = ampE.getOutputQueue().toArray(new Integer[0]);
-            int signal = output[output.length - 1];
+            BigInteger[] output = ampE.getOutputQueue().toArray(new BigInteger[0]);
+            int signal = output[output.length - 1].intValue();
 
             if (signal > highestSignal) {
                 highestSignal = signal;

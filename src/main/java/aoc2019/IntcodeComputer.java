@@ -20,17 +20,17 @@ class IntcodeComputer implements Runnable {
     private BlockingQueue<BigInteger> outputQueue;
     private CountDownLatch countDownLatch;
 
-    private int instructionPointer;
+    private BigInteger instructionPointer;
     private Map<BigInteger, BigInteger> opcodes;
 
     IntcodeComputer(List<String> program, int phaseSetting, CountDownLatch countDownLatch) {
         this.opcodes = new HashMap<>();
-        for (int i = 0; i < program.size() ; i++) {
+        for (int i = 0; i < program.size(); i++) {
             this.opcodes.put(new BigInteger(String.valueOf(i)), new BigInteger(program.get(i)));
         }
-        this.instructionPointer = 0;
+        this.instructionPointer = new BigInteger("0");
         this.inputQueue = new LinkedBlockingDeque<>();
-        this.inputQueue.add(phaseSetting);
+        this.inputQueue.add(new BigInteger(String.valueOf(phaseSetting)));
         this.outputQueue = new LinkedBlockingDeque<>();
         this.countDownLatch = countDownLatch;
     }
@@ -46,71 +46,77 @@ class IntcodeComputer implements Runnable {
                     case "01":
                         log.debug("{} {} {}: Adding {} + {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
-                                getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer + 3));
-                        opcodes.put(opcodes.get(instructionPointer + 3), getP1() + getP2());
-                        instructionPointer += 4;
+                                getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer.add(new BigInteger("3"))));
+                        opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))), getP1().add(getP2()));
+                        instructionPointer = instructionPointer.add(new BigInteger("4"));
                         break;
 
                     case "02":
                         log.debug("{} {} {}: Multiplying {} * {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
-                                getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer + 3));
-                        opcodes.put(opcodes.get(instructionPointer + 3), getP1() * getP2());
-                        instructionPointer += 4;
+                                getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer.add(new BigInteger("3"))));
+                        opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))), getP1().multiply(getP2()));
+                        instructionPointer = instructionPointer.add(new BigInteger("4"));
                         break;
 
                     case "03":
-                        int element = inputQueue.take();
+                        BigInteger element = inputQueue.take();
                         log.debug("{} {} {}: Input {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
-                                getOpcodeString(), element, opcodes.get(instructionPointer + 1));
-                        opcodes.put(opcodes.get(instructionPointer + 1), element);
-                        instructionPointer += 2;
+                                getOpcodeString(), element, opcodes.get(instructionPointer.add(new BigInteger("1"))));
+                        opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("1"))), element);
+                        instructionPointer = instructionPointer.add(new BigInteger("2"));
                         break;
 
                     case "04":
                         log.debug("{} {} {}: Output {} from position {}",
                                 Thread.currentThread().getName(), instructionPointer,
-                                getOpcodeString(), opcodes.get(opcodes.get(instructionPointer + 1)), instructionPointer + 1);
-                        outputQueue.add(opcodes.get(opcodes.get(instructionPointer + 1)));
-                        instructionPointer += 2;
+                                getOpcodeString(), opcodes.get(opcodes.get(instructionPointer.add(new BigInteger("1")))),
+                                instructionPointer.add(new BigInteger("1")));
+                        outputQueue.add(opcodes.get(opcodes.get(instructionPointer.add(new BigInteger("1")))));
+                        instructionPointer = instructionPointer.add(new BigInteger("2"));
                         break;
 
                     case "05":
                         log.debug("{} {}: Jumping to {} if {} != 0", instructionPointer,
                                 getOpcodeString(), getP2(), getP1());
-                        if (getP1() != 0) {
+                        if (!getP1().equals(new BigInteger("0"))) {
                             instructionPointer = getP2();
                         } else {
-                            instructionPointer += 3;
+                            instructionPointer = instructionPointer.add(new BigInteger("3"));
                         }
                         break;
 
                     case "06":
                         log.debug("{} {}: Jumping to {} if {} == 0", instructionPointer, getOpcodeString(), getP2(), getP1());
-                        if (getP1() == 0) {
+                        if (getP1().equals(new BigInteger("0"))) {
                             instructionPointer = getP2();
                         } else {
-                            instructionPointer += 3;
+                            instructionPointer = instructionPointer.add(new BigInteger("3"));
                         }
                         break;
 
                     case "07":
-                        if (getP1() < getP2()) {
-                            opcodes.put(opcodes.get(instructionPointer + 3), 1);
+                        //if (getP1() < getP2()) {
+                        if (getP1().compareTo(getP2()) < 0) {
+                            opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))),
+                                    new BigInteger("1"));
                         } else {
-                            opcodes.put(opcodes.get(instructionPointer + 3), 0);
+                            opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))),
+                                    new BigInteger("0"));
                         }
-                        instructionPointer += 4;
+                        instructionPointer = instructionPointer.add(new BigInteger("4"));
                         break;
 
                     case "08":
-                        if (getP1() == getP2()) {
-                            opcodes.put(opcodes.get(instructionPointer + 3), 1);
+                        if (getP1().equals(getP2())) {
+                            opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))),
+                                    new BigInteger("1"));
                         } else {
-                            opcodes.put(opcodes.get(instructionPointer + 3), 0);
+                            opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))),
+                                    new BigInteger("0"));
                         }
-                        instructionPointer += 4;
+                        instructionPointer = instructionPointer.add(new BigInteger("4"));
                         break;
 
                     case "99":
@@ -137,11 +143,11 @@ class IntcodeComputer implements Runnable {
     }
 
     private BigInteger getP1() {
-        return getOpcodeString().charAt(1) == '1' ? opcodes.get(instructionPointer + 1) : opcodes.get(opcodes.get(instructionPointer + 1));
+        return getOpcodeString().charAt(1) == '1' ? opcodes.get(instructionPointer.add(new BigInteger("1"))) : opcodes.get(opcodes.get(instructionPointer.add(new BigInteger("1"))));
     }
 
     private BigInteger getP2() {
-        return getOpcodeString().charAt(0) == '1' ? opcodes.get(instructionPointer + 2) : opcodes.get(opcodes.get(instructionPointer + 2));
+        return getOpcodeString().charAt(0) == '1' ? opcodes.get(instructionPointer.add(new BigInteger("2"))) : opcodes.get(opcodes.get(instructionPointer.add(new BigInteger("2"))));
     }
 
 }
