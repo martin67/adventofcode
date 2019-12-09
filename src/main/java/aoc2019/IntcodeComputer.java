@@ -4,8 +4,10 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
+import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -14,15 +16,18 @@ import java.util.concurrent.LinkedBlockingDeque;
 @Data
 class IntcodeComputer implements Runnable {
 
-    private BlockingQueue<Integer> inputQueue;
-    private BlockingQueue<Integer> outputQueue;
+    private BlockingQueue<BigInteger> inputQueue;
+    private BlockingQueue<BigInteger> outputQueue;
     private CountDownLatch countDownLatch;
 
     private int instructionPointer;
-    private List<Integer> opcodes;
+    private Map<BigInteger, BigInteger> opcodes;
 
-    IntcodeComputer(List<Integer> program, int phaseSetting, CountDownLatch countDownLatch) {
-        this.opcodes = new ArrayList<>(program);
+    IntcodeComputer(List<String> program, int phaseSetting, CountDownLatch countDownLatch) {
+        this.opcodes = new HashMap<>();
+        for (int i = 0; i < program.size() ; i++) {
+            this.opcodes.put(new BigInteger(String.valueOf(i)), new BigInteger(program.get(i)));
+        }
         this.instructionPointer = 0;
         this.inputQueue = new LinkedBlockingDeque<>();
         this.inputQueue.add(phaseSetting);
@@ -42,7 +47,7 @@ class IntcodeComputer implements Runnable {
                         log.debug("{} {} {}: Adding {} + {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
                                 getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer + 3));
-                        opcodes.set(opcodes.get(instructionPointer + 3), getP1() + getP2());
+                        opcodes.put(opcodes.get(instructionPointer + 3), getP1() + getP2());
                         instructionPointer += 4;
                         break;
 
@@ -50,7 +55,7 @@ class IntcodeComputer implements Runnable {
                         log.debug("{} {} {}: Multiplying {} * {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
                                 getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer + 3));
-                        opcodes.set(opcodes.get(instructionPointer + 3), getP1() * getP2());
+                        opcodes.put(opcodes.get(instructionPointer + 3), getP1() * getP2());
                         instructionPointer += 4;
                         break;
 
@@ -59,7 +64,7 @@ class IntcodeComputer implements Runnable {
                         log.debug("{} {} {}: Input {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
                                 getOpcodeString(), element, opcodes.get(instructionPointer + 1));
-                        opcodes.set(opcodes.get(instructionPointer + 1), element);
+                        opcodes.put(opcodes.get(instructionPointer + 1), element);
                         instructionPointer += 2;
                         break;
 
@@ -92,18 +97,18 @@ class IntcodeComputer implements Runnable {
 
                     case "07":
                         if (getP1() < getP2()) {
-                            opcodes.set(opcodes.get(instructionPointer + 3), 1);
+                            opcodes.put(opcodes.get(instructionPointer + 3), 1);
                         } else {
-                            opcodes.set(opcodes.get(instructionPointer + 3), 0);
+                            opcodes.put(opcodes.get(instructionPointer + 3), 0);
                         }
                         instructionPointer += 4;
                         break;
 
                     case "08":
                         if (getP1() == getP2()) {
-                            opcodes.set(opcodes.get(instructionPointer + 3), 1);
+                            opcodes.put(opcodes.get(instructionPointer + 3), 1);
                         } else {
-                            opcodes.set(opcodes.get(instructionPointer + 3), 0);
+                            opcodes.put(opcodes.get(instructionPointer + 3), 0);
                         }
                         instructionPointer += 4;
                         break;
@@ -131,11 +136,11 @@ class IntcodeComputer implements Runnable {
         return getOpcodeString().substring(2, 4);
     }
 
-    private int getP1() {
+    private BigInteger getP1() {
         return getOpcodeString().charAt(1) == '1' ? opcodes.get(instructionPointer + 1) : opcodes.get(opcodes.get(instructionPointer + 1));
     }
 
-    private int getP2() {
+    private BigInteger getP2() {
         return getOpcodeString().charAt(0) == '1' ? opcodes.get(instructionPointer + 2) : opcodes.get(opcodes.get(instructionPointer + 2));
     }
 
