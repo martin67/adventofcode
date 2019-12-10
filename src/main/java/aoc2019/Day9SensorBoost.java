@@ -7,19 +7,20 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Day9SensorBoost {
-    public Day9SensorBoost() {
-    }
 
-    Stream<BigInteger> boostKeycode(String opcodeString, Integer phaseSetting) throws InterruptedException {
+    List<String> boostkeyCode(String opcodeString, int mode) throws InterruptedException {
 
         List<String> opcodes = Stream.of(opcodeString.split(","))
                 .collect(Collectors.toList());
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        IntcodeComputer ic = new IntcodeComputer(opcodes, phaseSetting, countDownLatch);
+        IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
+        if (mode > 0) {
+            ic.getInputQueue().add(new BigInteger(String.valueOf(mode)));
+        }
         new Thread(ic).start();
         countDownLatch.await();
 
-        return ic.getOutputQueue().stream();
+        return ic.getOutputQueue().stream().map(BigInteger::toString).collect(Collectors.toList());
     }
 }

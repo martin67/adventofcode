@@ -17,11 +17,12 @@ public class Day5SunnyWithAChanceOfAsteroids {
                 .collect(Collectors.toList());
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        IntcodeComputer ic = new IntcodeComputer(opcodes, input, countDownLatch);
+        IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
+        ic.getInputQueue().add(new BigInteger(String.valueOf(input)));
         new Thread(ic).start();
         countDownLatch.await();
 
-        BigInteger[] output = ic.getOutputQueue().toArray(new java.math.BigInteger[0]);
+        BigInteger[] output = ic.getOutputQueue().toArray(new BigInteger[0]);
         return output[output.length - 1].intValue();
     }
 }

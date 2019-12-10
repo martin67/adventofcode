@@ -40,9 +40,9 @@ public class Day10MonitoringStation {
             return output;
         }
 
-        float getAngle(Asteroid target) {
-            return
-        }
+//        float getAngle(Asteroid target) {
+//            return
+//        }
         @Override
         public String toString() {
             return "Asteroid{" +
@@ -96,7 +96,7 @@ public class Day10MonitoringStation {
     int vaporize() {
         Asteroid laser = new Asteroid(new Position(8,3));
 
-        asteroids.stream().sorted(a -> {})
+//        asteroids.stream().sorted(a -> {})
         return 0;
     }
 }

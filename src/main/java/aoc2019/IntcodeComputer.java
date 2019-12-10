@@ -21,20 +21,17 @@ class IntcodeComputer implements Runnable {
     private CountDownLatch countDownLatch;
 
     private BigInteger instructionPointer;
-    private BigInteger relativeBase;
+    private BigInteger relativeBaseOffset;
     private Map<BigInteger, BigInteger> opcodes;
 
-    IntcodeComputer(List<String> program, int phaseSetting, CountDownLatch countDownLatch) {
+    IntcodeComputer(List<String> program, CountDownLatch countDownLatch) {
         this.opcodes = new HashMap<>();
         for (int i = 0; i < program.size(); i++) {
             this.opcodes.put(new BigInteger(String.valueOf(i)), new BigInteger(program.get(i)));
         }
         this.instructionPointer = new BigInteger("0");
-        this.relativeBase = new BigInteger("0");
+        this.relativeBaseOffset = new BigInteger("0");
         this.inputQueue = new LinkedBlockingDeque<>();
-        if (phaseSetting != 0) {
-            this.inputQueue.add(new BigInteger(String.valueOf(phaseSetting)));
-        }
         this.outputQueue = new LinkedBlockingDeque<>();
         this.countDownLatch = countDownLatch;
     }
@@ -50,16 +47,16 @@ class IntcodeComputer implements Runnable {
                     case "01":
                         log.info("{} {} {}: Adding {} + {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
-                                getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer.add(new BigInteger("3"))));
-                        opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))), getP1().add(getP2()));
+                                getOpcodeString(), getP1(), getP2(), getP3());
+                        opcodes.put(getP3(), getP1().add(getP2()));
                         instructionPointer = instructionPointer.add(new BigInteger("4"));
                         break;
 
                     case "02":
                         log.info("{} {} {}: Multiplying {} * {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
-                                getOpcodeString(), getP1(), getP2(), opcodes.get(instructionPointer.add(new BigInteger("3"))));
-                        opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))), getP1().multiply(getP2()));
+                                getOpcodeString(), getP1(), getP2(), getP3());
+                        opcodes.put(getP3(), getP1().multiply(getP2()));
                         instructionPointer = instructionPointer.add(new BigInteger("4"));
                         break;
 
@@ -67,17 +64,15 @@ class IntcodeComputer implements Runnable {
                         BigInteger element = inputQueue.take();
                         log.info("{} {} {}: Input {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
-                                getOpcodeString(), element, opcodes.get(instructionPointer.add(new BigInteger("1"))));
-                        opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("1"))), element);
+                                getOpcodeString(), element, getP1forPut());
+                        opcodes.put(getP1forPut(), element);
                         instructionPointer = instructionPointer.add(new BigInteger("2"));
                         break;
 
                     case "04":
-                        log.info("{} {} {}: Output {} from position {}",
+                        log.info("{} {} {}: Add {} to output queue",
                                 Thread.currentThread().getName(), instructionPointer,
-                                getOpcodeString(), opcodes.get(opcodes.get(instructionPointer.add(new BigInteger("1")))),
-                                instructionPointer.add(new BigInteger("1")));
-                        //outputQueue.add(opcodes.get(opcodes.get(instructionPointer.add(new BigInteger("1")))));
+                                getOpcodeString(), getP1());
                         outputQueue.add(getP1());
                         instructionPointer = instructionPointer.add(new BigInteger("2"));
                         break;
@@ -102,30 +97,29 @@ class IntcodeComputer implements Runnable {
                         break;
 
                     case "07":
-                        //if (getP1() < getP2()) {
                         if (getP1().compareTo(getP2()) < 0) {
-                            opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))),
-                                    new BigInteger("1"));
+                            opcodes.put(getP3(), new BigInteger("1"));
                         } else {
-                            opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))),
-                                    new BigInteger("0"));
+                            opcodes.put(getP3(), new BigInteger("0"));
                         }
                         instructionPointer = instructionPointer.add(new BigInteger("4"));
                         break;
 
                     case "08":
+                        log.info("{} {}: If {} == {} => {}=1  ", instructionPointer,
+                                getOpcodeString(), getP1(), getP2(), getP3());
                         if (getP1().equals(getP2())) {
-                            opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))),
-                                    new BigInteger("1"));
+                            opcodes.put(getP3(), new BigInteger("1"));
                         } else {
-                            opcodes.put(opcodes.get(instructionPointer.add(new BigInteger("3"))),
-                                    new BigInteger("0"));
+                            opcodes.put(getP3(), new BigInteger("0"));
                         }
                         instructionPointer = instructionPointer.add(new BigInteger("4"));
                         break;
 
                     case "09":
-                        relativeBase = getP1();
+                        log.info("{} {}: Adjusting relative base with {}", instructionPointer,
+                                getOpcodeString(), getP1());
+                        relativeBaseOffset = relativeBaseOffset.add(getP1());
                         instructionPointer = instructionPointer.add(new BigInteger("2"));
                         break;
 
@@ -144,52 +138,96 @@ class IntcodeComputer implements Runnable {
         countDownLatch.countDown();
     }
 
+    // ABCXX EE FF GG
     private String getOpcodeString() {
-        return StringUtils.leftPad(opcodes.get(instructionPointer).toString(), 4, '0');
+        return StringUtils.leftPad(opcodes.get(instructionPointer).toString(), 5, '0');
     }
 
     private String getOpcode() {
-        return getOpcodeString().substring(2, 4);
+        return getOpcodeString().substring(3, 5);
     }
 
     private BigInteger getP1() {
-        BigInteger result = null;
-        switch (getOpcodeString().charAt(1)) {
+        BigInteger output = null;
+        switch (getOpcodeString().charAt(2)) {
             case '0':   // position mode
-                result = opcodes.getOrDefault(opcodes.get(instructionPointer.add(new BigInteger("1"))),
+                output = opcodes.getOrDefault(opcodes.get(instructionPointer.add(new BigInteger("1"))),
                         new BigInteger("0"));
                 break;
-
             case '1':   // immediate mode
-                result = opcodes.get(instructionPointer.add(new BigInteger("1")));
+                output = opcodes.get(instructionPointer.add(new BigInteger("1")));
                 break;
-
             case '2':   // relative mode
-                result = opcodes.getOrDefault(relativeBase.add(opcodes.get(instructionPointer.add(new BigInteger("1")))),
+                output = opcodes.getOrDefault(relativeBaseOffset.add(opcodes.get(instructionPointer.add(new BigInteger("1")))),
                         new BigInteger("0"));
+                break;
+            default:
+                log.error("oops");
                 break;
         }
-        return result;
+        return output;
+    }
+
+    private BigInteger getP1forPut() {
+        BigInteger output = null;
+        switch (getOpcodeString().charAt(2)) {
+            case '0':   // position mode
+                output = opcodes.get(instructionPointer.add(new BigInteger("1")));
+                break;
+            case '1':   // immediate mode
+                log.error("Should not be in immediate mode!");
+                break;
+            case '2':   // relative mode
+                output = relativeBaseOffset.add(opcodes.get(instructionPointer.add(new BigInteger("1"))));
+                break;
+            default:
+                log.error("oops");
+                break;
+        }
+        return output;
     }
 
     private BigInteger getP2() {
-        BigInteger result = null;
-        switch (getOpcodeString().charAt(0)) {
+        BigInteger output = null;
+        switch (getOpcodeString().charAt(1)) {
             case '0':   // position mode
-                result = opcodes.getOrDefault(opcodes.get(instructionPointer.add(new BigInteger("2"))),
+                output = opcodes.getOrDefault(opcodes.get(instructionPointer.add(new BigInteger("2"))),
                         new BigInteger("0"));
                 break;
-
             case '1':   // immediate mode
-                result = opcodes.get(instructionPointer.add(new BigInteger("2")));
+                output = opcodes.get(instructionPointer.add(new BigInteger("2")));
                 break;
-
             case '2':   // relative mode
-                result = opcodes.getOrDefault(relativeBase.add(opcodes.get(instructionPointer.add(new BigInteger("2")))),
+                output = opcodes.getOrDefault(relativeBaseOffset.add(opcodes.get(instructionPointer.add(new BigInteger("2")))),
                         new BigInteger("0"));
+                break;
+            default:
+                log.error("oops");
                 break;
         }
-        return result;
+        return output;
+    }
+
+    // "Like position mode, parameters in relative mode can be read from or written to."
+    // "Parameters that an instruction writes to will never be in immediate mode."
+
+    private BigInteger getP3() {
+        BigInteger output = null;
+        switch (getOpcodeString().charAt(0)) {
+            case '0':   // position mode
+                output = opcodes.get(instructionPointer.add(new BigInteger("3")));
+                break;
+            case '1':   // immediate mode
+                log.error("Should not be in immediate mode!");
+                break;
+            case '2':   // relative mode
+                output = relativeBaseOffset.add(opcodes.get(instructionPointer.add(new BigInteger("3"))));
+                break;
+            default:
+                log.error("oops");
+                break;
+        }
+        return output;
     }
 
 }

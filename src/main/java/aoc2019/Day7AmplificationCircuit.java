@@ -27,11 +27,17 @@ public class Day7AmplificationCircuit {
         for (int[] phaseSetting : allPhaseSettings) {
             CountDownLatch countDownLatch = new CountDownLatch(5);
 
-            IntcodeComputer ampA = new IntcodeComputer(opcodes, phaseSetting[0], countDownLatch);
-            IntcodeComputer ampB = new IntcodeComputer(opcodes, phaseSetting[1], countDownLatch);
-            IntcodeComputer ampC = new IntcodeComputer(opcodes, phaseSetting[2], countDownLatch);
-            IntcodeComputer ampD = new IntcodeComputer(opcodes, phaseSetting[3], countDownLatch);
-            IntcodeComputer ampE = new IntcodeComputer(opcodes, phaseSetting[4], countDownLatch);
+            IntcodeComputer ampA = new IntcodeComputer(opcodes, countDownLatch);
+            IntcodeComputer ampB = new IntcodeComputer(opcodes, countDownLatch);
+            IntcodeComputer ampC = new IntcodeComputer(opcodes, countDownLatch);
+            IntcodeComputer ampD = new IntcodeComputer(opcodes, countDownLatch);
+            IntcodeComputer ampE = new IntcodeComputer(opcodes, countDownLatch);
+
+            ampA.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[0])));
+            ampB.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[1])));
+            ampC.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[2])));
+            ampD.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[3])));
+            ampE.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[4])));
 
             ampA.setOutputQueue(ampB.getInputQueue());
             ampB.setOutputQueue(ampC.getInputQueue());
@@ -66,11 +72,17 @@ public class Day7AmplificationCircuit {
         for (int[] phaseSetting : allPhaseSettings) {
             CountDownLatch countDownLatch = new CountDownLatch(5);
 
-            IntcodeComputer ampA = new IntcodeComputer(opcodes, phaseSetting[0], countDownLatch);
-            IntcodeComputer ampB = new IntcodeComputer(opcodes, phaseSetting[1], countDownLatch);
-            IntcodeComputer ampC = new IntcodeComputer(opcodes, phaseSetting[2], countDownLatch);
-            IntcodeComputer ampD = new IntcodeComputer(opcodes, phaseSetting[3], countDownLatch);
-            IntcodeComputer ampE = new IntcodeComputer(opcodes, phaseSetting[4], countDownLatch);
+            IntcodeComputer ampA = new IntcodeComputer(opcodes, countDownLatch);
+            IntcodeComputer ampB = new IntcodeComputer(opcodes, countDownLatch);
+            IntcodeComputer ampC = new IntcodeComputer(opcodes, countDownLatch);
+            IntcodeComputer ampD = new IntcodeComputer(opcodes, countDownLatch);
+            IntcodeComputer ampE = new IntcodeComputer(opcodes, countDownLatch);
+
+            ampA.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[0])));
+            ampB.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[1])));
+            ampC.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[2])));
+            ampD.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[3])));
+            ampE.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[4])));
 
             ampA.setOutputQueue(ampB.getInputQueue());
             ampB.setOutputQueue(ampC.getInputQueue());
