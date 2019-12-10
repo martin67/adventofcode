@@ -10,7 +10,7 @@ public class Day9SensorBoost {
     public Day9SensorBoost() {
     }
 
-    int boostKeycode(String opcodeString, Integer phaseSetting) throws InterruptedException {
+    Stream<BigInteger> boostKeycode(String opcodeString, Integer phaseSetting) throws InterruptedException {
 
         List<String> opcodes = Stream.of(opcodeString.split(","))
                 .collect(Collectors.toList());
@@ -20,7 +20,6 @@ public class Day9SensorBoost {
         new Thread(ic).start();
         countDownLatch.await();
 
-        //BigInteger[] output = ic.getOutputQueue().toArray(new java.math.BigInteger[0]);
-        return 0;
+        return ic.getOutputQueue().stream();
     }
 }

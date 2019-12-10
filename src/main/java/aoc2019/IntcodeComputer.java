@@ -24,7 +24,7 @@ class IntcodeComputer implements Runnable {
     private BigInteger relativeBase;
     private Map<BigInteger, BigInteger> opcodes;
 
-    IntcodeComputer(List<String> program, Integer phaseSetting, CountDownLatch countDownLatch) {
+    IntcodeComputer(List<String> program, int phaseSetting, CountDownLatch countDownLatch) {
         this.opcodes = new HashMap<>();
         for (int i = 0; i < program.size(); i++) {
             this.opcodes.put(new BigInteger(String.valueOf(i)), new BigInteger(program.get(i)));
@@ -32,7 +32,7 @@ class IntcodeComputer implements Runnable {
         this.instructionPointer = new BigInteger("0");
         this.relativeBase = new BigInteger("0");
         this.inputQueue = new LinkedBlockingDeque<>();
-        if (phaseSetting != null) {
+        if (phaseSetting != 0) {
             this.inputQueue.add(new BigInteger(String.valueOf(phaseSetting)));
         }
         this.outputQueue = new LinkedBlockingDeque<>();
