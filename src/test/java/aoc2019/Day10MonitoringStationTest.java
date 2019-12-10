@@ -17,10 +17,18 @@ class Day10MonitoringStationTest {
             "35, src/test/resources/2019/day10-demo3.txt",
             "41, src/test/resources/2019/day10-demo4.txt",
             "210, src/test/resources/2019/day10-demo5.txt",
-            "0, src/test/resources/2019/day10.txt"})
+            "299, src/test/resources/2019/day10.txt"})
     void bestLocation(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day10MonitoringStation(inputLines).bestLocation());
     }
 
+    @ParameterizedTest
+    @CsvSource({"0, src/test/resources/2019/day10-demo6.txt",
+            "802, src/test/resources/2019/day10-demo5.txt",
+            "0, src/test/resources/2019/day10.txt"})
+    void vaporize(int expected, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day10MonitoringStation(inputLines).vaporize());
+    }
 }
