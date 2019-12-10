@@ -36,7 +36,7 @@ public class Day2ProgramAlarm {
                     return opcodes.get(0);
 
                 default:
-                    log.error("Ooops");
+                    log.error("Oops");
                     break;
             }
             programCounter += 4;

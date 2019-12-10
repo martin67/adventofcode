@@ -24,9 +24,8 @@ class Day10MonitoringStationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"0, src/test/resources/2019/day10-demo6.txt",
-            "802, src/test/resources/2019/day10-demo5.txt",
-            "0, src/test/resources/2019/day10.txt"})
+    @CsvSource({"802, src/test/resources/2019/day10-demo5.txt",
+            "1419, src/test/resources/2019/day10.txt"})
     void vaporize(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day10MonitoringStation(inputLines).vaporize());

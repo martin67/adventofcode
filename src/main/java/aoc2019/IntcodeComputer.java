@@ -38,14 +38,14 @@ class IntcodeComputer implements Runnable {
 
     @Override
     public void run() {
-        log.info("Starting thread {}", Thread.currentThread().getName());
+        log.debug("Starting thread {}", Thread.currentThread().getName());
         try {
             boolean quit = false;
 
             while (!quit) {
                 switch (getOpcode()) {
                     case "01":
-                        log.info("{} {} {}: Adding {} + {} and storing in position {}",
+                        log.debug("{} {} {}: Adding {} + {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
                                 getOpcodeString(), getP1(), getP2(), getP3());
                         opcodes.put(getP3(), getP1().add(getP2()));
@@ -53,7 +53,7 @@ class IntcodeComputer implements Runnable {
                         break;
 
                     case "02":
-                        log.info("{} {} {}: Multiplying {} * {} and storing in position {}",
+                        log.debug("{} {} {}: Multiplying {} * {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
                                 getOpcodeString(), getP1(), getP2(), getP3());
                         opcodes.put(getP3(), getP1().multiply(getP2()));
@@ -62,7 +62,7 @@ class IntcodeComputer implements Runnable {
 
                     case "03":
                         BigInteger element = inputQueue.take();
-                        log.info("{} {} {}: Input {} and storing in position {}",
+                        log.debug("{} {} {}: Input {} and storing in position {}",
                                 Thread.currentThread().getName(), instructionPointer,
                                 getOpcodeString(), element, getP1forPut());
                         opcodes.put(getP1forPut(), element);
@@ -70,7 +70,7 @@ class IntcodeComputer implements Runnable {
                         break;
 
                     case "04":
-                        log.info("{} {} {}: Add {} to output queue",
+                        log.debug("{} {} {}: Add {} to output queue",
                                 Thread.currentThread().getName(), instructionPointer,
                                 getOpcodeString(), getP1());
                         outputQueue.add(getP1());
@@ -78,7 +78,7 @@ class IntcodeComputer implements Runnable {
                         break;
 
                     case "05":
-                        log.info("{} {}: Jumping to {} if {} != 0", instructionPointer,
+                        log.debug("{} {}: Jumping to {} if {} != 0", instructionPointer,
                                 getOpcodeString(), getP2(), getP1());
                         if (!getP1().equals(new BigInteger("0"))) {
                             instructionPointer = getP2();
@@ -88,7 +88,7 @@ class IntcodeComputer implements Runnable {
                         break;
 
                     case "06":
-                        log.info("{} {}: Jumping to {} if {} == 0", instructionPointer, getOpcodeString(), getP2(), getP1());
+                        log.debug("{} {}: Jumping to {} if {} == 0", instructionPointer, getOpcodeString(), getP2(), getP1());
                         if (getP1().equals(new BigInteger("0"))) {
                             instructionPointer = getP2();
                         } else {
@@ -106,7 +106,7 @@ class IntcodeComputer implements Runnable {
                         break;
 
                     case "08":
-                        log.info("{} {}: If {} == {} => {}=1  ", instructionPointer,
+                        log.debug("{} {}: If {} == {} => {}=1  ", instructionPointer,
                                 getOpcodeString(), getP1(), getP2(), getP3());
                         if (getP1().equals(getP2())) {
                             opcodes.put(getP3(), new BigInteger("1"));
@@ -117,14 +117,14 @@ class IntcodeComputer implements Runnable {
                         break;
 
                     case "09":
-                        log.info("{} {}: Adjusting relative base with {}", instructionPointer,
+                        log.debug("{} {}: Adjusting relative base with {}", instructionPointer,
                                 getOpcodeString(), getP1());
                         relativeBaseOffset = relativeBaseOffset.add(getP1());
                         instructionPointer = instructionPointer.add(new BigInteger("2"));
                         break;
 
                     case "99":
-                        log.info("{} {}: Quitting", instructionPointer, getOpcodeString());
+                        log.debug("{} {}: Quitting", instructionPointer, getOpcodeString());
                         quit = true;
                         break;
 
@@ -138,7 +138,6 @@ class IntcodeComputer implements Runnable {
         countDownLatch.countDown();
     }
 
-    // ABCXX EE FF GG
     private String getOpcodeString() {
         return StringUtils.leftPad(opcodes.get(instructionPointer).toString(), 5, '0');
     }

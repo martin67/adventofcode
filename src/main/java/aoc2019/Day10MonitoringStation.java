@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.Fraction;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Day10MonitoringStation {
@@ -40,18 +41,25 @@ public class Day10MonitoringStation {
             return output;
         }
 
-//        float getAngle(Asteroid target) {
-//            return
-//        }
+        double getAngle(Asteroid target) {
+            double dx = target.position.getX() - this.position.getX();
+            double dy = target.position.getY() - this.position.getY();
+
+            return Math.atan2(dx, dy);
+        }
+
+        int getDistance(Asteroid target) {
+            return this.position.distance(target.position);
+        }
+
         @Override
         public String toString() {
-            return "Asteroid{" +
-                    "position=" + position +
-                    '}';
+            return "Asteroid{" + position + '}';
         }
     }
 
-    private List<Asteroid> asteroids;
+    private final List<Asteroid> asteroids;
+    private Asteroid mostDetected;
 
     public Day10MonitoringStation(List<String> map) {
         int y = 0;
@@ -86,7 +94,7 @@ public class Day10MonitoringStation {
             asteroid.setAsteroidsDetected(directions.size());
         }
 
-        Asteroid mostDetected = asteroids.stream()
+        mostDetected = asteroids.stream()
                 .max(Comparator.comparing(Asteroid::getAsteroidsDetected))
                 .orElseThrow(NoSuchElementException::new);
         log.info("Most detected from {}", mostDetected);
@@ -94,9 +102,36 @@ public class Day10MonitoringStation {
     }
 
     int vaporize() {
-        Asteroid laser = new Asteroid(new Position(8,3));
+        bestLocation();
+        Asteroid laser = mostDetected;
 
-//        asteroids.stream().sorted(a -> {})
-        return 0;
+        List<Asteroid> targetList = asteroids.stream()
+                .sorted(Comparator.comparingDouble(laser::getAngle).reversed()
+                        .thenComparing(laser::getDistance)).collect(Collectors.toList());
+
+        List<Asteroid> zappedTargets = new ArrayList<>();
+        do {
+            double previousTargetAngle = -999.0;
+            List<Asteroid> nextTargetList = new ArrayList<>();
+            for (Asteroid target : targetList) {
+                if (previousTargetAngle == -999.0) {
+                    previousTargetAngle = laser.getAngle(target);
+                    log.debug("Zapping initial target " + target);
+                    zappedTargets.add(target);
+                } else {
+                    if (laser.getAngle(target) == previousTargetAngle) {
+                        log.debug("Skipping target " + target);
+                        nextTargetList.add(target);
+                    } else {
+                        previousTargetAngle = laser.getAngle(target);
+                        log.debug("Zapping target " + target);
+                        zappedTargets.add(target);
+                    }
+                }
+            }
+            targetList = nextTargetList;
+        } while (!targetList.isEmpty());
+
+        return zappedTargets.get(200 - 1).position.getX() * 100 + zappedTargets.get(200 - 1).position.getY();
     }
 }

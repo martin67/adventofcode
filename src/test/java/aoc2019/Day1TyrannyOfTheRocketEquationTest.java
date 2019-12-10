@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Day1TyrannyoftheRocketEquationTest {
+class Day1TyrannyOfTheRocketEquationTest {
 
     @ParameterizedTest
     @CsvSource({"2, 12",
@@ -19,13 +19,13 @@ class Day1TyrannyoftheRocketEquationTest {
             "654, 1969",
             "33583, 100756"})
     void fuelRequirement(int checksum, int mass) {
-        assertEquals(checksum, new Day1TyrannyoftheRocketEquation().fuelRequirement(mass));
+        assertEquals(checksum, new Day1TyrannyOfTheRocketEquation().fuelRequirement(mass));
     }
 
     @Test
     void fuelRequirementFromFile() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day1.txt"));
-        assertEquals(3478233, new Day1TyrannyoftheRocketEquation().sumOfFuelRequirements(inputLines));
+        assertEquals(3478233, new Day1TyrannyOfTheRocketEquation().sumOfFuelRequirements(inputLines));
     }
 
     @ParameterizedTest
@@ -33,12 +33,12 @@ class Day1TyrannyoftheRocketEquationTest {
             "966, 1969",
             "50346, 100756"})
     void fuelRequirementAddedFuel(int checksum, int mass) {
-        assertEquals(checksum, new Day1TyrannyoftheRocketEquation().fuelRequirementAddedFuel(mass));
+        assertEquals(checksum, new Day1TyrannyOfTheRocketEquation().fuelRequirementAddedFuel(mass));
     }
 
     @Test
     void fuelRequirementAddedFuelFromFile() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day1.txt"));
-        assertEquals(5214475, new Day1TyrannyoftheRocketEquation().sumOfFuelRequirementsAddedFuelFromFile(inputLines));
+        assertEquals(5214475, new Day1TyrannyOfTheRocketEquation().sumOfFuelRequirementsAddedFuelFromFile(inputLines));
     }
 }

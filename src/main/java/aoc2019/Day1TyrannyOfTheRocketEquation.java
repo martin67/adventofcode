@@ -2,7 +2,7 @@ package aoc2019;
 
 import java.util.List;
 
-public class Day1TyrannyoftheRocketEquation {
+public class Day1TyrannyOfTheRocketEquation {
     int sumOfFuelRequirements(List<String> modules) {
         return modules.stream()
                 .mapToInt(m -> fuelRequirement(Integer.parseInt(m)))

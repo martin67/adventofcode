@@ -52,7 +52,7 @@ public class Day7AmplificationCircuit {
             new Thread(ampD).start();
             new Thread(ampE).start();
 
-            // Wait until all threads have completed. last entry in the ampE.outputqueue is the signal
+            // Wait until all threads have completed. last entry in the ampE.outputQueue is the signal
             countDownLatch.await();
 
             BigInteger[] output = ampE.getOutputQueue().toArray(new BigInteger[0]);

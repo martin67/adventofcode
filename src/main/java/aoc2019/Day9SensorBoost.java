@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class Day9SensorBoost {
 
-    List<String> boostkeyCode(String opcodeString, int mode) throws InterruptedException {
+    List<String> boostKeyCode(String opcodeString, int mode) throws InterruptedException {
 
         List<String> opcodes = Stream.of(opcodeString.split(","))
                 .collect(Collectors.toList());

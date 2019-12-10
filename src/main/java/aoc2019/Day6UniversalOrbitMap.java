@@ -31,7 +31,7 @@ public class Day6UniversalOrbitMap {
             DijkstraShortestPath<String, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(g);
             ShortestPathAlgorithm.SingleSourcePaths<String, DefaultEdge> iPaths = dijkstraAlg.getPaths("COM");
             int distance = iPaths.getPath(object).getLength();
-            log.info("Distance from {} to COM is {}", object, distance);
+            log.debug("Distance from {} to COM is {}", object, distance);
             totalDistance += distance;
         }
         return totalDistance;
