@@ -1,7 +1,11 @@
 package aoc2019;
 
+import com.google.common.collect.Collections2;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
@@ -13,49 +17,40 @@ public class Day7AmplificationCircuit {
     private int highestSignal;
 
     public Day7AmplificationCircuit(List<String> inputLines) {
-
-        highestSignal = 0;
         opcodes = Stream.of(inputLines.get(0).split(","))
                 .collect(Collectors.toList());
+        highestSignal = 0;
     }
 
     int highestSignal() throws InterruptedException {
         // Generate all possible phase settings (permutations) => n! => 5! = 1*2*3*4*5 = 120
-        List<int[]> allPhaseSettings = new ArrayList<>();
-        heapPermutation(allPhaseSettings, new int[]{0, 1, 2, 3, 4}, 5);
+        Collection<List<Integer>> permutations = Collections2.permutations(Arrays.asList(0, 1, 2, 3, 4));
 
-        for (int[] phaseSetting : allPhaseSettings) {
+        for (List<Integer> phaseSetting : permutations) {
             CountDownLatch countDownLatch = new CountDownLatch(5);
+            List<IntcodeComputer> computers = new ArrayList<>();
 
-            IntcodeComputer ampA = new IntcodeComputer(opcodes, countDownLatch);
-            IntcodeComputer ampB = new IntcodeComputer(opcodes, countDownLatch);
-            IntcodeComputer ampC = new IntcodeComputer(opcodes, countDownLatch);
-            IntcodeComputer ampD = new IntcodeComputer(opcodes, countDownLatch);
-            IntcodeComputer ampE = new IntcodeComputer(opcodes, countDownLatch);
+            for (int i = 0; i < 5; i++) {
+                IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
+                ic.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting.get(i))));
+                computers.add(ic);
+            }
 
-            ampA.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[0])));
-            ampB.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[1])));
-            ampC.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[2])));
-            ampD.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[3])));
-            ampE.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[4])));
+            computers.get(0).setOutputQueue(computers.get(1).getInputQueue());
+            computers.get(1).setOutputQueue(computers.get(2).getInputQueue());
+            computers.get(2).setOutputQueue(computers.get(3).getInputQueue());
+            computers.get(3).setOutputQueue(computers.get(4).getInputQueue());
 
-            ampA.setOutputQueue(ampB.getInputQueue());
-            ampB.setOutputQueue(ampC.getInputQueue());
-            ampC.setOutputQueue(ampD.getInputQueue());
-            ampD.setOutputQueue(ampE.getInputQueue());
+            computers.get(0).getInputQueue().add(new BigInteger("0"));
 
-            ampA.getInputQueue().add(new BigInteger("0"));
-
-            new Thread(ampA).start();
-            new Thread(ampB).start();
-            new Thread(ampC).start();
-            new Thread(ampD).start();
-            new Thread(ampE).start();
+            for (int i = 0; i < 5; i++) {
+                new Thread(computers.get(i)).start();
+            }
 
             // Wait until all threads have completed. last entry in the ampE.outputQueue is the signal
             countDownLatch.await();
 
-            BigInteger[] output = ampE.getOutputQueue().toArray(new BigInteger[0]);
+            BigInteger[] output = computers.get(4).getOutputQueue().toArray(new BigInteger[0]);
             int signal = output[output.length - 1].intValue();
 
             if (signal > highestSignal) {
@@ -66,41 +61,33 @@ public class Day7AmplificationCircuit {
     }
 
     int highestSignalFeedbackLoop() throws InterruptedException {
-        List<int[]> allPhaseSettings = new ArrayList<>();
-        heapPermutation(allPhaseSettings, new int[]{5, 6, 7, 8, 9}, 5);
+        Collection<List<Integer>> permutations = Collections2.permutations(Arrays.asList(5, 6, 7, 8, 9));
 
-        for (int[] phaseSetting : allPhaseSettings) {
+        for (List<Integer> phaseSetting : permutations) {
             CountDownLatch countDownLatch = new CountDownLatch(5);
+            List<IntcodeComputer> computers = new ArrayList<>();
 
-            IntcodeComputer ampA = new IntcodeComputer(opcodes, countDownLatch);
-            IntcodeComputer ampB = new IntcodeComputer(opcodes, countDownLatch);
-            IntcodeComputer ampC = new IntcodeComputer(opcodes, countDownLatch);
-            IntcodeComputer ampD = new IntcodeComputer(opcodes, countDownLatch);
-            IntcodeComputer ampE = new IntcodeComputer(opcodes, countDownLatch);
+            for (int i = 0; i < 5; i++) {
+                IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
+                ic.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting.get(i))));
+                computers.add(ic);
+            }
 
-            ampA.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[0])));
-            ampB.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[1])));
-            ampC.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[2])));
-            ampD.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[3])));
-            ampE.getInputQueue().add(new BigInteger(String.valueOf(phaseSetting[4])));
+            computers.get(0).setOutputQueue(computers.get(1).getInputQueue());
+            computers.get(1).setOutputQueue(computers.get(2).getInputQueue());
+            computers.get(2).setOutputQueue(computers.get(3).getInputQueue());
+            computers.get(3).setOutputQueue(computers.get(4).getInputQueue());
+            computers.get(4).setOutputQueue(computers.get(0).getInputQueue());
 
-            ampA.setOutputQueue(ampB.getInputQueue());
-            ampB.setOutputQueue(ampC.getInputQueue());
-            ampC.setOutputQueue(ampD.getInputQueue());
-            ampD.setOutputQueue(ampE.getInputQueue());
-            ampE.setOutputQueue(ampA.getInputQueue());
+            computers.get(0).getInputQueue().add(new BigInteger("0"));
 
-            ampA.getInputQueue().add(new BigInteger("0"));
-
-            new Thread(ampA).start();
-            new Thread(ampB).start();
-            new Thread(ampC).start();
-            new Thread(ampD).start();
-            new Thread(ampE).start();
+            for (int i = 0; i < 5; i++) {
+                new Thread(computers.get(i)).start();
+            }
 
             countDownLatch.await();
 
-            BigInteger[] output = ampE.getOutputQueue().toArray(new BigInteger[0]);
+            BigInteger[] output = computers.get(4).getOutputQueue().toArray(new BigInteger[0]);
             int signal = output[output.length - 1].intValue();
 
             if (signal > highestSignal) {
@@ -108,27 +95,5 @@ public class Day7AmplificationCircuit {
             }
         }
         return highestSignal;
-    }
-
-    //Generating permutation using Heap Algorithm
-    private void heapPermutation(List<int[]> result, int[] a, int size) {
-
-        if (size == 1) {
-            result.add(a.clone());
-        }
-
-        for (int i = 0; i < size; i++) {
-            heapPermutation(result, a, size - 1);
-
-            if (size % 2 == 1) {
-                int temp = a[0];
-                a[0] = a[size - 1];
-                a[size - 1] = temp;
-            } else {
-                int temp = a[i];
-                a[i] = a[size - 1];
-                a[size - 1] = temp;
-            }
-        }
     }
 }
