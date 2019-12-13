@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.HashSet;
 import java.util.Set;
 
-enum Direction {North, South, East, West, Up, Right, Down, Left}
+enum Direction {North, South, East, West, Up, Right, Down, Left, NorthEast, NorthWest, SouthEast, SouthWest, Unknown}
 
 @Data
 @AllArgsConstructor
@@ -51,8 +51,106 @@ public class Position implements Comparable<Position> {
             case Left:
                 adj.x--;
                 break;
+            case NorthEast:
+                adj.x++;
+                adj.y--;
+                break;
+            case NorthWest:
+                adj.x--;
+                adj.y--;
+                break;
+            case SouthEast:
+                adj.x++;
+                adj.y++;
+                break;
+            case SouthWest:
+                adj.x--;
+                adj.y++;
+                break;
         }
         return adj;
+    }
+
+    Direction opposite(Direction direction) {
+        Direction result;
+        switch (direction) {
+            case North:
+                result = Direction.South;
+                break;
+            case Up:
+                result = Direction.Down;
+                break;
+            case East:
+                result = Direction.West;
+                break;
+            case Right:
+                result = Direction.Left;
+                break;
+            case South:
+                result = Direction.North;
+                break;
+            case Down:
+                result = Direction.Up;
+                break;
+            case West:
+                result = Direction.East;
+                break;
+            case Left:
+                result = Direction.Right;
+                break;
+            case NorthEast:
+                result = Direction.SouthWest;
+                break;
+            case NorthWest:
+                result = Direction.SouthEast;
+                break;
+            case SouthEast:
+                result = Direction.NorthWest;
+                break;
+            case SouthWest:
+                result = Direction.NorthEast;
+                break;
+            default:
+                result = Direction.Unknown;
+                break;
+        }
+        return result;
+    }
+
+    Direction bounce(Direction direction) {
+        Direction result;
+        switch (direction) {
+            case NorthEast:
+                result = Direction.NorthWest;
+                break;
+            case NorthWest:
+                result = Direction.NorthEast;
+                break;
+            case SouthEast:
+                result = Direction.SouthWest;
+                break;
+            case SouthWest:
+                result = Direction.SouthEast;
+                break;
+            default:
+                result = Direction.Unknown;
+                break;
+        }
+        return result;
+    }
+
+    Direction directionTo(Position position) {
+        if (position.x > x && position.y > y) {
+            return Direction.SouthEast;
+        } else if (position.x > x && position.y < y) {
+            return Direction.NorthEast;
+        } else if (position.x < x && position.y > y) {
+            return Direction.SouthWest;
+        } else if (position.x < x && position.y < y) {
+            return Direction.NorthEast;
+        } else {
+            return Direction.Unknown;
+        }
     }
 
     Position adjacent(char direction) {

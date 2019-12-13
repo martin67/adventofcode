@@ -20,4 +20,13 @@ class Day12TheNBodyProblemTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day12TheNBodyProblem(inputLines).totalEnergy(steps));
     }
+
+    @ParameterizedTest
+    @CsvSource({"2772, src/test/resources/2019/day12-demo1.txt",
+            "0, src/test/resources/2019/day12.txt"})
+    void stepsToOriginalState(int expected, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day12TheNBodyProblem(inputLines).stepsToOriginalState());
+    }
+
 }

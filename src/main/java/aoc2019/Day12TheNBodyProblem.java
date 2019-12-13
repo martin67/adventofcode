@@ -1,16 +1,17 @@
 package aoc2019;
 
 import com.google.common.collect.Sets;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class Day12TheNBodyProblem {
 
+    @Data
     static class Position {
         int x;
         int y;
@@ -23,6 +24,7 @@ public class Day12TheNBodyProblem {
         }
     }
 
+    @Data
     static class Velocity {
         int x;
         int y;
@@ -36,8 +38,8 @@ public class Day12TheNBodyProblem {
     }
 
     static class Moon {
-        Position position;
-        Velocity velocity;
+        final Position position;
+        final Velocity velocity;
 
         public Moon(Position position) {
             this.position = position;
@@ -93,28 +95,50 @@ public class Day12TheNBodyProblem {
             return String.format("pos=<x=%d, y=%d, z=%d>, vel=<x=%d, y=%d, z=%d>",
                     position.x, position.y, position.z, velocity.x, velocity.y, velocity.z);
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            return position.toString().equals(o.toString());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(toString());
+        }
     }
 
-    Set<Moon> moons;
+    final Set<Moon> moonSet;
+    List<Moon> moonList;
+    List<Moon> initialMoonList;
 
     public Day12TheNBodyProblem(List<String> inputLines) {
         String regexStr = "^<x=(-?\\d+), y=(-?\\d+), z=(-?\\d+)>$";
         Pattern pattern = Pattern.compile(regexStr);
-        moons = new HashSet<>();
+        moonSet = new HashSet<>();
+        moonList = new ArrayList<>();
+        initialMoonList = new ArrayList<>();
 
         for (String line : inputLines) {
             Matcher matcher = pattern.matcher(line);
             if (matcher.find()) {
-                moons.add(new Moon(new Position(Integer.parseInt(matcher.group(1)),
+                Moon moon = new Moon(new Position(Integer.parseInt(matcher.group(1)),
                         Integer.parseInt(matcher.group(2)),
-                        Integer.parseInt(matcher.group(3)))));
+                        Integer.parseInt(matcher.group(3))));
+                Moon moon2 = new Moon(new Position(Integer.parseInt(matcher.group(1)),
+                        Integer.parseInt(matcher.group(2)),
+                        Integer.parseInt(matcher.group(3))));
+                moonSet.add(moon);
+                moonList.add(moon);
+                initialMoonList.add(moon2);
             }
         }
     }
 
     int totalEnergy(int steps) {
 
-        Set<Set<Moon>> moonPairs = Sets.combinations(moons, 2);
+        Set<Set<Moon>> moonPairs = Sets.combinations(moonSet, 2);
 
         for (int step = 0; step < steps; step++) {
 
@@ -123,12 +147,89 @@ public class Day12TheNBodyProblem {
                 moonList.get(0).applyGravity(moonList.get(1));
             }
 
-            moons.forEach(Moon::applyVelocity);
+            moonSet.forEach(Moon::applyVelocity);
 
             //System.out.println("After " + (step +1) + " steps:");
             //moons.forEach(System.out::println);
             //System.out.println();
         }
-        return moons.stream().mapToInt(Moon::totalEnergy).sum();
+        return moonSet.stream().mapToInt(Moon::totalEnergy).sum();
+    }
+
+    int stepsToOriginalState() {
+        Set<Set<Moon>> moonPairs = Sets.combinations(moonSet, 2);
+//        Set<String> previousStates = new HashSet<>();
+//        previousStates.add(moons.toString());
+        String startState = moonSet.toString();
+        Set<Integer> diffs = new HashSet<>();
+
+        boolean quit = false;
+        int steps = 0;
+        int lastStep = 0;
+
+        while (!quit) {
+
+            for (Set<Moon> moonPair : moonPairs) {
+                List<Moon> moonList = new ArrayList<>(moonPair);
+                moonList.get(0).applyGravity(moonList.get(1));
+            }
+            moonSet.forEach(Moon::applyVelocity);
+
+            steps++;
+
+//            if (moonSet.hashCode() == moonSetStart) {
+//                quit = true;
+//            }
+
+            if (moonSet.toString().equals(startState)) {
+                quit = true;
+            }
+
+            int moon = 0;
+            if (moonList.get(moon).position.equals(initialMoonList.get(moon).position)) {
+                log.info("Step: {} - diff {} - {}", steps, steps - lastStep, moonList.get(moon));
+                if (diffs.contains(steps-lastStep)) {
+                    log.info("Found cycle: {} at {}", steps-lastStep, steps);
+                } else {
+                    diffs.add(steps - lastStep);
+                }
+                lastStep = steps;
+            }
+
+            if (steps % 1000000 == 0) {
+                log.info("Step: {}", steps);
+            }
+
+//            String state = moons.toString();
+//            if (previousStates.contains(state)) {
+//                quit = true;
+//            } else {
+//                previousStates.add(state);
+//                if (steps % 1000000 == 0) {
+//                    log.info("Step: {}", steps);
+//                }
+//            }
+        }
+        return steps;
     }
 }
+
+
+// Different cycles: for example1:
+//<x=-1, y=0, z=2>
+//<x=2, y=-10, z=-7>
+//<x=4, y=-8, z=8>
+//<x=3, y=5, z=-1>
+
+// moon0: 462 462 462 462 462 462                          - cycle: 462
+// moon1: 1125 261 261 1125                                - cycle: 1386
+// moon2: 308 308 154 308 308 308 308 154 308 308          - cycle: 1386
+// moon3: 261 201 201 261 261 201 201 261 261 201 201 261  - cycle: 462
+
+// moons are going back and forth in a pattern
+// 2772 :
+
+//  <x=13, y=9, z=5>
+//  <x=8, y=14, z=-2>
+//  <x=-5, y=4, z=11>
+//  <x=2, y=-6, z=1
