@@ -139,15 +139,23 @@ public class Position implements Comparable<Position> {
         return result;
     }
 
-    Direction directionTo(Position position) {
-        if (position.x > x && position.y > y) {
+    Direction directionTo(Position position, boolean allowDiagonal) {
+        if (position.x == x && position.y < y) {
+            return Direction.North;
+        } else if (allowDiagonal && position.x > x && position.y < y) {
+            return Direction.NorthEast;
+        } else if (position.x > x && position.y == y) {
+            return Direction.East;
+        } else if (allowDiagonal && position.x > x && position.y > y) {
             return Direction.SouthEast;
-        } else if (position.x > x && position.y < y) {
-            return Direction.NorthEast;
-        } else if (position.x < x && position.y > y) {
+        } else if (position.x == x && position.y > y) {
+            return Direction.South;
+        } else if (allowDiagonal && position.x < x && position.y > y) {
             return Direction.SouthWest;
-        } else if (position.x < x && position.y < y) {
-            return Direction.NorthEast;
+        } else if (position.x < x && position.y == y) {
+            return Direction.West;
+        } else if (allowDiagonal && position.x < x && position.y < y) {
+            return Direction.NorthWest;
         } else {
             return Direction.Unknown;
         }

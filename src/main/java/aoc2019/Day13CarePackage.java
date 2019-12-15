@@ -37,7 +37,7 @@ public class Day13CarePackage {
         }
 
         void updatePosition(Position newPosition) {
-            direction = position.directionTo(newPosition);
+            direction = position.directionTo(newPosition, true);
             position = newPosition;
         }
 
