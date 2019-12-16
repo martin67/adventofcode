@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class Day15OxygenSystem {
 
     @Data
-    class RemoteControl implements Runnable {
+    static class RemoteControl implements Runnable {
         private BlockingQueue<BigInteger> inputQueue;
         private BlockingQueue<BigInteger> outputQueue;
         private CountDownLatch countDownLatch;
@@ -65,10 +65,10 @@ public class Day15OxygenSystem {
 
             // Find longest shortest-path from oxygen system.
             iPaths = dijkstraAlg.getPaths(oxygenSystem);
-            int length = 0;
+            int length;
             ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> finalIPaths = iPaths;
-            length = map.keySet().stream().filter(p -> map.get(p) == 1).mapToInt(p -> {
-                return finalIPaths.getPath(p).getLength();}).max().orElse(0);
+            length = map.keySet().stream().filter(p -> map.get(p) == 1)
+                    .mapToInt(p -> finalIPaths.getPath(p).getLength()).max().orElse(0);
             log.info("Longest path length: {}", length);
         }
 
