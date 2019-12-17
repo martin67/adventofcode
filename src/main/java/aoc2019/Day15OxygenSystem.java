@@ -11,8 +11,7 @@ import org.jgrapht.graph.SimpleGraph;
 
 import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,10 +19,9 @@ import java.util.stream.Stream;
 public class Day15OxygenSystem {
 
     @Data
-    static class RemoteControl implements Runnable {
+    static class RemoteControl implements Callable<Integer> {
         private BlockingQueue<BigInteger> inputQueue;
         private BlockingQueue<BigInteger> outputQueue;
-        private CountDownLatch countDownLatch;
 
         Map<Position, Integer> map = new HashMap<>();
         Position currentPosition;
@@ -34,13 +32,9 @@ public class Day15OxygenSystem {
         private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
 
-        public RemoteControl(CountDownLatch countDownLatch) {
-            this.countDownLatch = countDownLatch;
-        }
-
         @SneakyThrows
         @Override
-        public void run() {
+        public Integer call() {
 
             Position startPosition = new Position(0, 0);
             Position currentPosition = new Position(startPosition);
@@ -70,6 +64,7 @@ public class Day15OxygenSystem {
             length = map.keySet().stream().filter(p -> map.get(p) == 1)
                     .mapToInt(p -> finalIPaths.getPath(p).getLength()).max().orElse(0);
             log.info("Longest path length: {}", length);
+            return length;
         }
 
         void checkPosition(Position start) throws InterruptedException {
@@ -169,21 +164,17 @@ public class Day15OxygenSystem {
                 .collect(Collectors.toList());
     }
 
-    int fewestNumberOfMovementCommands() throws InterruptedException {
-
+    int fewestNumberOfMovementCommands() throws InterruptedException, ExecutionException {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
         CountDownLatch countDownLatch = new CountDownLatch(2);
         IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
-        RemoteControl rc = new RemoteControl(countDownLatch);
+        RemoteControl rc = new RemoteControl();
         rc.setInputQueue(ic.getOutputQueue());
         rc.setOutputQueue(ic.getInputQueue());
 
-        new Thread(ic).start();
-        new Thread(rc).start();
+        executorService.submit(ic);
+        Future<Integer> futureSum = executorService.submit(rc);
 
-        countDownLatch.await();
-
-        return 0;
+        return futureSum.get();
     }
-
-
 }
