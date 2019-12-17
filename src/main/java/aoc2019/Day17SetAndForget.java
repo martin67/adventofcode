@@ -73,7 +73,6 @@ public class Day17SetAndForget {
     public Day17SetAndForget(List<String> inputLines) {
         opcodes = Stream.of(inputLines.get(0).split(","))
                 .collect(Collectors.toList());
-
     }
 
     int sumOfAlignmentParameters() throws InterruptedException, ExecutionException {

@@ -69,7 +69,7 @@ public class Day11SpacePolice {
     }
 
     private final List<String> opcodes;
-    private Map<Position, Panel> panels;
+    private final Map<Position, Panel> panels;
 
     public Day11SpacePolice(List<String> inputLines) {
         opcodes = Stream.of(inputLines.get(0).split(","))

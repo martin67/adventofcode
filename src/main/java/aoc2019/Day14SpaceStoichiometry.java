@@ -14,6 +14,7 @@ public class Day14SpaceStoichiometry {
 
     @Data
     @AllArgsConstructor
+    static
     class Chemical {
         String name;
     }
@@ -27,6 +28,7 @@ public class Day14SpaceStoichiometry {
 
     @Data
     @AllArgsConstructor
+    static
     class ReactionResult {
         int amount;
         int divisor;
@@ -90,13 +92,12 @@ public class Day14SpaceStoichiometry {
                 }
             }
             //log.info("doReaction returning {} for {}", result, reaction);
-            return;
         }
     }
 
-    Set<Chemical> chemicals = new HashSet<>();
-    Set<Reaction> reactions = new HashSet<>();
-    Map<Chemical, ReactionResult> reactionResults = new HashMap<>();
+    final Set<Chemical> chemicals = new HashSet<>();
+    final Set<Reaction> reactions = new HashSet<>();
+    final Map<Chemical, ReactionResult> reactionResults = new HashMap<>();
     Chemical ore;
     Chemical fuel;
 

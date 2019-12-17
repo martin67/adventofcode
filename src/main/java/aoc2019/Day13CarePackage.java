@@ -77,9 +77,9 @@ public class Day13CarePackage {
         }
     }
 
-    ExecutorService executorService;
+    final ExecutorService executorService;
     private final List<String> opcodes;
-    Map<Position, Tile> tiles;
+    final Map<Position, Tile> tiles;
     int score;
 
     public Day13CarePackage(List<String> inputLines) {

@@ -110,8 +110,8 @@ public class Day12TheNBodyProblem {
     }
 
     final Set<Moon> moonSet;
-    List<Moon> moonList;
-    List<Moon> initialMoonList;
+    final List<Moon> moonList;
+    final List<Moon> initialMoonList;
 
     public Day12TheNBodyProblem(List<String> inputLines) {
         String regexStr = "^<x=(-?\\d+), y=(-?\\d+), z=(-?\\d+)>$";
