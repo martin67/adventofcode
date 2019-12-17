@@ -9,22 +9,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingDeque;
 
 @Slf4j
 @Data
-class IntcodeComputer implements Runnable {
+class IntcodeComputer implements Callable<Integer> {
 
     private BlockingQueue<BigInteger> inputQueue;
     private BlockingQueue<BigInteger> outputQueue;
-    private CountDownLatch countDownLatch;
-
     private BigInteger instructionPointer;
     private BigInteger relativeBaseOffset;
     private Map<BigInteger, BigInteger> opcodes;
 
-    IntcodeComputer(List<String> program, CountDownLatch countDownLatch) {
+    IntcodeComputer(List<String> program) {
         this.opcodes = new HashMap<>();
         for (int i = 0; i < program.size(); i++) {
             this.opcodes.put(new BigInteger(String.valueOf(i)), new BigInteger(program.get(i)));
@@ -33,11 +31,10 @@ class IntcodeComputer implements Runnable {
         this.relativeBaseOffset = new BigInteger("0");
         this.inputQueue = new LinkedBlockingDeque<>();
         this.outputQueue = new LinkedBlockingDeque<>();
-        this.countDownLatch = countDownLatch;
     }
 
     @Override
-    public void run() {
+    public Integer call() {
         log.debug("Starting thread {}", Thread.currentThread().getName());
         try {
             boolean quit = false;
@@ -135,7 +132,8 @@ class IntcodeComputer implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        countDownLatch.countDown();
+        log.debug("Ending thread {}", Thread.currentThread().getName());
+        return 0;
     }
 
     private String getOpcodeString() {

@@ -14,6 +14,12 @@ class Day15OxygenSystemTest {
     @Test
     void fewestNumberofMovementCommands() throws IOException, InterruptedException, ExecutionException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day15.txt"));
-        assertEquals(0, new Day15OxygenSystem(inputLines).fewestNumberOfMovementCommands());
+        assertEquals(424, new Day15OxygenSystem(inputLines).fewestNumberOfMovementCommands(false));
+    }
+
+    @Test
+    void minutesToFill() throws IOException, InterruptedException, ExecutionException {
+        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day15.txt"));
+        assertEquals(446, new Day15OxygenSystem(inputLines).fewestNumberOfMovementCommands(true));
     }
 }

@@ -20,22 +20,32 @@ public class Day14SpaceStoichiometry {
 
     @Data
     @AllArgsConstructor
-    class ChemicalQuantity {
+    class Mix {
         Chemical chemical;
         int amount;
     }
 
     @Data
     @AllArgsConstructor
+    class ReactionResult {
+        int amount;
+        int divisor;
+    }
+
+    // Example
+    // reactionResults<A, 28
+
+    @Data
+    @AllArgsConstructor
     class Reaction {
         String name;
-        List<ChemicalQuantity> inputs;
-        ChemicalQuantity output;
+        List<Mix> inputs;
+        Mix output;
 
         boolean isReduceable() {
             boolean result = true;
-            for (ChemicalQuantity chemicalQuantity : inputs) {
-                if (!chemicalQuantity.getChemical().equals(ore)) {
+            for (Mix mix : inputs) {
+                if (!mix.getChemical().equals(ore)) {
                     result = false;
                     break;
                 }
@@ -45,8 +55,8 @@ public class Day14SpaceStoichiometry {
 
         boolean inputContains(Chemical c) {
             boolean result = false;
-            for (ChemicalQuantity cq : inputs) {
-                if (cq.getChemical().equals(c)) {
+            for (Mix mix : inputs) {
+                if (mix.getChemical().equals(c)) {
                     result = true;
                     break;
                 }
@@ -61,41 +71,47 @@ public class Day14SpaceStoichiometry {
                     '}';
         }
 
-        // returns Fractions of ore
-        Fraction doReaction(Reaction reaction) {
+        // recursive
+        void doReaction(Reaction reaction) {
             log.info("doReaction for {}", reaction);
-            Fraction result = Fraction.ONE;
-            for (ChemicalQuantity cq : reaction.inputs) {
-                Chemical cqi = cq.getChemical();
-                if (cqi.equals(ore)) {
-                    result.add(Fraction.getFraction(cq.getAmount(), reaction.output.amount));
+            for (Mix mix : reaction.inputs) {
+                Chemical chemical = mix.getChemical();
+                if (chemical.equals(ore)) {
+                    if (reactionResults.containsKey(chemical)) {
+                        reactionResults.get(chemical).amount += mix.getAmount();
+                    } else {
+                        //reactionResults.put(chemical, new ReactionResult(mix.getAmount(), reaction.))
+                    }
+                    //result.add(Fraction.getFraction(mix.getAmount(), reaction.output.amount));
                 } else {
-                    // Which reaction generates cqi?
-                    Reaction re = reactions.stream().filter(r -> r.output.chemical.equals(cqi)).findFirst().orElse(null);
-                    result.add(doReaction(re).multiplyBy(Fraction.getFraction(cq.getAmount(), reaction.output.amount)));
+                    // Which reaction generates chemical?
+                    Reaction re = reactions.stream().filter(r -> r.output.chemical.equals(chemical)).findFirst().orElse(null);
+                    //result.add(doReaction(re).multiplyBy(Fraction.getFraction(mix.getAmount(), reaction.output.amount)));
                 }
             }
-            log.info("doReaction returning {} for {}", result, reaction);
-            return result;
+            //log.info("doReaction returning {} for {}", result, reaction);
+            return;
         }
     }
 
     Set<Chemical> chemicals = new HashSet<>();
     Set<Reaction> reactions = new HashSet<>();
+    Map<Chemical, ReactionResult> reactionResults = new HashMap<>();
     Chemical ore;
+    Chemical fuel;
 
     public Day14SpaceStoichiometry(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(((\\d+) (\\w+),? )+)=> (?<outputAmount>\\d+) (?<outputChemical>\\w+)$");
         for (String line : inputLines) {
             Matcher matcher = pattern.matcher(line);
             if (matcher.find()) {
-                List<ChemicalQuantity> inputs = new ArrayList<>();
+                List<Mix> inputs = new ArrayList<>();
                 String indata = matcher.group(1);
                 for (String quantity : indata.split(",")) {
                     String[] split = quantity.trim().split(" ");
                     Chemical inputChemical = new Chemical(split[1]);
                     chemicals.add(inputChemical);
-                    ChemicalQuantity inputQuantity = new ChemicalQuantity(inputChemical, Integer.parseInt(split[0]));
+                    Mix inputQuantity = new Mix(inputChemical, Integer.parseInt(split[0]));
                     inputs.add(inputQuantity);
                     if (inputChemical.name.equals("ORE")) {
                         ore = inputChemical;
@@ -103,7 +119,10 @@ public class Day14SpaceStoichiometry {
                 }
                 Chemical outputChemical = new Chemical(matcher.group("outputChemical"));
                 chemicals.add(outputChemical);
-                ChemicalQuantity output = new ChemicalQuantity(outputChemical, Integer.parseInt(matcher.group("outputAmount")));
+                if (outputChemical.name.equals("FUEL")) {
+                    fuel = outputChemical;
+                }
+                Mix output = new Mix(outputChemical, Integer.parseInt(matcher.group("outputAmount")));
                 reactions.add(new Reaction("To " + outputChemical.name, inputs, output));
             }
         }
@@ -122,9 +141,9 @@ public class Day14SpaceStoichiometry {
             Map<Chemical, Fraction> reductions = new HashMap<>();
             for (Reaction reaction : reactions) {
                 if (reaction.isReduceable()) {
-                    ChemicalQuantity chemicalQuantity = reaction.output;
-                    reductions.put(chemicalQuantity.chemical, Fraction.getFraction(chemicalQuantity.amount, reaction.output.amount));
-                    log.info("Adding {} to reduction list (from reaction {})", chemicalQuantity.chemical.name, reaction);
+                    Mix mix = reaction.output;
+                    reductions.put(mix.chemical, Fraction.getFraction(mix.amount, reaction.output.amount));
+                    log.info("Adding {} to reduction list (from reaction {})", mix.chemical.name, reaction);
                 }
             }
 
@@ -133,25 +152,25 @@ public class Day14SpaceStoichiometry {
                 for (Reaction reaction : reactions) {
                     if (reaction.inputContains(chemicalToReduce)) {
                         int denominator = reductions.get(chemicalToReduce).getDenominator();
-                        for (ChemicalQuantity chemicalQuantity : reaction.inputs) {
-                            if (chemicalQuantity.chemical.equals(chemicalToReduce)) {
+                        for (Mix mix : reaction.inputs) {
+                            if (mix.chemical.equals(chemicalToReduce)) {
                                 log.info("Reducing {} on {}", chemicalToReduce, reaction);
-                                chemicalQuantity.chemical = ore;
-                                chemicalQuantity.amount *= reductions.get(chemicalToReduce).getNumerator();
+                                mix.chemical = ore;
+                                mix.amount *= reductions.get(chemicalToReduce).getNumerator();
                             } else {
-                                chemicalQuantity.amount *= denominator;
+                                mix.amount *= denominator;
                             }
                         }
                         reaction.output.amount *= denominator;
                         // add all chemicalQuantities that are Ore into one
-                        ChemicalQuantity newChemicalQuantity = new ChemicalQuantity(ore, 0);
-                        for (ChemicalQuantity chemicalQuantity : reaction.inputs) {
-                            if (chemicalQuantity.getChemical().equals(ore)) {
-                                newChemicalQuantity.amount += chemicalQuantity.getAmount();
+                        Mix newMix = new Mix(ore, 0);
+                        for (Mix mix : reaction.inputs) {
+                            if (mix.getChemical().equals(ore)) {
+                                newMix.amount += mix.getAmount();
                             }
                         }
                         reaction.inputs.removeIf(cq -> cq.getChemical().equals(ore));
-                        reaction.inputs.add(newChemicalQuantity);
+                        reaction.inputs.add(newMix);
                     }
                 }
                 chemicals.remove(chemicalToReduce);

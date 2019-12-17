@@ -7,7 +7,8 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -85,10 +86,11 @@ public class Day11SpacePolice {
         }
         Robot robot = new Robot(start, Direction.Up);
 
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
-        new Thread(ic).start();
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        executorService.submit(ic);
         boolean quit = false;
+
         while (!quit) {
             ic.getInputQueue().add(new BigInteger(String.valueOf(robot.location.color)));
             BigInteger color = ic.getOutputQueue().poll(1, TimeUnit.SECONDS);

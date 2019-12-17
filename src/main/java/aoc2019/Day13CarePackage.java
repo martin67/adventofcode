@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -74,21 +77,22 @@ public class Day13CarePackage {
         }
     }
 
+    ExecutorService executorService;
     private final List<String> opcodes;
     Map<Position, Tile> tiles;
     int score;
 
     public Day13CarePackage(List<String> inputLines) {
+        executorService = Executors.newCachedThreadPool();
         opcodes = Stream.of(inputLines.get(0).split(","))
                 .collect(Collectors.toList());
         tiles = new HashMap<>();
     }
 
-    long numberOfBlockTiles() throws InterruptedException {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
-        new Thread(ic).start();
-        countDownLatch.await();
+    long numberOfBlockTiles() throws ExecutionException, InterruptedException {
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        Future<Integer> futureSum = executorService.submit(ic);
+        futureSum.get();
 
         List<BigInteger> output = new ArrayList<>();
         ic.getOutputQueue().drainTo(output);
@@ -106,15 +110,14 @@ public class Day13CarePackage {
         return tiles.values().stream().filter(t -> t.getId() == 2).count();
     }
 
-    int lastScore() throws InterruptedException {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+    int lastScore() throws InterruptedException, ExecutionException {
         opcodes.set(0, "2");
-        IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
-
-        new Thread(ic).start();
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        Future<Integer> futureSum = executorService.submit(ic);
+        futureSum.get();
 
         boolean quit = false;
-        Ball ball = new Ball(new Position(19,18), Direction.SouthEast);
+        Ball ball = new Ball(new Position(19, 18), Direction.SouthEast);
         Position paddlePosition = new Position(22, 22);
 
         while (!quit) {
@@ -174,9 +177,6 @@ public class Day13CarePackage {
                 }
             }
         }
-
-
-        countDownLatch.await();
 
         return 0;
     }

@@ -28,9 +28,14 @@ public class Day15OxygenSystem {
         Queue<Position> positionsToCheck = new LinkedList<>();
         Position startPosition;
         Position oxygenSystem;
+        boolean secondTest;
 
         private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+
+        public RemoteControl(boolean secondTest) {
+            this.secondTest = secondTest;
+        }
 
         @SneakyThrows
         @Override
@@ -53,18 +58,21 @@ public class Day15OxygenSystem {
 
             printMap();
 
-            ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> iPaths = dijkstraAlg.getPaths(startPosition);
-
-            log.info("Shortest path length from {} to {} : {}", startPosition, oxygenSystem, iPaths.getPath(oxygenSystem).getLength());
-
-            // Find longest shortest-path from oxygen system.
-            iPaths = dijkstraAlg.getPaths(oxygenSystem);
-            int length;
-            ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> finalIPaths = iPaths;
-            length = map.keySet().stream().filter(p -> map.get(p) == 1)
-                    .mapToInt(p -> finalIPaths.getPath(p).getLength()).max().orElse(0);
-            log.info("Longest path length: {}", length);
-            return length;
+            ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> iPaths;
+            if (!secondTest) {
+                iPaths = dijkstraAlg.getPaths(startPosition);
+                log.info("Shortest path length from {} to {} : {}", startPosition, oxygenSystem, iPaths.getPath(oxygenSystem).getLength());
+                return iPaths.getPath(oxygenSystem).getLength();
+            } else {
+                // Find longest shortest-path from oxygen system.
+                iPaths = dijkstraAlg.getPaths(oxygenSystem);
+                int length;
+                ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> finalIPaths = iPaths;
+                length = map.keySet().stream().filter(p -> map.get(p) == 1)
+                        .mapToInt(p -> finalIPaths.getPath(p).getLength()).max().orElse(0);
+                log.info("Longest path length: {}", length);
+                return length;
+            }
         }
 
         void checkPosition(Position start) throws InterruptedException {
@@ -164,11 +172,10 @@ public class Day15OxygenSystem {
                 .collect(Collectors.toList());
     }
 
-    int fewestNumberOfMovementCommands() throws InterruptedException, ExecutionException {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        CountDownLatch countDownLatch = new CountDownLatch(2);
-        IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
-        RemoteControl rc = new RemoteControl();
+    int fewestNumberOfMovementCommands(boolean secondTest) throws InterruptedException, ExecutionException {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        RemoteControl rc = new RemoteControl(secondTest);
         rc.setInputQueue(ic.getOutputQueue());
         rc.setOutputQueue(ic.getInputQueue());
 

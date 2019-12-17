@@ -77,9 +77,8 @@ public class Day17SetAndForget {
     }
 
     int sumOfAlignmentParameters() throws InterruptedException, ExecutionException {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        CountDownLatch countDownLatch = new CountDownLatch(2);
-        IntcodeComputer ic = new IntcodeComputer(opcodes, countDownLatch);
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
         RemoteControl rc = new RemoteControl();
         rc.setInputQueue(ic.getOutputQueue());
         rc.setOutputQueue(ic.getInputQueue());
