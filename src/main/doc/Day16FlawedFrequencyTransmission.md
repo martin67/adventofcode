@@ -108,9 +108,9 @@ Here is the eight-digit message in the final output list after 100 phases. The m
 has been highlighted. (Note that the inputs given below are repeated 10000 times to find the actual starting 
 input lists.)
 
-* 03036732577212944063491565474664 becomes 84462026.
-* 02935109699940807407585447034323 becomes 78725270.
-* 03081770884921959731165446850517 becomes 53553731.
+* **0303673**2577212944063491565474664 becomes 84462026.
+* **0293510**9699940807407585447034323 becomes 78725270.
+* **0308177**0884921959731165446850517 becomes 53553731.
 
 After repeating your input signal 10000 times and running 100 phases of FFT, **what is the eight-digit message 
 embedded in the final output list?**

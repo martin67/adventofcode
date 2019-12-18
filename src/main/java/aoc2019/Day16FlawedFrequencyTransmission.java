@@ -1,6 +1,10 @@
 package aoc2019;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ public class Day16FlawedFrequencyTransmission {
     }
 
     String firstEightDigits(int phases) {
+        log.info("Starting FFT, {} phases, fft size: {}", phases, fft.size());
         for (int phase = 0; phase < phases; phase++) {
 
             List<Integer> nextValues = new ArrayList<>();
@@ -48,11 +53,30 @@ public class Day16FlawedFrequencyTransmission {
             }
             fft = nextValues;
             log.debug("After {} phase, {}", phase, fft);
+            log.info("After {} phase", phase);
         }
         return fft.stream().map(String::valueOf).collect(Collectors.joining()).substring(0, 8);
     }
 
     String finalOutput(int phases) {
+        List<Integer> initialFft = new ArrayList<>(fft);
+
+        for (int i = 0; i < 10000; i++) {
+            fft.addAll(initialFft);
+        }
+        String out = firstEightDigits(1000);
         return "00000000";
     }
+
+    String apacheFft(int phases) {
+        FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
+
+        double[] fftdata = fft.stream().mapToDouble(x -> x).toArray();
+
+        Complex[] hej = transformer.transform(fftdata, TransformType.FORWARD);
+        Complex[] hej2 = transformer.transform(fftdata, TransformType.INVERSE);
+
+        return "00000000";
+    }
+
 }
