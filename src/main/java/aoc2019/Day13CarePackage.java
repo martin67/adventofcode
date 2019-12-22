@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -77,6 +74,80 @@ public class Day13CarePackage {
         }
     }
 
+    @Data
+    class GameController implements Callable<Integer> {
+        BlockingQueue<BigInteger> inputQueue;
+        BlockingQueue<BigInteger> outputQueue;
+
+        @Override
+        public Integer call() throws Exception {
+            boolean quit = false;
+            Ball ball = new Ball(new Position(19, 18), Direction.SouthEast);
+            Position paddlePosition = new Position(22, 22);
+
+            while (!quit) {
+                int x = getOutputQueue().take().intValue();
+                int y = getOutputQueue().take().intValue();
+                int id = getOutputQueue().take().intValue();
+
+                if (x == -1 && y == 0) {
+                    score = id;
+                    log.info("Score: {}", score);
+                } else {
+                    // check if game over (all blocks removed)
+                    long blocks = tiles.values().stream().filter(t -> t.getId() == 2).count();
+                    if (blocks == 0 && tiles.size() == 1056) {
+                        return score;
+                    }
+
+                    // predict ball position
+                    // move joystick to ball position (or wait if it's already there)
+
+                    // temp test
+                    Position pos = new Position(x, y);
+                    if (tiles.size() == 1056) {
+                        log.info("Game output: type {}, {}", id, pos);
+                    }
+                    if (tiles.containsKey(pos)) {
+                        tiles.get(pos).id = id;
+                    } else {
+                        tiles.put(pos, new Tile(pos, id));
+                    }
+
+                    if (id == 3) {
+                        log.info("Paddle at {}", pos);
+                        paddlePosition = pos;
+                    }
+                    if (id == 4) {
+                        log.info("Ball at {}", pos);
+                        ball.updatePosition(pos);
+                    }
+
+                    if (tiles.size() == 1056) {
+                        printGame();
+                        System.out.println();
+
+                        Position nextPaddlePosition = ball.predictPaddlePosition();
+                        log.info("Predicting final paddle position to {}", nextPaddlePosition);
+                        if (nextPaddlePosition.x > paddlePosition.x) {
+                            log.info("Moving paddle to the right");
+                            getInputQueue().add(new BigInteger("1"));
+                        } else if (nextPaddlePosition.x < paddlePosition.x) {
+                            log.info("Moving paddle to the left");
+                            getInputQueue().add(new BigInteger("-1"));
+                        } else {
+                            log.info("Not moving paddle");
+                            getInputQueue().add(new BigInteger("0"));
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
+
     final ExecutorService executorService;
     private final List<String> opcodes;
     final Map<Position, Tile> tiles;
@@ -113,70 +184,13 @@ public class Day13CarePackage {
     int lastScore() throws InterruptedException, ExecutionException {
         opcodes.set(0, "2");
         IntcodeComputer ic = new IntcodeComputer(opcodes);
-        Future<Integer> futureSum = executorService.submit(ic);
+        GameController gc = new GameController();
+        gc.setInputQueue(ic.getOutputQueue());
+        gc.setOutputQueue(ic.getInputQueue());
+
+        executorService.submit(ic);
+        Future<Integer> futureSum = executorService.submit(gc);
         futureSum.get();
-
-        boolean quit = false;
-        Ball ball = new Ball(new Position(19, 18), Direction.SouthEast);
-        Position paddlePosition = new Position(22, 22);
-
-        while (!quit) {
-            int x = ic.getOutputQueue().take().intValue();
-            int y = ic.getOutputQueue().take().intValue();
-            int id = ic.getOutputQueue().take().intValue();
-
-            if (x == -1 && y == 0) {
-                score = id;
-                log.info("Score: {}", score);
-            } else {
-                // check if game over (all blocks removed)
-                long blocks = tiles.values().stream().filter(t -> t.getId() == 2).count();
-                if (blocks == 0 && tiles.size() == 1056) {
-                    return score;
-                }
-
-                // predict ball position
-                // move joystick to ball position (or wait if it's already there)
-
-                // temp test
-                Position pos = new Position(x, y);
-                if (tiles.size() == 1056) {
-                    log.info("Game output: type {}, {}", id, pos);
-                }
-                if (tiles.containsKey(pos)) {
-                    tiles.get(pos).id = id;
-                } else {
-                    tiles.put(pos, new Tile(pos, id));
-                }
-
-                if (id == 3) {
-                    log.info("Paddle at {}", pos);
-                    paddlePosition = pos;
-                }
-                if (id == 4) {
-                    log.info("Ball at {}", pos);
-                    ball.updatePosition(pos);
-                }
-
-                if (tiles.size() == 1056) {
-                    printGame();
-                    System.out.println();
-
-                    Position nextPaddlePosition = ball.predictPaddlePosition();
-                    log.info("Predicting final paddle position to {}", nextPaddlePosition);
-                    if (nextPaddlePosition.x > paddlePosition.x) {
-                        log.info("Moving paddle to the right");
-                        ic.getInputQueue().add(new BigInteger("1"));
-                    } else if (nextPaddlePosition.x < paddlePosition.x) {
-                        log.info("Moving paddle to the left");
-                        ic.getInputQueue().add(new BigInteger("-1"));
-                    } else {
-                        log.info("Not moving paddle");
-                        ic.getInputQueue().add(new BigInteger("0"));
-                    }
-                }
-            }
-        }
 
         return 0;
     }

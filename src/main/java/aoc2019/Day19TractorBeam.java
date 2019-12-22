@@ -68,7 +68,7 @@ public class Day19TractorBeam {
                         map.add(new Position(x, previousLeftEdge.y));
                     }
 
-                    int gridsize = 100;
+                    int gridsize = 10;
                     if (map.contains(new Position(previousLeftEdge.x, previousLeftEdge.y - gridsize)) &&
                             map.contains(new Position(previousLeftEdge.x + gridsize, previousLeftEdge.y - gridsize))) {
                         log.info("Found it at {}, {}", previousLeftEdge.x, previousLeftEdge.y - gridsize);
@@ -125,3 +125,5 @@ public class Day19TractorBeam {
         return futureSum.get();
     }
 }
+
+// 15791361 too high
