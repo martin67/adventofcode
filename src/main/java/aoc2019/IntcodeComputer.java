@@ -35,7 +35,7 @@ class IntcodeComputer implements Callable<Integer> {
 
     @Override
     public Integer call() {
-        log.debug("Starting thread {}", Thread.currentThread().getName());
+        log.info("Starting thread {}", Thread.currentThread().getName());
         try {
             boolean quit = false;
 
@@ -132,7 +132,7 @@ class IntcodeComputer implements Callable<Integer> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        log.debug("Ending thread {}", Thread.currentThread().getName());
+        log.info("Ending thread {}", Thread.currentThread().getName());
         return 0;
     }
 

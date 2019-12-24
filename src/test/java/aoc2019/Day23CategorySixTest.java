@@ -14,6 +14,12 @@ class Day23CategorySixTest {
     @Test
     void yValue() throws IOException, InterruptedException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day23.txt"));
-        assertEquals(0, new Day23CategorySix(inputLines).yValue());
+        assertEquals(24954, new Day23CategorySix(inputLines).yValue());
+    }
+
+    @Test
+    void secondYValue() throws IOException, InterruptedException {
+        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day23.txt"));
+        assertEquals(0, new Day23CategorySix(inputLines).secondYValue());
     }
 }

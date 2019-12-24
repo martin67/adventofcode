@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,6 +31,10 @@ public class Day23CategorySix {
                 BigInteger x = inputQueue.take();
                 BigInteger y = inputQueue.take();
                 log.info("Router {}: Routing {},{} to {}", id, x.intValue(), y.intValue(), destination);
+                if (destination == 255) {
+                    log.info("Found it: {}", y);
+                    return y.intValue();
+                }
                 computers.get(destination).getInputQueue().put(x);
                 computers.get(destination).getInputQueue().put(y);
             }
@@ -53,6 +54,8 @@ public class Day23CategorySix {
 
     int yValue() throws InterruptedException {
         log.info("Starting...");
+        List<Future<Integer>> futureSums = new ArrayList<>();
+
         for (int i = 0; i < 50; i++) {
             IntcodeComputer ic = new IntcodeComputer(new ArrayList<>(opcodes));
             Router router = new Router(i);
@@ -60,15 +63,46 @@ public class Day23CategorySix {
             router.setInputQueue(ic.getOutputQueue());
             computers.add(ic);
             routers.add(router);
-            executorService.submit(router);
+            //executorService.submit(router);
+            futureSums.add(executorService.submit(router));
+
             executorService.submit(ic);
+            ic.getInputQueue().add(new BigInteger("-1"));
+
         }
-
-
-
 
         //executorService.invokeAll(routers);
         //executorService.invokeAll(computers);
+        //Future<Integer> futureSum = executorService.;
+
+
+        log.info("Done");
+        return 0;
+    }
+
+    int secondYValue() throws InterruptedException {
+        log.info("Starting...");
+        List<Future<Integer>> futureSums = new ArrayList<>();
+
+        for (int i = 0; i < 50; i++) {
+            IntcodeComputer ic = new IntcodeComputer(new ArrayList<>(opcodes));
+            Router router = new Router(i);
+            ic.getInputQueue().add(new BigInteger(String.valueOf(i)));
+            router.setInputQueue(ic.getOutputQueue());
+            computers.add(ic);
+            routers.add(router);
+            //executorService.submit(router);
+            futureSums.add(executorService.submit(router));
+
+            executorService.submit(ic);
+            ic.getInputQueue().add(new BigInteger("-1"));
+
+        }
+
+        //executorService.invokeAll(routers);
+        //executorService.invokeAll(computers);
+        //Future<Integer> futureSum = executorService.;
+
 
         log.info("Done");
         return 0;
