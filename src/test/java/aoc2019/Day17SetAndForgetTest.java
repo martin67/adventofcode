@@ -17,4 +17,10 @@ class Day17SetAndForgetTest {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day17.txt"));
         assertEquals(13580, new Day17SetAndForget(inputLines).sumOfAlignmentParameters());
     }
+
+    @Test
+    void dustCollected() throws IOException, InterruptedException, ExecutionException {
+        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day17.txt"));
+        assertEquals(0, new Day17SetAndForget(inputLines).dustCollected());
+    }
 }

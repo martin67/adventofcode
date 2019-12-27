@@ -22,6 +22,11 @@ public class Day17SetAndForget {
         Position currentPosition;
         Position startPosition;
         Position oxygenSystem;
+        boolean dustCollector;
+
+        public RemoteControl(boolean dustCollector) {
+            this.dustCollector = dustCollector;
+        }
 
         @SneakyThrows
         @Override
@@ -68,17 +73,18 @@ public class Day17SetAndForget {
         }
     }
 
+    ExecutorService executorService;
     private final List<String> opcodes;
 
     public Day17SetAndForget(List<String> inputLines) {
+        executorService = Executors.newCachedThreadPool();
         opcodes = Stream.of(inputLines.get(0).split(","))
                 .collect(Collectors.toList());
     }
 
     int sumOfAlignmentParameters() throws InterruptedException, ExecutionException {
-        ExecutorService executorService = Executors.newCachedThreadPool();
         IntcodeComputer ic = new IntcodeComputer(opcodes);
-        RemoteControl rc = new RemoteControl();
+        RemoteControl rc = new RemoteControl(false);
         rc.setInputQueue(ic.getOutputQueue());
         rc.setOutputQueue(ic.getInputQueue());
 
@@ -87,4 +93,18 @@ public class Day17SetAndForget {
 
         return futureSum.get();
     }
+
+    int dustCollected() throws ExecutionException, InterruptedException {
+        opcodes.set(0, "2");
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        RemoteControl rc = new RemoteControl(true);
+        rc.setInputQueue(ic.getOutputQueue());
+        rc.setOutputQueue(ic.getInputQueue());
+
+        executorService.submit(ic);
+        Future<Integer> futureSum = executorService.submit(rc);
+
+        return futureSum.get();
+    }
+
 }

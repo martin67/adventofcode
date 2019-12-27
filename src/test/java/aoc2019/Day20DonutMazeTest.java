@@ -11,12 +11,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Day20DonutMazeTest {
-        @ParameterizedTest
-        @CsvSource({"23, src/test/resources/2019/day20-demo1.txt",
-                "58, src/test/resources/2019/day20-demo2.txt",
-                "442, src/test/resources/2019/day20.txt"})
-        void shortestPath(int expected, String fileName) throws IOException {
-            List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-            assertEquals(expected, new Day20DonutMaze(inputLines).shortestPath());
-        }
+    @ParameterizedTest
+    @CsvSource({"23, src/test/resources/2019/day20-demo1.txt",
+            "58, src/test/resources/2019/day20-demo2.txt",
+            "442, src/test/resources/2019/day20.txt"})
+    void shortestPath(int expected, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day20DonutMaze(inputLines).shortestPath());
+    }
 }
