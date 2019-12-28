@@ -247,8 +247,6 @@ This set of initial positions takes 4686774924 steps before it repeats a previou
 
 **How many steps does it take** to reach the first state that exactly matches a previous state?
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 277068010964808.
 
-Answer: 
- 
-
+Both parts of this puzzle are complete! They provide two gold stars: **

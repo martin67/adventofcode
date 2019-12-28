@@ -156,18 +156,22 @@ public class Day12TheNBodyProblem {
         return moonSet.stream().mapToInt(Moon::totalEnergy).sum();
     }
 
-    int stepsToOriginalState() {
+    long stepsToOriginalState() {
         Set<Set<Moon>> moonPairs = Sets.combinations(moonSet, 2);
-//        Set<String> previousStates = new HashSet<>();
-//        previousStates.add(moons.toString());
         String startState = moonSet.toString();
-        Set<Integer> diffs = new HashSet<>();
+        boolean xFound = false;
+        boolean yFound = false;
+        boolean zFound = false;
+        int lastX = 0;
+        int lastY = 0;
+        int lastZ = 0;
+        int xCycle = 0;
+        int yCycle = 0;
+        int zCycle = 0;
 
-        boolean quit = false;
         int steps = 0;
-        int lastStep = 0;
 
-        while (!quit) {
+        while (!xFound || !yFound || !zFound) {
 
             for (Set<Moon> moonPair : moonPairs) {
                 List<Moon> moonList = new ArrayList<>(moonPair);
@@ -177,59 +181,65 @@ public class Day12TheNBodyProblem {
 
             steps++;
 
-//            if (moonSet.hashCode() == moonSetStart) {
-//                quit = true;
-//            }
-
-            if (moonSet.toString().equals(startState)) {
-                quit = true;
-            }
-
-            int moon = 0;
-            if (moonList.get(moon).position.equals(initialMoonList.get(moon).position)) {
-                log.info("Step: {} - diff {} - {}", steps, steps - lastStep, moonList.get(moon));
-                if (diffs.contains(steps-lastStep)) {
-                    log.info("Found cycle: {} at {}", steps-lastStep, steps);
+            if (!xFound && moonList.get(0).position.x == initialMoonList.get(0).position.x &&
+                    moonList.get(1).position.x == initialMoonList.get(1).position.x &&
+                    moonList.get(2).position.x == initialMoonList.get(2).position.x &&
+                    moonList.get(3).position.x == initialMoonList.get(3).position.x) {
+                if (lastX == 0) {
+                    lastX = steps;
                 } else {
-                    diffs.add(steps - lastStep);
+                    if (steps > lastX + 1) {
+                        xCycle = steps - lastX;
+                        log.info("X cycle {}", xCycle);
+                        xFound = true;
+                    }
                 }
-                lastStep = steps;
             }
 
-            if (steps % 1000000 == 0) {
-                log.info("Step: {}", steps);
+            if (!yFound && moonList.get(0).position.y == initialMoonList.get(0).position.y &&
+                    moonList.get(1).position.y == initialMoonList.get(1).position.y &&
+                    moonList.get(2).position.y == initialMoonList.get(2).position.y &&
+                    moonList.get(3).position.y == initialMoonList.get(3).position.y) {
+                if (lastY == 0) {
+                    lastY = steps;
+                } else {
+                    if (steps > lastY + 1) {
+                        yCycle = steps - lastY;
+                        log.info("Y cycle {}", yCycle);
+                        yFound = true;
+                    }
+                }
             }
 
-//            String state = moons.toString();
-//            if (previousStates.contains(state)) {
-//                quit = true;
-//            } else {
-//                previousStates.add(state);
-//                if (steps % 1000000 == 0) {
-//                    log.info("Step: {}", steps);
-//                }
-//            }
+            if (!zFound && moonList.get(0).position.z == initialMoonList.get(0).position.z &&
+                    moonList.get(1).position.z == initialMoonList.get(1).position.z &&
+                    moonList.get(2).position.z == initialMoonList.get(2).position.z &&
+                    moonList.get(3).position.z == initialMoonList.get(3).position.z) {
+                if (lastZ == 0) {
+                    lastZ = steps;
+                } else {
+                    if (steps > lastZ + 1) {
+                        zCycle = steps - lastZ;
+                        log.info("Z cycle {}", zCycle);
+                        zFound = true;
+                    }
+                }
+            }
         }
-        return steps;
+
+        // compute lcm (least common multiplier)
+        return lcm(xCycle, yCycle, zCycle);
+    }
+
+    private static long gcd(long x, long y) {
+        return (y == 0) ? x : gcd(y, x % y);
+    }
+
+    public static long gcd(long... numbers) {
+        return Arrays.stream(numbers).reduce(0, Day12TheNBodyProblem::gcd);
+    }
+
+    public static long lcm(long... numbers) {
+        return Arrays.stream(numbers).reduce(1, (x, y) -> x * (y / gcd(x, y)));
     }
 }
-
-
-// Different cycles: for example1:
-//<x=-1, y=0, z=2>
-//<x=2, y=-10, z=-7>
-//<x=4, y=-8, z=8>
-//<x=3, y=5, z=-1>
-
-// moon0: 462 462 462 462 462 462                          - cycle: 462
-// moon1: 1125 261 261 1125                                - cycle: 1386
-// moon2: 308 308 154 308 308 308 308 154 308 308          - cycle: 1386
-// moon3: 261 201 201 261 261 201 201 261 261 201 201 261  - cycle: 462
-
-// moons are going back and forth in a pattern
-// 2772 :
-
-//  <x=13, y=9, z=5>
-//  <x=8, y=14, z=-2>
-//  <x=-5, y=4, z=11>
-//  <x=2, y=-6, z=1
