@@ -2,6 +2,7 @@ package aoc2019;
 
 import com.google.common.collect.Sets;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -9,6 +10,7 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 public class Day21SpringdroidAdventure {
 
     @Data
@@ -31,6 +33,7 @@ public class Day21SpringdroidAdventure {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    log.info("BigInteger: {}", output);
                     System.out.print((char) output.intValue());
                 }
             };
@@ -38,14 +41,12 @@ public class Day21SpringdroidAdventure {
 
             Runnable simpleInput = () -> {
                 Queue<String> commands = new LinkedList<>();
-                commands.add("NOT D T");
-                commands.add("NOT T J");
-
-//                commands.add("NOT B T");
-//                commands.add("AND T J");
-//                commands.add("NOT C T");
-//                commands.add("AND T J");
-//                commands.add("AND D J");
+                commands.add("NOT A T");
+                commands.add("NOT B J");
+                commands.add("OR T J");
+                commands.add("NOT C T");
+                commands.add("OR T J");
+                commands.add("AND D J");
                 commands.add("WALK");
                 while (!commands.isEmpty()) {
                     String input = commands.poll();
@@ -102,14 +103,27 @@ public class Day21SpringdroidAdventure {
 // jumps 3 positions
 // falls down in hole if empty below or next
 
-// ....@............    .................
+// ....@............     .................
 // #####.###########    #####@.#.########
 
 // .....@...........    .................
 // #####.###########    #####@###########
 
-// 1: if A=true && B=true && C=true && D=false => J = false
-// 2: jump if A=false && C=true
+// 1: jump if A=hole && C=ground (A=false, C=true) => NOT A J, AND C J
+// 2: jump if B=hole &&
 // 3. jump if C=true
 
 // if C=true jump
+
+// NOT A J => #####..#.########     jump if A=hole
+// NOT B J => #####...#########     jump if B=hole
+// NOT C J => #####...#########     jump if C=hole
+// NOT D J => #####.###########     jump if D=hole
+// NOT A J, AND C J => #####...#########
+// NOT A J, AND D J => #####..#.########
+// NOT A J, A=hole && C AND D == ground
+
+// NOT A J, AND D J or NOT B J, and D J
+// NOT D J - D skall vara mark, dvs J blir då false
+// A or B = hole && D = ground
+// A or B or C = hole & D = ground
