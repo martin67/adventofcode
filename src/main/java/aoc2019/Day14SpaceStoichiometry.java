@@ -21,6 +21,7 @@ public class Day14SpaceStoichiometry {
 
     @Data
     @AllArgsConstructor
+    static
     class Mix {
         Chemical chemical;
         int amount;

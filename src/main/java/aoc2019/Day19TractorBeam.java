@@ -104,7 +104,7 @@ public class Day19TractorBeam {
         }
     }
 
-    ExecutorService executorService;
+    final ExecutorService executorService;
     private final List<String> opcodes;
 
     public Day19TractorBeam(List<String> inputLines) {

@@ -1,6 +1,5 @@
 package aoc2019;
 
-import javafx.geometry.Pos;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -9,7 +8,7 @@ import java.util.*;
 public class Day24PlanetOfDiscord {
 
     Map<Position, Character> map = new HashMap<>();
-    Set<String> previousMaps = new HashSet<>();
+    final Set<String> previousMaps = new HashSet<>();
 
     public Day24PlanetOfDiscord(List<String> inputLines) {
         int x;

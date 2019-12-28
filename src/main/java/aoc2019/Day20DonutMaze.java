@@ -14,6 +14,7 @@ import java.util.*;
 public class Day20DonutMaze {
 
     @Data
+    static
     class Portal {
         String name;
         Position char1;
@@ -21,7 +22,7 @@ public class Day20DonutMaze {
         Position pos;
     }
 
-    Set<Position> map = new HashSet<>();
+    final Set<Position> map = new HashSet<>();
     Position start;
     Position end;
     private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);

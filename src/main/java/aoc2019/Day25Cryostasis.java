@@ -1,13 +1,11 @@
 package aoc2019;
 
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigInteger;
-import java.nio.Buffer;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -29,94 +27,92 @@ public class Day25Cryostasis {
         @Override
         public String call() throws Exception {
 
-            Runnable simpleOutput = new Runnable() {
-                @SneakyThrows
-                @Override
-                public void run() {
-                    while (true) {
-                        BigInteger output = inputQueue.take();
-                        System.out.print((char) output.intValue());
+            Runnable simpleOutput = () -> {
+                while (true) {
+                    BigInteger output = null;
+                    try {
+                        output = inputQueue.take();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+                    System.out.print((char) output.intValue());
                 }
             };
             executorService.submit(simpleOutput);
 
-            Runnable simpleInput = new Runnable() {
-                @Override
-                public void run() {
-                    Queue<String> commands = new LinkedList<>();
-                    commands.add("east");
-                    commands.add("take sand");
-                    commands.add("west");
-                    commands.add("south");
-                    commands.add("take ornament");
-                    commands.add("north");
-                    commands.add("west");
-                    commands.add("north");
-                    commands.add("take wreath");
-                    commands.add("east");
-                    commands.add("take fixed point");
-                    commands.add("west");
-                    commands.add("north");
-                    //commands.add("take infinite loop");
-                    commands.add("north");
-                    commands.add("take spool of cat6");
-                    commands.add("south");
-                    commands.add("south");
-                    commands.add("south");
-                    commands.add("south");
-                    //commands.add("take giant electromagnet");
-                    commands.add("south");
-                    commands.add("take candy cane");
-                    commands.add("north");
-                    commands.add("east");
-                    //commands.add("take escape pod");
-                    commands.add("east");
-                    commands.add("south");
-                    //commands.add("take photons");
-                    commands.add("north");
-                    commands.add("east");
-                    commands.add("take space law space brochure");
-                    commands.add("south");
-                    commands.add("take fuel cell");
-                    commands.add("south");
-                    commands.add("inv");
+            Runnable simpleInput = () -> {
+                Queue<String> commands = new LinkedList<>();
+                commands.add("east");
+                commands.add("take sand");
+                commands.add("west");
+                commands.add("south");
+                commands.add("take ornament");
+                commands.add("north");
+                commands.add("west");
+                commands.add("north");
+                commands.add("take wreath");
+                commands.add("east");
+                commands.add("take fixed point");
+                commands.add("west");
+                commands.add("north");
+                //commands.add("take infinite loop");
+                commands.add("north");
+                commands.add("take spool of cat6");
+                commands.add("south");
+                commands.add("south");
+                commands.add("south");
+                commands.add("south");
+                //commands.add("take giant electromagnet");
+                commands.add("south");
+                commands.add("take candy cane");
+                commands.add("north");
+                commands.add("east");
+                //commands.add("take escape pod");
+                commands.add("east");
+                commands.add("south");
+                //commands.add("take photons");
+                commands.add("north");
+                commands.add("east");
+                commands.add("take space law space brochure");
+                commands.add("south");
+                commands.add("take fuel cell");
+                commands.add("south");
+                commands.add("inv");
 
-                    commands.add("drop space law space brochure");
-                    commands.add("drop fixed point");
-                    commands.add("drop candy cane");
-                    commands.add("drop sand");
-                    commands.add("drop ornament");
-                    commands.add("drop fuel cell");
-                    commands.add("drop spool of cat6");
-                    commands.add("drop wreath");
+                commands.add("drop space law space brochure");
+                commands.add("drop fixed point");
+                commands.add("drop candy cane");
+                commands.add("drop sand");
+                commands.add("drop ornament");
+                commands.add("drop fuel cell");
+                commands.add("drop spool of cat6");
+                commands.add("drop wreath");
 
-                    Set<String> itemSet = new HashSet<>(Arrays.asList("space law space brochure", "fixed point", "candy cane", "sand",
-                            "ornament", "fuel cell", "spool of cat6", "wreath"));
-                    Set<Set<String>> combinations = Sets.powerSet(itemSet);
-                    for (Set<String> combination : combinations) {
-                        for (String item : combination) {
-                            commands.add("take " + item);
-                        }
-                        if (!combination.isEmpty()) {
-                            commands.add("west");
-                        }
-                        for (String item : combination) {
-                            commands.add("drop " + item);
-                        }
+                Set<String> itemSet = new HashSet<>(Arrays.asList("space law space brochure", "fixed point", "candy cane", "sand",
+                        "ornament", "fuel cell", "spool of cat6", "wreath"));
+                Set<Set<String>> combinations = Sets.powerSet(itemSet);
+                for (Set<String> combination : combinations) {
+                    for (String item : combination) {
+                        commands.add("take " + item);
                     }
-
-                    commands.add("inv");
-                    commands.add("west");
-                    while (!commands.isEmpty()) {
-                        String input = commands.poll();
-                        System.out.println(input);
-                        for (char c : input.toCharArray()) {
-                            BigInteger bi = new BigInteger(String.valueOf((int) c));
-                            outputQueue.add(bi);
-                        }
-                        outputQueue.add(new BigInteger("10"));
+                    if (!combination.isEmpty()) {
+                        commands.add("west");
                     }
+                    for (String item : combination) {
+                        commands.add("drop " + item);
+                    }
+                }
+
+                commands.add("inv");
+                commands.add("west");
+                while (!commands.isEmpty()) {
+                    String input = commands.poll();
+                    System.out.println(input);
+                    for (char c : input.toCharArray()) {
+                        BigInteger bi = new BigInteger(String.valueOf((int) c));
+                        outputQueue.add(bi);
+                    }
+                    outputQueue.add(new BigInteger("10"));
                 }
             };
             executorService.submit(simpleInput);
@@ -124,16 +120,9 @@ public class Day25Cryostasis {
             Thread.sleep(100000);
             return "hej";
         }
-
-        void simpleOutput() throws InterruptedException {
-            while (true) {
-                BigInteger output = inputQueue.take();
-                System.out.print((char) output.intValue());
-            }
-        }
     }
 
-    ExecutorService executorService;
+    final ExecutorService executorService;
     private final List<String> opcodes;
 
     public Day25Cryostasis(List<String> inputLines) {

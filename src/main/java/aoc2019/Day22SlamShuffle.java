@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day22SlamShuffle {
 
-    class Stack {
+    static class Stack {
         List<Integer> cards = new ArrayList<>();
 
         public Stack(int numberOfCards) {
@@ -50,7 +50,7 @@ public class Day22SlamShuffle {
         }
     }
 
-    List<String> inputLines;
+    final List<String> inputLines;
 
     public Day22SlamShuffle(List<String> inputLines) {
         this.inputLines = inputLines;

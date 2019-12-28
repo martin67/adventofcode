@@ -6,9 +6,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleGraph;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.*;
@@ -18,11 +16,11 @@ public class Day18ManyWorldsInterpretation {
 
     static class Walker {
         static int maxId = 1;
-        int id;
-        Map<Position, Character> keys;
-        Map<Character, Position> doors;
-        Position start;
-        Graph<Position, DefaultWeightedEdge> graph;
+        final int id;
+        final Map<Position, Character> keys;
+        final Map<Character, Position> doors;
+        final Position start;
+        final Graph<Position, DefaultWeightedEdge> graph;
 
         public Walker(Map<Position, Character> keys, Map<Character, Position> doors, Position start, Graph<Position, DefaultWeightedEdge> graph) {
             this.id = maxId++;
@@ -105,8 +103,8 @@ public class Day18ManyWorldsInterpretation {
         List<Character> path = new ArrayList<>();
     }
 
-    Map<Position, Character> keys = new HashMap<>();
-    Map<Character, Position> doors = new HashMap<>();
+    final Map<Position, Character> keys = new HashMap<>();
+    final Map<Character, Position> doors = new HashMap<>();
     Position start;
     private final Graph<Position, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final static int DEFAULT_DOOR_WEIGHT = 1000;

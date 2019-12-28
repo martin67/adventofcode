@@ -73,7 +73,7 @@ public class Day17SetAndForget {
         }
     }
 
-    ExecutorService executorService;
+    final ExecutorService executorService;
     private final List<String> opcodes;
 
     public Day17SetAndForget(List<String> inputLines) {

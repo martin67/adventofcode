@@ -41,10 +41,10 @@ public class Day23CategorySix {
         }
     }
 
-    ExecutorService executorService;
+    final ExecutorService executorService;
     private final List<String> opcodes;
-    List<IntcodeComputer> computers = new ArrayList<>();
-    List<Router> routers = new ArrayList<>();
+    final List<IntcodeComputer> computers = new ArrayList<>();
+    final List<Router> routers = new ArrayList<>();
 
     public Day23CategorySix(List<String> inputLines) {
         executorService = Executors.newCachedThreadPool();
@@ -52,7 +52,7 @@ public class Day23CategorySix {
                 .collect(Collectors.toList());
     }
 
-    int yValue() throws InterruptedException {
+    int yValue() {
         log.info("Starting...");
         List<Future<Integer>> futureSums = new ArrayList<>();
 
@@ -80,7 +80,7 @@ public class Day23CategorySix {
         return 0;
     }
 
-    int secondYValue() throws InterruptedException {
+    int secondYValue() {
         log.info("Starting...");
         List<Future<Integer>> futureSums = new ArrayList<>();
 
