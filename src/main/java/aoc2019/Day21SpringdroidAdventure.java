@@ -14,55 +14,53 @@ import java.util.stream.Stream;
 public class Day21SpringdroidAdventure {
 
     @Data
-    static class AsciiComputer implements Callable<Integer> {
+    static class AsciiComputerInput implements Callable<Integer> {
         ExecutorService executorService;
-        private BlockingQueue<BigInteger> inputQueue;
         private BlockingQueue<BigInteger> outputQueue;
 
-        public AsciiComputer(ExecutorService executorService) {
-            this.executorService = executorService;
+        @Override
+        public Integer call() {
+            Queue<String> commands = new LinkedList<>();
+            commands.add("NOT A T");
+            commands.add("NOT B J");
+            commands.add("OR T J");
+            commands.add("NOT C T");
+            commands.add("OR T J");
+            commands.add("AND D J");
+            commands.add("WALK");
+            while (!commands.isEmpty()) {
+                String input = commands.poll();
+                System.out.println(input);
+                for (char c : input.toCharArray()) {
+                    BigInteger bi = new BigInteger(String.valueOf((int) c));
+                    outputQueue.add(bi);
+                }
+                outputQueue.add(new BigInteger("10"));
+            }
+            return 0;
         }
+    }
+
+    @Data
+    static class AsciiComputerOutput implements Callable<String> {
+        private BlockingQueue<BigInteger> inputQueue;
 
         @Override
-        public Integer call() throws Exception {
-            Runnable simpleOutput = () -> {
-                while (true) {
-                    BigInteger output = null;
-                    try {
-                        output = inputQueue.take();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    log.info("BigInteger: {}", output);
+        public String call() {
+            while (true) {
+                BigInteger output = null;
+                try {
+                    output = inputQueue.take();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //log.info("BigInteger: {}", output);
+                if (output.compareTo(new BigInteger("10000")) > 0) {
+                    return output.toString();
+                } else {
                     System.out.print((char) output.intValue());
                 }
-            };
-            executorService.submit(simpleOutput);
-
-            Runnable simpleInput = () -> {
-                Queue<String> commands = new LinkedList<>();
-                commands.add("NOT A T");
-                commands.add("NOT B J");
-                commands.add("OR T J");
-                commands.add("NOT C T");
-                commands.add("OR T J");
-                commands.add("AND D J");
-                commands.add("WALK");
-                while (!commands.isEmpty()) {
-                    String input = commands.poll();
-                    System.out.println(input);
-                    for (char c : input.toCharArray()) {
-                        BigInteger bi = new BigInteger(String.valueOf((int) c));
-                        outputQueue.add(bi);
-                    }
-                    outputQueue.add(new BigInteger("10"));
-                }
-            };
-            executorService.submit(simpleInput);
-
-            Thread.sleep(100000);
-
-            return 0;
+            }
         }
     }
 
@@ -75,14 +73,16 @@ public class Day21SpringdroidAdventure {
                 .collect(Collectors.toList());
     }
 
-    int hullDamage() throws ExecutionException, InterruptedException {
+    String hullDamage() throws ExecutionException, InterruptedException {
         IntcodeComputer ic = new IntcodeComputer(opcodes);
-        AsciiComputer ac = new AsciiComputer(executorService);
-        ac.setInputQueue(ic.getOutputQueue());
-        ac.setOutputQueue(ic.getInputQueue());
+        AsciiComputerInput input = new AsciiComputerInput();
+        AsciiComputerOutput output = new AsciiComputerOutput();
+        input.setOutputQueue(ic.getInputQueue());
+        output.setInputQueue(ic.getOutputQueue());
 
         executorService.submit(ic);
-        Future<Integer> futureSum = executorService.submit(ac);
+        executorService.submit(input);
+        Future<String> futureSum = executorService.submit(output);
 
         return futureSum.get();
     }
