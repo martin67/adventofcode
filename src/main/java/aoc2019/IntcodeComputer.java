@@ -121,7 +121,7 @@ class IntcodeComputer implements Callable<Integer> {
                         break;
 
                     case "99":
-                        log.debug("{} {}: Quitting", instructionPointer, getOpcodeString());
+                        log.info("{} {}: Quitting", instructionPointer, getOpcodeString());
                         quit = true;
                         break;
 

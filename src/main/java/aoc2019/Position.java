@@ -2,12 +2,114 @@ package aoc2019;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.Set;
 
-enum Direction {North, South, East, West, Up, Right, Down, Left, NorthEast, NorthWest, SouthEast, SouthWest, Unknown}
+@Slf4j
+enum Direction {
+    North, South, East, West, Up, Right, Down, Left, NorthEast, NorthWest, SouthEast, SouthWest, Unknown;
 
+    Direction opposite() {
+        Direction result;
+        switch (this) {
+            case North:
+                result = Direction.South;
+                break;
+            case Up:
+                result = Direction.Down;
+                break;
+            case East:
+                result = Direction.West;
+                break;
+            case Right:
+                result = Direction.Left;
+                break;
+            case South:
+                result = Direction.North;
+                break;
+            case Down:
+                result = Direction.Up;
+                break;
+            case West:
+                result = Direction.East;
+                break;
+            case Left:
+                result = Direction.Right;
+                break;
+            case NorthEast:
+                result = Direction.SouthWest;
+                break;
+            case NorthWest:
+                result = Direction.SouthEast;
+                break;
+            case SouthEast:
+                result = Direction.NorthWest;
+                break;
+            case SouthWest:
+                result = Direction.NorthEast;
+                break;
+            default:
+                result = Direction.Unknown;
+                break;
+        }
+        return result;
+    }
+
+    Direction bounceWall(Direction wall) {
+        Direction result;
+        switch (this) {
+            case NorthEast:
+                if (wall == Direction.North) {
+                    result = Direction.SouthEast;
+                } else if (wall == Direction.East) {
+                    result = Direction.NorthWest;
+                } else {
+                    log.error("Bounce from northeast, no wall");
+                    result = Direction.Unknown;
+                }
+                break;
+            case NorthWest:
+                if (wall == Direction.North) {
+                    result = Direction.SouthWest;
+                } else if (wall == Direction.West) {
+                    result = Direction.NorthEast;
+                } else {
+                    log.error("Bounce from northwest, no wall");
+                    result = Direction.Unknown;
+                }
+                break;
+            case SouthEast:
+                if (wall == Direction.South) {
+                    result = Direction.NorthEast;
+                } else if (wall == Direction.East) {
+                    result = Direction.SouthWest;
+                } else {
+                    log.error("Bounce from southeast, no wall");
+                    result = Direction.Unknown;
+                }
+                break;
+            case SouthWest:
+                if (wall == Direction.South) {
+                    result = Direction.NorthWest;
+                } else if (wall == Direction.West) {
+                    result = Direction.SouthEast;
+                } else {
+                    log.error("Bounce from southwest, no wall");
+                    result = Direction.Unknown;
+                }
+                break;
+            default:
+                result = Direction.Unknown;
+                break;
+        }
+        return result;
+    }
+
+}
+
+@Slf4j
 @Data
 @AllArgsConstructor
 public class Position implements Comparable<Position> {
@@ -71,6 +173,7 @@ public class Position implements Comparable<Position> {
         return adj;
     }
 
+    @Deprecated
     Direction opposite(Direction direction) {
         Direction result;
         switch (direction) {
@@ -117,6 +220,7 @@ public class Position implements Comparable<Position> {
         return result;
     }
 
+    @Deprecated
     Direction bounce(Direction direction) {
         Direction result;
         switch (direction) {
@@ -138,6 +242,7 @@ public class Position implements Comparable<Position> {
         }
         return result;
     }
+
 
     Direction directionTo(Position position, boolean allowDiagonal) {
         if (position.x == x && position.y < y) {
@@ -190,6 +295,32 @@ public class Position implements Comparable<Position> {
         adjacent.add(new Position(x - 1, y)); // left or west
         adjacent.add(new Position(x + 1, y)); // right or east
         adjacent.add(new Position(x, y + 1)); // down or south
+        return adjacent;
+    }
+
+    Set<Position> adjacentDiagonal(Direction dir) {
+        Set<Position> adjacent = new HashSet<>();
+        switch (dir) {
+            case NorthEast:
+                adjacent.add(new Position(this.adjacent(Direction.North)));
+                adjacent.add(new Position(this.adjacent(Direction.East)));
+                break;
+            case NorthWest:
+                adjacent.add(new Position(this.adjacent(Direction.North)));
+                adjacent.add(new Position(this.adjacent(Direction.West)));
+                break;
+            case SouthEast:
+                adjacent.add(new Position(this.adjacent(Direction.South)));
+                adjacent.add(new Position(this.adjacent(Direction.East)));
+                break;
+            case SouthWest:
+                adjacent.add(new Position(this.adjacent(Direction.South)));
+                adjacent.add(new Position(this.adjacent(Direction.West)));
+                break;
+            default:
+                log.error("Not a diagonal direction");
+                break;
+        }
         return adjacent;
     }
 }

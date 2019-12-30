@@ -15,19 +15,33 @@ public class Day21SpringdroidAdventure {
 
     @Data
     static class AsciiComputerInput implements Callable<Integer> {
-        ExecutorService executorService;
         private BlockingQueue<BigInteger> outputQueue;
+        boolean partTwo;
+
+        public AsciiComputerInput(boolean partTwo) {
+            this.partTwo = partTwo;
+        }
 
         @Override
         public Integer call() {
             Queue<String> commands = new LinkedList<>();
-            commands.add("NOT A T");
-            commands.add("NOT B J");
-            commands.add("OR T J");
-            commands.add("NOT C T");
-            commands.add("OR T J");
-            commands.add("AND D J");
-            commands.add("WALK");
+            if (!partTwo) {
+                commands.add("NOT A T");
+                commands.add("NOT B J");
+                commands.add("OR T J");
+                commands.add("NOT C T");
+                commands.add("OR T J");
+                commands.add("AND D J");
+                commands.add("WALK");
+            } else {
+                commands.add("NOT A T");
+                commands.add("NOT B J");
+                commands.add("OR T J");
+                commands.add("NOT C T");
+                commands.add("OR T J");
+                commands.add("AND D J");
+                commands.add("RUN");
+            }
             while (!commands.isEmpty()) {
                 String input = commands.poll();
                 System.out.println(input);
@@ -55,6 +69,7 @@ public class Day21SpringdroidAdventure {
                     e.printStackTrace();
                 }
                 //log.info("BigInteger: {}", output);
+                assert output != null;
                 if (output.compareTo(new BigInteger("10000")) > 0) {
                     return output.toString();
                 } else {
@@ -73,9 +88,9 @@ public class Day21SpringdroidAdventure {
                 .collect(Collectors.toList());
     }
 
-    String hullDamage() throws ExecutionException, InterruptedException {
+    String hullDamage(boolean partTwo) throws ExecutionException, InterruptedException {
         IntcodeComputer ic = new IntcodeComputer(opcodes);
-        AsciiComputerInput input = new AsciiComputerInput();
+        AsciiComputerInput input = new AsciiComputerInput(partTwo);
         AsciiComputerOutput output = new AsciiComputerOutput();
         input.setOutputQueue(ic.getInputQueue());
         output.setInputQueue(ic.getOutputQueue());

@@ -24,6 +24,10 @@ public class Day13CarePackage {
             this.position = position;
             this.id = id;
         }
+
+        boolean isBrick() {
+            return id == 2;
+        }
     }
 
     @Data
@@ -32,7 +36,7 @@ public class Day13CarePackage {
         Direction direction;
 
         public Ball(Position position, Direction direction) {
-            this.position = position;
+            this.position = new Position(position);
             this.direction = direction;
         }
 
@@ -45,11 +49,26 @@ public class Day13CarePackage {
             Position newPosition = this.position;
             Direction newDirection = this.direction;
 
-            while (newPosition.getX() != 22) {
+            while (newPosition.getY() != 22) {
                 Tile next = tiles.get(newPosition.adjacent(newDirection));
                 switch (next.id) {
                     case 0:     // empty
-                        newPosition = next.getPosition();
+                    case 4:     // ball
+                        // then check that the ball is not adjacent to a brick
+                        boolean foundAdjacent = false;
+                        for (Position brickPosition : newPosition.adjacentDiagonal(newDirection)) {
+                            if (tiles.get(brickPosition).isBrick()) {
+                                Direction dirToP = newPosition.directionTo(brickPosition, false);
+                                newDirection = newDirection.bounceWall(dirToP);
+                                if (foundAdjacent == true) {
+                                    log.error("Already found one");
+                                }
+                                foundAdjacent = true;
+                            }
+                        }
+                        if (!foundAdjacent) {
+                            newPosition = new Position(next.getPosition());
+                        }
                         break;
                     case 1:     // wall
                         // Bounce (switch direction) 90 degrees
@@ -59,6 +78,8 @@ public class Day13CarePackage {
                         // just switch direction going back the opposite way
                         // no need remove any block. Only one can be removed each round
                         newDirection = newPosition.opposite(newDirection);
+                        break;
+                    case 3:
                         break;
                     default:
                         log.error("Oops");
@@ -72,6 +93,7 @@ public class Day13CarePackage {
             }
             return newPosition;
         }
+
     }
 
     @Data
@@ -86,9 +108,10 @@ public class Day13CarePackage {
             Position paddlePosition = new Position(22, 22);
 
             while (!quit) {
-                int x = getOutputQueue().take().intValue();
-                int y = getOutputQueue().take().intValue();
-                int id = getOutputQueue().take().intValue();
+                log.info("inputqueue length {}", getInputQueue().size());
+                int x = getInputQueue().take().intValue();
+                int y = getInputQueue().take().intValue();
+                int id = getInputQueue().take().intValue();
 
                 if (x == -1 && y == 0) {
                     score = id;
@@ -122,28 +145,32 @@ public class Day13CarePackage {
                         log.info("Ball at {}", pos);
                         ball.updatePosition(pos);
                     }
+                }
 
-                    if (tiles.size() == 1056) {
+                if (tiles.size() == 1056 && getInputQueue().size() == 0) {
+                    if (id != 0) {
                         printGame();
-                        System.out.println();
+                    }
+                    System.out.println();
 
-                        Position nextPaddlePosition = ball.predictPaddlePosition();
-                        log.info("Predicting final paddle position to {}", nextPaddlePosition);
-                        if (nextPaddlePosition.x > paddlePosition.x) {
-                            log.info("Moving paddle to the right");
-                            getInputQueue().add(new BigInteger("1"));
-                        } else if (nextPaddlePosition.x < paddlePosition.x) {
-                            log.info("Moving paddle to the left");
-                            getInputQueue().add(new BigInteger("-1"));
-                        } else {
-                            log.info("Not moving paddle");
-                            getInputQueue().add(new BigInteger("0"));
-                        }
+                    Position nextPaddlePosition = ball.predictPaddlePosition();
+                    log.info("Predicting final paddle position to {} (now at {})", nextPaddlePosition, paddlePosition);
+                    log.info("queue length: {}", getOutputQueue().size());
+                    if (nextPaddlePosition.x > paddlePosition.x) {
+                        log.info("Moving paddle to the right");
+                        getOutputQueue().add(new BigInteger("1"));
+                    } else if (nextPaddlePosition.x < paddlePosition.x) {
+                        log.info("Moving paddle to the left");
+                        getOutputQueue().add(new BigInteger("-1"));
+                    } else {
+                        log.info("Not moving paddle");
+                        getOutputQueue().add(new BigInteger("0"));
                     }
                 }
+
             }
 
-            return null;
+            return score;
         }
     }
 
@@ -190,9 +217,7 @@ public class Day13CarePackage {
 
         executorService.submit(ic);
         Future<Integer> futureSum = executorService.submit(gc);
-        futureSum.get();
-
-        return 0;
+        return futureSum.get();
     }
 
     void printGame() {
@@ -204,6 +229,7 @@ public class Day13CarePackage {
 
         for (int y = minY; y <= maxY; y++) {
             StringBuilder sb = new StringBuilder();
+            sb.append(String.format("%02d ", y));
             for (int x = minX; x <= maxX; x++) {
                 Position pos = new Position(x, y);
                 if (tiles.containsKey(pos)) {

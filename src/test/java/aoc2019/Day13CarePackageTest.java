@@ -22,5 +22,4 @@ class Day13CarePackageTest {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day13.txt"));
         assertEquals(0, new Day13CarePackage(inputLines).lastScore());
     }
-
 }
