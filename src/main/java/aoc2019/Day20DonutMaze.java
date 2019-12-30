@@ -23,13 +23,12 @@ public class Day20DonutMaze {
     }
 
     final Set<Position> map = new HashSet<>();
+    Map<Position, Portal> portals = new HashMap<>();
     Position start;
     Position end;
     private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
     public Day20DonutMaze(List<String> inputLines) {
-        //List<Portal> portals = new ArrayList<>();
-        Map<Position, Portal> portals = new HashMap<>();
         int x;
         int y = 0;
         for (String line : inputLines) {
@@ -67,7 +66,9 @@ public class Day20DonutMaze {
             y++;
         }
         log.info("Found {} portals", portals.size());
+    }
 
+    int shortestPath() {
         for (Portal portal : portals.values()) {
             Position target = null;
             if (portal.char1.x == portal.char2.x) {
@@ -109,9 +110,13 @@ public class Day20DonutMaze {
                 }
             }
         }
+
+        DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+        ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> iPaths = dijkstraAlg.getPaths(start);
+        return iPaths.getPath(end).getLength();
     }
 
-    int shortestPath() {
+    int shortestRecursivePath() {
         DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
         ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> iPaths = dijkstraAlg.getPaths(start);
         return iPaths.getPath(end).getLength();
