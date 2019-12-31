@@ -106,13 +106,9 @@ public class Day13CarePackage {
 //                    printGame();
 //                    System.out.println();
 
-                    if (!simulation.isEmpty()) {
-                        if (steps == simulation.peek().step + 2) {
-                            simulation.poll();
-                            if (!simulation.isEmpty()) {
-                                nextPaddlePosition = simulation.peek().position;
-                            }
-                        }
+                    if (steps == simulation.peek().step + 2) {
+                        simulation.poll();
+                        nextPaddlePosition = simulation.peek().position;
                     }
 
                     log.debug("Step: {}: moving paddle position to {} (now at {})", steps, nextPaddlePosition, paddlePosition);
@@ -190,6 +186,8 @@ public class Day13CarePackage {
                     }
                 }
             }
+            // end with start position
+            simulation.add(new SimulationResult(stepCounter, new Position(22, 22)));
             log.info("Simulation complete, {} steps", simulation.size());
             return simulation;
         }
