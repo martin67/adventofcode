@@ -20,6 +20,6 @@ class Day13CarePackageTest {
     @Test
     void lastScore() throws IOException, InterruptedException, ExecutionException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day13.txt"));
-        assertEquals(0, new Day13CarePackage(inputLines).lastScore());
+        assertEquals(14747, new Day13CarePackage(inputLines).lastScore());
     }
 }

@@ -1,13 +1,12 @@
 package aoc2019;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.jgrapht.alg.flow.PadbergRaoOddMinimumCutset;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,8 +24,17 @@ public class Day13CarePackage {
             this.id = id;
         }
 
+        public Tile(Tile t) {
+            this.position = t.position;
+            this.id = t.id;
+        }
+
         boolean isBrick() {
             return id == 2;
+        }
+
+        boolean isWall() {
+            return id == 1;
         }
     }
 
@@ -97,6 +105,13 @@ public class Day13CarePackage {
     }
 
     @Data
+    @AllArgsConstructor
+    class SimulationResult {
+        int step;
+        Position position;
+    }
+
+    @Data
     class GameController implements Callable<Integer> {
         BlockingQueue<BigInteger> inputQueue;
         BlockingQueue<BigInteger> outputQueue;
@@ -104,11 +119,15 @@ public class Day13CarePackage {
         @Override
         public Integer call() throws Exception {
             boolean quit = false;
-            Ball ball = new Ball(new Position(19, 18), Direction.SouthEast);
             Position paddlePosition = new Position(22, 22);
+            Position nextPaddlePosition = paddlePosition;
+            int steps = 0;
+            Queue<SimulationResult> simulation = null;
+
+            getOutputQueue().add(new BigInteger("0"));
 
             while (!quit) {
-                log.info("inputqueue length {}", getInputQueue().size());
+                //log.info("inputqueue length {}", getInputQueue().size());
                 int x = getInputQueue().take().intValue();
                 int y = getInputQueue().take().intValue();
                 int id = getInputQueue().take().intValue();
@@ -117,44 +136,61 @@ public class Day13CarePackage {
                     score = id;
                     log.info("Score: {}", score);
                 } else {
-                    // check if game over (all blocks removed)
-                    long blocks = tiles.values().stream().filter(t -> t.getId() == 2).count();
+                    // check if game over (all bricks removed)
+                    long blocks = tiles.values().stream().filter(Tile::isBrick).count();
                     if (blocks == 0 && tiles.size() == 1056) {
                         return score;
                     }
 
-                    // predict ball position
-                    // move joystick to ball position (or wait if it's already there)
-
-                    // temp test
                     Position pos = new Position(x, y);
                     if (tiles.size() == 1056) {
                         log.info("Game output: type {}, {}", id, pos);
                     }
+
                     if (tiles.containsKey(pos)) {
                         tiles.get(pos).id = id;
                     } else {
                         tiles.put(pos, new Tile(pos, id));
                     }
 
-                    if (id == 3) {
-                        log.info("Paddle at {}", pos);
+                    if (tiles.size() == 1056 && id == 3) {
+                        log.info("Step {}, moving paddle to {}", steps, pos);
                         paddlePosition = pos;
                     }
-                    if (id == 4) {
-                        log.info("Ball at {}", pos);
-                        ball.updatePosition(pos);
+
+                    if (tiles.size() == 1056 && id == 4) {
+                        log.info("Step {}, moving ball to {}", steps, pos);
+                        liveBallPositions.add(new Position(pos));
+                        steps++;
+                    }
+
+                    if (tiles.size() == 1056 && simulation == null) {
+                        simulation = simulate(tiles);
+                        nextPaddlePosition = simulation.poll().position;
                     }
                 }
 
-                if (tiles.size() == 1056 && getInputQueue().size() == 0) {
+                if (tiles.size() == 1056) {
+                    log.info("checking if doing move function, step {}, input queue length {}, output queue length {}",
+                            steps, inputQueue.size(), outputQueue.size());
+                }
+                //if (tiles.size() == 1056 && getInputQueue().size() == 0) {
+                if (tiles.size() == 1056 && id == 4) {
                     if (id != 0) {
                         printGame();
                     }
                     System.out.println();
 
-                    Position nextPaddlePosition = ball.predictPaddlePosition();
-                    log.info("Predicting final paddle position to {} (now at {})", nextPaddlePosition, paddlePosition);
+                    if (!simulation.isEmpty()) {
+                        if (steps == simulation.peek().step + 2) {
+                            simulation.poll();
+                            if (!simulation.isEmpty()) {
+                                nextPaddlePosition = simulation.peek().position;
+                            }
+                        }
+                    }
+
+                    log.info("Step: {}: moving paddle position to {} (now at {})", steps, nextPaddlePosition, paddlePosition);
                     log.info("queue length: {}", getOutputQueue().size());
                     if (nextPaddlePosition.x > paddlePosition.x) {
                         log.info("Moving paddle to the right");
@@ -166,11 +202,76 @@ public class Day13CarePackage {
                         log.info("Not moving paddle");
                         getOutputQueue().add(new BigInteger("0"));
                     }
+
+                    //steps++;
                 }
 
             }
 
             return score;
+        }
+
+        Queue<SimulationResult> simulate(Map<Position, Tile> originalTiles) {
+            Queue<SimulationResult> simulation = new LinkedList<>();
+            Map<Position, Tile> tiles = new HashMap<>();
+            for (Position pos : originalTiles.keySet()) {
+                tiles.put(pos, new Tile(originalTiles.get(pos)));
+            }
+            int stepCounter = 0;
+            //Position ballPosition = new Position(19, 18);
+            Position ballPosition = new Position(21, 20);
+            Direction ballDirection = Direction.SouthEast;
+            simulation.add(new SimulationResult(0, new Position(22, 22)));
+            simulatedBallPositions.add(new Position(ballPosition));
+
+            log.info("Starting simulation");
+            while (tiles.values().stream().anyMatch(Tile::isBrick)) {
+                log.debug("Step {}, {} bricks left", stepCounter, tiles.values().stream().filter(Tile::isBrick).count());
+                Tile next = tiles.get(ballPosition.adjacent(ballDirection));
+                if (next.position.y == 22) {
+                    // Bounce of paddle
+                    ballDirection = ballDirection.bounceWall(Direction.South);
+                    simulation.add(new SimulationResult(stepCounter, new Position(ballPosition.x, 22)));
+                } else {
+                    switch (next.id) {
+                        case 0:     // empty
+                        case 4:     // ball
+                            // move the ball
+                            ballPosition = ballPosition.adjacent(ballDirection);
+                            simulatedBallPositions.add(new Position(ballPosition));
+                            // then check that the ball is not adjacent to a brick
+                            for (Position brickPosition : ballPosition.adjacentDiagonal(ballDirection)) {
+                                if (tiles.get(brickPosition).isBrick()) {
+                                    Direction dirToP = ballPosition.directionTo(brickPosition, false);
+                                    ballDirection = ballDirection.bounceWall(dirToP);
+                                    tiles.get(brickPosition).id = 0;
+                                }
+                            }
+                            stepCounter++;
+                            break;
+                        case 1:     // wall
+                            // Bounce (switch direction) 90 degrees
+                            for (Position wallPosition : ballPosition.adjacentDiagonal(ballDirection)) {
+                                if (tiles.get(wallPosition).isWall()) {
+                                    Direction dirToP = ballPosition.directionTo(wallPosition, false);
+                                    ballDirection = ballDirection.bounceWall(dirToP);
+                                }
+                            }
+                            break;
+                        case 2:     // block
+                            // just switch direction going back the opposite way
+                            // and remove tile
+                            ballDirection = ballDirection.opposite();
+                            next.id = 0;
+                            break;
+                        default:
+                            log.error("Oops");
+                            break;
+                    }
+                }
+            }
+            log.info("Simulation complete, {} steps", simulation.size());
+            return simulation;
         }
     }
 
@@ -179,6 +280,9 @@ public class Day13CarePackage {
     private final List<String> opcodes;
     final Map<Position, Tile> tiles;
     int score;
+    List<Position> simulatedBallPositions = new ArrayList<>();
+    List<Position> liveBallPositions = new ArrayList<>();
+
 
     public Day13CarePackage(List<String> inputLines) {
         executorService = Executors.newCachedThreadPool();
