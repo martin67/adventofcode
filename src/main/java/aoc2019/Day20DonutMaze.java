@@ -22,13 +22,13 @@ public class Day20DonutMaze {
         Position pos;
     }
 
-    @EqualsAndHashCode(callSuper = true)
     @Data
+    @EqualsAndHashCode(callSuper = true)
     static class LayerPosition extends Position {
         int layer;
 
-        public LayerPosition(int layer, int x, int y) {
-            super(x, y);
+        public LayerPosition(int layer, Position pos) {
+            super(pos);
             this.layer = layer;
         }
 
@@ -42,13 +42,11 @@ public class Day20DonutMaze {
     }
 
     final Set<Position> map = new HashSet<>();
-    Map<Position, Portal> portals = new HashMap<>();
-    Map<Position, Portal> innerPortals = new HashMap<>();
-    Map<Position, Portal> outerPortals = new HashMap<>();
+    final Map<Position, Portal> portals = new HashMap<>();
+    final Map<Position, Portal> innerPortals = new HashMap<>();
+    final Map<Position, Portal> outerPortals = new HashMap<>();
     Position start;
     Position end;
-    int xSize;
-    int ySize;
     private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
     public Day20DonutMaze(List<String> inputLines) {
@@ -85,13 +83,9 @@ public class Day20DonutMaze {
                     }
                 }
                 x++;
-                if (x > xSize) {
-                    xSize = x;
-                }
             }
             y++;
         }
-        ySize = y;
 
         for (Portal portal : portals.values()) {
             Position target = null;
@@ -150,23 +144,25 @@ public class Day20DonutMaze {
 
         // copy graph from part 1
         for (Position vertex : this.graph.vertexSet()) {
-            graph.addVertex(new LayerPosition(0, vertex.x, vertex.y));
+            graph.addVertex(new LayerPosition(0, vertex));
         }
         for (DefaultEdge edge : this.graph.edgeSet()) {
             Position src = this.graph.getEdgeSource(edge);
             Position dst = this.graph.getEdgeTarget(edge);
-            graph.addEdge(new LayerPosition(0, src.x, src.y), new LayerPosition(0, dst.x, dst.y));
+            graph.addEdge(new LayerPosition(0, src), new LayerPosition(0, dst));
         }
 
         // setup portals
-//        int width = portals.values().stream()
-//                .max(Comparator.comparing(portal1 -> portal1.).orElseThrow(NoSuchElementException::new);
+        int width = portals.values().stream().mapToInt(p -> p.getPos().getX())
+                .max().orElseThrow(NoSuchElementException::new);
+        int height = portals.values().stream().mapToInt(p -> p.getPos().getY())
+                .max().orElseThrow(NoSuchElementException::new);
         for (Portal portal : portals.values()) {
             if (portal.name.equals("AA")) {
-                start = new LayerPosition(0, portal.pos.x, portal.pos.y);
+                start = new LayerPosition(0, portal.pos);
             } else if (portal.name.equals("ZZ")) {
-                end = new LayerPosition(0, portal.pos.x, portal.pos.y);
-            } else if (portal.pos.x == 2 || portal.pos.x == xSize - 3 || portal.pos.y == 2 || portal.pos.y == ySize - 3) {
+                end = new LayerPosition(0, portal.pos);
+            } else if (portal.pos.x == 2 || portal.pos.x == width || portal.pos.y == 2 || portal.pos.y == height) {
                 outerPortals.put(portal.pos, portal);
             } else {
                 innerPortals.put(portal.pos, portal);
@@ -178,6 +174,7 @@ public class Day20DonutMaze {
             addLayer(graph, layer);
 
             DijkstraShortestPath<LayerPosition, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+            assert start != null;
             ShortestPathAlgorithm.SingleSourcePaths<LayerPosition, DefaultEdge> iPaths = dijkstraAlg.getPaths(start);
             if (iPaths.getPath(end) != null) {
                 log.debug("Path: {}", iPaths.getPath(end).getVertexList());
@@ -193,21 +190,21 @@ public class Day20DonutMaze {
     void addLayer(Graph<LayerPosition, DefaultEdge> graph, int layer) {
         // copy graph from part 1
         for (Position vertex : this.graph.vertexSet()) {
-            graph.addVertex(new LayerPosition(layer, vertex.x, vertex.y));
+            graph.addVertex(new LayerPosition(layer, vertex));
         }
         for (DefaultEdge edge : this.graph.edgeSet()) {
             Position src = this.graph.getEdgeSource(edge);
             Position dst = this.graph.getEdgeTarget(edge);
-            graph.addEdge(new LayerPosition(layer, src.x, src.y), new LayerPosition(layer, dst.x, dst.y));
+            graph.addEdge(new LayerPosition(layer, src), new LayerPosition(layer, dst));
         }
 
         // Connect outer portals to inner portals from previous layer
         for (Portal outerPortal : outerPortals.values()) {
-            LayerPosition src = new LayerPosition(layer, outerPortal.pos.x, outerPortal.pos.y);
+            LayerPosition src = new LayerPosition(layer, outerPortal.pos);
             Portal innerPortal = innerPortals.values().stream()
                     .filter(p -> p.name.equals(outerPortal.name))
-                    .findFirst().orElse(null);
-            LayerPosition dst = new LayerPosition(layer - 1, innerPortal.pos.x, innerPortal.pos.y);
+                    .findFirst().orElseThrow(NoSuchElementException::new);
+            LayerPosition dst = new LayerPosition(layer - 1, innerPortal.pos);
             graph.addEdge(src, dst);
         }
     }
