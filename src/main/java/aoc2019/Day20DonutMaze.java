@@ -1,6 +1,7 @@
 package aoc2019;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -14,18 +15,40 @@ import java.util.*;
 public class Day20DonutMaze {
 
     @Data
-    static
-    class Portal {
+    static class Portal {
         String name;
         Position char1;
         Position char2;
         Position pos;
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    static class LayerPosition extends Position {
+        int layer;
+
+        public LayerPosition(int layer, int x, int y) {
+            super(x, y);
+            this.layer = layer;
+        }
+
+        @Override
+        public String toString() {
+            return "{" + layer +
+                    ": " + x +
+                    "," + y +
+                    '}';
+        }
+    }
+
     final Set<Position> map = new HashSet<>();
     Map<Position, Portal> portals = new HashMap<>();
+    Map<Position, Portal> innerPortals = new HashMap<>();
+    Map<Position, Portal> outerPortals = new HashMap<>();
     Position start;
     Position end;
+    int xSize;
+    int ySize;
     private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
     public Day20DonutMaze(List<String> inputLines) {
@@ -62,13 +85,14 @@ public class Day20DonutMaze {
                     }
                 }
                 x++;
+                if (x > xSize) {
+                    xSize = x;
+                }
             }
             y++;
         }
-        log.info("Found {} portals", portals.size());
-    }
+        ySize = y;
 
-    int shortestPath() {
         for (Portal portal : portals.values()) {
             Position target = null;
             if (portal.char1.x == portal.char2.x) {
@@ -90,7 +114,6 @@ public class Day20DonutMaze {
             } else {
                 log.error("Oops");
             }
-
             portal.pos = target;
 
             if (portal.name.equals("AA")) {
@@ -99,7 +122,10 @@ public class Day20DonutMaze {
                 end = target;
             }
         }
+        log.info("Found {} portals", portals.size());
+    }
 
+    int shortestPath() {
         // Map the portals
         log.info("Mapping portals");
         for (Portal src : portals.values()) {
@@ -117,8 +143,72 @@ public class Day20DonutMaze {
     }
 
     int shortestRecursivePath() {
-        DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
-        ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> iPaths = dijkstraAlg.getPaths(start);
-        return iPaths.getPath(end).getLength();
+        LayerPosition start = null;
+        LayerPosition end = null;
+        int layer = 1;
+        Graph<LayerPosition, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+        // copy graph from part 1
+        for (Position vertex : this.graph.vertexSet()) {
+            graph.addVertex(new LayerPosition(0, vertex.x, vertex.y));
+        }
+        for (DefaultEdge edge : this.graph.edgeSet()) {
+            Position src = this.graph.getEdgeSource(edge);
+            Position dst = this.graph.getEdgeTarget(edge);
+            graph.addEdge(new LayerPosition(0, src.x, src.y), new LayerPosition(0, dst.x, dst.y));
+        }
+
+        // setup portals
+//        int width = portals.values().stream()
+//                .max(Comparator.comparing(portal1 -> portal1.).orElseThrow(NoSuchElementException::new);
+        for (Portal portal : portals.values()) {
+            if (portal.name.equals("AA")) {
+                start = new LayerPosition(0, portal.pos.x, portal.pos.y);
+            } else if (portal.name.equals("ZZ")) {
+                end = new LayerPosition(0, portal.pos.x, portal.pos.y);
+            } else if (portal.pos.x == 2 || portal.pos.x == xSize - 3 || portal.pos.y == 2 || portal.pos.y == ySize - 3) {
+                outerPortals.put(portal.pos, portal);
+            } else {
+                innerPortals.put(portal.pos, portal);
+            }
+        }
+
+        while (layer < 100) {
+            log.info("Adding layer {} to graph", layer);
+            addLayer(graph, layer);
+
+            DijkstraShortestPath<LayerPosition, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+            ShortestPathAlgorithm.SingleSourcePaths<LayerPosition, DefaultEdge> iPaths = dijkstraAlg.getPaths(start);
+            if (iPaths.getPath(end) != null) {
+                log.debug("Path: {}", iPaths.getPath(end).getVertexList());
+                return iPaths.getPath(end).getLength();
+            } else {
+                log.info("No path found");
+                layer++;
+            }
+        }
+        return 0;
+    }
+
+    void addLayer(Graph<LayerPosition, DefaultEdge> graph, int layer) {
+        // copy graph from part 1
+        for (Position vertex : this.graph.vertexSet()) {
+            graph.addVertex(new LayerPosition(layer, vertex.x, vertex.y));
+        }
+        for (DefaultEdge edge : this.graph.edgeSet()) {
+            Position src = this.graph.getEdgeSource(edge);
+            Position dst = this.graph.getEdgeTarget(edge);
+            graph.addEdge(new LayerPosition(layer, src.x, src.y), new LayerPosition(layer, dst.x, dst.y));
+        }
+
+        // Connect outer portals to inner portals from previous layer
+        for (Portal outerPortal : outerPortals.values()) {
+            LayerPosition src = new LayerPosition(layer, outerPortal.pos.x, outerPortal.pos.y);
+            Portal innerPortal = innerPortals.values().stream()
+                    .filter(p -> p.name.equals(outerPortal.name))
+                    .findFirst().orElse(null);
+            LayerPosition dst = new LayerPosition(layer - 1, innerPortal.pos.x, innerPortal.pos.y);
+            graph.addEdge(src, dst);
+        }
     }
 }

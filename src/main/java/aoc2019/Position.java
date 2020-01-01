@@ -2,6 +2,7 @@ package aoc2019;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -112,6 +113,7 @@ enum Direction {
 @Slf4j
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Position implements Comparable<Position> {
     int x;
     int y;

@@ -14,23 +14,20 @@ public class Day14SpaceStoichiometry {
 
     @Data
     @AllArgsConstructor
-    static
-    class Chemical {
+    static class Chemical {
         String name;
     }
 
     @Data
     @AllArgsConstructor
-    static
-    class Mix {
+    static class Mix {
         Chemical chemical;
         int amount;
     }
 
     @Data
     @AllArgsConstructor
-    static
-    class ReactionResult {
+    static class ReactionResult {
         int amount;
         int divisor;
     }

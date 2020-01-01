@@ -22,7 +22,7 @@ class Day20DonutMazeTest {
 
     @ParameterizedTest
     @CsvSource({"396, src/test/resources/2019/day20-demo3.txt",
-            "0, src/test/resources/2019/day20.txt"})
+            "5208, src/test/resources/2019/day20.txt"})
     void shortestRecursivePath(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day20DonutMaze(inputLines).shortestRecursivePath());
