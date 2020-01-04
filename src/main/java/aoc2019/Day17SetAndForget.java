@@ -3,6 +3,9 @@ package aoc2019;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -19,10 +22,10 @@ public class Day17SetAndForget {
         private BlockingQueue<BigInteger> outputQueue;
 
         Map<Position, Integer> map = new HashMap<>();
-        Position currentPosition;
-        Position startPosition;
-        Position oxygenSystem;
+        Position robotPosition;
+        Direction robotDirection;
         boolean dustCollector;
+        private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
         public RemoteControl(boolean dustCollector) {
             this.dustCollector = dustCollector;
@@ -38,7 +41,20 @@ public class Day17SetAndForget {
                 int output = inputQueue.take().intValue();
                 switch (output) {
                     case 35:        // #
-                        map.put(new Position(x, y), output);
+                    case 94:        // vacuum robot
+                        Position pos = new Position(x, y);
+                        map.put(pos, output);
+                        graph.addVertex(pos);
+                        if (map.containsKey(pos.adjacent(Direction.Left))) {
+                            graph.addEdge(pos, pos.adjacent(Direction.Left));
+                        }
+                        if (map.containsKey(pos.adjacent(Direction.Up))) {
+                            graph.addEdge(pos, pos.adjacent(Direction.Up));
+                        }
+                        if (output == 94) {
+                            robotPosition = new Position(pos);
+                            robotDirection = Direction.North;
+                        }
                         x++;
                         break;
                     case 46:        // .
@@ -47,9 +63,6 @@ public class Day17SetAndForget {
                     case 10:        // newline
                         x = 0;
                         y++;
-                        break;
-                    case 94:        // vacuum robot
-                        x++;
                         break;
                     default:
                         log.error("Oops, {} at {},{}", output, x, y);
@@ -61,15 +74,79 @@ public class Day17SetAndForget {
                 total++;
             }
 
-            int sum = 0;
-            for (Position pos : map.keySet()) {
-                if (map.containsKey(pos.adjacent(Direction.North)) && map.containsKey(pos.adjacent(Direction.South)) &&
-                        map.containsKey(pos.adjacent(Direction.East)) && map.containsKey(pos.adjacent(Direction.West))) {
-                    sum += pos.x * pos.y;
+            if (!dustCollector) {
+                int sum = 0;
+                for (Position pos : map.keySet()) {
+                    if (map.containsKey(pos.adjacent(Direction.North)) && map.containsKey(pos.adjacent(Direction.South)) &&
+                            map.containsKey(pos.adjacent(Direction.East)) && map.containsKey(pos.adjacent(Direction.West))) {
+                        sum += pos.x * pos.y;
+                    }
                 }
+                log.info("Received {}", sum);
+                return sum;
+            } else {
+                boolean quit = false;
+                int stepsInDirection = 0;
+                List<String> instructions = new ArrayList<>();
+
+                while (!quit) {
+                    Position pos = robotPosition.adjacent(robotDirection);
+                    if (map.containsKey(pos)) {
+                        // continue
+                        robotPosition = pos;
+                        stepsInDirection++;
+                    } else {
+                        if (stepsInDirection > 0) {
+                            instructions.add(String.valueOf(stepsInDirection));
+                            stepsInDirection = 0;
+                        }
+                        if (map.containsKey(robotPosition.adjacent(robotDirection.turn(Direction.Left)))) {
+                            instructions.add("L");
+                            robotPosition = robotPosition.adjacent(robotDirection.turn(Direction.Left));
+                            robotDirection = robotDirection.turn(Direction.Left);
+                        } else if (map.containsKey(robotPosition.adjacent(robotDirection.turn(Direction.Right)))) {
+                            instructions.add("R");
+                            robotPosition = robotPosition.adjacent(robotDirection.turn(Direction.Right));
+                            robotDirection = robotDirection.turn(Direction.Right);
+                        } else {
+                            quit = true;
+                        }
+                    }
+                }
+                System.out.println(instructions);
+                log.info("Number of instructions: {}", instructions.size());
+
+                // Find patterns
+                // max 20 characters in command, excluding newline
+                // 34 instructions
+                HashMap<List<String>, Integer> instructionFrequency = new HashMap<>();
+                for (int patternLength = 2; patternLength < 34; patternLength += 2) {
+                    int slider = 0;
+                    while (slider + patternLength < instructions.size()) {
+                        int start = patternLength;
+                        while (patternLength + start < instructions.size()) {
+                            List<String> pattern = instructions.subList(start, start + patternLength);
+                            if (pattern.equals(instructions.subList(slider, slider + patternLength))) {
+                                if (instructionFrequency.containsKey(pattern)) {
+                                    instructionFrequency.put(pattern, instructionFrequency.get(pattern) + 1);
+                                } else {
+                                    instructionFrequency.put(pattern, 1);
+                                }
+                            }
+                            start += patternLength;
+                        }
+                        slider += patternLength;
+                    }
+                }
+                //instructionFrequency.entrySet().stream().sorted(Comparator.comparing())
+//                Set<List<Integer>> filteredInstructions = null;
+//                        int hej = instructionFrequency.entrySet().stream()
+//                        .filter(i -> i.getKey().size() < 20)
+//                        .filter(i -> i.getValue() > 1)
+//                        .map(Map.Entry::getKey)
+//                        .collect(Collectors.toMap(List<Integer>, Integer));
+                return 0;
             }
-            log.info("Received {}", sum);
-            return sum;
         }
     }
 

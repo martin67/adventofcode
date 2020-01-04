@@ -108,6 +108,69 @@ enum Direction {
         return result;
     }
 
+    Direction turn(Direction newDirection) {
+        switch (this) {
+            case North:
+                switch (newDirection) {
+                    case East:
+                        return Right;
+                    case West:
+                        return Left;
+                    case Left:
+                        return West;
+                    case Right:
+                        return East;
+                    default:
+                        log.error("Wrong turn");
+                        return Unknown;
+                }
+            case East:
+                switch (newDirection) {
+                    case South:
+                        return Right;
+                    case North:
+                        return Left;
+                    case Left:
+                        return North;
+                    case Right:
+                        return South;
+                    default:
+                        log.error("Wrong turn");
+                        return Unknown;
+                }
+            case South:
+                switch (newDirection) {
+                    case West:
+                        return Right;
+                    case East:
+                        return Left;
+                    case Left:
+                        return East;
+                    case Right:
+                        return West;
+                    default:
+                        log.error("Wrong turn");
+                        return Unknown;
+                }
+            case West:
+                switch (newDirection) {
+                    case North:
+                        return Right;
+                    case South:
+                        return Left;
+                    case Left:
+                        return South;
+                    case Right:
+                        return North;
+                    default:
+                        log.error("Wrong turn");
+                        return Unknown;
+                }
+            default:
+                log.error("Illegal currentDirection");
+                return Unknown;
+        }
+    }
 }
 
 @Slf4j

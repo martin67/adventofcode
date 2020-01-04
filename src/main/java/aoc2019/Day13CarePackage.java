@@ -198,8 +198,8 @@ public class Day13CarePackage {
     private final List<String> opcodes;
     final Map<Position, Tile> tiles;
     int score;
-    List<Position> simulatedBallPositions = new ArrayList<>();
-    List<Position> liveBallPositions = new ArrayList<>();
+    final List<Position> simulatedBallPositions = new ArrayList<>();
+    final List<Position> liveBallPositions = new ArrayList<>();
 
 
     public Day13CarePackage(List<String> inputLines) {

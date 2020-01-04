@@ -2,7 +2,6 @@ package aoc2019;
 
 import com.google.common.collect.Sets;
 import lombok.Data;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigInteger;

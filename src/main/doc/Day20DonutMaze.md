@@ -225,4 +225,6 @@ This path takes a total of **396** steps to move from AA at the outermost layer 
 In your maze, when accounting for recursion, **how many steps does it take to get from the open tile marked AA 
 to the open tile marked ZZ, both at the outermost layer?**
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 5208.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

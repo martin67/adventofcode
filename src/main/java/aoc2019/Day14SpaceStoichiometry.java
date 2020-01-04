@@ -85,7 +85,9 @@ public class Day14SpaceStoichiometry {
                     //result.add(Fraction.getFraction(mix.getAmount(), reaction.output.amount));
                 } else {
                     // Which reaction generates chemical?
-                    Reaction re = reactions.stream().filter(r -> r.output.chemical.equals(chemical)).findFirst().orElse(null);
+                    Reaction re = reactions.stream()
+                            .filter(r -> r.output.chemical.equals(chemical))
+                            .findFirst().orElseThrow(NoSuchElementException::new);
                     //result.add(doReaction(re).multiplyBy(Fraction.getFraction(mix.getAmount(), reaction.output.amount)));
                 }
             }
@@ -130,7 +132,9 @@ public class Day14SpaceStoichiometry {
     int minimumAmountOfOre() {
         int iterations = 0;
 
-        Reaction start = reactions.stream().filter(r -> r.output.getChemical().name.equals("FUEL")).findFirst().orElse(null);
+        Reaction start = reactions.stream()
+                .filter(r -> r.output.getChemical().name.equals("FUEL"))
+                .findFirst().orElseThrow(NoSuchElementException::new);
         start.doReaction(start);
 
         while (chemicals.size() > 2) {
@@ -180,3 +184,17 @@ public class Day14SpaceStoichiometry {
         return 0;
     }
 }
+
+// Plan:
+// 2ORE = 2A
+// 3ORE = 2B
+// 3A,4B => 3C
+// 4C => 1 FUEL
+//
+// 8 ORE => 8A => 4C
+// 6 ORE => 4B => 4C
+// så 14 ORE för 1 FUEL
+//
+// då behövs det 4/3 C för 1 FUEL, vilket i sin tur innebär att
+// för 1 FUEL behövs det 4/3 * 3/3 A = 12/9 A = 4/3 A och 4/3 * 4/3 B = 16/9 B
+// 12/9 A

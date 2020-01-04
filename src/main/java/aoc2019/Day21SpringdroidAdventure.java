@@ -1,6 +1,5 @@
 package aoc2019;
 
-import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
