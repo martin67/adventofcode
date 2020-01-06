@@ -1,5 +1,6 @@
 package aoc.aoc2018;
 
+import aoc.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,6 @@ class Unit {
 public class Day15BeverageBandits {
 
     enum Type {Elf, Goblin}
-
 
     @Data
     @AllArgsConstructor
@@ -156,7 +156,7 @@ public class Day15BeverageBandits {
                         // list all possible positions for all targets
                         Set<Position> positionsInRange = new HashSet<>();
                         for (Unit target : targets) {
-                            positionsInRange.addAll(target.getPosition().adjacent());
+                            positionsInRange.addAll(target.getPosition().allAdjacent());
                         }
                         // remove all positions that have a wall or a unit in them
                         positionsInRange.removeAll(new ArrayList<>(walls));
@@ -226,7 +226,7 @@ public class Day15BeverageBandits {
                 positionsDone.add(activePosition);
 
                 // add adjacent open nodes to posisitionsTodo
-                activePosition.position.adjacent().stream()
+                activePosition.position.allAdjacent().stream()
                         .filter(p -> !walls.contains(p))
                         .filter(p -> !units.stream().map(Unit::getPosition).collect(Collectors.toSet()).contains(p))
                         .filter(p -> !positionsDone.stream().map(BfsNode::getPosition).collect(Collectors.toSet()).contains(p))
@@ -251,7 +251,7 @@ public class Day15BeverageBandits {
     private List<Unit> getAdjacentUnits(Position position) {
         List<Unit> unitList = new ArrayList<>();
 
-        for (Position p : position.adjacent()) {
+        for (Position p : position.allAdjacent()) {
             Unit unit = getUnit(p);
             if (unit != null) {
                 unitList.add(unit);

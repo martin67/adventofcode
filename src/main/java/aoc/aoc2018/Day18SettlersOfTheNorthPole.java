@@ -1,5 +1,6 @@
 package aoc.aoc2018;
 
+import aoc.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

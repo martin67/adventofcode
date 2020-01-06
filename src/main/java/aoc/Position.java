@@ -80,7 +80,7 @@ public class Position implements Comparable<Position> {
             return Direction.NorthEast;
         } else if (position.x > x && position.y == y) {
             return Direction.East;
-        } else if (allowDiagonal && position.x > x && position.y > y) {
+        } else if (allowDiagonal && position.x > x) {
             return Direction.SouthEast;
         } else if (position.x == x && position.y > y) {
             return Direction.South;
@@ -88,7 +88,7 @@ public class Position implements Comparable<Position> {
             return Direction.SouthWest;
         } else if (position.x < x && position.y == y) {
             return Direction.West;
-        } else if (allowDiagonal && position.x < x && position.y < y) {
+        } else if (allowDiagonal && position.x < x) {
             return Direction.NorthWest;
         } else {
             return Direction.Unknown;

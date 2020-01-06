@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day15BeverageBanditsTest {
     @ParameterizedTest
@@ -15,7 +15,7 @@ class Day15BeverageBanditsTest {
             "27730, day15-demo0.txt",
             "36334, day15-demo1.txt",
             "39514, day15-demo2.txt",
-            "27755, day14-demo3.txt",
+            "27755, day15-demo3.txt",
             "28944, day15-demo4.txt",
             "18740, day15-demo5.txt",
             "226688, day15.txt"
@@ -30,7 +30,7 @@ class Day15BeverageBanditsTest {
     @CsvSource({
             "4988, day15-demo0.txt",
             "31284, day15-demo6.txt",
-            "3478, day14-demo3.txt",
+            "3478, day15-demo3.txt",
             "6474, day15-demo4.txt",
             "1140, day15-demo5.txt",
             "62958, day15.txt"
@@ -40,5 +40,4 @@ class Day15BeverageBanditsTest {
         Day15BeverageBandits day15BeverageBandits = new Day15BeverageBandits();
         assertEquals(outcome, day15BeverageBandits.computeCombatOutcomeNoDeadElves(input));
     }
-
 }

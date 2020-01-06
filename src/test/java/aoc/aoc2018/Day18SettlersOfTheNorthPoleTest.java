@@ -6,10 +6,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day18SettlersOfTheNorthPoleTest {
-
     @ParameterizedTest
     @CsvSource({
             "1147, src/test/resources/2018/day18-demo.txt",
