@@ -73,77 +73,6 @@ public class Position implements Comparable<Position> {
         return adj;
     }
 
-    @Deprecated
-    Direction opposite(Direction direction) {
-        Direction result;
-        switch (direction) {
-            case North:
-                result = Direction.South;
-                break;
-            case Up:
-                result = Direction.Down;
-                break;
-            case East:
-                result = Direction.West;
-                break;
-            case Right:
-                result = Direction.Left;
-                break;
-            case South:
-                result = Direction.North;
-                break;
-            case Down:
-                result = Direction.Up;
-                break;
-            case West:
-                result = Direction.East;
-                break;
-            case Left:
-                result = Direction.Right;
-                break;
-            case NorthEast:
-                result = Direction.SouthWest;
-                break;
-            case NorthWest:
-                result = Direction.SouthEast;
-                break;
-            case SouthEast:
-                result = Direction.NorthWest;
-                break;
-            case SouthWest:
-                result = Direction.NorthEast;
-                break;
-            default:
-                result = Direction.Unknown;
-                break;
-        }
-        return result;
-    }
-
-    @Deprecated
-    Direction bounce(Direction direction) {
-        Direction result;
-        switch (direction) {
-            case NorthEast:
-                result = Direction.NorthWest;
-                break;
-            case NorthWest:
-                result = Direction.NorthEast;
-                break;
-            case SouthEast:
-                result = Direction.SouthWest;
-                break;
-            case SouthWest:
-                result = Direction.SouthEast;
-                break;
-            default:
-                result = Direction.Unknown;
-                break;
-        }
-        return result;
-    }
-
-
     public Direction directionTo(Position position, boolean allowDiagonal) {
         if (position.x == x && position.y < y) {
             return Direction.North;
@@ -164,29 +93,6 @@ public class Position implements Comparable<Position> {
         } else {
             return Direction.Unknown;
         }
-    }
-
-    Position adjacent(char direction) {
-        Position adj = new Position(x, y);
-        switch (direction) {
-            case 'N':
-            case 'U':
-                adj.y--;
-                break;
-            case 'E':
-            case 'R':
-                adj.x++;
-                break;
-            case 'S':
-            case 'D':
-                adj.y++;
-                break;
-            case 'W':
-            case 'L':
-                adj.x--;
-                break;
-        }
-        return adj;
     }
 
     public Set<Position> allAdjacent() {
