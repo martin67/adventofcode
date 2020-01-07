@@ -36,6 +36,6 @@ class Day2IWasToldThereWouldBeNoMathTest {
     @Test
     void getRibbon() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2015/day2.txt"));
-        assertEquals(1588178, new Day2IWasToldThereWouldBeNoMath().getRibbon(inputLines));
+        assertEquals(3783758, new Day2IWasToldThereWouldBeNoMath().getRibbon(inputLines));
     }
 }

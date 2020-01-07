@@ -36,3 +36,7 @@ of ribbon for the bow, for a total of 34 feet.
 of ribbon for the bow, for a total of 14 feet.
 
 How many total **feet of ribbon** should they order?
+
+Your puzzle answer was 3783758.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
