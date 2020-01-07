@@ -1,8 +1,12 @@
 package aoc.aoc2018;
 
+import aoc.Position;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Day17ReservoirResearch {
@@ -16,7 +20,7 @@ public class Day17ReservoirResearch {
     private int maxY = Integer.MIN_VALUE;
 
     private void readData(String input) {
-        List<String> inputStrings = Arrays.stream(input.split("\\n+"))
+        List<String> inputStrings = Arrays.stream(input.split("\\r\\n+"))
                 .collect(Collectors.toList());
         // x=495, y=2..7
         for (String row : inputStrings) {

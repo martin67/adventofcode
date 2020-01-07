@@ -1,5 +1,7 @@
 package aoc.aoc2018;
 
+import aoc.Position;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,16 +30,16 @@ class DAG {
             this.distanceToStart = distanceToStart;
             switch (direction) {
                 case 'N':
-                    this.position = new Position(parent.x, parent.y - 2);
+                    this.position = new Position(parent.getX(), parent.getY() - 2);
                     break;
                 case 'S':
-                    this.position = new Position(parent.x, parent.y + 2);
+                    this.position = new Position(parent.getX(), parent.getY() + 2);
                     break;
                 case 'E':
-                    this.position = new Position(parent.x + 2, parent.y);
+                    this.position = new Position(parent.getX() + 2, parent.getY());
                     break;
                 case 'W':
-                    this.position = new Position(parent.x - 2, parent.y);
+                    this.position = new Position(parent.getX() - 2, parent.getY());
                     break;
             }
             id = idCounter;

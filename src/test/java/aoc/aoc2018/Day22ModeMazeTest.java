@@ -1,11 +1,12 @@
 package aoc.aoc2018;
 
+import aoc.Position;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day22ModeMazeTest {
-
     @ParameterizedTest
     @CsvSource({
             "114, 510, 10, 10",
@@ -25,5 +26,4 @@ class Day22ModeMazeTest {
         Day22ModeMaze day22ModeMaze = new Day22ModeMaze(depth, new Position(x, y));
         assertEquals(minutes, day22ModeMaze.fewestMinutes());
     }
-
 }

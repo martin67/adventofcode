@@ -1,5 +1,6 @@
 package aoc.aoc2018;
 
+import aoc.Position;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -39,7 +40,7 @@ public class Day22ModeMaze {
 
         @Override   // [1,2]/Rocky/Gear
         public String toString() {
-            return "[" + region.position.x + "," + region.position.y + "]/" + region.type + "/" + toolUsed;
+            return "[" + region.position.getX() + "," + region.position.getY() + "]/" + region.type + "/" + toolUsed;
         }
     }
 
@@ -57,17 +58,17 @@ public class Day22ModeMaze {
         this.mouth = new Position(0, 0);
         this.target = target;
         int edgePadding = 100;
-        this.maxCave = new Position(target.x + edgePadding, target.y + edgePadding);
+        this.maxCave = new Position(target.getX() + edgePadding, target.getY() + edgePadding);
         initCave(depth, target, maxCave);
     }
 
     private void initCave(int depth, Position target, Position maxCave) {
 
-        for (int x = 0; x < maxCave.x; x++) {
-            for (int y = 0; y < maxCave.y; y++) {
+        for (int x = 0; x < maxCave.getX(); x++) {
+            for (int y = 0; y < maxCave.getY(); y++) {
                 Region r = new Region(new Position(x, y));
 
-                if ((x == 0 && y == 0) || ((x == target.x && y == target.y))) {
+                if ((x == 0 && y == 0) || ((x == target.getX() && y == target.getY()))) {
                     r.geologicIndex = 0;
                 } else if (x == 0) {
                     r.geologicIndex = y * 48271;
@@ -129,7 +130,7 @@ public class Day22ModeMaze {
         // then setup the edges
         System.out.println("Creating edges");
         for (Node n : nodes) {
-            for (Position position : n.region.position.adjacent()) {
+            for (Position position : n.region.position.allAdjacent()) {
                 if (cave.containsKey(position)) {
                     for (Node targetNode : cave.get(position).nodeSet) {
                         int time = computeTime(n, targetNode);
@@ -182,8 +183,8 @@ public class Day22ModeMaze {
     }
 
     private void printCave() {
-        for (int y = 0; y < maxCave.y; y++) {
-            for (int x = 0; x < maxCave.x; x++) {
+        for (int y = 0; y < maxCave.getY(); y++) {
+            for (int x = 0; x < maxCave.getX(); x++) {
                 Region r = cave.get(new Position(x, y));
                 if (r.position.equals(mouth)) {
                     System.out.print('M');
@@ -206,7 +207,7 @@ public class Day22ModeMaze {
 
         int riskLevel = 0;
         for (Region r : cave.values()) {
-            if (r.position.x <= target.x && r.position.y <= target.y) {
+            if (r.position.getX() <= target.getX() && r.position.getY() <= target.getY()) {
                 riskLevel += r.type.ordinal();
             }
         }
@@ -220,7 +221,7 @@ public class Day22ModeMaze {
         Node start = nodes.stream().filter(n -> n.region.position.equals(mouth) && n.toolUsed == Tool.Torch).findFirst().get();
         Node end = nodes.stream().filter(n -> n.region.position.equals(target) && n.toolUsed == Tool.Torch).findFirst().get();
 
-        System.out.println("Size of cave: " + maxCave.x * maxCave.y + " (" + maxCave.x + "x" + maxCave.y + ")");
+        System.out.println("Size of cave: " + maxCave.getX() * maxCave.getY() + " (" + maxCave.getX() + "x" + maxCave.getY() + ")");
         System.out.println("Number of vertexes: " + (long) g.vertexSet().size());
         System.out.println("Number of edges: " + (long) g.edgeSet().size());
 
@@ -237,9 +238,9 @@ public class Day22ModeMaze {
 //        return (int) iPath.getWeight();
 
 //        Set<String> landmarks = new HashSet<>();
-//        Node upperRight = nodes.stream().filter(n -> n.region.position.equals(new nu.hagelin.adventofcode.cal2018.Position(maxCave.x - 1, 0))).findFirst().get();
-//        Node lowerRight = nodes.stream().filter(n -> n.region.position.equals(new nu.hagelin.adventofcode.cal2018.Position(maxCave.x - 1, maxCave.y - 1))).findFirst().get();
-//        Node lowerLeft = nodes.stream().filter(n -> n.region.position.equals(new nu.hagelin.adventofcode.cal2018.Position(0, maxCave.y - 1))).findFirst().get();
+//        Node upperRight = nodes.stream().filter(n -> n.region.position.equals(new nu.hagelin.adventofcode.cal2018.Position(maxCave.getX() - 1, 0))).findFirst().get();
+//        Node lowerRight = nodes.stream().filter(n -> n.region.position.equals(new nu.hagelin.adventofcode.cal2018.Position(maxCave.getX() - 1, maxCave.getY() - 1))).findFirst().get();
+//        Node lowerLeft = nodes.stream().filter(n -> n.region.position.equals(new nu.hagelin.adventofcode.cal2018.Position(0, maxCave.getY() - 1))).findFirst().get();
 //        landmarks.add(upperRight.toString());
 //        landmarks.add(lowerRight.toString());
 //        landmarks.add(lowerLeft.toString());

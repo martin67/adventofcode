@@ -1,5 +1,6 @@
 package aoc.aoc2018;
 
+import aoc.Position;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -9,7 +10,6 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day13MineCartMadnessTest {
-
     @Test
     void ReadDemoData() throws IOException {
         String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day13-0.txt"))));
@@ -37,5 +37,4 @@ class Day13MineCartMadnessTest {
         Day13MineCartMadness day13MineCartMadness = new Day13MineCartMadness(input);
         assertEquals(new Position(2,81), day13MineCartMadness.lastCart());
     }
-
 }
