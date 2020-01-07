@@ -54,13 +54,14 @@ public class Day23CategorySix {
 
             log.info("Starting nat idle checker");
             while (true) {
-                Thread.sleep(10);
+                Thread.sleep(1000);
                 log.info("Checking queues");
                 boolean queuesEmpty = true;
                 for (int i = 0; i < 50; i++) {
                     if (!computers.get(i).getInputQueue().isEmpty()) {
                         //log.info("queue nr {} is not empty. contains {} items", i, )
                         queuesEmpty = false;
+                        break;
                     }
                 }
                 log.info("queues empty: {}", queuesEmpty);
