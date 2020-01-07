@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -25,4 +26,16 @@ class Day2IWasToldThereWouldBeNoMathTest {
         assertEquals(1588178, new Day2IWasToldThereWouldBeNoMath().getSquareFeet(inputLines));
     }
 
+    @ParameterizedTest
+    @CsvSource({"2x3x4, 34",
+            "1x1x10, 14"})
+    void getRibbonDemo(String input, int expected) {
+        assertEquals(expected, new Day2IWasToldThereWouldBeNoMath().getRibbon(Collections.singletonList(input)));
+    }
+
+    @Test
+    void getRibbon() throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2015/day2.txt"));
+        assertEquals(1588178, new Day2IWasToldThereWouldBeNoMath().getRibbon(inputLines));
+    }
 }
