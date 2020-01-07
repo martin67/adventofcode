@@ -1,5 +1,8 @@
 package aoc.aoc2016;
 
+import aoc.Direction;
+import aoc.Position;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -52,16 +55,16 @@ public class Day1NoTimeForATaxicab {
 
             switch (currentDirection) {
                 case North:
-                    pos.y -= distance;
+                    pos.setY(pos.getY() - distance);
                     break;
                 case East:
-                    pos.x += distance;
+                    pos.setX(pos.getX() + distance);
                     break;
                 case South:
-                    pos.y += distance;
+                    pos.setY(pos.getY() + distance);
                     break;
                 case West:
-                    pos.x -= distance;
+                    pos.setX(pos.getX() - distance);
                     break;
             }
         }
@@ -100,5 +103,4 @@ public class Day1NoTimeForATaxicab {
         }
         return 0;
     }
-
 }

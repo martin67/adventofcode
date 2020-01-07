@@ -1,5 +1,8 @@
 package aoc.aoc2016;
 
+import aoc.Direction;
+import aoc.Position;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -66,7 +69,25 @@ public class Day2BathroomSecurity {
         StringBuilder code = new StringBuilder();
 
         for (String instruction : instructions) {
-            for (char direction : instruction.toCharArray()) {
+            Direction direction;
+            for (char dir : instruction.toCharArray()) {
+                switch (dir) {
+                    case 'U':
+                        direction = Direction.Up;
+                        break;
+                    case 'D':
+                        direction = Direction.Down;
+                        break;
+                    case 'R':
+                        direction = Direction.Right;
+                        break;
+                    case 'L':
+                        direction = Direction.Left;
+                        break;
+                    default:
+                        direction = Direction.Unknown;
+                        break;
+                }
                 Position next = pos.adjacent(direction);
                 if (keypad.containsKey(next)) {
                     pos = next;
