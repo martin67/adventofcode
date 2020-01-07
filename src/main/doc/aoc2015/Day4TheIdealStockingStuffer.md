@@ -14,3 +14,12 @@ For example:
 1048970; that is, the MD5 hash of pqrstuv1048970 looks like 000006136ef....
 
 Your puzzle input is **iwrupvqb**.
+
+Your puzzle answer was 346386.
+
+The first half of this puzzle is complete! It provides one gold star: *
+
+##Part Two
+Now find one that starts with six zeroes.
+
+Your puzzle input is still iwrupvqb.

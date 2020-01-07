@@ -1,20 +1,27 @@
 package aoc.aoc2015;
 
-import java.security.MessageDigest;
+import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+
 import java.security.NoSuchAlgorithmException;
 
 public class Day4TheIdealStockingStuffer {
-    int lowestNumber(String secretKey) throws NoSuchAlgorithmException {
-        int number = 1;
-        MessageDigest md = MessageDigest.getInstance("MD5");
-//        while (true) {
-//            String input = String.format("%s%d", secretKey, number);
-//
-//            //md.update(input);
-//            //hash = DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
-//
-//        }
-        return 0;
+    int lowestNumber(String secretKey, int length) throws NoSuchAlgorithmException {
+        int number = 0;
+        HashFunction hf = Hashing.md5();
+        String start = Strings.padStart("", length, '0');
+
+        while (true) {
+            number++;
+            String input = String.format("%s%d", secretKey, number);
+            HashCode hashCode = hf.newHasher().putString(input, Charsets.UTF_8).hash();
+            if (hashCode.toString().startsWith(start)) {
+                return number;
+            }
+        }
     }
 }
 
