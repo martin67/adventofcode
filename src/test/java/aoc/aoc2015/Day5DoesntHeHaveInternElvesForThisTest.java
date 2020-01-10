@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class Day5DoesntHeHaveInternElvesForThisTest {
     @ParameterizedTest
     @CsvSource({"ugknbfddgicrmopn, true",
+            "aaa, true",
             "jchzalrnumimnmhp, false",
             "haegwjzuvuyypxyu, false",
             "dvszwmarrgswjxmb, false"})
@@ -24,6 +25,21 @@ class Day5DoesntHeHaveInternElvesForThisTest {
     @Test
     void niceStrings() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2015/day5.txt"));
-        assertEquals(1783, new Day5DoesntHeHaveInternElvesForThis().isNice(inputLines));
+        assertEquals(238, new Day5DoesntHeHaveInternElvesForThis().isNice(inputLines));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"qjhvhtzxzqqjkmpb, true",
+            "xxyxx, true",
+            "uurcxstgmygtbstg, false",
+            "ieodomkazucvgmuy, false"})
+    void niceStringsNewRulesDemo(String input, boolean expected) {
+        assertEquals(expected, new Day5DoesntHeHaveInternElvesForThis().isNiceNewRule(input));
+    }
+
+    @Test
+    void niceStringsNewRules() throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2015/day5.txt"));
+        assertEquals(1783, new Day5DoesntHeHaveInternElvesForThis().isNiceNewRule(inputLines));
     }
 }

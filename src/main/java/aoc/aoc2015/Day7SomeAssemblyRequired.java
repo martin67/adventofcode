@@ -15,7 +15,7 @@ public class Day7SomeAssemblyRequired {
         Set<Wire> inputs;
         Wire output;
 
-        void execute();
+        void execute() {};
     }
 
     public Day7SomeAssemblyRequired(List<String> inputLines) {
