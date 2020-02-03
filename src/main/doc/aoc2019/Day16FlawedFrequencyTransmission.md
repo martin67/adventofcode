@@ -11,7 +11,7 @@ This new list is also used as the input for the next phase.
 
 Each element in the new list is built by multiplying every value in the input list by a value in a repeating **pattern**
 and then adding up the results. So, if the input list were 9, 8, 7, 6, 5 and the pattern for a given element were 1, 2, 
-3, the result would be 9*1 + 8*2 + 7*3 + 6*1 + 5*2 (with each input element on the left and each value in the repeating 
+3, the result would be 9 * 1 + 8 * 2 + 7 * 3 + 6 * 1 + 5 * 2 (with each input element on the left and each value in the repeating 
 pattern on the right of each multiplication). Then, only the ones digit is kept: 38 becomes 8, -17 becomes 7, and so on.
 
 While each element in the output array uses all of the same input array elements, the actual repeating pattern to use 
