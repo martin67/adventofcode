@@ -3,7 +3,6 @@ package aoc.aoc2019;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.math.Fraction;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -72,32 +71,39 @@ public class Day14SpaceStoichiometry {
         }
 
         // recursive
-        void doReaction(Reaction reaction) {
-            log.info("doReaction for {}", reaction);
-            for (Mix mix : reaction.inputs) {
+        void doReaction() {
+            log.info("doReaction for {}", this);
+            for (Mix mix : inputs) {
                 Chemical chemical = mix.getChemical();
-                if (chemical.equals(ore)) {
-                    if (reactionResults.containsKey(chemical)) {
-                        reactionResults.get(chemical).amount += mix.getAmount();
+
+                // check if chemical is dependent on ore only
+                Reaction inputReaction = reactions.stream()
+                        .filter(r -> r.output.chemical.equals(chemical))
+                        .findFirst().orElseThrow(NoSuchElementException::new);
+
+                if (inputReaction.inputs.size() == 1 && inputReaction.inputs.get(0).chemical.equals(ore)) {
+                    log.info("Adding {} {} to endChemicals", mix.amount, chemical.name);
+                    if (endChemicals.containsKey(chemical)) {
+                        endChemicals.put(chemical, endChemicals.get(chemical) + mix.amount);
                     } else {
-                        //reactionResults.put(chemical, new ReactionResult(mix.getAmount(), reaction.))
+                        endChemicals.put(chemical, mix.amount);
                     }
-                    //result.add(Fraction.getFraction(mix.getAmount(), reaction.output.amount));
                 } else {
-                    // Which reaction generates chemical?
-                    Reaction re = reactions.stream()
-                            .filter(r -> r.output.chemical.equals(chemical))
-                            .findFirst().orElseThrow(NoSuchElementException::new);
-                    //result.add(doReaction(re).multiplyBy(Fraction.getFraction(mix.getAmount(), reaction.output.amount)));
+                    for (int i = 0; i < mix.amount; i++) {
+                        inputReaction.doReaction();
+                    }
                 }
+
+                //log.info("doReaction returning {} for {}", result, reaction);
             }
-            //log.info("doReaction returning {} for {}", result, reaction);
         }
     }
 
     final Set<Chemical> chemicals = new HashSet<>();
     final Set<Reaction> reactions = new HashSet<>();
     final Map<Chemical, ReactionResult> reactionResults = new HashMap<>();
+    Map<Chemical, Integer> endChemicals = new HashMap<>();
+
     Chemical ore;
     Chemical fuel;
 
@@ -135,53 +141,27 @@ public class Day14SpaceStoichiometry {
         Reaction start = reactions.stream()
                 .filter(r -> r.output.getChemical().name.equals("FUEL"))
                 .findFirst().orElseThrow(NoSuchElementException::new);
-        start.doReaction(start);
+        start.doReaction();
 
-        while (chemicals.size() > 2) {
-            log.info("Iteration {}", iterations);
+        // compute ore needs
+        int oreNeeded = 0;
+        for (Chemical chemical : endChemicals.keySet()) {
+            Reaction oreReaction = reactions.stream()
+                    .filter(r -> r.output.chemical.equals(chemical))
+                    .findFirst().orElseThrow(NoSuchElementException::new);
+            int factor = oreReaction.inputs.get(0).amount;
+            int amount = endChemicals.get(chemical);
+            int oreFactor = oreReaction.output.amount;
 
-            // find chemicals which reactions can be reduced. The are the ones that only have ore as input
-            Map<Chemical, Fraction> reductions = new HashMap<>();
-            for (Reaction reaction : reactions) {
-                if (reaction.isReduceable()) {
-                    Mix mix = reaction.output;
-                    reductions.put(mix.chemical, Fraction.getFraction(mix.amount, reaction.output.amount));
-                    log.info("Adding {} to reduction list (from reaction {})", mix.chemical.name, reaction);
-                }
-            }
+            int temp = ((amount + oreFactor - 1) / oreFactor) * factor;
+            log.info("Summing up {}; factor {}, oreFactor {}, amount {}, temp {}", chemical.name, factor, oreFactor, amount, temp);
 
-            // go through all reactions and reduce the found chemicals
-            for (Chemical chemicalToReduce : reductions.keySet()) {
-                for (Reaction reaction : reactions) {
-                    if (reaction.inputContains(chemicalToReduce)) {
-                        int denominator = reductions.get(chemicalToReduce).getDenominator();
-                        for (Mix mix : reaction.inputs) {
-                            if (mix.chemical.equals(chemicalToReduce)) {
-                                log.info("Reducing {} on {}", chemicalToReduce, reaction);
-                                mix.chemical = ore;
-                                mix.amount *= reductions.get(chemicalToReduce).getNumerator();
-                            } else {
-                                mix.amount *= denominator;
-                            }
-                        }
-                        reaction.output.amount *= denominator;
-                        // add all chemicalQuantities that are Ore into one
-                        Mix newMix = new Mix(ore, 0);
-                        for (Mix mix : reaction.inputs) {
-                            if (mix.getChemical().equals(ore)) {
-                                newMix.amount += mix.getAmount();
-                            }
-                        }
-                        reaction.inputs.removeIf(cq -> cq.getChemical().equals(ore));
-                        reaction.inputs.add(newMix);
-                    }
-                }
-                chemicals.remove(chemicalToReduce);
-            }
-            iterations++;
+
+
+            //oreNeeded += ((amount + factor - 1) / factor) * factor;
+            oreNeeded += temp;
         }
-        //
-        return 0;
+        return oreNeeded;
     }
 }
 

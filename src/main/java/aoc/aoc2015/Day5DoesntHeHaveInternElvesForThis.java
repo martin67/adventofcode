@@ -46,20 +46,26 @@ public class Day5DoesntHeHaveInternElvesForThis {
         char[] charArray = input.toCharArray();
         Set<String> pairs = new HashSet<>();
         String previousPair = "";
+        int okCount = 0;
 
+        log.info("## Looking at {}", input);
         for (int i = 1; i < charArray.length; i++) {
             String pair = new String(charArray, i - 1, 2);
             if (pairs.contains(pair) && !pair.equals(previousPair)) {
-                pairOk = true;
-             //   break;
+                log.info("Found pair {}", pair);
+                okCount++;
             } else {
                 pairs.add(pair);
                 previousPair = pair;
             }
         }
+        if (okCount == 1) {
+            pairOk = true;
+        }
 
         for (int i = 2; i < charArray.length; i++) {
             if (charArray[i] == charArray[i - 2]) {
+                log.info("Found match {}, pos {}", charArray[i], i);
                 gapOk = true;
                // break;
             }
@@ -83,4 +89,4 @@ public class Day5DoesntHeHaveInternElvesForThis {
 }
 
 // 158 too low
-// 68 not correct
+// 68 not correct, not 71, not 60
