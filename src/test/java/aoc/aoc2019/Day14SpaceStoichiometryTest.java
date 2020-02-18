@@ -22,4 +22,15 @@ class Day14SpaceStoichiometryTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day14SpaceStoichiometry(inputLines).minimumAmountOfOre());
     }
+
+    @ParameterizedTest
+    @CsvSource({"82892753, src/test/resources/2019/day14-demo3.txt",
+            "5586022, src/test/resources/2019/day14-demo4.txt",
+            "460664, src/test/resources/2019/day14-demo5.txt",
+            "0, src/test/resources/2019/day14.txt"})
+    void maximumAmountOfFuel(int expected, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day14SpaceStoichiometry(inputLines).maximumAmountOfFuel());
+    }
+
 }
