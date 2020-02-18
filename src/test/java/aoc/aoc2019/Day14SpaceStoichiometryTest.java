@@ -17,7 +17,7 @@ class Day14SpaceStoichiometryTest {
             "13312, src/test/resources/2019/day14-demo3.txt",
             "180697, src/test/resources/2019/day14-demo4.txt",
             "2210736, src/test/resources/2019/day14-demo5.txt",
-            "0, src/test/resources/2019/day14.txt"})
+            "741927, src/test/resources/2019/day14.txt"})
     void minimumAmountOfOre(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day14SpaceStoichiometry(inputLines).minimumAmountOfOre());
