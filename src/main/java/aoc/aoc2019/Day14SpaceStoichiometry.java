@@ -21,7 +21,7 @@ public class Day14SpaceStoichiometry {
         long amount;
     }
 
-    Map<String, Recipe> recipies = new HashMap<>();
+    Map<String, Recipe> recipes = new HashMap<>();
     Map<String, Long> surplus = new HashMap<>();
 
     public Day14SpaceStoichiometry(List<String> inputLines) {
@@ -37,17 +37,17 @@ public class Day14SpaceStoichiometry {
                 }
                 String output = matcher.group("outputChemical");
                 int amount = Integer.parseInt(matcher.group("outputAmount"));
-                recipies.put(output, new Recipe(inputs, output, amount));
+                recipes.put(output, new Recipe(inputs, output, amount));
             }
         }
     }
 
     long requiredOre(String chemical, long amount) {
-        Recipe recipe = recipies.get(chemical);
+        Recipe recipe = recipes.get(chemical);
         long existing = surplus.getOrDefault(chemical, 0L);
         long multiple = (amount - existing + recipe.amount - 1) / recipe.amount;
         long extra = (recipe.amount * multiple) - (amount - existing);
-        log.debug("{}; amount needed: {}, existing: {}, multiple: {}, extra: {}", chemical, amount, existing, multiple, extra);
+        //log.debug("{}; amount needed: {}, existing: {}, multiple: {}, extra: {}", chemical, amount, existing, multiple, extra);
         if (!recipe.chemical.equals("ORE")) {
             surplus.put(chemical, extra);
         }
@@ -66,12 +66,22 @@ public class Day14SpaceStoichiometry {
     }
 
     long maximumAmountOfFuel() {
-        // use binary search between 0 and Long.Max
-        return requiredOre("FUEL", 82892753);
+        return search(0, Integer.MAX_VALUE);
     }
 
     long search(long low, long high) {
-        long value = (high - low) / 2;
-
+        if (high - low == 1) {
+            log.info("Found it: low {} high {}", low, high);
+            return low;
+        }
+        long mid = ((high - low) / 2) + low;
+        surplus.clear();
+        long ore = requiredOre("FUEL", mid);
+        log.debug("Checking: low {} high {} mid {} ore {}", low, high, mid, ore);
+        if (ore > 1000000000000L) {
+            return search(low, mid);
+        } else {
+            return search(mid, high);
+        }
     }
 }
