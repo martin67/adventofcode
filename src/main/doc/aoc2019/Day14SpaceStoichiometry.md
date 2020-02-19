@@ -104,4 +104,6 @@ With that much ore, given the examples above:
 
 Given 1 trillion ORE, **what is the maximum amount of FUEL you can produce?**
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 2371699.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

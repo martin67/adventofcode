@@ -99,6 +99,11 @@ public class Day18ManyWorldsInterpretation {
         }
     }
 
+    static class Walker2 {
+        public Walker2(Map<Position, Character> keys, Map<Position, Character> doors, Position start, Graph<Character, DefaultWeightedEdge> graph) {
+        }
+    }
+
     @Data
     static class WalkResult {
         int length;
@@ -107,9 +112,11 @@ public class Day18ManyWorldsInterpretation {
 
     final Map<Position, Character> keys = new HashMap<>();
     final Map<Character, Position> doors = new HashMap<>();
+    final Map<Position, Character> doors2 = new HashMap<>();
     Position start;
     private final Graph<Position, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-    private final static int DEFAULT_DOOR_WEIGHT = 1000;
+    private final Graph<Character, DefaultWeightedEdge> graph2 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    private final static int DEFAULT_DOOR_WEIGHT = 10000;
 
     public Day18ManyWorldsInterpretation(List<String> inputLines) {
         Set<Position> map = new HashSet<>();
@@ -136,8 +143,9 @@ public class Day18ManyWorldsInterpretation {
                     } else if (c != '.') {
                         if (Character.isUpperCase(c)) {
                             doors.put(c, pos);
+                            doors2.put(pos, c);
                         } else {
-                            keys.put(pos, Character.toUpperCase(c));
+                            keys.put(pos, c);
                         }
                     }
                 }
@@ -146,12 +154,88 @@ public class Day18ManyWorldsInterpretation {
             y++;
         }
 
-        // Make doors have high weight
+        // Make doors have heavy weight
         for (Position doorPosition : doors.values()) {
             for (DefaultWeightedEdge edge : graph.edgesOf(doorPosition)) {
                 graph.setEdgeWeight(edge, DEFAULT_DOOR_WEIGHT);
             }
         }
+
+        // Create new graph with only the connected nodes
+        Set<Position> allNodes = new HashSet<>();
+        allNodes.addAll(keys.keySet());
+        allNodes.addAll(doors2.keySet());
+        allNodes.add(start);
+        for (Position position : allNodes) {
+            Character c;
+            if (keys.containsKey(position)) {
+                c = keys.get(position);
+            } else if (doors2.containsKey(position)) {
+                c = doors2.get(position);
+            } else {
+                c = '@';
+            }
+            log.info("Evaluating: {} at pos {}", c, position);
+
+            if (!graph2.containsVertex(c)) {
+                log.info("adding 1st vertex, {} at pos {}", c, position);
+                graph2.addVertex(c);
+            }
+
+            Map<Position, Integer> nodes = getAllReachableNodes(position);
+
+            for (Position p : nodes.keySet()) {
+                Character c2;
+                if (keys.containsKey(p)) {
+                    c2 = keys.get(p);
+                } else if (doors2.containsKey(p)) {
+                    c2 = doors2.get(p);
+                } else {
+                    c2 = '@';
+                }
+
+                if (!graph2.containsVertex(c2)) {
+                    log.info("adding 2nd vertex, {} at pos {}", c2, p);
+                    graph2.addVertex(c2);
+                }
+                log.info("adding edge between {} and {} ({}, {}), distance {}", c, c2, position, p, nodes.get(p));
+                DefaultWeightedEdge e = graph2.addEdge(c, c2);
+                if (e != null) {
+                    graph2.setEdgeWeight(e, nodes.get(p));
+                }
+            }
+        }
+
+    }
+
+    // return all reachable nodes and their distance
+    Map<Position, Integer> getAllReachableNodes(Position start) {
+        log.info("Evaluating all reachable nodes from {}", start);
+        DijkstraShortestPath<Position, DefaultWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+        ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultWeightedEdge> iPaths = dijkstraAlg.getPaths(start);
+        Map<Position, Integer> result = new HashMap<>();
+        for (Position keyPosition : keys.keySet()) {
+            if (keyPosition != start) {
+                double distance = iPaths.getPath(keyPosition).getWeight();
+                log.debug("Distance from start {} to key {} {}:  {}", start, keys.get(keyPosition), keyPosition, distance);
+                if (distance < DEFAULT_DOOR_WEIGHT * 2) {
+                    result.put(keyPosition, iPaths.getPath(keyPosition).getLength());
+                }
+            }
+        }
+        for (Position doorPosition : doors.values()) {
+            if (doorPosition != start) {
+                double distance = iPaths.getPath(doorPosition).getWeight();
+                log.debug("Distance from start {} to door {} {}:  {}", start, doors.get(doorPosition), doorPosition, distance);
+                if (distance < DEFAULT_DOOR_WEIGHT * 2) {
+                    result.put(doorPosition, iPaths.getPath(doorPosition).getLength());
+                }
+            }
+        }
+        for (Position p : result.keySet()) {
+            log.info("Node {} is connected to {}, distance {}", start, p, result.get(p));
+        }
+        return result;
     }
 
     int shortestPath() {

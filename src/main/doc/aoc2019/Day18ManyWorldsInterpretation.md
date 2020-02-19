@@ -6,7 +6,7 @@ A scan of the local area reveals only one interesting feature: a massive undergr
 tunnels (your puzzle input). The tunnels are too narrow to move diagonally.
 
 Only one **entrance** (marked @) is present among the **open passages** (marked .) and **stone walls** (#), but you also detect an 
-assortment of keys (shown as lowercase letters) and doors (shown as uppercase letters). Keys of a given letter open 
+assortment of keys (shown as lowercase letters) and **doors** (shown as uppercase letters). Keys of a given letter open 
 the door of the same letter: a opens A, b opens B, and so on. You aren't sure which key you need to disable the 
 tractor beam, so you'll need to **collect all of them**.
 
