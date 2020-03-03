@@ -6,6 +6,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -23,6 +24,7 @@ public class Day18ManyWorldsInterpretation {
         final BiMap<Position, Character> doors;
         final Character start;
         final Graph<Character, DefaultWeightedEdge> graph;
+        final DijkstraShortestPath<Character, DefaultWeightedEdge> dijkstraAlg;
 
         public Walker(BiMap<Position, Character> keys, BiMap<Position, Character> doors, Character start, Graph<Character, DefaultWeightedEdge> graph) {
             this.keys = keys;
@@ -30,34 +32,35 @@ public class Day18ManyWorldsInterpretation {
             this.start = start;
             this.graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
             Graphs.addGraph(this.graph, graph);
+            this.dijkstraAlg = new DijkstraShortestPath<>(graph);
         }
 
         // return all reachable keys and their distance
         Map<Character, Integer> getAllReachableKeys() {
-            DijkstraShortestPath<Character, DefaultWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
             ShortestPathAlgorithm.SingleSourcePaths<Character, DefaultWeightedEdge> iPaths = dijkstraAlg.getPaths(start);
             Map<Character, Integer> result = new HashMap<>();
             for (Character key : keys.values()) {
-                if (!doorsOnPath(iPaths.getPath(key).getVertexList(), doors.inverse().keySet())) {
-                    result.put(key, (int) iPaths.getPath(key).getWeight());
+                // position is reachable if there are no doors on the shortest path
+                GraphPath<Character, DefaultWeightedEdge> path = iPaths.getPath(key);
+                List<Character> pathNodes = path.getVertexList();
+                // remove first and last (start and end)
+                pathNodes.remove(pathNodes.size() - 1);
+                pathNodes.remove(0);
+
+                boolean doorOnPath = false;
+                for (Character c : pathNodes) {
+                    if (doors.containsValue(c)) {
+                        doorOnPath = true;
+                        break;
+                    }
+                }
+
+                if (!doorOnPath) {
+                    log.debug("Distance from start {} to {}: {}", start, key, path.getWeight());
+                    result.put(key, (int) path.getWeight());
                 }
             }
             return result;
-        }
-
-        boolean doorsOnPath(List<Character> path, Set<Character> doors) {
-            List<Character> workingPath = new ArrayList<>(path);
-            boolean foundDoor = false;
-            // Remove last and first
-            workingPath.remove(path.size() - 1);
-            workingPath.remove(0);
-            for (Character charToCheck : workingPath) {
-                if (doors.contains(charToCheck)) {
-                    foundDoor = true;
-                    break;
-                }
-            }
-            return foundDoor;
         }
 
         int findShortestPath() {
@@ -66,8 +69,8 @@ public class Day18ManyWorldsInterpretation {
 
             // Check that we haven't tried this path before
             String cacheKey = start + reachableKeys.keySet().stream().sorted().map(String::valueOf).collect(Collectors.joining());
-            if (mapCache.containsKey(cacheKey)) {
-                return mapCache.get(cacheKey);
+            if (pathCache.containsKey(cacheKey)) {
+                return pathCache.get(cacheKey);
             }
 
             // find the shortest path for all those keys
@@ -86,12 +89,6 @@ public class Day18ManyWorldsInterpretation {
                     // open the door
                     Character door = Character.toUpperCase(key);
                     if (newDoors.containsValue(door)) {
-                        for (DefaultWeightedEdge edge : newGraph.edgesOf(door)) {
-                            int currentWeight = (int) newGraph.getEdgeWeight(edge);
-                            if (currentWeight > DEFAULT_DOOR_WEIGHT) {
-                                newGraph.setEdgeWeight(edge, currentWeight - DEFAULT_DOOR_WEIGHT);
-                            }
-                        }
                         newDoors.inverse().remove(door);
                     }
                     // and continue
@@ -101,7 +98,7 @@ public class Day18ManyWorldsInterpretation {
                     shortestPath = path;
                 }
             }
-            mapCache.put(cacheKey, shortestPath);
+            pathCache.put(cacheKey, shortestPath);
             return shortestPath;
         }
     }
@@ -112,8 +109,7 @@ public class Day18ManyWorldsInterpretation {
     Position start;
     private final Graph<Position, DefaultWeightedEdge> initialGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final Graph<Character, DefaultWeightedEdge> reducedGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-    private final static int DEFAULT_DOOR_WEIGHT = 10000000;
-    private final static Map<String, Integer> mapCache = new HashMap<>();
+    private final static Map<String, Integer> pathCache = new HashMap<>();
 
     public Day18ManyWorldsInterpretation(List<String> inputLines) {
         Set<Position> map = new HashSet<>();
@@ -121,7 +117,7 @@ public class Day18ManyWorldsInterpretation {
         int y = 0;
         Position pos;
 
-        mapCache.clear();
+        pathCache.clear();
 
         for (String line : inputLines) {
             x = 0;
@@ -153,13 +149,6 @@ public class Day18ManyWorldsInterpretation {
             y++;
         }
 
-        // Make doors have heavy weight
-        for (Position doorPosition : doors.inverse().values()) {
-            for (DefaultWeightedEdge edge : initialGraph.edgesOf(doorPosition)) {
-                initialGraph.setEdgeWeight(edge, DEFAULT_DOOR_WEIGHT);
-            }
-        }
-
         // Create new graph with only the connected nodes
         Set<Position> allNodes = new HashSet<>();
         allNodes.addAll(keys.keySet());
@@ -177,7 +166,7 @@ public class Day18ManyWorldsInterpretation {
                 reducedGraph.addVertex(start);
             }
 
-            Map<Position, Integer> nodes = getAllReachableNodes(startPosition);
+            Map<Position, Integer> nodes = getAllReachableNodes(startPosition, allNodes);
 
             for (Position endPosition : nodes.keySet()) {
                 Character end;
@@ -192,23 +181,16 @@ public class Day18ManyWorldsInterpretation {
                 DefaultWeightedEdge e = reducedGraph.addEdge(start, end);
                 if (e != null) {
                     int weight = nodes.get(endPosition);
-                    if (doors.containsValue(start) || doors.containsValue(end)) {
-                        log.debug("One node is a door, adding weight {}", DEFAULT_DOOR_WEIGHT);
-                        weight += DEFAULT_DOOR_WEIGHT;
-                    }
                     reducedGraph.setEdgeWeight(e, weight);
-                    log.debug("adding edge between {} and {}, distance {}", start, end, weight);
+                    log.debug("adding edge between {} and {}, weight {}", start, end, weight);
                 }
             }
         }
     }
 
     // return all reachable nodes and their distance
-    Map<Position, Integer> getAllReachableNodes(Position start) {
+    Map<Position, Integer> getAllReachableNodes(Position start, Set<Position> allNodes) {
         log.debug("Evaluating all reachable nodes from {}", start);
-        Set<Position> allNodes = new HashSet<>();
-        allNodes.addAll(keys.keySet());
-        allNodes.addAll(doors.keySet());
 
         DijkstraShortestPath<Position, DefaultWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(initialGraph);
         ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultWeightedEdge> iPaths = dijkstraAlg.getPaths(start);
@@ -216,41 +198,32 @@ public class Day18ManyWorldsInterpretation {
 
         for (Position position : allNodes) {
             if (position != start) {
-                double distance = iPaths.getPath(position).getWeight();
-                log.debug("Distance from start {} to {}: {}", start, position, distance);
-                // Check that there are no doors on the path
-                if (!doorsOnPath(iPaths.getPath(position).getVertexList(), doors.keySet())) {
-                    log.debug("Adding position {} to result", position);
-                    result.put(position, iPaths.getPath(position).getLength());
+                // position is reachable if there is no other nodes on the shortest path
+                GraphPath<Position, DefaultWeightedEdge> path = iPaths.getPath(position);
+                List<Position> pathPositions = path.getVertexList();
+                // remove first and last (start and end)
+                pathPositions.remove(pathPositions.size() - 1);
+                pathPositions.remove(0);
+
+                boolean nodesOnPath = false;
+                for (Position p : pathPositions) {
+                    if (allNodes.contains(p)) {
+                        nodesOnPath = true;
+                        break;
+                    }
+                }
+
+                if (!nodesOnPath) {
+                    log.debug("Distance from start {} to {}: {}", start, position, path.getLength());
+                    result.put(position, path.getLength());
                 }
             }
-        }
-
-        for (Position p : result.keySet()) {
-            log.debug("Node {} is connected to {}, distance {}", start, p, result.get(p));
         }
         return result;
     }
 
-    boolean doorsOnPath(List<Position> path, Set<Position> doors) {
-        List<Position> workingPath = new ArrayList<>(path);
-        boolean foundDoor = false;
-        // Remove last and first
-        workingPath.remove(path.size() - 1);
-        workingPath.remove(0);
-        for (Position posToCheck : workingPath) {
-            log.debug("Checking {}", posToCheck);
-            if (doors.contains(posToCheck)) {
-                log.debug("Found door at {}, skipping", posToCheck);
-                foundDoor = true;
-                break;
-            }
-        }
-        return foundDoor;
-    }
 
     int shortestPath() {
-        Walker walker = new Walker(keys, doors, '@', reducedGraph);
-        return walker.findShortestPath();
+        return new Walker(keys, doors, '@', reducedGraph).findShortestPath();
     }
 }
