@@ -14,6 +14,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Day18ManyWorldsInterpretation {
@@ -72,9 +73,15 @@ public class Day18ManyWorldsInterpretation {
             // Find all reachable keys and their distance
             Map<Character, Integer> reachableKeys = getAllReachableKeys();
 
+            // Check that we haven't tried this path before
+            String cacheKey = start + reachableKeys.keySet().stream().sorted().map(String::valueOf).collect(Collectors.joining());
+            if (mapCache.containsKey(cacheKey)) {
+                log.debug("[{}] Found cache hit for {}", id, cacheKey);
+                return mapCache.get(cacheKey);
+            }
+
             // find the shortest path for all those keys
             // goto key and make the door possible to open (reduce weight)
-            //Set<Integer> lengths = new HashSet<>();
             Set<WalkResult> walkResults = new HashSet<>();
             for (Character key : reachableKeys.keySet()) {
                 WalkResult walkResult = new WalkResult();
@@ -85,7 +92,7 @@ public class Day18ManyWorldsInterpretation {
 
                 walkResult.length = reachableKeys.get(key);
                 walkResult.path.add(key);
-                log.info("[{}] Going from {} to key {}, distance {}", id, start, key, walkResult.length);
+                log.debug("[{}] Going from {} to key {}, distance {}", id, start, key, walkResult.length);
                 newKeys.inverse().remove(key);
                 if (newKeys.isEmpty()) {
                     log.debug("All keys collected - returning");
@@ -93,7 +100,7 @@ public class Day18ManyWorldsInterpretation {
                     // open the door
                     Character door = Character.toUpperCase(key);
                     if (newDoors.containsValue(door)) {
-                        log.info("[{}] Opening door {}", id, door);
+                        log.debug("[{}] Opening door {}", id, door);
                         for (DefaultWeightedEdge edge : newGraph.edgesOf(door)) {
                             int currentWeight = (int) newGraph.getEdgeWeight(edge);
                             if (currentWeight > DEFAULT_DOOR_WEIGHT) {
@@ -109,14 +116,15 @@ public class Day18ManyWorldsInterpretation {
                     WalkResult wr = walker.shortestPathRecursive();
                     walkResult.length += wr.length;
                     walkResult.path.addAll(wr.path);
+
                 }
                 walkResults.add(walkResult);
             }
             // return the shortest
             log.debug("[{}] Returning from walker, {}", id, walkResults);
-            //WalkResult walkResult = new WalkResult(Collections.min(lengths), null);
-            //WalkResult walkResult = new WalkResult(Collections.min(lengths), null);
-            return walkResults.stream().min(Comparator.comparing(WalkResult::getLength)).orElse(null);
+            WalkResult shortestWalk = walkResults.stream().min(Comparator.comparing(WalkResult::getLength)).orElse(null);
+            mapCache.put(cacheKey, shortestWalk);
+            return shortestWalk;
         }
     }
 
@@ -128,17 +136,19 @@ public class Day18ManyWorldsInterpretation {
 
     final HashBiMap<Position, Character> keys = HashBiMap.create();
     final HashBiMap<Position, Character> doors = HashBiMap.create();
-    //final Map<Position, Character> doors2 = new HashMap<>();
     Position start;
     private final Graph<Position, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final Graph<Character, DefaultWeightedEdge> graph2 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final static int DEFAULT_DOOR_WEIGHT = 10000000;
+    private final static Map<String, WalkResult> mapCache = new HashMap<>();
 
     public Day18ManyWorldsInterpretation(List<String> inputLines) {
         Set<Position> map = new HashSet<>();
         int x;
         int y = 0;
         Position pos;
+        mapCache.clear();
+
         for (String line : inputLines) {
             x = 0;
             for (char c : line.toCharArray()) {
@@ -186,11 +196,7 @@ public class Day18ManyWorldsInterpretation {
             Character c;
             if (keys.containsKey(position)) {
                 c = keys.get(position);
-            } else if (doors.containsKey(position)) {
-                c = doors.get(position);
-            } else {
-                c = '@';
-            }
+            } else c = doors.getOrDefault(position, '@');
             log.debug("Evaluating: {} at pos {}", c, position);
 
             if (!graph2.containsVertex(c)) {
@@ -204,11 +210,7 @@ public class Day18ManyWorldsInterpretation {
                 Character c2;
                 if (keys.containsKey(p)) {
                     c2 = keys.get(p);
-                } else if (doors.containsKey(p)) {
-                    c2 = doors.get(p);
-                } else {
-                    c2 = '@';
-                }
+                } else c2 = doors.getOrDefault(p, '@');
 
                 if (!graph2.containsVertex(c2)) {
                     log.debug("adding 2nd vertex, {} at pos {}", c2, p);
@@ -222,7 +224,7 @@ public class Day18ManyWorldsInterpretation {
                         weight += DEFAULT_DOOR_WEIGHT;
                     }
                     graph2.setEdgeWeight(e, weight);
-                    log.info("adding edge between {} and {}, distance {}", c, c2, weight);
+                    log.debug("adding edge between {} and {}, distance {}", c, c2, weight);
                 }
             }
         }

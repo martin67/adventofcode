@@ -16,8 +16,8 @@ class Day18ManyWorldsInterpretationTest {
             "86, src/test/resources/2019/day18-demo2.txt",
             "132, src/test/resources/2019/day18-demo3.txt",
             "136, src/test/resources/2019/day18-demo4.txt",
-            "281, src/test/resources/2019/day18-demo5.txt",
-            "0, src/test/resources/2019/day18.txt"})
+            "81, src/test/resources/2019/day18-demo5.txt",
+            "4250, src/test/resources/2019/day18.txt"})
     void shortestPath(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day18ManyWorldsInterpretation(inputLines).shortestPath());
