@@ -69,7 +69,7 @@ public class Day18ManyWorldsInterpretation {
             return foundDoor;
         }
 
-        WalkResult shortestPathRecursive() {
+        WalkResult findShortestPath() {
             // Find all reachable keys and their distance
             Map<Character, Integer> reachableKeys = getAllReachableKeys();
 
@@ -111,9 +111,7 @@ public class Day18ManyWorldsInterpretation {
                     }
                     // and continue
                     log.debug("[{}] Creating new walker", id);
-                    Walker walker = new Walker(newKeys, newDoors, key, newGraph);
-                    //length += walker.shortestPathRecursive();
-                    WalkResult wr = walker.shortestPathRecursive();
+                    WalkResult wr = new Walker(newKeys, newDoors, key, newGraph).findShortestPath();
                     walkResult.length += wr.length;
                     walkResult.path.addAll(wr.path);
 
@@ -134,11 +132,12 @@ public class Day18ManyWorldsInterpretation {
         List<Character> path = new ArrayList<>();
     }
 
+
     final HashBiMap<Position, Character> keys = HashBiMap.create();
     final HashBiMap<Position, Character> doors = HashBiMap.create();
     Position start;
-    private final Graph<Position, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-    private final Graph<Character, DefaultWeightedEdge> graph2 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    private final Graph<Position, DefaultWeightedEdge> initialGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    private final Graph<Character, DefaultWeightedEdge> reducedGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final static int DEFAULT_DOOR_WEIGHT = 10000000;
     private final static Map<String, WalkResult> mapCache = new HashMap<>();
 
@@ -147,6 +146,7 @@ public class Day18ManyWorldsInterpretation {
         int x;
         int y = 0;
         Position pos;
+
         mapCache.clear();
 
         for (String line : inputLines) {
@@ -155,14 +155,14 @@ public class Day18ManyWorldsInterpretation {
                 if (c != '#') {
                     pos = new Position(x, y);
                     map.add(pos);
-                    graph.addVertex(pos);
+                    initialGraph.addVertex(pos);
                     Position left = pos.adjacent(Direction.Left);
                     if (map.contains(left)) {
-                        graph.addEdge(pos, left);
+                        initialGraph.addEdge(pos, left);
                     }
                     Position up = pos.adjacent(Direction.Up);
                     if (map.contains(up)) {
-                        graph.addEdge(pos, up);
+                        initialGraph.addEdge(pos, up);
                     }
                     if (c == '@') {
                         start = pos;
@@ -181,54 +181,52 @@ public class Day18ManyWorldsInterpretation {
 
         // Make doors have heavy weight
         for (Position doorPosition : doors.inverse().values()) {
-            for (DefaultWeightedEdge edge : graph.edgesOf(doorPosition)) {
-                graph.setEdgeWeight(edge, DEFAULT_DOOR_WEIGHT);
+            for (DefaultWeightedEdge edge : initialGraph.edgesOf(doorPosition)) {
+                initialGraph.setEdgeWeight(edge, DEFAULT_DOOR_WEIGHT);
             }
         }
 
-        log.info("Creating new graph ------------------");
         // Create new graph with only the connected nodes
         Set<Position> allNodes = new HashSet<>();
         allNodes.addAll(keys.keySet());
         allNodes.addAll(doors.keySet());
         allNodes.add(start);
-        for (Position position : allNodes) {
-            Character c;
-            if (keys.containsKey(position)) {
-                c = keys.get(position);
-            } else c = doors.getOrDefault(position, '@');
-            log.debug("Evaluating: {} at pos {}", c, position);
+        for (Position startPosition : allNodes) {
+            Character start;
+            if (keys.containsKey(startPosition)) {
+                start = keys.get(startPosition);
+            } else start = doors.getOrDefault(startPosition, '@');
+            log.debug("Evaluating: {} at pos {}", start, startPosition);
 
-            if (!graph2.containsVertex(c)) {
-                log.debug("adding 1st vertex, {} at pos {}", c, position);
-                graph2.addVertex(c);
+            if (!reducedGraph.containsVertex(start)) {
+                log.debug("adding 1st vertex, {} at pos {}", start, startPosition);
+                reducedGraph.addVertex(start);
             }
 
-            Map<Position, Integer> nodes = getAllReachableNodes(position);
+            Map<Position, Integer> nodes = getAllReachableNodes(startPosition);
 
-            for (Position p : nodes.keySet()) {
-                Character c2;
-                if (keys.containsKey(p)) {
-                    c2 = keys.get(p);
-                } else c2 = doors.getOrDefault(p, '@');
+            for (Position endPosition : nodes.keySet()) {
+                Character end;
+                if (keys.containsKey(endPosition)) {
+                    end = keys.get(endPosition);
+                } else end = doors.getOrDefault(endPosition, '@');
 
-                if (!graph2.containsVertex(c2)) {
-                    log.debug("adding 2nd vertex, {} at pos {}", c2, p);
-                    graph2.addVertex(c2);
+                if (!reducedGraph.containsVertex(end)) {
+                    log.debug("adding 2nd vertex, {} at pos {}", end, endPosition);
+                    reducedGraph.addVertex(end);
                 }
-                DefaultWeightedEdge e = graph2.addEdge(c, c2);
+                DefaultWeightedEdge e = reducedGraph.addEdge(start, end);
                 if (e != null) {
-                    int weight = nodes.get(p);
-                    if (doors.containsValue(c) || doors.containsValue(c2)) {
+                    int weight = nodes.get(endPosition);
+                    if (doors.containsValue(start) || doors.containsValue(end)) {
                         log.debug("One node is a door, adding weight {}", DEFAULT_DOOR_WEIGHT);
                         weight += DEFAULT_DOOR_WEIGHT;
                     }
-                    graph2.setEdgeWeight(e, weight);
-                    log.debug("adding edge between {} and {}, distance {}", c, c2, weight);
+                    reducedGraph.setEdgeWeight(e, weight);
+                    log.debug("adding edge between {} and {}, distance {}", start, end, weight);
                 }
             }
         }
-        log.info("-----------------------------------");
     }
 
     // return all reachable nodes and their distance
@@ -238,7 +236,7 @@ public class Day18ManyWorldsInterpretation {
         allNodes.addAll(keys.keySet());
         allNodes.addAll(doors.keySet());
 
-        DijkstraShortestPath<Position, DefaultWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+        DijkstraShortestPath<Position, DefaultWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(initialGraph);
         ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultWeightedEdge> iPaths = dijkstraAlg.getPaths(start);
         Map<Position, Integer> result = new HashMap<>();
 
@@ -278,7 +276,7 @@ public class Day18ManyWorldsInterpretation {
     }
 
     int shortestPath() {
-        Walker walker = new Walker(keys, doors, '@', graph2);
-        return walker.shortestPathRecursive().length;
+        Walker walker = new Walker(keys, doors, '@', reducedGraph);
+        return walker.findShortestPath().length;
     }
 }
