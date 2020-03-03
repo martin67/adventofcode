@@ -38,7 +38,6 @@ public class Day18ManyWorldsInterpretation {
             ShortestPathAlgorithm.SingleSourcePaths<Character, DefaultWeightedEdge> iPaths = dijkstraAlg.getPaths(start);
             Map<Character, Integer> result = new HashMap<>();
             for (Character key : keys.values()) {
-                double distance = iPaths.getPath(key).getWeight();
                 if (!doorsOnPath(iPaths.getPath(key).getVertexList(), doors.inverse().keySet())) {
                     result.put(key, (int) iPaths.getPath(key).getWeight());
                 }
@@ -53,7 +52,6 @@ public class Day18ManyWorldsInterpretation {
             workingPath.remove(path.size() - 1);
             workingPath.remove(0);
             for (Character charToCheck : workingPath) {
-                log.debug("Checking {}", charToCheck);
                 if (doors.contains(charToCheck)) {
                     foundDoor = true;
                     break;
@@ -84,8 +82,7 @@ public class Day18ManyWorldsInterpretation {
 
                 int path = reachableKeys.get(key);
                 newKeys.inverse().remove(key);
-                if (newKeys.isEmpty()) {
-                } else {
+                if (!newKeys.isEmpty()) {
                     // open the door
                     Character door = Character.toUpperCase(key);
                     if (newDoors.containsValue(door)) {
