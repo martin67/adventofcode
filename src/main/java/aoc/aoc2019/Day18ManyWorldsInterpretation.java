@@ -2,8 +2,6 @@ package aoc.aoc2019;
 
 import aoc.Direction;
 import aoc.Position;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -19,13 +17,13 @@ import java.util.stream.Collectors;
 public class Day18ManyWorldsInterpretation {
 
     static class Walker {
-        final BiMap<Position, Character> keys;
-        final BiMap<Position, Character> doors;
+        final Collection<Character> keys;
+        final Collection<Character> doors;
         final Character start;
         final Graph<Character, DefaultWeightedEdge> graph;
         final DijkstraShortestPath<Character, DefaultWeightedEdge> dijkstraAlg;
 
-        public Walker(BiMap<Position, Character> keys, BiMap<Position, Character> doors, Character start, Graph<Character, DefaultWeightedEdge> graph) {
+        public Walker(Collection<Character> keys, Collection<Character> doors, Character start, Graph<Character, DefaultWeightedEdge> graph) {
             this.keys = keys;
             this.doors = doors;
             this.start = start;
@@ -34,10 +32,10 @@ public class Day18ManyWorldsInterpretation {
         }
 
         // return all reachable keys and their distance
-        Map<Character, Integer> getAllReachableKeys() {
+        Map<Character, Integer> getAllReachableKeys(Character start) {
             ShortestPathAlgorithm.SingleSourcePaths<Character, DefaultWeightedEdge> iPaths = dijkstraAlg.getPaths(start);
             Map<Character, Integer> result = new HashMap<>();
-            for (Character key : keys.values()) {
+            for (Character key : keys) {
                 // position is reachable if there are no doors on the shortest path
                 GraphPath<Character, DefaultWeightedEdge> path = iPaths.getPath(key);
                 List<Character> pathNodes = path.getVertexList();
@@ -47,7 +45,7 @@ public class Day18ManyWorldsInterpretation {
 
                 boolean doorOnPath = false;
                 for (Character c : pathNodes) {
-                    if (doors.containsValue(c)) {
+                    if (doors.contains(c)) {
                         doorOnPath = true;
                         break;
                     }
@@ -63,7 +61,7 @@ public class Day18ManyWorldsInterpretation {
 
         int findShortestPath() {
             // Find all reachable keys and their distance
-            Map<Character, Integer> reachableKeys = getAllReachableKeys();
+            Map<Character, Integer> reachableKeys = getAllReachableKeys(start);
 
             // Check that we haven't tried this path before
             String cacheKey = start + reachableKeys.keySet().stream().sorted().map(String::valueOf).collect(Collectors.joining());
@@ -72,21 +70,18 @@ public class Day18ManyWorldsInterpretation {
             }
 
             // find the shortest path for all those keys
-            // goto key and make the door possible to open (reduce weight)
+            // goto key and open the door
             int shortestPath = Integer.MAX_VALUE;
 
             for (Character key : reachableKeys.keySet()) {
-                BiMap<Position, Character> newKeys = HashBiMap.create(keys);
-                BiMap<Position, Character> newDoors = HashBiMap.create(doors);
+                Set<Character> newKeys = new HashSet<>(keys);
+                Set<Character> newDoors = new HashSet<>(doors);
 
                 int path = reachableKeys.get(key);
-                newKeys.inverse().remove(key);
+                newKeys.remove(key);
                 if (!newKeys.isEmpty()) {
-                    // open the door
-                    Character door = Character.toUpperCase(key);
-                    if (newDoors.containsValue(door)) {
-                        newDoors.inverse().remove(door);
-                    }
+                    // open the door. Does not matter if there is no door
+                    newDoors.remove(Character.toUpperCase(key));
                     // and continue
                     path += new Walker(newKeys, newDoors, key, graph).findShortestPath();
                 }
@@ -100,24 +95,24 @@ public class Day18ManyWorldsInterpretation {
     }
 
 
-    final HashBiMap<Position, Character> keys = HashBiMap.create();
-    final HashBiMap<Position, Character> doors = HashBiMap.create();
-    List<Position> startPositions = new ArrayList<>();
+    final Map<Position, Character> keys = new HashMap<>();
+    final Map<Position, Character> doors = new HashMap<>();
+    final Map<Position, Character> starts = new HashMap<>();
     private final Graph<Position, DefaultWeightedEdge> initialGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final Graph<Character, DefaultWeightedEdge> reducedGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final static Map<String, Integer> pathCache = new HashMap<>();
 
     public Day18ManyWorldsInterpretation(List<String> inputLines, int numberOfStartingPoints) {
         Set<Position> map = new HashSet<>();
-        int x;
         int y = 0;
         Position pos;
+        List<Position> startPositions = new ArrayList<>();
 
         pathCache.clear();
 
         log.info("Creating initial graph");
         for (String line : inputLines) {
-            x = 0;
+            int x = 0;
             for (char c : line.toCharArray()) {
                 if (c != '#') {
                     pos = new Position(x, y);
@@ -146,17 +141,26 @@ public class Day18ManyWorldsInterpretation {
             y++;
         }
 
+        // Convert startPositions from @ to 0,1,2,3 etc.
+        for (int i = 0; i < startPositions.size(); i++) {
+            starts.put(startPositions.get(i), Character.forDigit(i, 10));
+        }
+
         // Create new graph with only the connected nodes
         log.info("Creating reduced graph");
         Set<Position> allNodes = new HashSet<>();
         allNodes.addAll(keys.keySet());
         allNodes.addAll(doors.keySet());
-        allNodes.addAll(startPositions);
+        allNodes.addAll(starts.keySet());
         for (Position startPosition : allNodes) {
             Character start;
             if (keys.containsKey(startPosition)) {
                 start = keys.get(startPosition);
-            } else start = doors.getOrDefault(startPosition, '@');
+            } else if (doors.containsKey(startPosition)) {
+                start = doors.get(startPosition);
+            } else {
+                start = starts.get(startPosition);
+            }
             log.debug("Evaluating: {} at pos {}", start, startPosition);
 
             if (!reducedGraph.containsVertex(start)) {
@@ -170,7 +174,11 @@ public class Day18ManyWorldsInterpretation {
                 Character end;
                 if (keys.containsKey(endPosition)) {
                     end = keys.get(endPosition);
-                } else end = doors.getOrDefault(endPosition, '@');
+                } else if (doors.containsKey(endPosition)) {
+                    end = doors.get(endPosition);
+                } else {
+                    end = starts.get(endPosition);
+                }
 
                 if (!reducedGraph.containsVertex(end)) {
                     log.debug("adding 2nd vertex, {} at pos {}", end, endPosition);
@@ -198,22 +206,24 @@ public class Day18ManyWorldsInterpretation {
             if (position != start) {
                 // position is reachable if there is no other nodes on the shortest path
                 GraphPath<Position, DefaultWeightedEdge> path = iPaths.getPath(position);
-                List<Position> pathPositions = path.getVertexList();
-                // remove first and last (start and end)
-                pathPositions.remove(pathPositions.size() - 1);
-                pathPositions.remove(0);
+                if (path != null) {
+                    List<Position> pathPositions = path.getVertexList();
+                    // remove first and last (start and end)
+                    pathPositions.remove(pathPositions.size() - 1);
+                    pathPositions.remove(0);
 
-                boolean nodesOnPath = false;
-                for (Position p : pathPositions) {
-                    if (allNodes.contains(p)) {
-                        nodesOnPath = true;
-                        break;
+                    boolean nodesOnPath = false;
+                    for (Position p : pathPositions) {
+                        if (allNodes.contains(p)) {
+                            nodesOnPath = true;
+                            break;
+                        }
                     }
-                }
 
-                if (!nodesOnPath) {
-                    log.debug("Distance from start {} to {}: {}", start, position, path.getLength());
-                    result.put(position, path.getLength());
+                    if (!nodesOnPath) {
+                        log.debug("Distance from start {} to {}: {}", start, position, path.getLength());
+                        result.put(position, path.getLength());
+                    }
                 }
             }
         }
@@ -223,12 +233,12 @@ public class Day18ManyWorldsInterpretation {
 
     int shortestPath() {
         log.info("Creating initial walker");
-        return new Walker(keys, doors, '@', reducedGraph).findShortestPath();
+        return new Walker(keys.values(), doors.values(), '0', reducedGraph).findShortestPath();
     }
 
     int shortestMultiplePath() {
         log.info("Creating initial walker");
-        return new Walker(keys, doors, '@', reducedGraph).findShortestPath();
+        return new Walker(keys.values(), doors.values(), '@', reducedGraph).findShortestPath();
     }
 
 }
