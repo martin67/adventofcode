@@ -7,7 +7,6 @@ import com.google.common.collect.HashBiMap;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -30,8 +29,7 @@ public class Day18ManyWorldsInterpretation {
             this.keys = keys;
             this.doors = doors;
             this.start = start;
-            this.graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-            Graphs.addGraph(this.graph, graph);
+            this.graph = graph;
             this.dijkstraAlg = new DijkstraShortestPath<>(graph);
         }
 
@@ -80,8 +78,6 @@ public class Day18ManyWorldsInterpretation {
             for (Character key : reachableKeys.keySet()) {
                 BiMap<Position, Character> newKeys = HashBiMap.create(keys);
                 BiMap<Position, Character> newDoors = HashBiMap.create(doors);
-                Graph<Character, DefaultWeightedEdge> newGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-                Graphs.addGraph(newGraph, graph);
 
                 int path = reachableKeys.get(key);
                 newKeys.inverse().remove(key);
@@ -92,7 +88,7 @@ public class Day18ManyWorldsInterpretation {
                         newDoors.inverse().remove(door);
                     }
                     // and continue
-                    path += new Walker(newKeys, newDoors, key, newGraph).findShortestPath();
+                    path += new Walker(newKeys, newDoors, key, graph).findShortestPath();
                 }
                 if (path < shortestPath) {
                     shortestPath = path;
@@ -106,12 +102,12 @@ public class Day18ManyWorldsInterpretation {
 
     final HashBiMap<Position, Character> keys = HashBiMap.create();
     final HashBiMap<Position, Character> doors = HashBiMap.create();
-    Position start;
+    List<Position> startPositions = new ArrayList<>();
     private final Graph<Position, DefaultWeightedEdge> initialGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final Graph<Character, DefaultWeightedEdge> reducedGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final static Map<String, Integer> pathCache = new HashMap<>();
 
-    public Day18ManyWorldsInterpretation(List<String> inputLines) {
+    public Day18ManyWorldsInterpretation(List<String> inputLines, int numberOfStartingPoints) {
         Set<Position> map = new HashSet<>();
         int x;
         int y = 0;
@@ -119,6 +115,7 @@ public class Day18ManyWorldsInterpretation {
 
         pathCache.clear();
 
+        log.info("Creating initial graph");
         for (String line : inputLines) {
             x = 0;
             for (char c : line.toCharArray()) {
@@ -135,7 +132,7 @@ public class Day18ManyWorldsInterpretation {
                         initialGraph.addEdge(pos, up);
                     }
                     if (c == '@') {
-                        start = pos;
+                        startPositions.add(pos);
                     } else if (c != '.') {
                         if (Character.isUpperCase(c)) {
                             doors.put(pos, c);
@@ -150,10 +147,11 @@ public class Day18ManyWorldsInterpretation {
         }
 
         // Create new graph with only the connected nodes
+        log.info("Creating reduced graph");
         Set<Position> allNodes = new HashSet<>();
         allNodes.addAll(keys.keySet());
         allNodes.addAll(doors.keySet());
-        allNodes.add(start);
+        allNodes.addAll(startPositions);
         for (Position startPosition : allNodes) {
             Character start;
             if (keys.containsKey(startPosition)) {
@@ -224,6 +222,13 @@ public class Day18ManyWorldsInterpretation {
 
 
     int shortestPath() {
+        log.info("Creating initial walker");
         return new Walker(keys, doors, '@', reducedGraph).findShortestPath();
     }
+
+    int shortestMultiplePath() {
+        log.info("Creating initial walker");
+        return new Walker(keys, doors, '@', reducedGraph).findShortestPath();
+    }
+
 }
