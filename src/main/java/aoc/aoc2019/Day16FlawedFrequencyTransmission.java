@@ -2,24 +2,22 @@ package aoc.aoc2019;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 @Slf4j
 public class Day16FlawedFrequencyTransmission {
 
-    List<Integer> fft;
+    int[] fft;
 
     public Day16FlawedFrequencyTransmission(String input) {
-        fft = input.chars().mapToObj(Character::getNumericValue).collect(Collectors.toList());
+        log.info("Creating fft");
+        fft = input.chars().map(x -> x - '0').toArray();
     }
 
     int pattern(int value, int position, int row) {
         position++;
 
         int group = position / (row + 1);
-
         switch (group % 4) {
             case 0:
             case 2:
@@ -35,65 +33,114 @@ public class Day16FlawedFrequencyTransmission {
     }
 
     String firstEightDigits(int phases) {
-        log.info("Starting FFT, {} phases, fft size: {}", phases, fft.size());
+        log.info("Starting FFT, {} phases, fft size: {}", phases, fft.length);
         for (int phase = 0; phase < phases; phase++) {
-            System.out.println(phase);
-            List<Integer> nextValues = new ArrayList<>();
-            for (int row = 0; row < fft.size(); row++) {
+            log.info("Running FFT, phase {}", phase);
+            int[] nextValues = new int[fft.length];
+
+            for (int row = 0; row < fft.length; row++) {
                 int value = 0;
-                for (int position = 0; position < fft.size(); position++) {
-                    value += pattern(fft.get(position), position, row);
+                for (int position = 0; position < fft.length; position++) {
+                    value += pattern(fft[position], position, row);
                 }
-                String valueString = String.valueOf(value);
-                nextValues.add(row, Integer.valueOf(valueString.substring(valueString.length() - 1)));
+                nextValues[row] = Math.abs(value % 10);
             }
             fft = nextValues;
-            log.debug("After {} phase, {}", phase, fft);
-            log.info("After {} phase", phase);
         }
-        return fft.stream().map(String::valueOf).collect(Collectors.joining()).substring(0, 8);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            sb.append(fft[i]);
+        }
+        return sb.toString();
     }
 
     String finalOutput(int phases, int multiplier) {
-        List<Integer> initialFft = new ArrayList<>(fft);
-        log.info("Starting FFT, {} phases, fft size: {}", phases, fft.size());
+        log.info("fft length {}, multiplier {}, total length {}", fft.length, multiplier, fft.length * multiplier);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 7; i++) {
+            sb.append(fft[i]);
+        }
+        int offset = Integer.parseInt(sb.toString());
+        log.info("offset {}", offset);
+
+        int o2 = offset % fft.length;
+        log.info("second offset {}", o2);
+
+        log.info("fft at second offset: {}", Arrays.copyOfRange(fft, o2, o2 + 8));
+        int[] fft2 = Arrays.copyOfRange(fft, o2, o2 + 8);
+
+        // only +
+
+        for (int i = 0; i < phases; i++) {
+            // beräkna bara nedre högra hörnet; alla koefficienter är 1
+            for (int row = offset; row < fft.length * multiplier; row++) {
+                int value = 0;
+                for (int position = 0; position < fft.length; position++) {
+                    value += pattern(fft[position], position, row);
+                }
+                nextValues[row] = Math.abs(value % 10);
+            }
+            fft = nextValues;
+        }
+
+        return "";
+    }
+
+    String finalOutput2(int phases, int multiplier) {
+        int[] initialFft = new int[fft.length];
+        log.info("Starting FFT, {} phases, fft size: {}", phases, fft.length);
 
         // Extend the fft, not with multiplier times, but the minimum needed (as the pattern repeats)
-        int maxIterationsNeeded = 4 * fft.size();
-        List<Integer> extendedFft = new ArrayList<>();
-        for (int i = 0; i < maxIterationsNeeded; i++) {
-            extendedFft.addAll(fft);
+        int maxIterationsNeeded = 4 * fft.length;
+        int[] extendedFft = new int[maxIterationsNeeded];
+        for (int i = 0; i < fft.length; i++) {
+            extendedFft[i] = fft[i];
+            extendedFft[i + fft.length] = fft[i];
+            extendedFft[i + fft.length * 2] = fft[i];
+            extendedFft[i + fft.length * 3] = fft[i];
         }
-        log.info("Extended FFT, fft size: {}", extendedFft.size());
+
+        log.info("Extended FFT, fft size: {}", extendedFft.length);
 
         // Loop through all phases
         for (int phase = 0; phase < phases; phase++) {
             log.info("Running FFT, phase {}", phase);
-            List<Integer> nextValues = new ArrayList<>();
+            //List<Integer> nextValues = new ArrayList<>();
+            int[] nextValues = new int[extendedFft.length];
 
             // For each phase, go through all rows
-            for (int row = 0; row < extendedFft.size(); row++) {
+            for (int row = 0; row < extendedFft.length; row++) {
 
                 // For each row, go through all positions in the list
                 int value = 0;
-                for (int fftIndex = 0; fftIndex < extendedFft.size(); fftIndex++) {
-                    value += pattern(extendedFft.get(fftIndex), fftIndex, row);
+                for (int fftIndex = 0; fftIndex < extendedFft.length; fftIndex++) {
+                    value += pattern(extendedFft[fftIndex], fftIndex, row);
                 }
                 // Adjust for the multiplier
                 int multipliedValue = value * (multiplier / maxIterationsNeeded);
-               // log.info("row {}, value {}, multipled value {}", row, value, multipliedValue);
-                String valueString = String.valueOf(multipliedValue);
-                nextValues.add(row, Integer.valueOf(valueString.substring(valueString.length() - 1)));
+                // log.info("row {}, value {}, multipled value {}", row, value, multipliedValue);
+                nextValues[row] = Math.abs(multipliedValue % 10);
             }
             extendedFft = nextValues;
             //log.info("After {} phase, {}", phase, extendedFft);
             //log.info("After {} phase", phase);
         }
-        String offset = extendedFft.stream().map(String::valueOf).collect(Collectors.joining()).substring(0, 7);
-        return offset;
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 7; i++) {
+            sb.append(extendedFft[i]);
+        }
+        return sb.toString();
     }
 
+    String partTwo() {
+        return null;
+    }
 }
+
+// del två
+// går inte att bara kopiera input 10000 ggr, utan något smartare behövs. Förmodligen något med att det finns något
+// cykliskt i det hela... Eller går det att räkna ut
 
 // Idé för del 2:
 //
@@ -128,3 +175,14 @@ public class Day16FlawedFrequencyTransmission {
 //                -1 1 1 0 0
 //                 0 0 1 1 0
 //                 1 0 1 1 1
+
+// matriser
+
+// 1 2 3 4 5 6 7 8    + 0 - 0 + 0 - 0
+// 1 2 3 4 5 6 7 8    0 + + 0 0 - - 0
+// 1 2 3 4 5 6 7 8    0 0 + + + 0 0 0
+// 1 2 3 4 5 6 7 8    0 0 0 + + + + 0
+// 1 2 3 4 5 6 7 8    0 0 0 0 + + + +
+// 1 2 3 4 5 6 7 8    0 0 0 0 0 + + +
+// 1 2 3 4 5 6 7 8    0 0 0 0 0 0 + +
+// 1 2 3 4 5 6 7 8    0 0 0 0 0 0 0 +

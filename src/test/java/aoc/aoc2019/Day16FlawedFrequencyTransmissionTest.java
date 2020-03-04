@@ -20,7 +20,6 @@ class Day16FlawedFrequencyTransmissionTest {
             "52432133, 100, 69317163492948606335995924319873"})
     void totalEnergyDemo(String expected, int phases, String input) {
         assertEquals(expected, new Day16FlawedFrequencyTransmission(input).firstEightDigits(phases));
-       // assertEquals(expected, new Day16FlawedFrequencyTransmission(input).apacheFft(phases));
     }
 
     @Test
