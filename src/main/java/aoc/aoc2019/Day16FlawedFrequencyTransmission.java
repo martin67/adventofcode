@@ -74,19 +74,25 @@ public class Day16FlawedFrequencyTransmission {
         for (int i = 0; i < multiplier - index - 1; i++) {
             System.arraycopy(fft, 0, newFft, (fft.length - remainder) + fft.length * i, fft.length);
         }
+
         log.info("new FFT length: {}", newFft.length);
 
-        for (int i = 0; i < phases; i++) {
-            log.info("Phase {}", i);
-            int[] nextValues = new int[newFft.length];
-            for (int row = 0; row < newFft.length; row++) {
-                int value = 0;
-                for (int position = row; position < newFft.length; position++) {
-                    value += newFft[position];
-                }
-                nextValues[row] = Math.abs(value % 10);
+//        int[] nextValues = new int[newFft.length];
+
+        for (int phase = 0; phase < phases; phase++) {
+//            log.info("Phase {}", phase);
+//            for (int row = 0; row < newFft.length; row++) {
+//                int value = 0;
+//                for (int position = row; position < newFft.length; position++) {
+//                    value += newFft[position];
+//                }
+//                nextValues[row] = value % 10;
+//            }
+//            newFft = nextValues;
+
+            for (int i = newFft.length - 2; i >= 0; i--) {
+                newFft[i] = (newFft[i] + newFft[i + 1]) % 10;
             }
-            newFft = nextValues;
         }
 
         sb = new StringBuilder();
