@@ -36,4 +36,9 @@ class Day16FlawedFrequencyTransmissionTest {
         assertEquals(expected, new Day16FlawedFrequencyTransmission(input).finalOutput(phases, 10000));
     }
 
+    @Test
+    void finalOutput() throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day16.txt"));
+        assertEquals("80284420", new Day16FlawedFrequencyTransmission(inputLines.get(0)).finalOutput(100, 10000));
+    }
 }

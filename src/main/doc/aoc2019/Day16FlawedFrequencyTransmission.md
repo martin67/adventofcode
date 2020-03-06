@@ -114,3 +114,7 @@ input lists.)
 
 After repeating your input signal 10000 times and running 100 phases of FFT, **what is the eight-digit message 
 embedded in the final output list?**
+
+Your puzzle answer was 80284420.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
