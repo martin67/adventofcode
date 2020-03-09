@@ -40,6 +40,6 @@ class Day5DoesntHeHaveInternElvesForThisTest {
     @Test
     void niceStringsNewRules() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2015/day5.txt"));
-        assertEquals(68, new Day5DoesntHeHaveInternElvesForThis().isNiceNewRule(inputLines));
+        assertEquals(69, new Day5DoesntHeHaveInternElvesForThis().isNiceNewRule(inputLines));
     }
 }

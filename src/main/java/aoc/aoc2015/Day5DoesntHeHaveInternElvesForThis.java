@@ -45,32 +45,32 @@ public class Day5DoesntHeHaveInternElvesForThis {
         boolean gapOk = false;
         char[] charArray = input.toCharArray();
         Set<String> pairs = new HashSet<>();
-        String previousPair = "";
         int okCount = 0;
 
-        log.info("## Looking at {}", input);
         for (int i = 1; i < charArray.length; i++) {
             String pair = new String(charArray, i - 1, 2);
-            if (pairs.contains(pair) && !pair.equals(previousPair)) {
-                log.info("Found pair {}", pair);
-                okCount++;
+            if (pairs.contains(pair)) {
+                if (i == 2 && charArray[2] == charArray[0]) {
+                    log.debug("no hit! - three first, {}", i);
+                } else if (charArray[i] == charArray[i - 1] && charArray[i] == charArray[i - 2] && charArray[i] != charArray[i - 3]) {
+                    log.debug("no hit! - pos {}", i);
+                } else {
+                    okCount++;
+                }
             } else {
                 pairs.add(pair);
-                previousPair = pair;
             }
         }
-        if (okCount == 1) {
+        if (okCount > 0) {
             pairOk = true;
         }
 
         for (int i = 2; i < charArray.length; i++) {
             if (charArray[i] == charArray[i - 2]) {
-                log.info("Found match {}, pos {}", charArray[i], i);
                 gapOk = true;
-               // break;
+                break;
             }
         }
-        log.info("{} : {} - {}", input, pairOk, gapOk);
 
         return (pairOk && gapOk);
     }
@@ -82,11 +82,7 @@ public class Day5DoesntHeHaveInternElvesForThis {
             if (isNiceNewRule(line)) {
                 niceCount++;
             }
-            log.info("{} : {}", line, niceCount);
         }
         return niceCount;
     }
 }
-
-// 158 too low
-// 68 not correct, not 71, not 60

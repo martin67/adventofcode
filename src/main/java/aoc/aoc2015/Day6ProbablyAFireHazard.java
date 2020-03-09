@@ -35,12 +35,16 @@ public class Day6ProbablyAFireHazard {
                 for (int x = start.getX(); x < end.getX(); x++) {
                     for (int y = start.getY(); y < end.getY(); y++) {
                         Position pos = new Position(x, y);
-                        if (command.equals("toggle")) {
-                            lights.put(pos, !lights.get(pos));
-                        } else if (command.equals("turn on")) {
-                            lights.put(pos, true);
-                        } else if (command.equals("turn off")) {
-                            lights.put(pos, false);
+                        switch (command) {
+                            case "toggle":
+                                lights.put(pos, !lights.get(pos));
+                                break;
+                            case "turn on":
+                                lights.put(pos, true);
+                                break;
+                            case "turn off":
+                                lights.put(pos, false);
+                                break;
                         }
                     }
                 }

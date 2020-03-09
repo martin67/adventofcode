@@ -44,4 +44,6 @@ appears twice.
 
 How many strings are nice under these new rules?
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 69.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
