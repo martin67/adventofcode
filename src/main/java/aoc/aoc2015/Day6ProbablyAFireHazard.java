@@ -53,3 +53,5 @@ public class Day6ProbablyAFireHazard {
         return lights.values().stream().filter(b -> b).count();
     }
 }
+
+// 542387 too low
