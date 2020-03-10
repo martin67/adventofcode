@@ -57,11 +57,11 @@ removed marble 9, while no other player got any points in this very short exampl
 
 Here are a few more examples:
 
-* 10 players; last marble is worth 1618 points: high score is 8317
-* 13 players; last marble is worth 7999 points: high score is 146373
-* 17 players; last marble is worth 1104 points: high score is 2764
-* 21 players; last marble is worth 6111 points: high score is 54718
-* 30 players; last marble is worth 5807 points: high score is 37305
+* 10 players; last marble is worth 1618 points: high score is **8317**
+* 13 players; last marble is worth 7999 points: high score is **146373**
+* 17 players; last marble is worth 1104 points: high score is **2764**
+* 21 players; last marble is worth 6111 points: high score is **54718**
+* 30 players; last marble is worth 5807 points: high score is **37305**
 
 **What is the winning Elf's score?**
 
