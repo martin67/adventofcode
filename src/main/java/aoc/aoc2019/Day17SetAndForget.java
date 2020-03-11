@@ -92,6 +92,7 @@ public class Day17SetAndForget {
             } else {
                 boolean quit = false;
                 int stepsInDirection = 0;
+                int totalSteps = 0;
                 List<String> instructions = new ArrayList<>();
 
                 while (!quit) {
@@ -100,6 +101,7 @@ public class Day17SetAndForget {
                         // continue
                         robotPosition = pos;
                         stepsInDirection++;
+                        totalSteps++;
                     } else {
                         if (stepsInDirection > 0) {
                             instructions.add(String.valueOf(stepsInDirection));
@@ -120,12 +122,13 @@ public class Day17SetAndForget {
                 }
                 System.out.println(instructions);
                 log.info("Number of instructions: {}", instructions.size());
+                log.info("Total number of steps: {}", totalSteps);
 
                 // Find patterns
                 // max 20 characters in command, excluding newline
                 // 34 instructions
                 HashMap<List<String>, Integer> instructionFrequency = new HashMap<>();
-                for (int patternLength = 2; patternLength < 34; patternLength += 2) {
+                for (int patternLength = 2; patternLength < instructions.size() / 2; patternLength += 2) {
                     int slider = 0;
                     while (slider + patternLength < instructions.size()) {
                         int start = patternLength;
@@ -190,3 +193,10 @@ public class Day17SetAndForget {
     }
 
 }
+
+//
+// Max 20 tecken (exkl newline) för de olika parametrarna. Innebär följande:
+// Main routine kan max innehålla 10 st poster
+// A,B,C kan max innehålla 7 vardera
+// Ordningen på A, B, C spelar ingen roll, det styrs i main routine
+// Börja med A på första instruktionen, kolla sedan alla möjliga kombinationer av B och C

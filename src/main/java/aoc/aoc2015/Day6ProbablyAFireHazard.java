@@ -1,6 +1,7 @@
 package aoc.aoc2015;
 
 import aoc.Position;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class Day6ProbablyAFireHazard {
 
 
@@ -38,6 +40,13 @@ public class Day6ProbablyAFireHazard {
                 String command = matcher.group(1);
                 Position start = new Position(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
                 Position end = new Position(Integer.parseInt(matcher.group(4)), Integer.parseInt(matcher.group(5)));
+
+                if (start.getX() > end.getX()) {
+                    log.error("start X > end X");
+                }
+                if (start.getY() > end.getY()) {
+                    log.error("start Y > end Y");
+                }
 
                 for (int x = start.getX(); x <= end.getX(); x++) {
                     for (int y = start.getY(); y <= end.getY(); y++) {
