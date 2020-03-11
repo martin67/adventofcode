@@ -10,10 +10,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -92,7 +89,7 @@ public class Day17SetAndForget {
             } else {
                 boolean quit = false;
                 int stepsInDirection = 0;
-                int totalSteps = 0;
+                char lastTurn = '?';
                 List<String> instructions = new ArrayList<>();
 
                 while (!quit) {
@@ -101,18 +98,17 @@ public class Day17SetAndForget {
                         // continue
                         robotPosition = pos;
                         stepsInDirection++;
-                        totalSteps++;
                     } else {
                         if (stepsInDirection > 0) {
-                            instructions.add(String.valueOf(stepsInDirection));
+                            instructions.add(lastTurn + String.valueOf(stepsInDirection));
                             stepsInDirection = 0;
                         }
                         if (map.containsKey(robotPosition.adjacent(robotDirection.turn(Direction.Left)))) {
-                            instructions.add("L");
+                            lastTurn = 'L';
                             robotPosition = robotPosition.adjacent(robotDirection.turn(Direction.Left));
                             robotDirection = robotDirection.turn(Direction.Left);
                         } else if (map.containsKey(robotPosition.adjacent(robotDirection.turn(Direction.Right)))) {
-                            instructions.add("R");
+                            lastTurn = 'R';
                             robotPosition = robotPosition.adjacent(robotDirection.turn(Direction.Right));
                             robotDirection = robotDirection.turn(Direction.Right);
                         } else {
@@ -122,39 +118,90 @@ public class Day17SetAndForget {
                 }
                 System.out.println(instructions);
                 log.info("Number of instructions: {}", instructions.size());
-                log.info("Total number of steps: {}", totalSteps);
+                log.info("Total number of steps: {}", pathLength(instructions));
 
                 // Find patterns
                 // max 20 characters in command, excluding newline
                 // 34 instructions
+                // A path (A,B or C) can be from 1 to 7 steps
                 HashMap<List<String>, Integer> instructionFrequency = new HashMap<>();
-                for (int patternLength = 2; patternLength < instructions.size() / 2; patternLength += 2) {
-                    int slider = 0;
-                    while (slider + patternLength < instructions.size()) {
-                        int start = patternLength;
-                        while (patternLength + start < instructions.size()) {
-                            List<String> pattern = instructions.subList(start, start + patternLength);
-                            if (pattern.equals(instructions.subList(slider, slider + patternLength))) {
-                                if (instructionFrequency.containsKey(pattern)) {
-                                    instructionFrequency.put(pattern, instructionFrequency.get(pattern) + 1);
-                                } else {
-                                    instructionFrequency.put(pattern, 1);
-                                }
-                            }
-                            start += patternLength;
+                for (int patternLength = 1; patternLength < 8; patternLength++) {
+                    int start = 0;
+                    while (patternLength + start < instructions.size()) {
+                        List<String> pattern = instructions.subList(start, start + patternLength);
+                        if (instructionFrequency.containsKey(pattern)) {
+                            instructionFrequency.put(pattern, instructionFrequency.get(pattern) + 1);
+                        } else {
+                            instructionFrequency.put(pattern, 1);
                         }
-                        slider += patternLength;
+                        start++;
                     }
                 }
-                //instructionFrequency.entrySet().stream().sorted(Comparator.comparing())
-//                Set<List<Integer>> filteredInstructions = null;
-//                        int hej = instructionFrequency.entrySet().stream()
-//                        .filter(i -> i.getKey().size() < 20)
-//                        .filter(i -> i.getValue() > 1)
-//                        .map(Map.Entry::getKey)
-//                        .collect(Collectors.toMap(List<Integer>, Integer));
+
+                List<List<String>> possibleStartPaths = new ArrayList<>();
+                for (int i = 1; i < 8; i++) {
+                    List<String> path = instructions.subList(0, i);
+                    if (pathSize(path) <= 20) {
+                        possibleStartPaths.add(path);
+                    }
+                }
+
+                List<List<String>> possibleEndPaths = new ArrayList<>();
+                for (int i = 1; i < 8; i++) {
+                    List<String> path = instructions.subList(instructions.size() - i, instructions.size());
+                    if (pathSize(path) <= 20) {
+                        possibleEndPaths.add(path);
+                    }
+                }
+
+                // x * A + y * B + z * C = 34
+                // x + y + z <= 10
+                //
+                for (List<String> startPath : possibleStartPaths) {
+                    for (List<String> endPath : possibleEndPaths) {
+                        int start;
+                        int end;
+//                        log.info("Before: {}", instructions);
+                        List<String> tempPath = new ArrayList<>(instructions);
+  //                      log.info("Removing startPath: {}", startPath);
+                        start = removeAllSubLists(tempPath, startPath);
+//                        log.info("Middle: {}", tempPath);
+//                        log.info("Removing endPath: {}", endPath);
+                        end = removeAllSubLists(tempPath, endPath);
+                        log.info("Removing {} x start {} and {} x end {}", start, startPath, end, endPath);
+                        log.info("After: {}", tempPath);
+                    }
+                }
+
                 return 0;
             }
+        }
+
+        int removeAllSubLists(List<String> list, List<String> subList) {
+            int index;
+            int numberOfRemovals = 0;
+            do {
+                index = Collections.indexOfSubList(list, subList);
+                if (index != -1) {
+                    list.subList(index, index + subList.size()).clear();
+                    numberOfRemovals++;
+                }
+            }
+            while (index != -1);
+            return numberOfRemovals;
+        }
+
+        int pathLength(List<String> path) {
+            int length = 0;
+            for (String step : path) {
+                length += Integer.parseInt(step.substring(1));
+            }
+
+            return length;
+        }
+
+        int pathSize(List<String> path) {
+            return String.join(",", path).length();
         }
     }
 
@@ -197,6 +244,11 @@ public class Day17SetAndForget {
 //
 // Max 20 tecken (exkl newline) för de olika parametrarna. Innebär följande:
 // Main routine kan max innehålla 10 st poster
-// A,B,C kan max innehålla 7 vardera
+// A,B,C kan max innehålla 7 steg vardera
 // Ordningen på A, B, C spelar ingen roll, det styrs i main routine
-// Börja med A på första instruktionen, kolla sedan alla möjliga kombinationer av B och C
+// Varje sekvens har en viss längd. Summan av alla sekvensers längder skall bli hela längden på banan (given)
+// En sekvens kan inte innehålla en annan sekvens
+// En av de tre sekvenserna måste minst innehålla det allra första steget
+// En av de tre sekvenserna måste minst innehålla det allra sista steget
+// Börja identifiera sekvenser från ändarna.
+// Det skall gå att räkna ut minsta möjliga längd
