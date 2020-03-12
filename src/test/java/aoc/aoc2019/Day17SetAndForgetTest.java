@@ -21,6 +21,6 @@ class Day17SetAndForgetTest {
     @Test
     void dustCollected() throws IOException, InterruptedException, ExecutionException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day17.txt"));
-        assertEquals(0, new Day17SetAndForget(inputLines).dustCollected());
+        assertEquals(1063081, new Day17SetAndForget(inputLines).dustCollected());
     }
 }
