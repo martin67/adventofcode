@@ -35,7 +35,7 @@ class IntcodeComputer implements Callable<Integer> {
 
     @Override
     public Integer call() {
-        log.info("Starting thread {}", Thread.currentThread().getName());
+        log.debug("Starting thread {}", Thread.currentThread().getName());
         try {
             boolean quit = false;
 
@@ -121,7 +121,7 @@ class IntcodeComputer implements Callable<Integer> {
                         break;
 
                     case "99":
-                        log.info("{} {}: Quitting", instructionPointer, getOpcodeString());
+                        log.debug("{} {}: Quitting", instructionPointer, getOpcodeString());
                         quit = true;
                         break;
 
@@ -132,7 +132,7 @@ class IntcodeComputer implements Callable<Integer> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        log.info("Ending thread {}", Thread.currentThread().getName());
+        log.debug("Ending thread {}", Thread.currentThread().getName());
         return 0;
     }
 

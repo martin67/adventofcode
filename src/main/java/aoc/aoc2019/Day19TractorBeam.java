@@ -71,9 +71,10 @@ public class Day19TractorBeam {
                     }
 
                     int gridsize = 10;
-                    if (map.contains(new Position(previousLeftEdge.getX(), previousLeftEdge.getY() - gridsize)) &&
+                    if (map.contains(new Position(previousLeftEdge.getX(), previousLeftEdge.getY())) &&
                             map.contains(new Position(previousLeftEdge.getX() + gridsize, previousLeftEdge.getY() - gridsize))) {
                         log.info("Found it at {}, {}", previousLeftEdge.getX(), previousLeftEdge.getY() - gridsize);
+                        printMap();
                         return previousLeftEdge.getX() * 10000 + previousLeftEdge.getY() - gridsize;
                     }
                 }
@@ -91,9 +92,12 @@ public class Day19TractorBeam {
         }
 
         void printMap() {
-            for (int y = 0; y < 50; y++) {
+            int xMax = map.stream().mapToInt(Position::getX).max().orElse(0);
+            int yMax = map.stream().mapToInt(Position::getY).max().orElse(0);
+            for (int y = 0; y <= yMax; y++) {
                 StringBuilder sb = new StringBuilder();
-                for (int x = 0; x < 50; x++) {
+                sb.append(String.format("%3d ", y));
+                for (int x = 0; x <= xMax; x++) {
                     Position pos = new Position(x, y);
                     if (map.contains(pos)) {
                         sb.append("#");     // normal
