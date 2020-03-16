@@ -89,3 +89,7 @@ Within it, the point closest to the emitter (the only highlighted O) is at X=25,
 Find the **100x100** square closest to the emitter that fits entirely within the tractor beam; within that square, find 
 the point closest to the emitter. **What value do you get if you take that point's X coordinate, multiply it by 10000, 
 then add the point's Y coordinate?** (In the example above, this would be 250020.)
+
+Your puzzle answer was 15641348.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -70,11 +72,11 @@ public class Day19TractorBeam {
                         map.add(new Position(x, previousLeftEdge.getY()));
                     }
 
-                    int gridsize = 10;
+                    int gridsize = 100 - 1;
                     if (map.contains(new Position(previousLeftEdge.getX(), previousLeftEdge.getY())) &&
                             map.contains(new Position(previousLeftEdge.getX() + gridsize, previousLeftEdge.getY() - gridsize))) {
                         log.info("Found it at {}, {}", previousLeftEdge.getX(), previousLeftEdge.getY() - gridsize);
-                        printMap();
+                        //printMap();
                         return previousLeftEdge.getX() * 10000 + previousLeftEdge.getY() - gridsize;
                     }
                 }
@@ -131,5 +133,3 @@ public class Day19TractorBeam {
         return futureSum.get();
     }
 }
-
-// 15791361 too high

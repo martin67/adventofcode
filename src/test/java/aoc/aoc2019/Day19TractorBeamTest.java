@@ -21,6 +21,6 @@ class Day19TractorBeamTest {
     @Test
     void closetSquare() throws IOException, InterruptedException, ExecutionException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day19.txt"));
-        assertEquals(15791361, new Day19TractorBeam(inputLines).closetSquare());
+        assertEquals(15641348, new Day19TractorBeam(inputLines).closetSquare());
     }
 }
