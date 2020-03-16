@@ -20,7 +20,7 @@ class Day18ManyWorldsInterpretationTest {
             "4250, src/test/resources/2019/day18.txt"})
     void shortestPath(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day18ManyWorldsInterpretation(inputLines, 1).shortestPath());
+        assertEquals(expected, new Day18ManyWorldsInterpretation(inputLines).shortestPath());
     }
 
     @ParameterizedTest
@@ -28,9 +28,9 @@ class Day18ManyWorldsInterpretationTest {
             "24, src/test/resources/2019/day18-demo7.txt",
             "32, src/test/resources/2019/day18-demo8.txt",
             "72, src/test/resources/2019/day18-demo9.txt",
-            "0, src/test/resources/2019/day18-2.txt"})
+            "1640, src/test/resources/2019/day18-2.txt"})
     void shortestMultiplePath(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day18ManyWorldsInterpretation(inputLines, 4).shortestMultiplePath());
+        assertEquals(expected, new Day18ManyWorldsInterpretation(inputLines).shortestMultiplePath());
     }
 }
