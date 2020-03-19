@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day23CategorySixTest {
     @Test
@@ -18,8 +18,8 @@ class Day23CategorySixTest {
     }
 
     @Test
-    void secondYValue() throws IOException, ExecutionException, InterruptedException {
+    void repeatedYValue() throws IOException, ExecutionException, InterruptedException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day23.txt"));
-        assertEquals(0, new Day23CategorySix(inputLines).secondYValue());
+        assertEquals(17091, new Day23CategorySix(inputLines).repeatedYValue());
     }
 }

@@ -52,4 +52,6 @@ when the ship needs power in other areas.
 Monitor packets released to the computer at address 0 by the NAT. **What is the first Y value delivered by the 
 NAT to the computer at address 0 twice in a row?**
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 17091.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
