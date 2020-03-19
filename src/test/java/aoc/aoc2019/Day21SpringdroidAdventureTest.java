@@ -20,7 +20,7 @@ class Day21SpringdroidAdventureTest {
     @Test
     void hullDamagePart2() throws IOException, InterruptedException, ExecutionException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day21.txt"));
-        assertEquals("19353074", new Day21SpringdroidAdventure(inputLines).hullDamage(true));
+        assertEquals("1147582556", new Day21SpringdroidAdventure(inputLines).hullDamage(true));
     }
 
 }

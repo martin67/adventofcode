@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,7 +27,7 @@ public class Day21SpringdroidAdventure {
         public Integer call() {
             Queue<String> commands = new LinkedList<>();
             if (!partTwo) {
-                // (A or B or C == hole) and D == ground
+                // jump if (A or B or C == hole) and D == ground
                 commands.add("NOT A T");
                 commands.add("NOT B J");
                 commands.add("OR T J");
@@ -34,8 +36,16 @@ public class Day21SpringdroidAdventure {
                 commands.add("AND D J");
                 commands.add("WALK");
             } else {
+                // (!A || !B || !C) && D && (E || H))
+                commands.add("NOT A T");
+                commands.add("NOT B J");
+                commands.add("OR T J");
+                commands.add("NOT C T");
+                commands.add("OR T J");
+                commands.add("AND D J");
                 commands.add("NOT E T");
-                commands.add("NOT I J");
+                commands.add("NOT T T");
+                commands.add("OR H T");
                 commands.add("AND T J");
                 commands.add("RUN");
             }
@@ -99,57 +109,3 @@ public class Day21SpringdroidAdventure {
         return futureSum.get();
     }
 }
-
-// Possible cases. can only jump 3?
-// 1234ABCD            1   2   3   4
-// ####.####   1000    no  ok  ok  ok
-// ####.##.#   1001    no  ok  ok  no
-// ####.#.##   1010    no  ok  no  ok
-// ####.#..#   1011    no  ok  no  no
-// ####..###   1100    no  no  ok  ok
-// ####..#.#   1101    no  no  ok  no
-// ####...##   1110    no  no  no  ok
-// ####....#   1111    no  no  no  no
-
-// ground = true, hole = false
-// jumps 3 positions
-// falls down in hole if empty below or next
-
-// ....@............     .................
-// #####.###########    #####@.#.########
-
-// .....@...........    .................
-// #####.###########    #####@###########
-
-// 1: jump if A=hole && C=ground (A=false, C=true) => NOT A J, AND C J
-// 2: jump if B=hole &&
-// 3. jump if C=true
-
-// if C=true jump
-
-// NOT A J => #####..#.########     jump if A=hole
-// NOT B J => #####...#########     jump if B=hole
-// NOT C J => #####...#########     jump if C=hole
-// NOT D J => #####.###########     jump if D=hole
-// NOT A J, AND C J => #####...#########
-// NOT A J, AND D J => #####..#.########
-// NOT A J, A=hole && C AND D == ground
-
-// NOT A J, AND D J or NOT B J, and D J
-// NOT D J - D skall vara mark, dvs J blir då false
-// A or B = hole && D = ground
-// svar; A or B or C = hole & D = ground
-
-// A or B or C = hole && D = ground && E = ground
-
-//      *
-//     * *
-//    *   *
-// #####.#.#...#.###
-//      ABCDEFGHI
-//     ABCDEFGHI
-//    ABCDEFGHI
-//   ABCDEFGHI
-//  ABCDEFGHI
-
-// E && I == ground

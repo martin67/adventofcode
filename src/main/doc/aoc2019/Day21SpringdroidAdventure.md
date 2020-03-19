@@ -123,4 +123,6 @@ All other functions remain the same.
 Successfully survey the rest of the hull by ending your program with RUN. **What amount of hull damage does the 
 springdroid now report?**
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 1147582556.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
