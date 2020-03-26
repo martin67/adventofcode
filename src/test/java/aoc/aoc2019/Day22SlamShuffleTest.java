@@ -1,5 +1,6 @@
 package aoc.aoc2019;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -20,5 +21,11 @@ class Day22SlamShuffleTest {
     void cardPosition(int expected, int numberOfCards, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day22SlamShuffle(inputLines).cardPosition(numberOfCards));
+    }
+
+    @Test
+    void numberOnCard() throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day22.txt"));
+        assertEquals("1041334417227", new Day22SlamShuffle(inputLines).numberOnCard("119315717514047", "101741582076661"));
     }
 }

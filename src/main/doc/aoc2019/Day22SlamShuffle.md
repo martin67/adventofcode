@@ -175,4 +175,6 @@ You'll need to be careful, though - one wrong move with this many cards and you 
 After shuffling your new, giant, **factory order** deck that many times, **what number is on the card that ends up in 
 position 2020?**
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 1041334417227.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
