@@ -244,3 +244,7 @@ Depth 5:
 In this example, after 10 minutes, a total of **99** bugs are present.
 
 Starting with your scan, **how many bugs are present after 200 minutes?**
+
+Your puzzle answer was 2097.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day24PlanetOfDiscordTest {
 
@@ -21,8 +21,8 @@ class Day24PlanetOfDiscordTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"99, 11, src/test/resources/2019/day24-demo1.txt",
-            "0, 200, src/test/resources/2019/day24.txt"})
+    @CsvSource({"99, 10, src/test/resources/2019/day24-demo1.txt",
+            "2097, 200, src/test/resources/2019/day24.txt"})
     void bugsPresent(int expected, int minutes, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day24PlanetOfDiscord(inputLines).bugsPresent(minutes));
