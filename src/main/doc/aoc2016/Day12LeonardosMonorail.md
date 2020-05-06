@@ -40,4 +40,11 @@ last instruction, the program halts.
 
 After executing the assembunny code in your puzzle input, **what value is left in register a**?
 
-To begin, get your puzzle input.
+Your puzzle answer was 318020.
+
+The first half of this puzzle is complete! It provides one gold star: *
+
+##Part Two
+As you head down the fire escape to the monorail, you notice it didn't start; register c needs to be initialized to the position of the ignition key.
+
+If you instead **initialize register c to be 1**, what value is now left in register a?
