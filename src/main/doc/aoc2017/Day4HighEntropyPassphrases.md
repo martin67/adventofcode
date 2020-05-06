@@ -31,4 +31,6 @@ For example:
 
 Under this new system policy, **how many passphrases are valid**?
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 223.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

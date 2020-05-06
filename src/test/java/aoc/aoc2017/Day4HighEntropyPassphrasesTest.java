@@ -36,4 +36,9 @@ class Day4HighEntropyPassphrasesTest {
         assertEquals(valid, new Day4HighEntropyPassphrases().validAnagramPassphrase(passphrase));
     }
 
+    @Test
+    void numberOfValidAnagramPassphrases() throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2017/day4.txt"));
+        assertEquals(223, new Day4HighEntropyPassphrases().numberOfValidAnagramPassphrases(inputLines));
+    }
 }
