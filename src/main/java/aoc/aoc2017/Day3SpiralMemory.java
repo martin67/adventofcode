@@ -11,12 +11,13 @@ public class Day3SpiralMemory {
 
         // distance from axis
         int sideLength = layer * 2 + 1;
-        int distance = (int) (Math.pow(layer * 2 + 1, 2) - dataLocation);
+        int corner = (int) Math.pow(layer * 2 + 1, 2);
 
-        while (distance > sideLength) {
-            distance -= sideLength;
+        while ((corner - dataLocation) > sideLength - 1) {
+            corner -= sideLength - 1;
         }
-        int distanceToAxis = Math.abs(distance - layer);
+        int axisPosition = corner - layer;
+        int distanceToAxis = Math.abs(dataLocation - axisPosition);
         return layer + distanceToAxis;
     }
 }
