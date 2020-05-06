@@ -10,9 +10,11 @@ import java.util.List;
 @Slf4j
 public class Day14OneTimePad {
     String salt;
+    boolean stretchedHash;
 
-    public Day14OneTimePad(String salt) {
+    public Day14OneTimePad(String salt, boolean stretchedHash) {
         this.salt = salt;
+        this.stretchedHash = stretchedHash;
     }
 
     int hashIndex() {
@@ -68,8 +70,16 @@ public class Day14OneTimePad {
 
     String getHash(int index) {
         String value = salt + index;
-        String md5 = Hashing.md5().hashString(value, Charsets.UTF_8).toString();
+        String result = null;
 
-        return md5;
+        if (stretchedHash) {
+            for (int i = 0; i < 2017; i++) {
+                result = Hashing.md5().hashString(value, Charsets.UTF_8).toString();
+                value = result;
+            }
+        } else {
+            result = Hashing.md5().hashString(value, Charsets.UTF_8).toString();
+        }
+        return result;
     }
 }

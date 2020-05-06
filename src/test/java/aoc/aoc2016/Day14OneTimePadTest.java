@@ -12,6 +12,13 @@ class Day14OneTimePadTest {
     @CsvSource({"22728, abc",
             "18626, ngcjuoqr"})
     void hashIndex(int expected, String salt) {
-        assertEquals(expected, new Day14OneTimePad(salt).hashIndex());
+        assertEquals(expected, new Day14OneTimePad(salt, false).hashIndex());
+    }
+
+    @ParameterizedTest
+    @CsvSource({"22551, abc",
+            "20092, ngcjuoqr"})
+    void stretchedHashIndex(int expected, String salt) {
+        assertEquals(expected, new Day14OneTimePad(salt, true).hashIndex());
     }
 }
