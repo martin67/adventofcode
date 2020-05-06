@@ -20,4 +20,10 @@ class Day12LeonardosMonorailTest {
         assertEquals(expected, new Day12LeonardosMonorail(inputLines).registerA());
     }
 
+    @ParameterizedTest
+    @CsvSource({"9227674, src/test/resources/2016/day12.txt"})
+    void registerAwithC(int expected, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day12LeonardosMonorail(inputLines).registerAwithC());
+    }
 }

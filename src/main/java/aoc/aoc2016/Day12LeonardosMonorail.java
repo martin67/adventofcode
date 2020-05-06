@@ -16,10 +16,21 @@ public class Day12LeonardosMonorail {
     public Day12LeonardosMonorail(List<String> program) {
 
         computer = new Computer();
-        computer.load(program);
+        computer.loadProgram(program);
     }
 
     int registerA() {
+        computer.run();
+        return computer.getRegister('a');
+    }
+
+    int registerAwithC() {
+        Map<Character, Integer> registers = new HashMap<>();
+        registers.put('a', 0);
+        registers.put('b', 0);
+        registers.put('c', 1);
+        registers.put('d', 0);
+        computer.loadRegisters(registers);
         computer.run();
         return computer.getRegister('a');
     }
@@ -38,8 +49,12 @@ public class Day12LeonardosMonorail {
             instructionPointer = 0;
         }
 
-        void load(List<String> input) {
+        void loadProgram(List<String> input) {
             program = new ArrayList<>(input);
+        }
+
+        void loadRegisters(Map<Character, Integer> newRegisters) {
+            registers = newRegisters;
         }
 
         void run() {
