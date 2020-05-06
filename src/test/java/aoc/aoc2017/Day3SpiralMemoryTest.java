@@ -1,5 +1,6 @@
 package aoc.aoc2017;
 
+import aoc.Position;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -14,5 +15,28 @@ class Day3SpiralMemoryTest {
             "475, 277678"})
     void computeCaptcha(int steps, int dataLocation) {
         assertEquals(steps, new Day3SpiralMemory().stepsRequired(dataLocation));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"0, 0, 1",
+            "1, 0, 2",
+            "1, 1, 3",
+            "0, 1, 4",
+            "-1, 1, 5",
+            "-1, 0, 6",
+            "-1, -1, 7",
+            "0, -1, 8",
+            "1, -1, 9",
+            "2, -1, 10"})
+    void testPosition(int x, int y, int dataLocation) {
+        assertEquals(new Position(x, y), new Day3SpiralMemory().getPosition(dataLocation));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"122, 100",
+            "747, 500",
+            "279138, 277678"})
+    void stressTest(int value, int maxValue) {
+        assertEquals(value, new Day3SpiralMemory().stressTest(maxValue));
     }
 }

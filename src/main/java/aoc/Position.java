@@ -104,6 +104,19 @@ public class Position implements Comparable<Position> {
         return adjacent;
     }
 
+    public Set<Position> allAdjacentIncludingDiagonal() {
+        Set<Position> adjacent = new HashSet<>();
+        adjacent.add(new Position(x, y - 1)); // north
+        adjacent.add(new Position(x - 1, y - 1)); // northwest
+        adjacent.add(new Position(x - 1, y)); // west
+        adjacent.add(new Position(x - 1, y + 1)); // southwest
+        adjacent.add(new Position(x + 1, y)); // east
+        adjacent.add(new Position(x + 1, y - 1)); // northeast
+        adjacent.add(new Position(x, y + 1)); // south
+        adjacent.add(new Position(x + 1, y + 1)); // southeast
+        return adjacent;
+    }
+
     public Set<Position> adjacentDiagonal(Direction dir) {
         Set<Position> adjacent = new HashSet<>();
         switch (dir) {

@@ -50,4 +50,10 @@ Once a square is written, its value does not change. Therefore, the first few sq
 ```
 What is the **first value written** that is **larger** than your puzzle input?
 
-Your puzzle input is still 277678.
+Your puzzle answer was 279138.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
+
+At this point, you should return to your Advent calendar and try another puzzle.
+
+Your puzzle input was 277678.
