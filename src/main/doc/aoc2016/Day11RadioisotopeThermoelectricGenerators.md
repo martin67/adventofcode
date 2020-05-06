@@ -157,3 +157,7 @@ These work just like the other generators and microchips. You'll have to get the
 
 What is the **minimum number of steps** required to bring all of the objects, including these four new ones, to the 
 fourth floor?
+
+Your puzzle answer was 61.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
