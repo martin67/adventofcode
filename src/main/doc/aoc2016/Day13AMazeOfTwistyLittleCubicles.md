@@ -49,3 +49,7 @@ The first half of this puzzle is complete! It provides one gold star: *
 
 ##Part Two
 **How many locations** (distinct x,y coordinates, including your starting location) can you reach in at most 50 steps?
+
+Your puzzle answer was 127.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

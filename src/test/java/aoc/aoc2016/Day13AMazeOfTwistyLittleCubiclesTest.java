@@ -1,6 +1,7 @@
 package aoc.aoc2016;
 
 import aoc.Position;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -13,5 +14,10 @@ class Day13AMazeOfTwistyLittleCubiclesTest {
             "86, 1364, 31, 39"})
     void fewestNumberOfSteps(int expected, int favoriteNumber, int x, int y) {
         assertEquals(expected, new Day13AMazeOfTwistyLittleCubicles(favoriteNumber).fewestNumberOfSteps(new Position(x, y)));
+    }
+
+    @Test
+    void numberOfLocations() {
+        assertEquals(127, new Day13AMazeOfTwistyLittleCubicles(1364).numberOfLocations());
     }
 }

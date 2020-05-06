@@ -51,6 +51,42 @@ public class Day13AMazeOfTwistyLittleCubicles {
 
     }
 
+    int numberOfLocations() {
+        // Make map
+        Set<Position> map = new HashSet<>();
+
+        for (int y = 0; y < 55; y++) {
+            for (int x = 0; x < 55; x++) {
+                Position p = new Position(x, y);
+                if (isOpenSpace(p)) {
+                    map.add(p);
+                    graph.addVertex(p);
+                }
+            }
+        }
+
+        // Make graph
+        for (Position pos : map) {
+            if (map.contains(pos.adjacent(Direction.Left))) {
+                graph.addEdge(pos, pos.adjacent(Direction.Left));
+            }
+            if (map.contains(pos.adjacent(Direction.Up))) {
+                graph.addEdge(pos, pos.adjacent(Direction.Up));
+            }
+        }
+
+        DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+        ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> iPaths = dijkstraAlg.getPaths(new Position(1, 1));
+
+        int locations = 0;
+        for (Position p : map) {
+            if (iPaths.getPath(p) != null && iPaths.getPath(p).getLength() <= 50) {
+                locations++;
+            }
+        }
+        return locations;
+    }
+
     boolean isOpenSpace(Position p) {
         int value = p.getX() * p.getX() + 3 * p.getX() + 2 * p.getX() * p.getY() + p.getY() + p.getY() * p.getY() + favoriteNumber;
 
