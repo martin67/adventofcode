@@ -26,6 +26,62 @@ public class Day11RadioisotopeThermoelectricGenerators {
 
     private static final int NUMBER_OF_FLOORS = 4;
 
+    private State readData(String fileName) throws IOException {
+        List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
+        Pattern pattern = Pattern.compile("(a|, a| and a|, and a) (\\w+)(-compatible)? (generator|microchip)");
+
+        int floor = 1;
+        Set<String> newDevices = new HashSet<>();
+        Set<String> newDeviceNames = new HashSet<>();
+
+        for (String row : inputStrings) {
+            Matcher matcher = pattern.matcher(row);
+            while (matcher.find()) {
+                // hydrogen generator on 3rd floor => HG3
+                String material = matcher.group(2).substring(0, 1).toUpperCase();
+                String type = matcher.group(4).substring(0, 1).toUpperCase();
+                newDevices.add(material + type + floor);
+                newDeviceNames.add(material + type);
+            }
+            floor++;
+        }
+
+        // save all the devices in order to a state
+        StringBuilder istate = new StringBuilder("E1");
+        newDevices.stream().sorted().forEach(d -> istate.append("-").append(d));
+        State initialState = new State(istate.toString());
+
+        // Some tests
+//        List<String> devicesOnFloor1 = initialState.getDeviceNamesFromFloor(1);
+//        boolean ok = initialState.isValid();
+//        Set<State> validStates = initialState.validStates();
+//        String t2 = initialState.getSignature();
+//        Set<String> validSignatures = initialState.validSignatures();
+        return initialState;
+    }
+
+
+    //private Set<String> allDevices = new HashSet<>();
+    private Set<State> allStates = new HashSet<>();
+    private Set<String> allSignatures = new HashSet<>();
+    private State initialState;
+    private State finalState;
+    private Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
+
+
+    public Day11RadioisotopeThermoelectricGenerators(String fileName) throws IOException {
+        initialState = readData(fileName);
+        finalState = createFinalState(initialState);// kommer aldrig att gå att skapa alla tillstånd i förväg. I fall 2 är det +4M stycken
+        graph.addVertex(initialState.getSignature());
+        //createAllStatesRecursive(initialState);
+        createAllStates();
+        //createAllStates2();
+        System.out.printf("Initial state: %s\nFinal state:   %s\n", initialState, finalState);
+
+        //setupGraph();
+        //setupNewGraph(initialState, finalState);
+    }
+
     @Data
     @NoArgsConstructor
     static class State {
@@ -158,7 +214,14 @@ public class Day11RadioisotopeThermoelectricGenerators {
 
             int currentFloor = getElevator();
             List<String> devicesOnCurrentFloor = getDeviceNamesFromFloor(currentFloor);
-            Set<Set<String>> combinations = Sets.powerSet(new HashSet<>(devicesOnCurrentFloor));
+            Set<Set<String>> allCombinations = Sets.powerSet(new HashSet<>(devicesOnCurrentFloor));
+            // Remove all sets that are 0 (elevator can't be empty) or bigger than 2 (max for the elevator)
+            Set<Set<String>> combinations = new HashSet<>();
+            for (Set<String> set : allCombinations) {
+                if (set.size() > 0 && set.size() < 3) {
+                    combinations.add(set);
+                }
+            }
 
             // go up
             if (currentFloor < NUMBER_OF_FLOORS) {
@@ -206,62 +269,6 @@ public class Day11RadioisotopeThermoelectricGenerators {
         public String toString() {
             return name;
         }
-    }
-
-
-    //private Set<String> allDevices = new HashSet<>();
-    private Set<State> allStates = new HashSet<>();
-    private Set<String> allSignatures = new HashSet<>();
-    private State initialState;
-    private State finalState;
-    private Graph<String, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-
-
-    public Day11RadioisotopeThermoelectricGenerators(String fileName) throws IOException {
-        initialState = readData(fileName);
-        finalState = createFinalState(initialState);// kommer aldrig att gå att skapa alla tillstånd i förväg. I fall 2 är det +4M stycken
-        graph.addVertex(initialState.getSignature());
-        //createAllStatesRecursive(initialState);
-        createAllStates();
-        //createAllStates2();
-        System.out.printf("Initial state: %s\nFinal state:   %s\n", initialState, finalState);
-
-        //setupGraph();
-        //setupNewGraph(initialState, finalState);
-    }
-
-    private State readData(String fileName) throws IOException {
-        List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
-        Pattern pattern = Pattern.compile("(a|, a| and a|, and a) (\\w+)(-compatible)? (generator|microchip)");
-
-        int floor = 1;
-        Set<String> newDevices = new HashSet<>();
-        Set<String> newDeviceNames = new HashSet<>();
-
-        for (String row : inputStrings) {
-            Matcher matcher = pattern.matcher(row);
-            while (matcher.find()) {
-                // hydrogen generator on 3rd floor => HG3
-                String material = matcher.group(2).substring(0, 1).toUpperCase();
-                String type = matcher.group(4).substring(0, 1).toUpperCase();
-                newDevices.add(material + type + floor);
-                newDeviceNames.add(material + type);
-            }
-            floor++;
-        }
-
-        // save all the devices in order to a state
-        StringBuilder istate = new StringBuilder("E1");
-        newDevices.stream().sorted().forEach(d -> istate.append("-").append(d));
-        State initialState = new State(istate.toString());
-
-        // Some tests
-        List<String> devicesOnFloor1 = initialState.getDeviceNamesFromFloor(1);
-        boolean ok = initialState.isValid();
-        Set<State> validStates = initialState.validStates();
-        String t2 = initialState.getSignature();
-        Set<String> validSignatures = initialState.validSignatures();
-        return initialState;
     }
 
     private void createAllStatesRecursive(State start) {
