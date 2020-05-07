@@ -58,4 +58,14 @@ In this example, the correct checksum would therefore be 01100.
 The first disk you have to fill has length 272. Using the initial state in your puzzle input, 
 **what is the correct checksum**?
 
-Your puzzle input is 10010000000110000.
+Your puzzle answer was 10010110010011110.
+
+The first half of this puzzle is complete! It provides one gold star: *
+
+##Part Two
+The second disk you have to fill has length 35651584. Again using the initial state in your puzzle input, 
+**what is the correct checksum** for this disk?
+
+Your puzzle answer was 01101011101100011.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
