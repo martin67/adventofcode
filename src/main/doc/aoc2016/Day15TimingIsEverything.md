@@ -52,3 +52,7 @@ with 11 positions and starting at position 0 has appeared exactly one second bel
 
 With this new disc, and counting again starting from time=0 with the configuration in your puzzle input, what is the 
 **first time you can press the button** to get another capsule?
+
+Your puzzle answer was 3543984.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
