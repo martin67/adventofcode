@@ -64,4 +64,13 @@ In ten rows, this larger example has 38 safe tiles.
 Starting with the map in your puzzle input, in a total of 40 rows (including the starting row), 
 **how many safe tiles** are there?
 
-To begin, get your puzzle input.
+Your puzzle answer was 2035.
+
+The first half of this puzzle is complete! It provides one gold star: *
+
+##Part Two
+**How many safe tiles** are there in a total of 400000 rows?
+
+Your puzzle answer was 20000577.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
