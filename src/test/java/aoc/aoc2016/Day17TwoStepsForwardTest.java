@@ -16,4 +16,12 @@ class Day17TwoStepsForwardTest {
         assertEquals(expected, new Day17TwoStepsForward(passcode).shortestPath());
     }
 
+    @ParameterizedTest
+    @CsvSource({"370, ihgpwlah",
+            "492, kglvqrro",
+            "830, ulqzkmiv",
+            "706, qtetzkpl"})
+    void longestPath(int expected, String passcode) {
+        assertEquals(expected, new Day17TwoStepsForward(passcode).longestPath());
+    }
 }

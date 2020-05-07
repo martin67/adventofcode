@@ -14,6 +14,7 @@ public class Day17TwoStepsForward {
     String passcode;
     Set<Position> rooms = new HashSet<>();
     String shortestPath;
+    String longestPath;
     Position start = new Position(0, 0);
     Position end = new Position(3, 3);
 
@@ -31,21 +32,29 @@ public class Day17TwoStepsForward {
         return shortestPath;
     }
 
+    int longestPath() {
+        pathRunner(start, "");
+        return longestPath.length();
+    }
+
     void pathRunner(Position position, String path) {
 
-        if (shortestPath == null || path.length() < shortestPath.length()) {
-            if (position.equals(end)) {
-                log.debug("Found target {}, path {}", position, path);
+        if (position.equals(end)) {
+            log.debug("Found target {}, path {}", position, path);
+            if (shortestPath == null || path.length() < shortestPath.length()) {
                 shortestPath = path;
-            } else {
-                String hash = Hashing.md5().hashString(passcode + path, Charsets.UTF_8).toString();
-                Set<Direction> possibleDirections = openDoors(hash);
+            }
+            if (longestPath == null || path.length() > longestPath.length()) {
+                longestPath = path;
+            }
+        } else {
+            String hash = Hashing.md5().hashString(passcode + path, Charsets.UTF_8).toString();
+            Set<Direction> possibleDirections = openDoors(hash);
 
-                for (Direction direction : possibleDirections) {
-                    if (rooms.contains(position.adjacent(direction))) {
-                        log.debug("Found direction {} from {}", direction, position);
-                        pathRunner(position.adjacent(direction), path + direction.shortName());
-                    }
+            for (Direction direction : possibleDirections) {
+                if (rooms.contains(position.adjacent(direction))) {
+                    log.debug("Found direction {} from {}", direction, position);
+                    pathRunner(position.adjacent(direction), path + direction.shortName());
                 }
             }
         }
