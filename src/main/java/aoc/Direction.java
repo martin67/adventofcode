@@ -165,4 +165,50 @@ public enum Direction {
                 return Unknown;
         }
     }
+
+    public String shortName() {
+        String result;
+        switch (this) {
+            case North:
+                result = "N";
+                break;
+            case Up:
+                result = "U";
+                break;
+            case East:
+                result = "E";
+                break;
+            case Right:
+                result = "R";
+                break;
+            case South:
+                result = "S";
+                break;
+            case Down:
+                result = "D";
+                break;
+            case West:
+                result = "W";
+                break;
+            case Left:
+                result = "L";
+                break;
+            case NorthEast:
+                result = "NE";
+                break;
+            case NorthWest:
+                result = "NW";
+                break;
+            case SouthEast:
+                result = "SE";
+                break;
+            case SouthWest:
+                result = "SW";
+                break;
+            default:
+                result = "?";
+                break;
+        }
+        return result;
+    }
 }
