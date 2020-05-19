@@ -14,4 +14,14 @@ class Day19AnElephantNamedJosephTest {
         assertEquals(expected, new Day19AnElephantNamedJoseph(numberOfElves).allPresents());
     }
 
+    @ParameterizedTest
+    @CsvSource({"2, 5",
+            "5, 7",
+            "7, 8",
+            "9, 9",
+            "1420064, 3014387"})
+    void allPresentsAcross(int expected, int numberOfElves) {
+        assertEquals(expected, new Day19AnElephantNamedJoseph(numberOfElves).allPresentsAcross4());
+    }
+
 }

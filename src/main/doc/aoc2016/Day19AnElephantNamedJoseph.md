@@ -70,3 +70,7 @@ and the rest of the Elves move in:
 So, with **five** Elves, the Elf that sits starting in position 2 gets all the presents.
 
 With the number of Elves given in your puzzle input, **which Elf now gets all the presents?**
+
+Your puzzle answer was 1420064.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
