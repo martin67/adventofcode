@@ -19,4 +19,13 @@ class Day20FirewallRulesTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day20FirewallRules(inputLines).lowestValuedIp());
     }
+
+    @ParameterizedTest
+    @CsvSource({"2, 0, 9, src/test/resources/2016/day20-demo1.txt",
+            "109, 0, 4294967295, src/test/resources/2016/day20.txt"})
+    void ipsAllowed(long expected, long min, long max, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day20FirewallRules(inputLines).ipsAllowed(min, max));
+    }
+
 }

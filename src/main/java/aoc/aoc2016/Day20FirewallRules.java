@@ -32,7 +32,6 @@ public class Day20FirewallRules {
     }
 
     long lowestValuedIp() {
-
         Iterator<Range<Long>> it = ranges.iterator();
         Range<Long> previousRange = it.next();
         while (it.hasNext()) {
@@ -47,4 +46,12 @@ public class Day20FirewallRules {
         return previousRange.upperEndpoint() + 1;
     }
 
+    long ipsAllowed(long min, long max) {
+        long blocked = 0;
+
+        for (Range<Long> range : ranges) {
+            blocked += range.upperEndpoint() - range.lowerEndpoint() + 1;
+        }
+        return (max - min + 1) - blocked;
+    }
 }

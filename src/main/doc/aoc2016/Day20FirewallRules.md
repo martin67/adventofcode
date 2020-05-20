@@ -24,3 +24,7 @@ The first half of this puzzle is complete! It provides one gold star: *
 
 ##Part Two
 **How many IPs** are allowed by the blacklist?
+
+Your puzzle answer was 109.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
