@@ -14,7 +14,7 @@ class Day21ScrambledLettersAndHashTest {
 
     @ParameterizedTest
     @CsvSource({"decab, abcde, src/test/resources/2016/day21-demo1.txt",
-            "blabla, abcdefgh, src/test/resources/2016/day21.txt"})
+            "dbfgaehc, abcdefgh, src/test/resources/2016/day21.txt"})
     void scrambledPassword(String expected, String input, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day21ScrambledLettersAndHash(inputLines).scramble(input));

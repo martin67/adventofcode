@@ -37,4 +37,12 @@ After these steps, the resulting scrambled password is decab.
 Now, you just need to generate a new scrambled password and you can access the system. Given the list of 
 scrambling operations in your puzzle input, **what is the result of scrambling abcdefgh**?
 
-To begin, get your puzzle input.
+Your puzzle answer was dbfgaehc.
+
+The first half of this puzzle is complete! It provides one gold star: *
+
+##Part Two
+You scrambled the password correctly, but you discover that you can't actually modify the password file on the system. 
+You'll need to un-scramble one of the existing passwords by reversing the scrambling process.
+
+What is the un-scrambled version of the scrambled password fbgdceah?
