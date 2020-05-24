@@ -2,6 +2,7 @@ package aoc.aoc2016;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,14 +34,7 @@ public class Day21ScrambledLettersAndHash {
             pattern = Pattern.compile("^swap position (\\d+) with position (\\d+)$");
             matcher = pattern.matcher(instruction);
             if (matcher.find()) {
-                int x = Integer.parseInt(matcher.group(1));
-                int y = Integer.parseInt(matcher.group(2));
-
-                char[] chars = password.toCharArray();
-                char temp = chars[y];
-                chars[y] = chars[x];
-                chars[x] = temp;
-                password = new String(chars);
+                password = swapPosition(password, Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
                 log.info("{}: {}", instruction, password);
                 continue;
             }
@@ -48,16 +42,7 @@ public class Day21ScrambledLettersAndHash {
             pattern = Pattern.compile("^swap letter (\\w) with letter (\\w)$");
             matcher = pattern.matcher(instruction);
             if (matcher.find()) {
-                char x = matcher.group(1).charAt(0);
-                char y = matcher.group(2).charAt(0);
-                int xpos = password.indexOf(x);
-                int ypos = password.indexOf(y);
-
-                char[] chars = password.toCharArray();
-                char temp = chars[ypos];
-                chars[ypos] = chars[xpos];
-                chars[xpos] = temp;
-                password = new String(chars);
+                password = swapLetter(password, matcher.group(1).charAt(0), matcher.group(2).charAt(0));
                 log.info("{}: {}", instruction, password);
                 continue;
             }
@@ -65,20 +50,7 @@ public class Day21ScrambledLettersAndHash {
             pattern = Pattern.compile("^rotate (left|right) (\\d+) step(s)?$");
             matcher = pattern.matcher(instruction);
             if (matcher.find()) {
-                String direction = matcher.group(1);
-                int x = Integer.parseInt(matcher.group(2));
-                int size = password.length();
-                StringBuilder sb = new StringBuilder();
-                if (direction.equals("right")) {
-                    for (int i = 0; i < password.length(); i++) {
-                        sb.append(password.charAt((i + size - x) % size));
-                    }
-                } else {
-                    for (int i = 0; i < password.length(); i++) {
-                        sb.append(password.charAt((i + x) % size));
-                    }
-                }
-                password = sb.toString();
+                password = rotate(password, matcher.group(1), Integer.parseInt(matcher.group(2)));
                 log.info("{}: {}", instruction, password);
                 continue;
             }
@@ -86,19 +58,7 @@ public class Day21ScrambledLettersAndHash {
             pattern = Pattern.compile("^rotate based on position of letter (\\w)$");
             matcher = pattern.matcher(instruction);
             if (matcher.find()) {
-                String letter = matcher.group(1);
-                int index = password.indexOf(letter);
-                int size = password.length();
-                int numberOfRotations = 1 + index;
-                if (index >= 4) {
-                    numberOfRotations++;
-                    numberOfRotations = numberOfRotations % size;
-                }
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < password.length(); i++) {
-                    sb.append(password.charAt((i + size - numberOfRotations) % size));
-                }
-                password = sb.toString();
+                password = rotateLetter(password, matcher.group(1));
                 log.info("{}: {}", instruction, password);
                 continue;
             }
@@ -106,15 +66,7 @@ public class Day21ScrambledLettersAndHash {
             pattern = Pattern.compile("^reverse positions (\\d+) through (\\d+)$");
             matcher = pattern.matcher(instruction);
             if (matcher.find()) {
-                int x = Integer.parseInt(matcher.group(1));
-                int y = Integer.parseInt(matcher.group(2));
-
-                String before = password.substring(0, x);
-                String reverse = password.substring(x, y + 1);
-                String after = (y < password.length() - 1) ? password.substring(y + 1) : "";
-
-                StringBuilder sb = new StringBuilder(reverse).reverse();
-                password = before + sb.toString() + after;
+                password = reverse(password, Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
                 log.info("{}: {}", instruction, password);
                 continue;
             }
@@ -122,18 +74,154 @@ public class Day21ScrambledLettersAndHash {
             pattern = Pattern.compile("^move position (\\d+) to position (\\d+)$");
             matcher = pattern.matcher(instruction);
             if (matcher.find()) {
-                int x = Integer.parseInt(matcher.group(1));
-                int y = Integer.parseInt(matcher.group(2));
+                password = move(password, Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+                log.info("{}: {}", instruction, password);
+            }
+        }
+        return password;
+    }
 
-                String before = password.substring(0, x);
-                String letter = password.substring(x, x + 1);
-                String after = password.substring(x + 1);
+    private String swapPosition(String input, int x, int y) {
+        char[] chars = input.toCharArray();
+        char temp = chars[y];
+        chars[y] = chars[x];
+        chars[x] = temp;
+        return new String(chars);
+    }
 
-                String tempPassword = before + after;
-                before = tempPassword.substring(0, y);
-                after = (y < tempPassword.length()) ? tempPassword.substring(y) : "";
+    private String swapLetter(String input, char x, char y) {
+        int xpos = input.indexOf(x);
+        int ypos = input.indexOf(y);
 
-                password = before + letter + after;
+        char[] chars = input.toCharArray();
+        char temp = chars[ypos];
+        chars[ypos] = chars[xpos];
+        chars[xpos] = temp;
+        return new String(chars);
+    }
+
+    private String rotate(String input, String direction, int x) {
+        int size = input.length();
+        StringBuilder sb = new StringBuilder();
+        if (direction.equals("right")) {
+            for (int i = 0; i < input.length(); i++) {
+                sb.append(input.charAt((i + size - x) % size));
+            }
+        } else {
+            for (int i = 0; i < input.length(); i++) {
+                sb.append(input.charAt((i + x) % size));
+            }
+        }
+        return sb.toString();
+    }
+
+    private String rotateLetter(String input, String x) {
+        int index = input.indexOf(x);
+        int size = input.length();
+        int numberOfRotations = 1 + index;
+        if (index >= 4) {
+            numberOfRotations++;
+            numberOfRotations = numberOfRotations % size;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            sb.append(input.charAt((i + size - numberOfRotations) % size));
+        }
+        return sb.toString();
+    }
+
+    private String reverseRotateLetter(String input, String x) {
+        int index = input.indexOf(x);
+        int size = input.length();
+
+        int initialIndex;
+        int[] indexMap = {7, 0, 4, 1, 5, 2, 6, 3};
+        initialIndex = indexMap[index];
+
+        int rotations = (size + (index - initialIndex)) % size;
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            sb.append(input.charAt((i + rotations) % size));
+        }
+        return sb.toString();
+    }
+
+    private String reverse(String input, int x, int y) {
+        String before = input.substring(0, x);
+        String reverse = input.substring(x, y + 1);
+        String after = (y < input.length() - 1) ? input.substring(y + 1) : "";
+        StringBuilder sb = new StringBuilder(reverse).reverse();
+        return before + sb.toString() + after;
+    }
+
+    private String move(String input, int x, int y) {
+        String before = input.substring(0, x);
+        String letter = input.substring(x, x + 1);
+        String after = input.substring(x + 1);
+        String tempPassword = before + after;
+        before = tempPassword.substring(0, y);
+        after = (y < tempPassword.length()) ? tempPassword.substring(y) : "";
+        return before + letter + after;
+    }
+
+    String crack(String answer) {
+        Pattern pattern;
+        Matcher matcher;
+        String password = answer;
+
+        log.info("Starting with: {}", password);
+        Collections.reverse(instructions);
+        for (String instruction : instructions) {
+
+            pattern = Pattern.compile("^swap position (\\d+) with position (\\d+)$");
+            matcher = pattern.matcher(instruction);
+            if (matcher.find()) {
+                password = swapPosition(password, Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(1)));
+                log.info("{}: {}", instruction, password);
+                continue;
+            }
+
+            pattern = Pattern.compile("^swap letter (\\w) with letter (\\w)$");
+            matcher = pattern.matcher(instruction);
+            if (matcher.find()) {
+                password = swapLetter(password, matcher.group(2).charAt(0), matcher.group(1).charAt(0));
+                log.info("{}: {}", instruction, password);
+                continue;
+            }
+
+            pattern = Pattern.compile("^rotate (left|right) (\\d+) step(s)?$");
+            matcher = pattern.matcher(instruction);
+            if (matcher.find()) {
+                if (matcher.group(1).equals("left")) {
+                    password = rotate(password, "right", Integer.parseInt(matcher.group(2)));
+                } else {
+                    password = rotate(password, "left", Integer.parseInt(matcher.group(2)));
+                }
+                log.info("{}: {}", instruction, password);
+                continue;
+            }
+
+            pattern = Pattern.compile("^rotate based on position of letter (\\w)$");
+            matcher = pattern.matcher(instruction);
+            if (matcher.find()) {
+                password = reverseRotateLetter(password, matcher.group(1));
+                log.info("{}: {}", instruction, password);
+                continue;
+            }
+
+            pattern = Pattern.compile("^reverse positions (\\d+) through (\\d+)$");
+            matcher = pattern.matcher(instruction);
+            if (matcher.find()) {
+                password = reverse(password, Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+                log.info("{}: {}", instruction, password);
+                continue;
+            }
+
+            pattern = Pattern.compile("^move position (\\d+) to position (\\d+)$");
+            matcher = pattern.matcher(instruction);
+            if (matcher.find()) {
+                password = move(password, Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(1)));
                 log.info("{}: {}", instruction, password);
             }
         }

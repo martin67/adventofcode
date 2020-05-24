@@ -19,4 +19,12 @@ class Day21ScrambledLettersAndHashTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day21ScrambledLettersAndHash(inputLines).scramble(input));
     }
+
+    @ParameterizedTest
+    @CsvSource({"abcdefgh, dbfgaehc, src/test/resources/2016/day21.txt",
+            "aghfcdeb, fbgdceah, src/test/resources/2016/day21.txt"})
+    void crackPassword(String expected, String input, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day21ScrambledLettersAndHash(inputLines).crack(input));
+    }
 }

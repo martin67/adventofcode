@@ -46,3 +46,7 @@ You scrambled the password correctly, but you discover that you can't actually m
 You'll need to un-scramble one of the existing passwords by reversing the scrambling process.
 
 What is the un-scrambled version of the scrambled password fbgdceah?
+
+Your puzzle answer was aghfcdeb.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
