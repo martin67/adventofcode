@@ -1,6 +1,8 @@
 package aoc.aoc2016;
 
 import aoc.Position;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -8,10 +10,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class Day22GridComputing {
     Set<Node> nodes = new HashSet<>();
 
-    public Day22GridComputing(List<String> inputLines) {
+    public Day22GridComputing(@NotNull List<String> inputLines) {
 
         // /dev/grid/node-x0-y0     94T   73T    21T   77%
         Pattern pattern = Pattern.compile("^/dev/grid/node-x(\\d+)-y(\\d+)\\s+(\\d+)T\\s+(\\d+)T\\s+(\\d+)T\\s+(\\d+)%$");
@@ -42,6 +45,10 @@ public class Day22GridComputing {
         return viableNodes;
     }
 
+    int fewestSteps() {
+        return 0;
+    }
+
     static class Node {
         Position pos;
         int size;
@@ -55,6 +62,11 @@ public class Day22GridComputing {
             this.used = used;
             this.avail = avail;
             this.use = use;
+        }
+
+        @Override
+        public String toString() {
+            return "Node [" + pos.getX() + "," + pos.getY() + "] " + used + "T/" + size + "T";
         }
     }
 }
