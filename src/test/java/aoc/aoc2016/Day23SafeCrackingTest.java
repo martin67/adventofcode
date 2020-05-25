@@ -20,4 +20,11 @@ class Day23SafeCrackingTest {
         assertEquals(expected, new Day23SafeCracking(inputLines).safeValue());
     }
 
+    @ParameterizedTest
+    @CsvSource({"479009263, src/test/resources/2016/day23.txt"})
+    void secondValue(int expected, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day23SafeCracking(inputLines).secondValue());
+    }
+
 }

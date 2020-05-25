@@ -22,4 +22,16 @@ public class Day23SafeCracking {
         computer.run();
         return computer.getRegister('a');
     }
+
+    int secondValue() {
+        Map<Character, Integer> registers = new HashMap<>();
+        registers.put('a', 12);
+        registers.put('b', 0);
+        registers.put('c', 0);
+        registers.put('d', 0);
+        computer.loadRegisters(registers);
+        computer.setMultiplyHack(true);
+        computer.run();
+        return computer.getRegister('a');
+    }
 }

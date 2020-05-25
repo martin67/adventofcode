@@ -1,5 +1,6 @@
 package aoc.aoc2016;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -8,10 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@Data
 class MonorailComputer {
     Map<Character, Integer> registers;
     List<String> program;
     int instructionPointer;
+    boolean multiplyHack;
 
     public MonorailComputer() {
         registers = new HashMap<>();
@@ -34,7 +37,17 @@ class MonorailComputer {
         while (instructionPointer < program.size()) {
             String instruction = program.get(instructionPointer);
             String[] s = instruction.split(" ");
-            log.debug("IP: {}, instruction: {}, registers:{}", instructionPointer, instruction, registers);
+
+            if (multiplyHack && instructionPointer == 2) {
+                log.info("multiplyHack: a: {}, b {}", getRegister('a'), getRegister('b'));
+                registers.put('a', getRegister('a') * getRegister('b'));
+                registers.put('b', getRegister('b') - 1);
+                registers.put('c', getRegister('b') * 2);
+                registers.put('d', 0);
+                instructionPointer = 16;
+                continue;
+            }
+            //log.info("IP: {}, instruction: {}, registers:{}", instructionPointer, instruction, registers);
             char c;
             int x;
             switch (s[0]) {

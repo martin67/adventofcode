@@ -67,4 +67,6 @@ usually **multiply**?
 
 Anyway, **what value** should actually be sent to the safe?
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 479009263.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
