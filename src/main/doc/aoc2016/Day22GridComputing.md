@@ -125,4 +125,6 @@ be efficient:
 
 **What is the fewest number of steps** required to move your goal data to node-x0-y0?
 
-Although it hasn't changed, you can still get your puzzle input.
+Your puzzle answer was 207.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

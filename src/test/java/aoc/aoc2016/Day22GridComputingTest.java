@@ -22,7 +22,7 @@ class Day22GridComputingTest {
 
     @ParameterizedTest
     @CsvSource({"7, src/test/resources/2016/day22-demo1.txt",
-            "0, src/test/resources/2016/day22.txt"})
+            "207, src/test/resources/2016/day22.txt"})
     void fewestSteps(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day22GridComputing(inputLines).fewestSteps());
