@@ -1,13 +1,10 @@
 plugins {
-    id 'idea'
-    id "io.freefair.lombok" version "4.1.6"
+    id "java"
+    id "io.freefair.lombok" version "5.1.0"
 }
 
 group 'nu.hagelin.adventofcode'
 version '1.0-SNAPSHOT'
-
-apply plugin: 'java'
-apply plugin: 'idea'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
