@@ -13,9 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class Day7SomeAssemblyRequiredTest {
     @ParameterizedTest
     @CsvSource({"72, d, src/test/resources/2015/day7-demo1.txt",
-            "0, a, src/test/resources/2015/day7.txt"})
+            "46065, a, src/test/resources/2015/day7.txt"})
     void signalWire(int expected, String wireName, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day7SomeAssemblyRequired(inputLines).signalWire(wireName));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"14134, a, src/test/resources/2015/day7.txt"})
+    void signalRewired(int expected, String wireName, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day7SomeAssemblyRequired(inputLines).signalRewired(wireName));
     }
 }
