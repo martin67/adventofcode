@@ -22,7 +22,7 @@ class MonorailComputer {
         registers.put('b', 0);
         registers.put('c', 0);
         registers.put('d', 0);
-        instructionPointer = 0;
+
     }
 
     void loadProgram(List<String> input) {
@@ -34,6 +34,11 @@ class MonorailComputer {
     }
 
     void run() {
+        instructionPointer = 0;
+        int signalRepeats = 0;
+        int signalStart = getRegister('a');
+        int lastSignal = -1;
+
         while (instructionPointer < program.size()) {
             String instruction = program.get(instructionPointer);
             String[] s = instruction.split(" ");
@@ -50,6 +55,7 @@ class MonorailComputer {
             //log.info("IP: {}, instruction: {}, registers:{}", instructionPointer, instruction, registers);
             char c;
             int x;
+
             switch (s[0]) {
 
                 // cpy x y copies x (either an integer or the value of a register) into register y.
@@ -131,6 +137,29 @@ class MonorailComputer {
                         }
                     }
                     instructionPointer++;
+                    break;
+
+                case "out":
+                    c = s[1].charAt(0);
+                    if (registers.containsKey(c)) {
+                        x = registers.get(c);
+                    } else {
+                        x = Integer.parseInt(s[1]);
+                    }
+                    if (x == lastSignal || signalRepeats > 100) {
+                        log.debug("Got {} repeats for a={}", signalRepeats, signalStart);
+                        if (signalRepeats > 100) {
+                            log.info("Found it: {}!", signalStart);
+                            registers.put('a', signalStart);
+                        } else {
+                            registers.put('a', 0);
+                        }
+                        instructionPointer = program.size();
+                    } else {
+                        lastSignal = x;
+                        signalRepeats++;
+                        instructionPointer++;
+                    }
                     break;
 
                 default:
