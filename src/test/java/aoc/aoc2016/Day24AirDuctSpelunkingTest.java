@@ -18,4 +18,12 @@ class Day24AirDuctSpelunkingTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day24AirDuctSpelunking(inputLines).fewestSteps());
     }
+
+    @ParameterizedTest
+    @CsvSource({"20, src/test/resources/2016/day24-demo1.txt",
+            "652, src/test/resources/2016/day24.txt"})
+    void fewestStepsAndReturn(int expected, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day24AirDuctSpelunking(inputLines).fewestStepsAndReturn());
+    }
 }

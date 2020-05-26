@@ -16,10 +16,12 @@ import java.util.*;
 @Slf4j
 public class Day24AirDuctSpelunking {
 
-    private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+    private final Graph<Character, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final Map<Character, Position> pointsOfInterest = new HashMap<>();
 
     public Day24AirDuctSpelunking(List<String> inputLines) {
+        Graph<Position, DefaultEdge> initialGraph = new SimpleGraph<>(DefaultEdge.class);
+        DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(initialGraph);
         Set<Position> map = new HashSet<>();
         int y = 0;
         Position pos;
@@ -30,14 +32,14 @@ public class Day24AirDuctSpelunking {
                 if (c != '#') {
                     pos = new Position(x, y);
                     map.add(pos);
-                    graph.addVertex(pos);
+                    initialGraph.addVertex(pos);
                     Position left = pos.adjacent(Direction.Left);
                     if (map.contains(left)) {
-                        graph.addEdge(pos, left);
+                        initialGraph.addEdge(pos, left);
                     }
                     Position up = pos.adjacent(Direction.Up);
                     if (map.contains(up)) {
-                        graph.addEdge(pos, up);
+                        initialGraph.addEdge(pos, up);
                     }
                     if (c != '.') {
                         pointsOfInterest.put(c, pos);
@@ -47,30 +49,28 @@ public class Day24AirDuctSpelunking {
             }
             y++;
         }
-    }
 
-    int fewestSteps() {
         // reduce to smaller graph
-        Graph<Character, DefaultWeightedEdge> smallerGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
-
         for (char start : pointsOfInterest.keySet()) {
             for (char end : pointsOfInterest.keySet()) {
                 if (start != end) {
-                    if (!smallerGraph.containsVertex(start)) {
-                        smallerGraph.addVertex(start);
+                    if (!graph.containsVertex(start)) {
+                        graph.addVertex(start);
                     }
-                    if (!smallerGraph.containsVertex(end)) {
-                        smallerGraph.addVertex(end);
+                    if (!graph.containsVertex(end)) {
+                        graph.addVertex(end);
                     }
-                    if (!smallerGraph.containsEdge(start, end)) {
+                    if (!graph.containsEdge(start, end)) {
                         int length = dijkstraAlg.getPath(pointsOfInterest.get(start), pointsOfInterest.get(end)).getLength();
-                        DefaultWeightedEdge e = smallerGraph.addEdge(start, end);
-                        smallerGraph.setEdgeWeight(e, length);
+                        DefaultWeightedEdge e = graph.addEdge(start, end);
+                        graph.setEdgeWeight(e, length);
                     }
                 }
             }
         }
+    }
+
+    int fewestSteps() {
 
         HeldKarpTSP<Character, DefaultWeightedEdge> tour = new HeldKarpTSP<>();
         int shortestLength = Integer.MAX_VALUE;
@@ -78,18 +78,25 @@ public class Day24AirDuctSpelunking {
         // Change weight between start and end to 0 and compute length => that will give the shortest using TSP
         for (char end : pointsOfInterest.keySet()) {
             if (end != '0') {
-                DefaultWeightedEdge e = smallerGraph.getEdge('0', end);
-                double weight = smallerGraph.getEdgeWeight(e);
-                smallerGraph.setEdgeWeight(e, 0);
-                int length = (int) tour.getTour(smallerGraph).getWeight();
+                DefaultWeightedEdge e = graph.getEdge('0', end);
+                double weight = graph.getEdgeWeight(e);
+                graph.setEdgeWeight(e, 0);
+                int length = (int) tour.getTour(graph).getWeight();
                 log.info("Length between 0 and {}: {}", end, length);
                 if (length < shortestLength) {
                     shortestLength = length;
                 }
-                smallerGraph.setEdgeWeight(e, weight);
+                graph.setEdgeWeight(e, weight);
             }
         }
 
         return shortestLength;
+    }
+
+    int fewestStepsAndReturn() {
+        HeldKarpTSP<Character, DefaultWeightedEdge> tour = new HeldKarpTSP<>();
+        int length = (int) tour.getTour(graph).getWeight();
+        log.info("TSP length: {}", length);
+        return length;
     }
 }
