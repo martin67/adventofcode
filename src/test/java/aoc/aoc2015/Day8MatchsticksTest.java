@@ -18,4 +18,12 @@ class Day8MatchsticksTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day8Matchsticks(inputLines).matches());
     }
+
+    @ParameterizedTest
+    @CsvSource({"19, src/test/resources/2015/day8-demo1.txt",
+            "2074, src/test/resources/2015/day8.txt"})
+    void encoded(int expected, String fileName) throws IOException {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day8Matchsticks(inputLines).encoded());
+    }
 }

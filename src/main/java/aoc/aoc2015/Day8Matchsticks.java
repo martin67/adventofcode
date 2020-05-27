@@ -10,11 +10,13 @@ import java.util.List;
 public class Day8Matchsticks {
     int numberOfCharacters = 0;
     int numberOfMemory = 0;
+    int extended = 0;
 
     public Day8Matchsticks(List<String> inputLines) {
         for (String line : inputLines) {
             String before = line;
             numberOfCharacters += line.length();
+            extended += line.length() + 4;
 
             line = line.substring(1, line.length() - 1);
 
@@ -24,6 +26,7 @@ public class Day8Matchsticks {
             while (it.current() != CharacterIterator.DONE) {
                 if (it.current() == '\\') {
                     it.next();
+                    extended++;
                     switch (it.current()) {
                         case CharacterIterator.DONE:
                             log.error("Is this legal?");
@@ -32,13 +35,14 @@ public class Day8Matchsticks {
                         case ('\\'):
                             sb.append('A');
                             it.next();
+                            extended++;
                             break;
                         case '"':
                             sb.append('B');
                             it.next();
+                            extended++;
                             break;
                         case 'x':
-                            //it.
                             char a = it.next();
                             char b = it.next();
                             if (Character.digit(a, 16) != -1 && Character.digit(b, 16) != -1) {
@@ -51,6 +55,7 @@ public class Day8Matchsticks {
                             }
                             break;
                         default:
+                            log.error("Is this legal?");
                             sb.append('C').append(it.current());
                             it.next();
                             break;
@@ -63,11 +68,15 @@ public class Day8Matchsticks {
 
             line = sb.toString();
             numberOfMemory += line.length();
-            log.info("{} [{}] -> {} [{}]", before, before.length(), line, line.length());
+            log.debug("{} [{}] -> {} [{}]", before, before.length(), line, line.length());
         }
     }
 
     int matches() {
         return numberOfCharacters - numberOfMemory;
+    }
+
+    int encoded() {
+        return extended - numberOfCharacters;
     }
 }
