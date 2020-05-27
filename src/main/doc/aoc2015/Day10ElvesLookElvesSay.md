@@ -29,3 +29,7 @@ of Life** fame).
 
 Now, starting again with the digits in your puzzle input, apply this process **50** times. What is **the length of 
 the new result**?
+
+Your puzzle answer was 5103798.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
