@@ -22,7 +22,7 @@ class Day9AllInASingleNightTest {
 
     @ParameterizedTest
     @CsvSource({"982, src/test/resources/2015/day9-demo1.txt",
-            "141, src/test/resources/2015/day9.txt"})
+            "736, src/test/resources/2015/day9.txt"})
     void longestRoute(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day9AllInASingleNight(inputLines).longestRoute());

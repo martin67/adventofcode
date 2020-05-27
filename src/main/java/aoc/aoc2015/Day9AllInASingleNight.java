@@ -2,6 +2,8 @@ package aoc.aoc2015;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.KShortestSimplePaths;
 import org.jgrapht.alg.tour.HeldKarpTSP;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
@@ -63,8 +65,30 @@ public class Day9AllInASingleNight {
         return shortestRoute;
     }
 
-
     int longestRoute() {
-        return 0;
+        // Very brute force... Get all possible paths and see which one that is longest.
+        KShortestSimplePaths<String, DefaultWeightedEdge> kShortestSimplePaths = new KShortestSimplePaths<>(graph);
+        List<GraphPath<String, DefaultWeightedEdge>> paths;
+        double longest = 0;
+
+        for (String start : graph.vertexSet()) {
+            for (String end : graph.vertexSet()) {
+
+                if (!start.equals(end)) {
+                    paths = kShortestSimplePaths.getPaths(start, end, 10000);
+                    for (GraphPath<String, DefaultWeightedEdge> path : paths) {
+                        if (path.getLength() == graph.vertexSet().size() - 1) {
+                            double length = path.getWeight();
+                            if (length > longest) {
+                                log.debug("Found longest: {}", path);
+                                longest = length;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        return (int) longest;
     }
 }
