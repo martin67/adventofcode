@@ -30,3 +30,14 @@ since i is not allowed.
 Given Santa's current password (your puzzle input), what should his **next password** be?
 
 Your puzzle input is **vzbxkghb**.
+
+Your puzzle answer was vzbxxyzz.
+
+The first half of this puzzle is complete! It provides one gold star: *
+
+##Part Two
+Santa's password expired again. What's the next one?
+
+Your puzzle answer was vzcaabcc.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
