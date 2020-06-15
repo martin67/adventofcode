@@ -20,7 +20,7 @@ class Day16AuntSueTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"213, src/test/resources/2015/day16.txt"})
+    @CsvSource({"323, src/test/resources/2015/day16.txt"})
     void realSueNumber(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day16AuntSue(inputLines).realSueNumber());
