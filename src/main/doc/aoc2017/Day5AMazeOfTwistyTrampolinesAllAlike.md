@@ -32,4 +32,15 @@ In this example, the exit is reached in 5 steps.
 
 **How many steps** does it take to reach the exit?
 
-To begin, get your puzzle input.
+Your puzzle answer was 360603.
+
+##Part Two
+Now, the jumps are even stranger: after each jump, if the offset was **three or more**, instead **decrease** it by 1. Otherwise, increase it by 1 as before.
+
+Using this rule with the above example, the process now takes 10 steps, and the offset values after finding the exit are left as 2 3 2 3 -1.
+
+**How many steps** does it now take to reach the exit?
+
+Your puzzle answer was 25347697.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
