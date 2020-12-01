@@ -9,3 +9,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 * 2017 - ongoing
 * 2018 - completed!
 * 2019 - completed!
+* 2020 - ongoing
