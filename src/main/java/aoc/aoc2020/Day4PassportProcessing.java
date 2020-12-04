@@ -86,7 +86,7 @@ public class Day4PassportProcessing {
                 return false;
             }
 
-            if (!byr.matches("\\d\\d\\d\\d") || !iyr.matches("\\d\\d\\d\\d") || !eyr.matches("\\d\\d\\d\\d")) {
+            if (!byr.matches("\\d{4}") || !iyr.matches("\\d{4}") || !eyr.matches("\\d{4}")) {
                 return false;
             }
 
