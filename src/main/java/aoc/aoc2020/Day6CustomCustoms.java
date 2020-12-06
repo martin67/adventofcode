@@ -42,11 +42,8 @@ public class Day6CustomCustoms {
                 personsInGroup = 0;
             } else {
                 for (char c : line.toCharArray()) {
-                    if (questions.containsKey(c)) {
-                        questions.put(c, questions.get(c) + 1);
-                    } else {
-                        questions.put(c, 1);
-                    }
+                    questions.putIfAbsent(c, 0);
+                    questions.put(c, questions.get(c) + 1);
                 }
                 personsInGroup++;
             }
