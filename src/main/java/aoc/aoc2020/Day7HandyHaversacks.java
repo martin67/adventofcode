@@ -15,8 +15,7 @@ public class Day7HandyHaversacks {
         for (String line : inputLines) {
             String[] firstSplit = line.split(" bags contain ");
             String color = firstSplit[0];
-            String allContent = firstSplit[1];
-            String[] splitContents = allContent.split("(,|\\.)");
+            String[] contentList = firstSplit[1].split(",");
 
             Bag bag;
             if (bags.containsKey(color)) {
@@ -26,9 +25,9 @@ public class Day7HandyHaversacks {
                 bags.put(color, bag);
             }
 
-            Pattern pattern = Pattern.compile("^(\\d+) (\\w+ \\w+) bag(s)?$");
-            for (String content : splitContents) {
-                Matcher matcher = pattern.matcher(content.trim());
+            Pattern pattern = Pattern.compile("(\\d+) (\\w+ \\w+) bag.*");
+            for (String content : contentList) {
+                Matcher matcher = pattern.matcher(content);
                 if (matcher.find()) {
                     int amount = Integer.parseInt(matcher.group(1));
                     String secondColor = matcher.group(2);
