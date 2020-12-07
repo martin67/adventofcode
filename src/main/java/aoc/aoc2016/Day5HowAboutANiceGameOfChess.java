@@ -1,12 +1,13 @@
 package aoc.aoc2016;
 
-import javax.xml.bind.DatatypeConverter;
+import com.google.common.io.BaseEncoding;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Day5HowAboutANiceGameOfChess {
 
-    private String doorId;
+    private final String doorId;
 
     public Day5HowAboutANiceGameOfChess(String input) {
         this.doorId = input;
@@ -24,9 +25,9 @@ public class Day5HowAboutANiceGameOfChess {
             do {
                 String id = doorId + counter;
                 md.update(id.getBytes());
-                hash = DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
+                hash = BaseEncoding.base16().encode(md.digest()).toLowerCase();
                 counter++;
-            } while (!hash.substring(0, 5).equals("00000"));
+            } while (!hash.startsWith("00000"));
             password.append(hash.charAt(5));
         }
         return password.toString();
@@ -43,9 +44,9 @@ public class Day5HowAboutANiceGameOfChess {
             do {
                 String id = doorId + counter;
                 md.update(id.getBytes());
-                hash = DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
+                hash = BaseEncoding.base16().encode(md.digest()).toLowerCase();
                 counter++;
-            } while (!hash.substring(0, 5).equals("00000"));
+            } while (!hash.startsWith("00000"));
 
             int index = Character.getNumericValue(hash.charAt(5));
             if (index < 8 && password[index] == 0) {
