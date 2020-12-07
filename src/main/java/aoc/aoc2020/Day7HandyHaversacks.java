@@ -32,6 +32,7 @@ public class Day7HandyHaversacks {
                 if (matcher.find()) {
                     int amount = Integer.parseInt(matcher.group(1));
                     String secondColor = matcher.group(2);
+
                     Bag secondBag;
                     if (bags.containsKey(secondColor)) {
                         secondBag = bags.get(secondColor);
@@ -50,7 +51,7 @@ public class Day7HandyHaversacks {
     }
 
     long numberOfBagsInside() {
-        return bags.get("shiny gold").numberOfBagsInside() -1;
+        return bags.get("shiny gold").numberOfBagsInside() - 1;
     }
 
     static class Bag {
@@ -79,15 +80,11 @@ public class Day7HandyHaversacks {
         }
 
         int numberOfBagsInside() {
-            if (content.isEmpty()) {
-                return 1;
-            } else {
-                int numberOfBags = 1;
-                for (Bag bag : content.keySet()) {
-                    numberOfBags += content.get(bag) * bag.numberOfBagsInside();
-                }
-                return numberOfBags;
+            int numberOfBags = 1;
+            for (Bag bag : content.keySet()) {
+                numberOfBags += content.get(bag) * bag.numberOfBagsInside();
             }
+            return numberOfBags;
         }
     }
 }
