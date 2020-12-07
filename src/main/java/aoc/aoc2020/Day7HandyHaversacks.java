@@ -45,20 +45,12 @@ public class Day7HandyHaversacks {
         }
     }
 
-    int numberOfBags() {
-        int numberOfBagsFound = 0;
-        for (Bag bag : bags.values()) {
-            if (bag.containsGoldBag()) {
-                numberOfBagsFound++;
-            }
-        }
-        return numberOfBagsFound - 1;
+    long numberOfBags() {
+        return bags.values().stream().filter(Bag::containsGoldBag).count() - 1;
     }
 
     long numberOfBagsInside() {
-        Bag goldenBag = bags.get("shiny gold");
-
-        return goldenBag.numberOfBagsInside() - 1;
+        return bags.get("shiny gold").numberOfBagsInside() -1;
     }
 
     static class Bag {
