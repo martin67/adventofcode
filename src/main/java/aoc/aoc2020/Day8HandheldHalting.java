@@ -11,9 +11,7 @@ public class Day8HandheldHalting {
     public Day8HandheldHalting(List<String> inputLines) {
         for (String line : inputLines) {
             String[] s = line.split(" ");
-            String operation = s[0];
-            int argument = Integer.parseInt(s[1]);
-            instructions.add(new Instruction(operation, argument));
+            instructions.add(new Instruction(s[0], Integer.parseInt(s[1])));
         }
     }
 
@@ -21,7 +19,7 @@ public class Day8HandheldHalting {
         return runProgram(instructions).value;
     }
 
-    Result runProgram(List<Instruction> program) {
+    private Result runProgram(List<Instruction> program) {
         int accumulator = 0;
         int pc = 0;
         Set<Integer> instructionsRun = new HashSet<>();
@@ -47,11 +45,7 @@ public class Day8HandheldHalting {
             }
         }
 
-        if (pc == program.size()) {
-            return new Result(false, accumulator);
-        } else {
-            return new Result(true, accumulator);
-        }
+        return new Result((pc != program.size()), accumulator);
     }
 
     int accumulatorValueNoLoop() {
