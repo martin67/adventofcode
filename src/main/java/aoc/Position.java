@@ -97,23 +97,23 @@ public class Position implements Comparable<Position> {
 
     public Set<Position> allAdjacent() {
         Set<Position> adjacent = new HashSet<>();
-        adjacent.add(new Position(x, y - 1)); // up or north
-        adjacent.add(new Position(x - 1, y)); // left or west
-        adjacent.add(new Position(x + 1, y)); // right or east
-        adjacent.add(new Position(x, y + 1)); // down or south
+        adjacent.add(adjacent(Direction.North));
+        adjacent.add(adjacent(Direction.South));
+        adjacent.add(adjacent(Direction.East));
+        adjacent.add(adjacent(Direction.West));
         return adjacent;
     }
 
     public Set<Position> allAdjacentIncludingDiagonal() {
         Set<Position> adjacent = new HashSet<>();
-        adjacent.add(new Position(x, y - 1)); // north
-        adjacent.add(new Position(x - 1, y - 1)); // northwest
-        adjacent.add(new Position(x - 1, y)); // west
-        adjacent.add(new Position(x - 1, y + 1)); // southwest
-        adjacent.add(new Position(x + 1, y)); // east
-        adjacent.add(new Position(x + 1, y - 1)); // northeast
-        adjacent.add(new Position(x, y + 1)); // south
-        adjacent.add(new Position(x + 1, y + 1)); // southeast
+        adjacent.add(adjacent(Direction.North));
+        adjacent.add(adjacent(Direction.South));
+        adjacent.add(adjacent(Direction.East));
+        adjacent.add(adjacent(Direction.West));
+        adjacent.add(adjacent(Direction.NorthEast));
+        adjacent.add(adjacent(Direction.NorthWest));
+        adjacent.add(adjacent(Direction.SouthEast));
+        adjacent.add(adjacent(Direction.SouthWest));
         return adjacent;
     }
 
@@ -121,20 +121,20 @@ public class Position implements Comparable<Position> {
         Set<Position> adjacent = new HashSet<>();
         switch (dir) {
             case NorthEast:
-                adjacent.add(new Position(this.adjacent(Direction.North)));
-                adjacent.add(new Position(this.adjacent(Direction.East)));
+                adjacent.add(adjacent(Direction.North));
+                adjacent.add(adjacent(Direction.East));
                 break;
             case NorthWest:
-                adjacent.add(new Position(this.adjacent(Direction.North)));
-                adjacent.add(new Position(this.adjacent(Direction.West)));
+                adjacent.add(adjacent(Direction.North));
+                adjacent.add(adjacent(Direction.West));
                 break;
             case SouthEast:
-                adjacent.add(new Position(this.adjacent(Direction.South)));
-                adjacent.add(new Position(this.adjacent(Direction.East)));
+                adjacent.add(adjacent(Direction.South));
+                adjacent.add(adjacent(Direction.East));
                 break;
             case SouthWest:
-                adjacent.add(new Position(this.adjacent(Direction.South)));
-                adjacent.add(new Position(this.adjacent(Direction.West)));
+                adjacent.add(adjacent(Direction.South));
+                adjacent.add(adjacent(Direction.West));
                 break;
             default:
                 log.error("Not a diagonal direction");
