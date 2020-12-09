@@ -4,35 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day10KnotHash {
-    final int listSize;
     List<Integer> list = new ArrayList<>();
-    List<Integer> lengthsWithCharacters = new ArrayList<>();
-    List<Integer> lengths = new ArrayList<>();
 
-    public Day10KnotHash(int listSize, List<String> inputLines) {
-        this.listSize = listSize;
-        for (String line : inputLines) {
-            String[] numbers = line.split(",");
-            for (String number : numbers) {
-                lengths.add(Integer.parseInt(number));
-            }
-
-            for (char c : line.toCharArray()) {
-                lengthsWithCharacters.add((int) c);
-            }
-        }
+    public Day10KnotHash(int listSize) {
         for (int i = 0; i < listSize; i++) {
             list.add(i);
         }
-        lengthsWithCharacters.addAll(List.of(17, 31, 73, 47, 23));
     }
 
-    int checkKnot() {
+    int checkKnot(String line) {
+        List<Integer> lengths = new ArrayList<>();
+
+        String[] numbers = line.split(",");
+        for (String number : numbers) {
+            lengths.add(Integer.parseInt(number));
+        }
+
         return runRounds(lengths, 1);
     }
 
-    String knotHash() {
-        runRounds(lengthsWithCharacters, 64);
+    String knotHash(String input) {
+        List<Integer> lengths = new ArrayList<>();
+
+        for (char c : input.toCharArray()) {
+            lengths.add((int) c);
+        }
+        lengths.addAll(List.of(17, 31, 73, 47, 23));
+
+        runRounds(lengths, 64);
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 16; i++) {
@@ -40,7 +39,7 @@ public class Day10KnotHash {
             for (int j = 0; j < 16; j++) {
                 hash ^= list.get(i * 16 + j);
             }
-            sb.append(Integer.toHexString(hash));
+            sb.append(String.format("%02x", hash));
         }
         return sb.toString();
     }
@@ -49,7 +48,7 @@ public class Day10KnotHash {
         int currentPosition = 0;
         int skipSize = 0;
 
-        for (int round = 0; round <numberOfRounds ; round++) {
+        for (int round = 0; round < numberOfRounds; round++) {
 
             for (int length : lengths) {
                 // reverse from currentPosition, length: length
