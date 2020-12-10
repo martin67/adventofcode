@@ -1,13 +1,10 @@
 package aoc.aoc2020;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@Slf4j
 public class Day10AdapterArray {
     List<Integer> adapters = new ArrayList<>();
 
@@ -32,53 +29,75 @@ public class Day10AdapterArray {
             if (adapters.get(i) - adapters.get(i - 1) == 3) {
                 diff3++;
             }
-
         }
-        log.info("1 diff: {}, 3 diff: {}", diff1, diff3);
         return diff1 * diff3;
-    }
-
-    long adapterCombinations() {
-        Collections.sort(adapters);
-        return evaluteCombinations(0);
-    }
-
-    long evaluteCombinations(int index) {
-        long combinations = 0;
-        //log.info("Evaluation started index {}, value {}", index, adapters.get(index));
-        int foundCombinations = 0;
-        if (index == adapters.size() - 1) {
-            return 1;
-        }
-        for (int i = 1; i < 4; i++) {
-            if (index < adapters.size() - i && adapters.get(index + i) - adapters.get(index) < 4) {
-                foundCombinations++;
-                combinations += evaluteCombinations(index + i);
-            }
-        }
-        if (foundCombinations == 1 && combinations < 1) {
-            combinations = 0;
-        }
-        //log.info("Evaluation finished for index {}, value {}, combinations {}", index, adapters.get(index), combinations);
-        return combinations;
     }
 
     long adapterCombinations2() {
         long combinations = 1;
         Collections.sort(adapters);
 
-        for (int index = 0; index < adapters.size(); index++) {
-            int routes = 0;
-            for (int i = 1; i < 4; i++) {
-                if (index < adapters.size() - i && adapters.get(index + i) - adapters.get(index) < 4) {
-                    routes++;
-                }
-            }
-            if (routes > 1) {
-                combinations += routes;
-            }
+        int index = 0;
+        while (index < adapters.size() - 1) {
+            int reachable = reachable(index);
+            int factor = 1;
 
+            switch (reachable) {
+                case 1:
+                    index++;
+                    break;
+                case 2:
+                    factor = 2;
+                    if (reachable(index + 1) == 2) {
+                        factor = 3;
+                        if (reachable(index + 2) == 2) {
+                            factor = 5;
+                        }
+                    } else if (reachable(index + 1) == 3) {
+                        factor = 6;
+                        if (reachable(index + 3) == 3) {
+                            factor = 7;
+                        }
+                    }
+                    index += 2;
+                    break;
+                case 3:
+                    factor = 3;
+                    if (reachable(index + 1) == 2) {
+                        factor = 4;
+                        if (reachable(index + 2) == 2) {
+                            factor = 6;
+                        } else if (reachable(index + 2) == 3)
+                            factor = 8;
+                    } else if (reachable(index + 1) == 3) {
+                        factor = 7;
+                        if (reachable(index + 2) == 3) {
+                            factor = 9;
+                        }
+                    }
+                    index += 3;
+                    break;
+            }
+            combinations *= factor;
         }
+
         return combinations;
+    }
+
+    int reachable(int index) {
+        if (index < adapters.size()) {
+            int start = adapters.get(index);
+            if (index + 3 < adapters.size() && adapters.get(index + 3) - start == 3) {
+                return 3;
+            } else if (index + 2 < adapters.size() && (adapters.get(index + 2) - start == 3 || adapters.get(index + 2) - start == 2)) {
+                return 2;
+            } else if (index + 1 < adapters.size() && adapters.get(index + 1) - start < 4) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
     }
 }

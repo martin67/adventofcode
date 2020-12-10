@@ -24,10 +24,10 @@ class Day10AdapterArrayTest {
     @ParameterizedTest
     @CsvSource({"8, src/test/resources/2020/day10-demo1.txt",
             "19208, src/test/resources/2020/day10-demo2.txt",
-            "20, src/test/resources/2020/day10.txt"})
+            "7086739046912, src/test/resources/2020/day10.txt"})
     void adapterCombinations(long expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day10AdapterArray(inputLines).adapterCombinations());
+        assertEquals(expected, new Day10AdapterArray(inputLines).adapterCombinations2());
     }
 
 }
