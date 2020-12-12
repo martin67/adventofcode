@@ -166,6 +166,126 @@ public enum Direction {
         }
     }
 
+    public Direction turn(Direction newDirection, int degrees) {
+        switch (this) {
+            case North:
+                switch (newDirection) {
+                    case Left:
+                        switch (degrees) {
+                            case 90:
+                                return West;
+                            case 180:
+                                return South;
+                            case 270:
+                                return East;
+                            case 360:
+                                return North;
+                        }
+                    case Right:
+                        switch (degrees) {
+                            case 90:
+                                return East;
+                            case 180:
+                                return South;
+                            case 270:
+                                return West;
+                            case 360:
+                                return North;
+                        }
+                    default:
+                        log.error("Wrong direction");
+                        return Unknown;
+                }
+            case East:
+                switch (newDirection) {
+                    case Left:
+                        switch (degrees) {
+                            case 90:
+                                return North;
+                            case 180:
+                                return West;
+                            case 270:
+                                return South;
+                            case 360:
+                                return East;
+                        }
+                    case Right:
+                        switch (degrees) {
+                            case 90:
+                                return South;
+                            case 180:
+                                return West;
+                            case 270:
+                                return North;
+                            case 360:
+                                return East;
+                        }
+                    default:
+                        log.error("Wrong direction");
+                        return Unknown;
+                }
+            case South:
+                switch (newDirection) {
+                    case Left:
+                        switch (degrees) {
+                            case 90:
+                                return East;
+                            case 180:
+                                return North;
+                            case 270:
+                                return West;
+                            case 360:
+                                return South;
+                        }
+                    case Right:
+                        switch (degrees) {
+                            case 90:
+                                return West;
+                            case 180:
+                                return North;
+                            case 270:
+                                return East;
+                            case 360:
+                                return South;
+                        }
+                    default:
+                        log.error("Wrong direction");
+                        return Unknown;
+                }
+            case West:
+                switch (newDirection) {
+                    case Left:
+                        switch (degrees) {
+                            case 90:
+                                return South;
+                            case 180:
+                                return East;
+                            case 270:
+                                return North;
+                            case 360:
+                                return West;
+                        }
+                    case Right:
+                        switch (degrees) {
+                            case 90:
+                                return North;
+                            case 180:
+                                return East;
+                            case 270:
+                                return South;
+                            case 360:
+                                return West;
+                        }
+                    default:
+                        log.error("Wrong direction");
+                        return Unknown;
+                }
+            default:
+                log.error("Illegal currentDirection");
+                return Unknown;
+        }
+    }
+
     public String shortName() {
         String result;
         switch (this) {
