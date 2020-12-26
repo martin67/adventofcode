@@ -28,9 +28,10 @@ public class Day6CustomCustoms {
     }
 
     int questionsWithEveryoneYes() {
-        int passwordsOk = 0;
         Map<Character, Integer> questions = new HashMap<>();
+        int passwordsOk = 0;
         int personsInGroup = 0;
+
         for (String line : answers) {
             if (line.isEmpty()) {
                 for (Character c : questions.keySet()) {
