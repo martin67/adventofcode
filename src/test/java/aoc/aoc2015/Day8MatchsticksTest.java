@@ -1,5 +1,6 @@
 package aoc.aoc2015;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("Day 8: Matchsticks")
 class Day8MatchsticksTest {
     @ParameterizedTest
     @CsvSource({"12, src/test/resources/2015/day8-demo1.txt",

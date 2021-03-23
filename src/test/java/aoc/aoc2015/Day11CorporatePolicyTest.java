@@ -1,10 +1,12 @@
 package aoc.aoc2015;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("Day 11: Corporate Policy")
 class Day11CorporatePolicyTest {
     @ParameterizedTest
     @CsvSource({"false, hijklmmn",

@@ -1,5 +1,6 @@
 package aoc.aoc2015;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("Day 19: Medicine for Rudolph")
 class Day19MedicineForRudolphTest {
 
     @ParameterizedTest
@@ -27,7 +29,7 @@ class Day19MedicineForRudolphTest {
             "0, src/test/resources/2015/day19.txt"})
     void fewestSteps(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day19MedicineForRudolph(inputLines).fewestSteps());
+        assertEquals(expected, new Day19MedicineForRudolph(inputLines).fewestSteps3());
     }
 
 }

@@ -1,5 +1,6 @@
 package aoc.aoc2015;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -8,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("Day 4: The Ideal Stocking Stuffer")
 class Day4TheIdealStockingStufferTest {
     @ParameterizedTest
     @CsvSource({"abcdef, 609043",

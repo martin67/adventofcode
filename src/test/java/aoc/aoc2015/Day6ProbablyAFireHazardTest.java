@@ -1,5 +1,6 @@
 package aoc.aoc2015;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("Day 6: Probably a Fire Hazard")
 class Day6ProbablyAFireHazardTest {
     @Test
     void lightsLit() throws IOException {
