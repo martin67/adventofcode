@@ -1,5 +1,6 @@
 package aoc.aoc2020;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("Day 20: Jurassic Jigsaw")
 class Day20JurassicJigsawTest {
 
     @ParameterizedTest
