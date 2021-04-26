@@ -24,7 +24,7 @@ class Day21AllergenAssessmentTest {
 
     @ParameterizedTest
     @CsvSource({"'mxmxvkd,sqjhc,fvjkl', src/test/resources/2020/day21-demo1.txt",
-            "2798, src/test/resources/2020/day21.txt"})
+            "'gbt,rpj,vdxb,dtb,bqmhk,vqzbq,zqjm,nhjrzzj', src/test/resources/2020/day21.txt"})
     void problem2(String expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day21AllergenAssessment(inputLines).problem2());
