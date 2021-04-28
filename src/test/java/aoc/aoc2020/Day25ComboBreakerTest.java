@@ -16,7 +16,7 @@ class Day25ComboBreakerTest {
 
     @ParameterizedTest
     @CsvSource({"14897079, src/test/resources/2020/day25-demo1.txt",
-            "2798, src/test/resources/2020/day25.txt"})
+            "7032853, src/test/resources/2020/day25.txt"})
     void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day25ComboBreaker(inputLines).problem1());
