@@ -16,7 +16,7 @@ class Day20JurassicJigsawTest {
 
     @ParameterizedTest
     @CsvSource({"20899048083289, src/test/resources/2020/day20-demo1.txt",
-            "255, src/test/resources/2020/day20.txt"})
+            "21599955909991, src/test/resources/2020/day20.txt"})
     void problem1(long expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day20JurassicJigsaw(inputLines).problem1());

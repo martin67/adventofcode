@@ -3,45 +3,39 @@ package aoc.aoc2020;
 import aoc.Direction;
 import aoc.Position;
 import lombok.extern.slf4j.Slf4j;
-import org.jgrapht.Graph;
-import org.jgrapht.alg.connectivity.ConnectivityInspector;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static aoc.Direction.*;
+
 @Slf4j
 public class Day20JurassicJigsaw {
-    private final Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-    Set<Map> maps = new HashSet<>();
+    Map<Integer, Tile> tiles = new HashMap<>();
     int width = 0;
     int height = 0;
-    int checkId = 0;
-    int numberOfConnections = 0;
 
     public Day20JurassicJigsaw(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^Tile (\\d+):$");
 
-        Map map = null;
+        Tile tile = null;
         int x;
         int y = 0;
 
         for (String line : inputLines) {
             Matcher matcher = pattern.matcher(line);
             if (matcher.find()) {
-                map = new Map(Integer.parseInt(matcher.group(1)));
-                maps.add(map);
+                int id = Integer.parseInt(matcher.group(1));
+                tile = new Tile(id);
+                tiles.put(id, tile);
                 y = 0;
             } else if (line.startsWith(".") || line.startsWith("#")) {
                 x = 0;
                 for (char c : line.toCharArray()) {
                     if (c == '#') {
-                        map.positions.add(new Position(x, y));
+                        tile.initialPositions.add(new Position(x, y));
                     }
                     x++;
                     if (x > width) {
@@ -54,222 +48,161 @@ public class Day20JurassicJigsaw {
                 }
             }
         }
-        for (Map m : maps) {
-            m.generateAlternatives();
+
+        for (Tile t : tiles.values()) {
+            for (int w = 0; w < width; w++) {
+
+                if (t.initialPositions.contains(new Position(w, 0))) {
+                    t.top += Math.pow(2, width - w - 1);
+                }
+                if (t.initialPositions.contains(new Position(w, height - 1))) {
+                    t.bottom += Math.pow(2, width - w - 1);
+                }
+            }
+            for (int h = 0; h < height; h++) {
+                if (t.initialPositions.contains(new Position(0, h))) {
+                    t.left += Math.pow(2, height - h - 1);
+                }
+                if (t.initialPositions.contains(new Position(width - 1, h))) {
+                    t.right += Math.pow(2, height - h - 1);
+                }
+            }
         }
+
+        log.info("Tile size, width: {}, height: {}", width, height);
+        log.info("Number of tiles: {}", tiles.size());
     }
 
     long problem1() {
-        for (Map firstMap : maps) {
-            for (Map otherMap : maps)
-                if (otherMap != firstMap) {
-                    firstMap.match(otherMap, Direction.Left);
-                    firstMap.match(otherMap, Direction.Right);
-                    firstMap.match(otherMap, Direction.Up);
-                    firstMap.match(otherMap, Direction.Down);
-                }
-        }
-        log.info("Number of connections {}", numberOfConnections);
-        ConnectivityInspector<String, DefaultEdge> connectivityInspector = new ConnectivityInspector<>(graph);
-        List<Set<String>> connectedSets = connectivityInspector.connectedSets();
-        long chek2 = 0;
-        log.info("Number of connected sets: {}", connectedSets.size());
 
-        for (Set<String> set : connectedSets) {
-            if (set.size() == maps.size()) {
-                long checksum = 1;
-                for (String vertex : set) {
-                    log.info("Nod {} har {} edges", vertex, graph.degreeOf(vertex));
-                    if (graph.degreeOf(vertex) == 2) {
-                        log.info("Hörnnod: {}", vertex);
-                        checksum *= Integer.parseInt(vertex.substring(0, 4));
-                    }
-                }
-                log.info("--------------- Checksum: {}", checksum);
-                chek2 = checksum;
+        Map<Integer, Integer> freq = new HashMap<>();
+        for (Tile tile : tiles.values()) {
+
+            for (Tile alt : tile.alternatives()) {
+                freq.putIfAbsent(alt.top, 0);
+                freq.put(alt.top, freq.get(alt.top) + 1);
+                freq.putIfAbsent(alt.bottom, 0);
+                freq.put(alt.bottom, freq.get(alt.bottom) + 1);
+                freq.putIfAbsent(alt.left, 0);
+                freq.put(alt.left, freq.get(alt.left) + 1);
+                freq.putIfAbsent(alt.right, 0);
+                freq.put(alt.right, freq.get(alt.right) + 1);
             }
         }
-        return chek2;
+
+        long value = 1;
+        for (Tile tile : tiles.values()) {
+            for (int edge : tile.allEdges()) {
+                if (freq.get(edge) == 2) {
+                    log.debug("Tile {}, external edge {}", tile.id, edge);
+                    tile.externalEdges++;
+                }
+            }
+            log.info("Tile {}, total external edges {}", tile.id, tile.externalEdges);
+            // Tiles with two external edges are corners
+            if (tile.externalEdges == 2) {
+                value *= tile.id;
+            }
+        }
+
+        return value;
     }
 
-    class Map {
-        int id;
-        Set<Position> positions = new HashSet<>();
-        List<Set<Position>> alternatives;
 
-        public Map(int id) {
+    static class Tile {
+        int id;
+        Set<Position> initialPositions = new HashSet<>();
+        int top;
+        int bottom;
+        int left;
+        int right;
+        int externalEdges;
+
+        public Tile(int id) {
             this.id = id;
         }
 
-        Set<Position> rotate(Direction direction) {
-            Set<Position> rotatedPositions = new HashSet<>();
-
-            switch (direction) {
-                case Right:
-                    for (int x = 0; x < width / 2; x++) {
-                        for (int y = x; y < width - x - 1; y++) {
-                            boolean temp = positions.contains(new Position(x, y));
-
-                            // Move values from right to top
-                            Position p = new Position(y, width - 1 - x);
-                            if (positions.contains(p)) {
-                                rotatedPositions.add(new Position(x, y));
-                            }
-
-                            // Move values from bottom to right
-                            p = new Position(width - 1 - x, width - 1 - y);
-                            if (positions.contains(p)) {
-                                rotatedPositions.add(new Position(y, width - 1 - x));
-                            }
-
-                            // Move values from left to bottom
-                            p = new Position(width - 1 - y, x);
-                            if (positions.contains(p)) {
-                                rotatedPositions.add(new Position(width - 1 - x, width - 1 - y));
-                            }
-
-                            // Assign temp to left
-                            if (temp) {
-                                rotatedPositions.add(new Position(width - 1 - y, x));
-                            }
-                        }
-                    }
-                    break;
-            }
-            return rotatedPositions;
+        public Tile(int id, int top, int bottom, int left, int right) {
+            this.id = id;
+            this.top = top;
+            this.bottom = bottom;
+            this.left = left;
+            this.right = right;
         }
 
-        Set<Position> flip(Direction direction) {
-            Set<Position> flippedPositions = new HashSet<>();
+        Tile rotate(Direction dir) {
+            Tile t;
+            switch (dir) {
+                case Left:
+                    t = new Tile(id, right, left, top, bottom);
+                    break;
+                case Right:
+                    t = new Tile(id, left, right, bottom, top);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + dir);
+            }
+            return t;
+        }
 
-            switch (direction) {
+        Tile flip(Direction dir) {
+            Tile t;
+            switch (dir) {
                 case Up:
                 case Down:
-                    for (int y = 0; y < height; y++) {
-                        for (int x = 0; x < width; x++) {
-                            if (positions.contains(new Position(x, y))) {
-                                flippedPositions.add(new Position(x, 10 - y - 1));
-                            }
-                        }
-                    }
+                    t = new Tile(id, bottom, top, flipNumber(left), flipNumber(right));
                     break;
-
                 case Left:
                 case Right:
-                    for (int y = 0; y < height; y++) {
-                        for (int x = 0; x < width; x++) {
-                            if (positions.contains(new Position(x, y))) {
-                                flippedPositions.add(new Position(10 - x - 1, y));
-                            }
-                        }
-                    }
+                    t = new Tile(id, flipNumber(top), flipNumber(bottom), right, left);
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + dir);
             }
-            return flippedPositions;
+            return t;
         }
 
-        void generateAlternatives() {
-            alternatives = new ArrayList<>();
-            alternatives.add(this.positions);
-            alternatives.add(rotate(Direction.Right));
-            Map temp = new Map(0);
-            temp.positions = rotate(Direction.Right);
-            alternatives.add(temp.rotate(Direction.Right));
-            Map temp2 = new Map(0);
-            temp2.positions = temp.rotate(Direction.Right);
-            alternatives.add(temp2.rotate(Direction.Right));
-            alternatives.add(flip(Direction.Up));
-            alternatives.add(flip(Direction.Left));
+        Set<Tile> alternatives() {
+            Set<Tile> alternatives = new HashSet<>();
+            alternatives.add(this);
+            alternatives.add(rotate(Left));
+            alternatives.add(rotate(Right));
+            alternatives.add(rotate(Left).rotate(Left));
+            alternatives.add(flip(Up));
+            alternatives.add(flip(Left));
+            alternatives.add(rotate(Left).flip(Up));
+            alternatives.add(rotate(Left).flip(Left));
+            return alternatives;
         }
 
-        int match(Map map, Direction direction) {
-
-            for (Set<Position> ownPosition : alternatives) {
-                for (Set<Position> oppositePosition : map.alternatives) {
-
-                    boolean matchSide = true;
-                    switch (direction) {
-
-                        case Right:
-                            for (int y = 0; y < height; y++) {
-                                if (ownPosition.contains(new Position(width - 1, y)) != oppositePosition.contains(new Position(0, y))) {
-                                    matchSide = false;
-                                }
-                            }
-                            break;
-                        case Left:
-                            for (int y = 0; y < height; y++) {
-                                if (ownPosition.contains(new Position(0, y)) != oppositePosition.contains(new Position(width - 1, y))) {
-                                    matchSide = false;
-                                }
-                            }
-                            break;
-                        case Up:
-                            for (int x = 0; x < width; x++) {
-                                if (ownPosition.contains(new Position(x, 0)) != oppositePosition.contains(new Position(x, height - 1))) {
-                                    matchSide = false;
-                                }
-                            }
-                            break;
-                        case Down:
-                            for (int x = 0; x < width; x++) {
-                                if (ownPosition.contains(new Position(x, height - 1)) != oppositePosition.contains(new Position(x, 0))) {
-                                    matchSide = false;
-                                }
-                            }
-                            break;
-                    }
-                    if (matchSide) {
-                        String src = id + "-" + alternatives.indexOf(ownPosition);
-                        String dst = map.id + "-" + map.alternatives.indexOf(oppositePosition);
-                        numberOfConnections++;
-
-                        //log.info("**** Map {} matched {} side with map {}", src, direction, dst);
-                        if (!graph.containsVertex(src)) {
-                            graph.addVertex(src);
-                        }
-                        if (!graph.containsVertex(dst)) {
-                            graph.addVertex(dst);
-                        }
-                        graph.addEdge(src, dst);
-                        return map.id;
-                    }
-                }
-            }
-            //log.info("No {} match for map {} with map {}", direction, id, map.id);
-            return 0;
+        Set<Integer> allEdges() {
+            Set<Integer> allEdges = new HashSet<>();
+            allEdges.add(top);
+            allEdges.add(bottom);
+            allEdges.add(left);
+            allEdges.add(right);
+            allEdges.add(flipNumber(top));
+            allEdges.add(flipNumber(bottom));
+            allEdges.add(flipNumber(left));
+            allEdges.add(flipNumber(right));
+            return allEdges;
         }
 
-        void print() {
-            for (int y = 0; y < height; y++) {
-                StringBuilder sb = new StringBuilder();
-                for (int x = 0; x < width; x++) {
-                    Position p = new Position(x, y);
-                    if (positions.contains(p)) {
-                        sb.append('#');
-                    } else {
-                        sb.append('.');
-                    }
-                }
-                System.out.println(sb.toString());
-            }
-            System.out.println();
+        private int flipNumber(int i) {
+            String s = StringUtils.leftPad(Integer.toBinaryString(i), 10, '0');
+            s = StringUtils.reverse(s);
+            return Integer.parseInt(s, 2);
         }
 
-        void print(Set<Position> positions) {
-            for (int y = 0; y < height; y++) {
-                StringBuilder sb = new StringBuilder();
-                for (int x = 0; x < width; x++) {
-                    Position p = new Position(x, y);
-                    if (positions.contains(p)) {
-                        sb.append('#');
-                    } else {
-                        sb.append('.');
-                    }
-                }
-                System.out.println(sb.toString());
-            }
-            System.out.println();
+        @Override
+        public String toString() {
+            return "Tile{" +
+                    "id=" + id +
+                    ", top=" + top +
+                    ", bottom=" + bottom +
+                    ", left=" + left +
+                    ", right=" + right +
+                    '}';
         }
     }
 }
