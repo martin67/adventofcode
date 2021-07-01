@@ -22,4 +22,11 @@ class Day20JurassicJigsawTest {
         assertEquals(expected, new Day20JurassicJigsaw(inputLines).problem1());
     }
 
+    @ParameterizedTest
+    @CsvSource({"273, src/test/resources/2020/day20-demo1.txt",
+            "2495, src/test/resources/2020/day20.txt"})
+    void problem2(long expected, String fileName) throws Exception {
+        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
+        assertEquals(expected, new Day20JurassicJigsaw(inputLines).problem2());
+    }
 }

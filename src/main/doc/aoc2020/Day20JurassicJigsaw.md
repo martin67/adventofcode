@@ -295,3 +295,7 @@ Determine how rough the waters are in the sea monsters' habitat by counting the 
 sea monster. In the above example, the habitat's water roughness is **273**.
 
 **How many # are not part of a sea monster?**
+
+Your puzzle answer was 2495.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

@@ -3,7 +3,9 @@ package aoc.aoc2020;
 import aoc.Direction;
 import aoc.Position;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -13,9 +15,8 @@ import static aoc.Direction.*;
 
 @Slf4j
 public class Day20JurassicJigsaw {
-    Map<Integer, Tile> tiles = new HashMap<>();
-    int width = 0;
-    int height = 0;
+    private final Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+    Set<Tile> tiles = new HashSet<>();
 
     public Day20JurassicJigsaw(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^Tile (\\d+):$");
@@ -27,80 +28,46 @@ public class Day20JurassicJigsaw {
         for (String line : inputLines) {
             Matcher matcher = pattern.matcher(line);
             if (matcher.find()) {
-                int id = Integer.parseInt(matcher.group(1));
-                tile = new Tile(id);
-                tiles.put(id, tile);
+                tile = new Tile(Integer.parseInt(matcher.group(1)), 10, 10);
+                tiles.add(tile);
                 y = 0;
             } else if (line.startsWith(".") || line.startsWith("#")) {
                 x = 0;
                 for (char c : line.toCharArray()) {
                     if (c == '#') {
-                        tile.initialPositions.add(new Position(x, y));
+                        tile.positions.add(new Position(x, y));
                     }
                     x++;
-                    if (x > width) {
-                        width = x;
-                    }
                 }
                 y++;
-                if (y > height) {
-                    height = y;
-                }
             }
         }
 
-        for (Tile t : tiles.values()) {
-            for (int w = 0; w < width; w++) {
-
-                if (t.initialPositions.contains(new Position(w, 0))) {
-                    t.top += Math.pow(2, width - w - 1);
-                }
-                if (t.initialPositions.contains(new Position(w, height - 1))) {
-                    t.bottom += Math.pow(2, width - w - 1);
-                }
-            }
-            for (int h = 0; h < height; h++) {
-                if (t.initialPositions.contains(new Position(0, h))) {
-                    t.left += Math.pow(2, height - h - 1);
-                }
-                if (t.initialPositions.contains(new Position(width - 1, h))) {
-                    t.right += Math.pow(2, height - h - 1);
-                }
-            }
-        }
-
-        log.info("Tile size, width: {}, height: {}", width, height);
+        log.info("Tile size, width: {}, height: {}", tile.width, tile.height);
         log.info("Number of tiles: {}", tiles.size());
     }
 
     long problem1() {
 
-        Map<Integer, Integer> freq = new HashMap<>();
-        for (Tile tile : tiles.values()) {
-
-            for (Tile alt : tile.alternatives()) {
-                freq.putIfAbsent(alt.top, 0);
-                freq.put(alt.top, freq.get(alt.top) + 1);
-                freq.putIfAbsent(alt.bottom, 0);
-                freq.put(alt.bottom, freq.get(alt.bottom) + 1);
-                freq.putIfAbsent(alt.left, 0);
-                freq.put(alt.left, freq.get(alt.left) + 1);
-                freq.putIfAbsent(alt.right, 0);
-                freq.put(alt.right, freq.get(alt.right) + 1);
+        Map<String, Integer> freq = new HashMap<>();
+        for (Tile tile : tiles) {
+            for (String edge : tile.allEdges()) {
+                freq.putIfAbsent(edge, 0);
+                freq.put(edge, freq.get(edge) + 1);
             }
         }
 
         long value = 1;
-        for (Tile tile : tiles.values()) {
-            for (int edge : tile.allEdges()) {
-                if (freq.get(edge) == 2) {
+        for (Tile tile : tiles) {
+            for (String edge : tile.allEdges()) {
+                if (freq.get(edge) == 1) {
                     log.debug("Tile {}, external edge {}", tile.id, edge);
-                    tile.externalEdges++;
+                    tile.externalEdges.add(edge);
                 }
             }
-            log.info("Tile {}, total external edges {}", tile.id, tile.externalEdges);
-            // Tiles with two external edges are corners
-            if (tile.externalEdges == 2) {
+            log.debug("Tile {}, total external edges {}", tile.id, tile.externalEdges.size());
+            // Tiles with four external edges are corners. It is two, but they are also reversed
+            if (tile.isCorner()) {
                 value *= tile.id;
             }
         }
@@ -108,36 +75,189 @@ public class Day20JurassicJigsaw {
         return value;
     }
 
+    long problem2() throws Exception {
+        // Find all edges
+        problem1();
 
-    static class Tile {
-        int id;
-        Set<Position> initialPositions = new HashSet<>();
-        int top;
-        int bottom;
-        int left;
-        int right;
-        int externalEdges;
+        // Find first corner
+        Tile firstCorner = tiles.stream().filter(Tile::isCorner).findFirst().orElseThrow(() -> new Exception("hej"));
+        // Find correct orientation
+        log.info("Found first corner on tile {}", firstCorner);
+        log.debug("External edges: {}", firstCorner.externalEdges);
+        log.debug("Internal edges: {}", firstCorner.internalEdges());
 
-        public Tile(int id) {
-            this.id = id;
+
+        Map<Position, Tile> bigMap = new HashMap<>();
+        // start in upper left corner
+        // which alternative has external edges on left and top? Two will match, pick the first
+        Tile start = firstCorner.alternatives().stream()
+                .filter(t -> firstCorner.externalEdges.contains(t.edge(Up)))
+                .filter(t -> firstCorner.externalEdges.contains(t.edge(Left)))
+                .findFirst().get();
+
+        log.debug("Start tile (0,0) is {}", start);
+        bigMap.put(new Position(0, 0), start);
+
+
+        // Go down
+        Tile previous = start;
+        for (int y = 1; y < Math.sqrt(tiles.size()); y++) {
+            log.debug("Going down, checking for edge {}", previous.edge(Down));
+            boolean foundIt = false;
+            for (Tile tile : tiles) {
+                if (tile.id != previous.id) {
+                    for (Tile alt : tile.alternatives()) {
+                        if (alt.edge(Up).equals(previous.edge(Down))) {
+                            log.debug("Next down: {}", alt);
+                            bigMap.put(new Position(0, y), alt);
+                            previous = alt;
+                            foundIt = true;
+                            break;
+                        }
+                    }
+                }
+                if (foundIt) {
+                    break;
+                }
+            }
         }
 
-        public Tile(int id, int top, int bottom, int left, int right) {
+        // Go right
+        previous = start;
+        for (int x = 1; x < Math.sqrt(tiles.size()); x++) {
+            log.debug("Going right, checking for edge {}", previous.edge(Right));
+            boolean foundIt = false;
+            for (Tile tile : tiles) {
+                if (tile.id != previous.id) {
+                    for (Tile alt : tile.alternatives()) {
+                        if (alt.edge(Left).equals(previous.edge(Right))) {
+                            log.debug("Next right: {}", alt);
+                            bigMap.put(new Position(x, 0), alt);
+                            previous = alt;
+                            foundIt = true;
+                            break;
+                        }
+                    }
+                }
+                if (foundIt) {
+                    break;
+                }
+            }
+        }
+
+        // then go from left to right
+        for (int y = 1; y < Math.sqrt(tiles.size()); y++) {
+            for (int x = 1; x < Math.sqrt(tiles.size()); x++) {
+                Tile leftTile = bigMap.get(new Position(x - 1, y));
+                log.debug("Row {}, column {}, checking for edge {}", y, x, leftTile.edge(Right));
+
+                for (Tile tile : tiles) {
+                    if (tile.id != leftTile.id) {
+                        for (Tile alt : tile.alternatives()) {
+                            if (alt.edge(Left).equals(leftTile.edge(Right))) {
+                                log.debug("Next right: {}", alt);
+                                bigMap.put(new Position(x, y), alt);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        bigMap.values().forEach(Tile::stripBorder);
+
+        int bigMapsize = 8 * (int) Math.sqrt(tiles.size());
+        Tile bigTile = new Tile(1, bigMapsize, bigMapsize);
+
+        for (int y = 0; y < Math.sqrt(tiles.size()); y++) {
+            for (int x = 0; x < Math.sqrt(tiles.size()); x++) {
+                for (Position position : bigMap.get(new Position(x, y)).positions) {
+                    bigTile.positions.add(new Position((position.getX() - 1) + x * 8, (position.getY() - 1) + y * 8));
+                }
+            }
+        }
+        //bigTile.print();
+
+        // Find sea monster
+        Tile seaMonsterTile = null;
+        Set<Set<Position>> seaMonsters = new HashSet<>();
+        for (Tile bt : bigTile.alternatives()) {
+            for (int y = 0; y < bigMapsize; y++) {
+                for (int x = 0; x < bigMapsize; x++) {
+                    Set<Position> seaMonster = createSeaMonster(x, y);
+                    if (bt.positions.containsAll(seaMonster)) {
+                        log.info("Sea Monster found at {},{}", x, y);
+                        seaMonsterTile = bt;
+                        seaMonsters.add(seaMonster);
+                    }
+                }
+            }
+        }
+
+        // Strip Sea Monsters
+        for (Set<Position> seaMonster : seaMonsters) {
+            seaMonsterTile.positions.removeAll(seaMonster);
+        }
+
+        return seaMonsterTile.positions.size();
+    }
+
+    Set<Position> createSeaMonster(int xstart, int ystart) {
+        String[] seaMonsterPattern = {"                  # ",
+                "#    ##    ##    ###",
+                " #  #  #  #  #  #   "};
+
+        Set<Position> seaMonster = new HashSet<>();
+        int y = ystart;
+        for (String s : seaMonsterPattern) {
+            int x = xstart;
+            for (char c : s.toCharArray()) {
+                if (c == '#') {
+                    seaMonster.add(new Position(x, y));
+                }
+                x++;
+            }
+            y++;
+        }
+        return seaMonster;
+    }
+
+    class Tile {
+        int id;
+        int width;
+        int height;
+        Set<Position> positions = new HashSet<>();
+
+        Set<String> externalEdges = new HashSet<>();
+
+        public Tile(int id, int width, int height) {
             this.id = id;
-            this.top = top;
-            this.bottom = bottom;
-            this.left = left;
-            this.right = right;
+            this.width = width;
+            this.height = height;
         }
 
         Tile rotate(Direction dir) {
-            Tile t;
+            // 3,1 -> 1,6 -> 6,8 -> 8,3
+            Tile t = new Tile(id, width, height);
             switch (dir) {
                 case Left:
-                    t = new Tile(id, right, left, top, bottom);
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            if (positions.contains(new Position(x, y))) {
+                                t.positions.add(new Position(y, height - x - 1));
+                            }
+                        }
+                    }
                     break;
                 case Right:
-                    t = new Tile(id, left, right, bottom, top);
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            if (positions.contains(new Position(x, y))) {
+                                t.positions.add(new Position(width - y - 1, x));
+                            }
+                        }
+                    }
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + dir);
@@ -146,15 +266,27 @@ public class Day20JurassicJigsaw {
         }
 
         Tile flip(Direction dir) {
-            Tile t;
+            Tile t = new Tile(id, width, height);
             switch (dir) {
                 case Up:
                 case Down:
-                    t = new Tile(id, bottom, top, flipNumber(left), flipNumber(right));
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            if (positions.contains(new Position(x, y))) {
+                                t.positions.add(new Position(x, height - y - 1));
+                            }
+                        }
+                    }
                     break;
                 case Left:
                 case Right:
-                    t = new Tile(id, flipNumber(top), flipNumber(bottom), right, left);
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            if (positions.contains(new Position(x, y))) {
+                                t.positions.add(new Position(width - x - 1, y));
+                            }
+                        }
+                    }
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + dir);
@@ -166,42 +298,120 @@ public class Day20JurassicJigsaw {
             Set<Tile> alternatives = new HashSet<>();
             alternatives.add(this);
             alternatives.add(rotate(Left));
-            alternatives.add(rotate(Right));
             alternatives.add(rotate(Left).rotate(Left));
+            alternatives.add(rotate(Left).rotate(Left).rotate(Left));
             alternatives.add(flip(Up));
-            alternatives.add(flip(Left));
             alternatives.add(rotate(Left).flip(Up));
-            alternatives.add(rotate(Left).flip(Left));
+            alternatives.add(rotate(Left).rotate(Left).flip(Up));
+            alternatives.add(rotate(Left).rotate(Left).rotate(Left).flip(Up));
             return alternatives;
         }
 
-        Set<Integer> allEdges() {
-            Set<Integer> allEdges = new HashSet<>();
-            allEdges.add(top);
-            allEdges.add(bottom);
-            allEdges.add(left);
-            allEdges.add(right);
-            allEdges.add(flipNumber(top));
-            allEdges.add(flipNumber(bottom));
-            allEdges.add(flipNumber(left));
-            allEdges.add(flipNumber(right));
+        Set<String> allEdges() {
+            Set<String> allEdges = new HashSet<>();
+            allEdges.add(edge(Up));
+            allEdges.add(edge(Down));
+            allEdges.add(edge(Left));
+            allEdges.add(edge(Right));
+            allEdges.add(reverse(edge(Up)));
+            allEdges.add(reverse(edge(Down)));
+            allEdges.add(reverse(edge(Left)));
+            allEdges.add(reverse(edge(Right)));
+
             return allEdges;
         }
 
-        private int flipNumber(int i) {
-            String s = StringUtils.leftPad(Integer.toBinaryString(i), 10, '0');
-            s = StringUtils.reverse(s);
-            return Integer.parseInt(s, 2);
+        Set<String> internalEdges() {
+            Set<String> internalEdges = allEdges();
+            internalEdges.removeAll(externalEdges);
+            return internalEdges;
         }
+
+        public boolean isEdge() {
+            return externalEdges.size() == 2;
+        }
+
+        public boolean isCorner() {
+            return externalEdges.size() == 4;
+        }
+
+        String reverse(String in) {
+            StringBuilder sb = new StringBuilder(in);
+            return sb.reverse().toString();
+        }
+
+        public String edge(Direction dir) {
+            StringBuilder sb = new StringBuilder();
+            switch (dir) {
+                case Up:
+                    for (int x = 0; x < width; x++) {
+                        Position p = new Position(x, 0);
+                        if (positions.contains(p)) {
+                            sb.append('#');
+                        } else {
+                            sb.append('.');
+                        }
+                    }
+                    break;
+                case Down:
+                    for (int x = 0; x < width; x++) {
+                        Position p = new Position(x, height - 1);
+                        if (positions.contains(p)) {
+                            sb.append('#');
+                        } else {
+                            sb.append('.');
+                        }
+                    }
+                    break;
+                case Left:
+                    for (int y = 0; y < height; y++) {
+                        Position p = new Position(0, y);
+                        if (positions.contains(p)) {
+                            sb.append('#');
+                        } else {
+                            sb.append('.');
+                        }
+                    }
+                    break;
+                case Right:
+                    for (int y = 0; y < height; y++) {
+                        Position p = new Position(width - 1, y);
+                        if (positions.contains(p)) {
+                            sb.append('#');
+                        } else {
+                            sb.append('.');
+                        }
+                    }
+                    break;
+            }
+            return sb.toString();
+        }
+
+        void print() {
+            for (int y = 0; y < height; y++) {
+                StringBuilder sb = new StringBuilder();
+                for (int x = 0; x < width; x++) {
+                    Position p = new Position(x, y);
+                    if (positions.contains(p)) {
+                        sb.append('#');
+                    } else {
+                        sb.append('.');
+                    }
+                }
+                System.out.println(sb);
+            }
+            System.out.println();
+        }
+
+        void stripBorder() {
+            positions.removeIf(p -> (p.getX() == 0 || p.getX() == 9 || p.getY() == 0 || p.getY() == 9));
+        }
+
 
         @Override
         public String toString() {
             return "Tile{" +
                     "id=" + id +
-                    ", top=" + top +
-                    ", bottom=" + bottom +
-                    ", left=" + left +
-                    ", right=" + right +
                     '}';
         }
     }
