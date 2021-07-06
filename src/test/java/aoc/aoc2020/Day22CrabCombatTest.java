@@ -24,7 +24,8 @@ class Day22CrabCombatTest {
 
     @ParameterizedTest
     @CsvSource({"291, src/test/resources/2020/day22-demo1.txt",
-            "30197, src/test/resources/2020/day22.txt"})
+            "105, src/test/resources/2020/day22-demo2.txt",
+            "34031, src/test/resources/2020/day22.txt"})
     void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day22CrabCombat(inputLines).problem2());
