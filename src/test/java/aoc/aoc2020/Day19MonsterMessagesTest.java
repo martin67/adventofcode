@@ -26,7 +26,7 @@ class Day19MonsterMessagesTest {
 
     @ParameterizedTest
     @CsvSource({"12, src/test/resources/2020/day19-demo3.txt",
-            "187, src/test/resources/2020/day19.txt"})
+            "392, src/test/resources/2020/day19.txt"})
     void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day19MonsterMessages(inputLines).problem2());
