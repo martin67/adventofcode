@@ -20,7 +20,7 @@ class Day23CrabCupsTest {
 
     @ParameterizedTest
     @CsvSource({"149245887792, 389125467",
-            "24798635, 362981754"})
+            "12757828710, 362981754"})
     void problem2(long expected, int start) throws IOException {
         assertEquals(expected, new Day23CrabCups(start).problem2(10000000));
     }
