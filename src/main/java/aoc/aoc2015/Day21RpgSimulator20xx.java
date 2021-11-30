@@ -63,8 +63,29 @@ public class Day21RpgSimulator20xx {
         return lowestCost;
     }
 
-    void problem2() {
+    int problem2() {
+        int highestCost = Integer.MIN_VALUE;
 
+        // Generate all player combinations
+        for (Weapon weapon : weapons) {
+            for (Armor armor : armors) {
+                for (Ring ring1 : rings) {
+                    for (Ring ring2 : rings) {
+                        if (ring1 != ring2) {
+                            List<Ring> ringList = List.of(ring1, ring2);
+                            Player player = new Player(100, weapon, armor, ringList);
+                            Player boss = new Player(109, 8, 2);
+                            if (fight(player, boss) == boss) {
+                                if (player.cost > highestCost) {
+                                    highestCost = player.cost;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return highestCost;
     }
 
     Player fight(Player player, Player boss) {

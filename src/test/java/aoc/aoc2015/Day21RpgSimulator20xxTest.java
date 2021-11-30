@@ -16,7 +16,8 @@ class Day21RpgSimulator20xxTest {
 
     @Test
     void problem2() {
-
+        Day21RpgSimulator20xx day21RpgSimulator20xx = new Day21RpgSimulator20xx();
+        assertEquals(111, day21RpgSimulator20xx.problem2());
     }
 
 }
