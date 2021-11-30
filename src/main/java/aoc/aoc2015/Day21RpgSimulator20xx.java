@@ -25,10 +25,11 @@ public class Day21RpgSimulator20xx {
         armors.add(new Armor("Bandedmail", 75, 0, 4));
         armors.add(new Armor("Platemail ", 102, 0, 5));
 
-        rings.add(new Ring("no ring", 0, 0, 0));
+        rings.add(new Ring("no ring 1", 0, 0, 0));
+        rings.add(new Ring("no ring 2", 0, 0, 0));
         rings.add(new Ring("Damage +1", 25, 1, 0));
         rings.add(new Ring("Damage +2", 50, 2, 0));
-        rings.add(new Ring("Damage +3", 50, 2, 0));
+        rings.add(new Ring("Damage +3", 100, 3, 0));
         rings.add(new Ring("Defense +1", 20, 0, 1));
         rings.add(new Ring("Defense +2", 40, 0, 2));
         rings.add(new Ring("Defense +3", 80, 0, 3));
@@ -56,10 +57,6 @@ public class Day21RpgSimulator20xx {
                 }
             }
         }
-
-//        Player player = new Player(8, 5, 5);
-//        Player boss = new Player(12, 7, 2);
-//        fight(player, boss);
         return lowestCost;
     }
 
