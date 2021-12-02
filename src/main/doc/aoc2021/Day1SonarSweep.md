@@ -1,4 +1,5 @@
 #Day 1: Sonar Sweep
+
 You're minding your own business on a ship at sea when the overboard alarm goes off! You rush to see if you can help. 
 Apparently, one of the Elves tripped and accidentally sent the sleigh keys flying into the ocean!
 
@@ -56,10 +57,11 @@ In this example, there are **7** measurements that are larger than the previous 
 Your puzzle answer was 1298.
 
 ##Part Two
+
 Considering every single measurement isn't as useful as you expected: there's just too much noise in the data.
 
 Instead, consider sums of a **three-measurement sliding window**. Again considering the above example:
-
+```
 199  A      
 200  A B    
 208  A B C  
@@ -70,6 +72,7 @@ Instead, consider sums of a **three-measurement sliding window**. Again consider
 269    F G H
 260      G H
 263        H
+```
 Start by comparing the first and second three-measurement windows. The measurements in the first window are marked 
 A (199, 200, 208); their sum is 199 + 200 + 208 = 607. The second window is marked B (200, 208, 210); its sum is 618. 
 The sum of measurements in the second window is larger than the sum of the first, so this first comparison 
