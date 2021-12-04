@@ -11,22 +11,22 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 3: Binary Diagnostic")
-class Day3BinaryDiagnosticTest {
+@DisplayName("Day 4: Giant Squid")
+class Day4GiantSquidTest {
 
     @ParameterizedTest
-    @CsvSource({"198, src/test/resources/2021/day3-demo1.txt",
-            "3895776, src/test/resources/2021/day3.txt"})
+    @CsvSource({"4512, src/test/resources/2021/day4-demo1.txt",
+            "8136, src/test/resources/2021/day4.txt"})
     void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day3BinaryDiagnostic(inputLines).problem1());
+        assertEquals(expected, new Day4GiantSquid(inputLines).problem1());
     }
 
     @ParameterizedTest
-    @CsvSource({"230, src/test/resources/2021/day3-demo1.txt",
-            "7928162, src/test/resources/2021/day3.txt"})
+    @CsvSource({"1924, src/test/resources/2021/day4-demo1.txt",
+            "12738, src/test/resources/2021/day4.txt"})
     void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day3BinaryDiagnostic(inputLines).problem2());
+        assertEquals(expected, new Day4GiantSquid(inputLines).problem2());
     }
 }
