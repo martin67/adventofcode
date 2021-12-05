@@ -1,5 +1,6 @@
 package aoc.aoc2019;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2019: Day 1: The Tyranny of the Rocket Equation")
 class Day1TyrannyOfTheRocketEquationTest {
 
     @ParameterizedTest
@@ -23,7 +25,7 @@ class Day1TyrannyOfTheRocketEquationTest {
     }
 
     @Test
-    void fuelRequirementFromFile() throws IOException {
+    void problem1() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day1.txt"));
         assertEquals(3478233, new Day1TyrannyOfTheRocketEquation().sumOfFuelRequirements(inputLines));
     }
@@ -37,8 +39,9 @@ class Day1TyrannyOfTheRocketEquationTest {
     }
 
     @Test
-    void fuelRequirementAddedFuelFromFile() throws IOException {
+    void problem2() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day1.txt"));
         assertEquals(5214475, new Day1TyrannyOfTheRocketEquation().sumOfFuelRequirementsAddedFuelFromFile(inputLines));
     }
+
 }

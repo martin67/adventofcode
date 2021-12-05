@@ -1,5 +1,6 @@
 package aoc.aoc2019;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -10,7 +11,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("2019: Day 18: Many-Worlds Interpretation")
 class Day18ManyWorldsInterpretationTest {
+
     @ParameterizedTest
     @CsvSource({"8, src/test/resources/2019/day18-demo1.txt",
             "86, src/test/resources/2019/day18-demo2.txt",
@@ -18,7 +21,7 @@ class Day18ManyWorldsInterpretationTest {
             "136, src/test/resources/2019/day18-demo4.txt",
             "81, src/test/resources/2019/day18-demo5.txt",
             "4250, src/test/resources/2019/day18.txt"})
-    void shortestPath(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day18ManyWorldsInterpretation(inputLines).shortestPath());
     }
@@ -29,8 +32,9 @@ class Day18ManyWorldsInterpretationTest {
             "32, src/test/resources/2019/day18-demo8.txt",
             "72, src/test/resources/2019/day18-demo9.txt",
             "1640, src/test/resources/2019/day18-2.txt"})
-    void shortestMultiplePath(int expected, String fileName) throws IOException {
+    void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day18ManyWorldsInterpretation(inputLines).shortestMultiplePath());
     }
+
 }

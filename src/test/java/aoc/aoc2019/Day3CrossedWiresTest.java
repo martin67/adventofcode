@@ -1,5 +1,6 @@
 package aoc.aoc2019;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2019: Day 3: Crossed Wires")
 class Day3CrossedWiresTest {
 
     @ParameterizedTest
@@ -17,7 +19,7 @@ class Day3CrossedWiresTest {
             "159, src/test/resources/2019/day3-demo2.txt",
             "135, src/test/resources/2019/day3-demo3.txt",
             "865, src/test/resources/2019/day3.txt"})
-    void distanceToClosestIntersection(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day3CrossedWires(inputLines).distanceToClosestIntersection());
     }
@@ -27,8 +29,9 @@ class Day3CrossedWiresTest {
             "610, src/test/resources/2019/day3-demo2.txt",
             "410, src/test/resources/2019/day3-demo3.txt",
             "35038, src/test/resources/2019/day3.txt"})
-    void stepsToClosestIntersection(int expected, String fileName) throws IOException {
+    void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day3CrossedWires(inputLines).stepsToClosestIntersection());
     }
+
 }

@@ -1,5 +1,6 @@
 package aoc.aoc2019;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2019: Day 16: Flawed Frequency Transmission")
 class Day16FlawedFrequencyTransmissionTest {
 
     @ParameterizedTest
@@ -23,7 +25,7 @@ class Day16FlawedFrequencyTransmissionTest {
     }
 
     @Test
-    void totalEnergy() throws IOException {
+    void problem1() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day16.txt"));
         assertEquals("73127523", new Day16FlawedFrequencyTransmission(inputLines.get(0)).firstEightDigits(100));
     }
@@ -37,7 +39,7 @@ class Day16FlawedFrequencyTransmissionTest {
     }
 
     @Test
-    void finalOutput() throws IOException {
+    void problem2() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day16.txt"));
         assertEquals("80284420", new Day16FlawedFrequencyTransmission(inputLines.get(0)).finalOutput(100, 10000));
     }

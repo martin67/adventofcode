@@ -1,11 +1,13 @@
 package aoc.aoc2019;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2019: Day 4: Secure Container")
 class Day4SecureContainerTest {
 
     @ParameterizedTest
@@ -17,7 +19,7 @@ class Day4SecureContainerTest {
     }
 
     @Test
-    void validPasswordRange() {
+    void problem1() {
         assertEquals(454, new Day4SecureContainer().validPasswordRange(402328, 864247));
     }
 
@@ -30,7 +32,7 @@ class Day4SecureContainerTest {
     }
 
     @Test
-    void validPasswordNoGroupRange() {
+    void problem2() {
         assertEquals(288, new Day4SecureContainer().validPasswordNoGroupRange(402328, 864247));
     }
 }

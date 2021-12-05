@@ -1,5 +1,6 @@
 package aoc.aoc2019;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -11,7 +12,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2019: Day 2: Program Alarm")
 class Day2ProgramAlarmTest {
+
     @ParameterizedTest
     @CsvSource({"3500, '1,9,10,3,2,3,11,0,99,30,40,50'",
             "2, '1,0,0,0,99'",
@@ -23,7 +26,7 @@ class Day2ProgramAlarmTest {
     }
 
     @Test
-    void valueAtProgramHaltFromFile() throws IOException {
+    void problem1() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day2.txt"));
         for (String opcodes : inputLines) {
             assertEquals(5098658, new Day2ProgramAlarm().valueAtProgramHalt(opcodes, 12, 2));
@@ -31,10 +34,11 @@ class Day2ProgramAlarmTest {
     }
 
     @Test
-    void nounAndVerb() throws IOException {
+    void problem2() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day2.txt"));
         for (String opcodes : inputLines) {
             assertEquals(5064, new Day2ProgramAlarm().nounAndVerb(opcodes));
         }
     }
+
 }

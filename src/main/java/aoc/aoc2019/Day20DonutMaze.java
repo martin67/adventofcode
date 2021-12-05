@@ -127,7 +127,7 @@ public class Day20DonutMaze {
         for (Portal src : portals.values()) {
             for (Portal dst : portals.values()) {
                 if (src.name.equals(dst.name) && src != dst) {
-                    log.info("Mapping {} to {}", src, dst);
+                    log.debug("Mapping {} to {}", src, dst);
                     graph.addEdge(src.pos, dst.pos);
                 }
             }

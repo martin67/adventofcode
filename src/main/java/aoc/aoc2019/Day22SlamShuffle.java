@@ -168,7 +168,7 @@ public class Day22SlamShuffle {
                     }
                 }
             }
-            log.info(stack.cards.toString());
+            log.debug(stack.cards.toString());
         }
 
         if (numberOfCards == 10) {

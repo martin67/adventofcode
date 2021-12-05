@@ -1,5 +1,6 @@
 package aoc.aoc2019;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -9,7 +10,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2019: Day 9: Sensor Boost")
 class Day9SensorBoostTest {
+
     @Test
     void boostTest1() throws InterruptedException {
         String input = "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99";
@@ -32,16 +35,17 @@ class Day9SensorBoostTest {
     }
 
     @Test
-    void boostKeyCode() throws InterruptedException, IOException {
+    void problem1() throws InterruptedException, IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day9.txt"));
         List<String> output = new Day9SensorBoost().boostKeyCode(inputLines.get(0), 1);
         assertEquals("2494485073", output.get(0));
     }
 
     @Test
-    void distressSignal() throws InterruptedException, IOException {
+    void problem2() throws InterruptedException, IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day9.txt"));
         List<String> output = new Day9SensorBoost().boostKeyCode(inputLines.get(0), 2);
         assertEquals("44997", output.get(0));
     }
+
 }

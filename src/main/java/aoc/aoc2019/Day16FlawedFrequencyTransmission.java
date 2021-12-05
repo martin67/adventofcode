@@ -33,7 +33,7 @@ public class Day16FlawedFrequencyTransmission {
     String firstEightDigits(int phases) {
         log.info("Starting FFT, {} phases, fft size: {}", phases, fft.length);
         for (int phase = 0; phase < phases; phase++) {
-            log.info("Running FFT, phase {}", phase);
+            log.debug("Running FFT, phase {}", phase);
             int[] nextValues = new int[fft.length];
 
             for (int row = 0; row < fft.length; row++) {

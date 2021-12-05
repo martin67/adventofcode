@@ -65,7 +65,7 @@ public class Day24PlanetOfDiscord {
             }
             sb.append("\n");
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
     void printGrid(Character[][] grid) {
@@ -76,7 +76,7 @@ public class Day24PlanetOfDiscord {
             }
             sb.append("\n");
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
     void printTwoGrid(Character[][] before, Character[][] after) {
@@ -99,7 +99,7 @@ public class Day24PlanetOfDiscord {
             }
             sb.append("\n");
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
     void printGrids(Map<Integer, Character[][]> grids) {
@@ -136,11 +136,11 @@ public class Day24PlanetOfDiscord {
         while (!previousMaps.contains(m)) {
             previousMaps.add(m);
             m = grow();
-            printMap();
+            //printMap();
         }
 
         log.info("Found duplicate");
-        printMap();
+        //printMap();
 
         int n = 0;
         int rating = 0;
