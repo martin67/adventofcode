@@ -11,13 +11,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 12: Rain Risk")
+@DisplayName("2020: Day 12: Rain Risk")
 class Day12RainRiskTest {
 
     @ParameterizedTest
     @CsvSource({"25, src/test/resources/2020/day12-demo1.txt",
             "636, src/test/resources/2020/day12.txt"})
-    void distance(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day12RainRisk(inputLines).distance());
     }
@@ -25,7 +25,7 @@ class Day12RainRiskTest {
     @ParameterizedTest
     @CsvSource({"286, src/test/resources/2020/day12-demo1.txt",
             "26841, src/test/resources/2020/day12.txt"})
-    void distanceWithWaypoint(int expected, String fileName) throws IOException {
+    void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day12RainRisk(inputLines).distanceWithWaypoint());
     }

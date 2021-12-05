@@ -11,13 +11,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 2: Password Philosophy")
+@DisplayName("2020: Day 2: Password Philosophy")
 class Day2PasswordPhilosophyTest {
 
     @ParameterizedTest
     @CsvSource({"2, src/test/resources/2020/day2-demo1.txt",
             "603, src/test/resources/2020/day2.txt"})
-    void validPasswords(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day2PasswordPhilosophy(inputLines).validPasswords());
     }
@@ -25,7 +25,7 @@ class Day2PasswordPhilosophyTest {
     @ParameterizedTest
     @CsvSource({"1, src/test/resources/2020/day2-demo1.txt",
             "404, src/test/resources/2020/day2.txt"})
-    void validPasswordsNewPolicy(int expected, String fileName) throws IOException {
+    void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day2PasswordPhilosophy(inputLines).validPasswordsNewPolicy());
     }

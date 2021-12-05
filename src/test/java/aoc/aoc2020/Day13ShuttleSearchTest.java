@@ -11,13 +11,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 13: Shuttle Search")
+@DisplayName("2020: Day 13: Shuttle Search")
 class Day13ShuttleSearchTest {
 
     @ParameterizedTest
     @CsvSource({"295, src/test/resources/2020/day13-demo1.txt",
             "2935, src/test/resources/2020/day13.txt"})
-    void busWait(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day13ShuttleSearch(inputLines).busWait());
     }
@@ -36,7 +36,7 @@ class Day13ShuttleSearchTest {
     @ParameterizedTest
     @CsvSource({"1068781, src/test/resources/2020/day13-demo1.txt",
             "836024966345345, src/test/resources/2020/day13.txt"})
-    void earliestTimestampFromFile(long expected, String fileName) throws IOException {
+    void problem2(long expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day13ShuttleSearch(inputLines.get(1)).earliestTimestamp());
     }

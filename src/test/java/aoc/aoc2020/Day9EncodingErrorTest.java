@@ -11,13 +11,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 9: Encoding Error")
+@DisplayName("2020: Day 9: Encoding Error")
 class Day9EncodingErrorTest {
 
     @ParameterizedTest
     @CsvSource({"127, 5, src/test/resources/2020/day9-demo1.txt",
             "373803594, 25, src/test/resources/2020/day9.txt"})
-    void invalidNumber(long expected, int preamble, String fileName) throws IOException {
+    void problem1(long expected, int preamble, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day9EncodingError(preamble, inputLines).invalidNumber());
     }
@@ -25,7 +25,7 @@ class Day9EncodingErrorTest {
     @ParameterizedTest
     @CsvSource({"62, 5, src/test/resources/2020/day9-demo1.txt",
             "51152360, 25, src/test/resources/2020/day9.txt"})
-    void encryptionWeakness(long expected, int preamble, String fileName) throws IOException {
+    void problem2(long expected, int preamble, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day9EncodingError(preamble, inputLines).encryptionWeakness());
     }

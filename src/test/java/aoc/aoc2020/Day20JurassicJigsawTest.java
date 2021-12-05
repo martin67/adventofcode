@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 20: Jurassic Jigsaw")
+@DisplayName("2020: Day 20: Jurassic Jigsaw")
 class Day20JurassicJigsawTest {
 
     @ParameterizedTest
@@ -29,4 +29,5 @@ class Day20JurassicJigsawTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day20JurassicJigsaw(inputLines).problem2());
     }
+
 }

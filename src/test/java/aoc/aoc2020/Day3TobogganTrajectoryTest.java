@@ -11,13 +11,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 3: Toboggan Trajectory")
+@DisplayName("2020: Day 3: Toboggan Trajectory")
 class Day3TobogganTrajectoryTest {
 
     @ParameterizedTest
     @CsvSource({"7, src/test/resources/2020/day3-demo1.txt",
             "176, src/test/resources/2020/day3.txt"})
-    void treesEncountered(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day3TobogganTrajectory(inputLines).treesEncountered(3, 1));
     }
@@ -25,7 +25,7 @@ class Day3TobogganTrajectoryTest {
     @ParameterizedTest
     @CsvSource({"336, src/test/resources/2020/day3-demo1.txt",
             "5872458240, src/test/resources/2020/day3.txt"})
-    void treesSecondEncounter(long expected, String fileName) throws IOException {
+    void problem2(long expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day3TobogganTrajectory(inputLines).treesSecondEncounter());
     }

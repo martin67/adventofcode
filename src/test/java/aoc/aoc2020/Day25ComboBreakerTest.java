@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 25: Combo Breaker")
+@DisplayName("2020: Day 25: Combo Breaker")
 class Day25ComboBreakerTest {
 
     @ParameterizedTest

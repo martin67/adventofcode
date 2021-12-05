@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 23: Crab Cups")
+@DisplayName("2020: Day 23: Crab Cups")
 class Day23CrabCupsTest {
 
     @ParameterizedTest

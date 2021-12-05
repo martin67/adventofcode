@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 15: Rambunctious Recitation")
+@DisplayName("2020: Day 15: Rambunctious Recitation")
 class Day15RambunctiousRecitationTest {
 
     @ParameterizedTest
@@ -34,4 +34,5 @@ class Day15RambunctiousRecitationTest {
     void problem2(long expected, String numbers) {
         assertEquals(expected, new Day15RambunctiousRecitation(numbers).numberSpoken(30000000));
     }
+
 }

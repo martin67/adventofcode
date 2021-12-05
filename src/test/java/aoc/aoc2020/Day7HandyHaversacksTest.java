@@ -11,13 +11,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 7: Handy Haversacks")
+@DisplayName("2020: Day 7: Handy Haversacks")
 class Day7HandyHaversacksTest {
 
     @ParameterizedTest
     @CsvSource({"4, src/test/resources/2020/day7-demo1.txt",
             "185, src/test/resources/2020/day7.txt"})
-    void numberOfBags(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day7HandyHaversacks(inputLines).numberOfBags());
     }
@@ -26,8 +26,9 @@ class Day7HandyHaversacksTest {
     @CsvSource({"32, src/test/resources/2020/day7-demo1.txt",
             "126, src/test/resources/2020/day7-demo2.txt",
             "89084, src/test/resources/2020/day7.txt"})
-    void numberOfBagsInside(int expected, String fileName) throws IOException {
+    void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day7HandyHaversacks(inputLines).numberOfBagsInside());
     }
+
 }

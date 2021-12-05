@@ -11,14 +11,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 10: Adapter Array")
+@DisplayName("2020: Day 10: Adapter Array")
 class Day10AdapterArrayTest {
 
     @ParameterizedTest
     @CsvSource({"35, src/test/resources/2020/day10-demo1.txt",
             "220, src/test/resources/2020/day10-demo2.txt",
             "2210, src/test/resources/2020/day10.txt"})
-    void joltDifference(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day10AdapterArray(inputLines).joltDifference());
     }
@@ -27,7 +27,7 @@ class Day10AdapterArrayTest {
     @CsvSource({"8, src/test/resources/2020/day10-demo1.txt",
             "19208, src/test/resources/2020/day10-demo2.txt",
             "7086739046912, src/test/resources/2020/day10.txt"})
-    void adapterCombinations(long expected, String fileName) throws IOException {
+    void problem2(long expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day10AdapterArray(inputLines).adapterCombinations2());
     }

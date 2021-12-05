@@ -11,14 +11,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 6: Custom Customs")
+@DisplayName("2020: Day 6: Custom Customs")
 class Day6CustomCustomsTest {
 
     @ParameterizedTest
     @CsvSource({"6, src/test/resources/2020/day6-demo1.txt",
             "11, src/test/resources/2020/day6-demo2.txt",
             "6742, src/test/resources/2020/day6.txt"})
-    void questionsWithYes(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day6CustomCustoms(inputLines).questionsWithYes());
     }
@@ -27,7 +27,7 @@ class Day6CustomCustomsTest {
     @CsvSource({"3, src/test/resources/2020/day6-demo1.txt",
             "6, src/test/resources/2020/day6-demo2.txt",
             "3447, src/test/resources/2020/day6.txt"})
-    void questionsWithEveryoneYes(int expected, String fileName) throws IOException {
+    void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day6CustomCustoms(inputLines).questionsWithEveryoneYes());
     }

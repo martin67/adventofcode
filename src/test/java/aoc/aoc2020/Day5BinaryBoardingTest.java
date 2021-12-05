@@ -11,20 +11,20 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 5: Binary Boarding")
+@DisplayName("2020: Day 5: Binary Boarding")
 class Day5BinaryBoardingTest {
 
     @ParameterizedTest
     @CsvSource({"820, src/test/resources/2020/day5-demo1.txt",
             "911, src/test/resources/2020/day5.txt"})
-    void highestId(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day5BinaryBoarding(inputLines).highestId());
     }
 
     @ParameterizedTest
     @CsvSource({"629, src/test/resources/2020/day5.txt"})
-    void myId(int expected, String fileName) throws IOException {
+    void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day5BinaryBoarding(inputLines).myId());
     }

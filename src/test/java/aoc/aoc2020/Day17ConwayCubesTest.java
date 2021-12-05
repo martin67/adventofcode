@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 17: Conway Cubes")
+@DisplayName("2020: Day 17: Conway Cubes")
 class Day17ConwayCubesTest {
 
     @ParameterizedTest

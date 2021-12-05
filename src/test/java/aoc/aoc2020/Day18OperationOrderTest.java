@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 18: Operation Order")
+@DisplayName("2020: Day 18: Operation Order")
 class Day18OperationOrderTest {
 
     @ParameterizedTest
