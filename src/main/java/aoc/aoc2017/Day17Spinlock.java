@@ -1,8 +1,10 @@
 package aoc.aoc2017;
 
-import java.util.LinkedList;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.*;
+
+@Slf4j
 public class Day17Spinlock {
     int steps;
 
@@ -35,6 +37,8 @@ public class Day17Spinlock {
 
     int secondCompletedBufferValue() {
         List<Integer> circularBuffer = new LinkedList<>();
+        Set<Integer> values = new TreeSet<>();
+
         circularBuffer.add(0);
         int currentPosition = 0;
         for (int i = 0; i < 50000000; i++) {
@@ -51,10 +55,32 @@ public class Day17Spinlock {
                     circularBuffer.add((currentPosition + 1) % bufferSize, i + 1);
                 }
             }
-
+            int index = circularBuffer.indexOf(0) + 1;
+            if (index == circularBuffer.size()) {
+                index = 0;
+            }
+            values.add(circularBuffer.get(index));
+            if ((i % 100000) == 0) {
+                log.info("value after {} iterations: {}", i, values);
+            }
             currentPosition++;
         }
         return circularBuffer.get(currentPosition + 1);
 
+    }
+
+    int problem2() {
+        int pos = 0;
+        int value = 0;
+
+        for (int i = 0; i < 50000000; i++) {
+            pos = (pos + steps) % (i + 1);
+            if (pos == 0) {
+                log.info("pos: {}, i: {}", pos, i + 1);
+                value = i + 1;
+            }
+            pos++;
+        }
+        return value;
     }
 }

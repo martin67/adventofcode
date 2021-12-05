@@ -1,6 +1,5 @@
 package aoc.aoc2017;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -18,11 +17,9 @@ class Day17SpinlockTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"638, 3",
-            "2000, 354"})
-    @Disabled
+    @CsvSource({"10242889, 354"})
     void problem2(int expected, int steps) {
-        assertEquals(expected, new Day17Spinlock(steps).secondCompletedBufferValue());
+        assertEquals(expected, new Day17Spinlock(steps).problem2());
     }
 
 }
