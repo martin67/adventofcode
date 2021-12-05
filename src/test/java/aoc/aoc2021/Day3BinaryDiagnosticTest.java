@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 3: Binary Diagnostic")
+@DisplayName("2021: Day 3: Binary Diagnostic")
 class Day3BinaryDiagnosticTest {
 
     @ParameterizedTest
@@ -29,4 +29,5 @@ class Day3BinaryDiagnosticTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day3BinaryDiagnostic(inputLines).problem2());
     }
+
 }

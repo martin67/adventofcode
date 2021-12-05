@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 4: Giant Squid")
+@DisplayName("2021: Day 4: Giant Squid")
 class Day4GiantSquidTest {
 
     @ParameterizedTest
@@ -29,4 +29,5 @@ class Day4GiantSquidTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day4GiantSquid(inputLines).problem2());
     }
+
 }

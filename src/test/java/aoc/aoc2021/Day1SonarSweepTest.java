@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 1: Sonar Sweep")
+@DisplayName("2021: Day 1: Sonar Sweep")
 class Day1SonarSweepTest {
 
     @ParameterizedTest
@@ -29,4 +29,5 @@ class Day1SonarSweepTest {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day1SonarSweep(inputLines).problem2());
     }
+
 }
