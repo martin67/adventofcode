@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 13: Knights of the Dinner Table")
+@DisplayName("2015: Day 13: Knights of the Dinner Table")
 class Day13KnightsOfTheDinnerTableTest {
 
     @ParameterizedTest

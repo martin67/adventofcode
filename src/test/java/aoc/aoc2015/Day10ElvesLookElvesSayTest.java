@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 10: Elves Look, Elves Say")
+@DisplayName("2015: Day 10: Elves Look, Elves Say")
 class Day10ElvesLookElvesSayTest {
 
     @ParameterizedTest

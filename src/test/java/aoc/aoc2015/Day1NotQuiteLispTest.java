@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 1: Not Quite Lisp")
+@DisplayName("2015: Day 1: Not Quite Lisp")
 class Day1NotQuiteLispTest {
     @ParameterizedTest
     @CsvSource({"(()), 0",

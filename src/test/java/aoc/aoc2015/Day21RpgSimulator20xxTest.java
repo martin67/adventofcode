@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 21: RPG Simulator 20XX")
+@DisplayName("2015: Day 21: RPG Simulator 20XX")
 class Day21RpgSimulator20xxTest {
 
     @Test

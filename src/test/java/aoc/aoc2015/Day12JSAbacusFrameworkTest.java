@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 12: JSAbacusFramework.io")
+@DisplayName("2015: Day 12: JSAbacusFramework.io")
 class Day12JSAbacusFrameworkTest {
 
     @ParameterizedTest

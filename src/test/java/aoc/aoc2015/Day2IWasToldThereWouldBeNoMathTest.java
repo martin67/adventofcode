@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 2: I Was Told There Would Be No Math Test")
+@DisplayName("2015: Day 2: I Was Told There Would Be No Math Test")
 class Day2IWasToldThereWouldBeNoMathTest {
     @ParameterizedTest
     @CsvSource({"2x3x4, 58",

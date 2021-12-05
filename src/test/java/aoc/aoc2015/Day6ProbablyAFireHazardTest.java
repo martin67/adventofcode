@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 6: Probably a Fire Hazard")
+@DisplayName("2015: Day 6: Probably a Fire Hazard")
 class Day6ProbablyAFireHazardTest {
     @Test
     void lightsLit() throws IOException {

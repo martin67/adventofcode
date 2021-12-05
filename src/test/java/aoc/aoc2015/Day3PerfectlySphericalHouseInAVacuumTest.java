@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 3: Perfectly Spherical Houses in a Vacuum")
+@DisplayName("2015: Day 3: Perfectly Spherical Houses in a Vacuum")
 class Day3PerfectlySphericalHouseInAVacuumTest {
     @ParameterizedTest
     @CsvSource({">, 2",

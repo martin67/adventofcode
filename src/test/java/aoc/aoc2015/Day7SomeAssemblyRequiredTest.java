@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 7: Some Assembly Required")
+@DisplayName("2015: Day 7: Some Assembly Required")
 class Day7SomeAssemblyRequiredTest {
     @ParameterizedTest
     @CsvSource({"72, d, src/test/resources/2015/day7-demo1.txt",

@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("Day 4: The Ideal Stocking Stuffer")
+@DisplayName("2015: Day 4: The Ideal Stocking Stuffer")
 class Day4TheIdealStockingStufferTest {
     @ParameterizedTest
     @CsvSource({"abcdef, 609043",
