@@ -1,5 +1,6 @@
 package aoc.aoc2016;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -7,6 +8,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2016: Day 1: No Time for a Taxicab")
 class Day1NoTimeForATaxicabTest {
 
     @ParameterizedTest
@@ -14,14 +16,14 @@ class Day1NoTimeForATaxicabTest {
             "2, src/test/resources/2016/day1-demo2.txt",
             "12, src/test/resources/2016/day1-demo3.txt",
             "250, src/test/resources/2016/day1.txt"})
-    void shortestPath(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         assertEquals(expected, new Day1NoTimeForATaxicab(fileName).shortestPath());
     }
 
     @ParameterizedTest
     @CsvSource({"4, src/test/resources/2016/day1-demo4.txt",
             "151, src/test/resources/2016/day1.txt"})
-    void visitedTwice(int expected, String fileName) throws IOException {
+    void problem2(int expected, String fileName) throws IOException {
         assertEquals(expected, new Day1NoTimeForATaxicab(fileName).visitedTwice());
     }
 }
