@@ -1,50 +1,34 @@
 package aoc.aoc2018;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2018: Day 6: Chronal Coordinates")
 class Day6ChronalCoordinatesTest {
 
-    @Test
-    void largestSize() {
-        String input = "1, 1\n" +
-                "1, 6\n" +
-                "8, 3\n" +
-                "3, 4\n" +
-                "5, 5\n" +
-                "8, 9";
+    @ParameterizedTest
+    @CsvSource({"17, src/test/resources/2018/day6-demo1.txt",
+            "3293, src/test/resources/2018/day6.txt"})
+    void problem1(int expected, String fileName) throws IOException {
+        String input = new String((Files.readAllBytes(Paths.get(fileName))));
         Day6ChronalCoordinates day6ChronalCoordinates = new Day6ChronalCoordinates();
-        assertEquals(17, day6ChronalCoordinates.largestArea(input));
+        assertEquals(expected, day6ChronalCoordinates.largestArea(input));
     }
 
-    @Test
-    void largestSizeFromFile() throws IOException {
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day6.txt"))));
+    @ParameterizedTest
+    @CsvSource({"16, 32, src/test/resources/2018/day6-demo1.txt",
+            "45176, 10000, src/test/resources/2018/day6.txt"})
+    void problem2(int expected, int totalDistance, String fileName) throws IOException {
+        String input = new String((Files.readAllBytes(Paths.get(fileName))));
         Day6ChronalCoordinates day6ChronalCoordinates = new Day6ChronalCoordinates();
-        assertEquals(3293, day6ChronalCoordinates.largestArea(input));
+        assertEquals(expected, day6ChronalCoordinates.sizeOfRegion(input, totalDistance));
     }
 
-    @Test
-    void sizeOfRegion() {
-        String input = "1, 1\n" +
-                "1, 6\n" +
-                "8, 3\n" +
-                "3, 4\n" +
-                "5, 5\n" +
-                "8, 9";
-        Day6ChronalCoordinates day6ChronalCoordinates = new Day6ChronalCoordinates();
-        assertEquals(16, day6ChronalCoordinates.sizeOfRegion(input, 32));
-    }
-
-    @Test
-    void sizeOfRegionFromFile() throws IOException {
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day6.txt"))));
-        Day6ChronalCoordinates day6ChronalCoordinates = new Day6ChronalCoordinates();
-        assertEquals(45176, day6ChronalCoordinates.sizeOfRegion(input, 10000));
-    }
 }

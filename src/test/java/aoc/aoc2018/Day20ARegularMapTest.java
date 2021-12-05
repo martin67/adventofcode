@@ -1,5 +1,6 @@
 package aoc.aoc2018;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -7,6 +8,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2018: Day 20: A Regular Map")
 class Day20ARegularMapTest {
 
     @ParameterizedTest
@@ -18,7 +20,7 @@ class Day20ARegularMapTest {
             "31, src/test/resources/2018/day20-demo5.txt, day20-demo5.gml",
             "4214, src/test/resources/2018/day20.txt, day20.gml"
     })
-    void largestNumberOfDoors(int outcome, String fileName, String output) throws IOException {
+    void problem1(int outcome, String fileName, String output) throws IOException {
         Day20ARegularMap day20ARegularMap = new Day20ARegularMap(fileName, output, true);
         assertEquals(outcome, day20ARegularMap.largestNumberOfDoors());
     }
@@ -32,7 +34,7 @@ class Day20ARegularMapTest {
             "44, src/test/resources/2018/day20-demo5.txt, day20-demo5.gml, 5",
             "8492, src/test/resources/2018/day20.txt, day20.gml, 1000"
     })
-    void countRooms(int outcome, String fileName, String output, int minNumberOfDoors) throws IOException {
+    void problem2(int outcome, String fileName, String output, int minNumberOfDoors) throws IOException {
         Day20ARegularMap day20ARegularMap = new Day20ARegularMap(fileName, output, false);
         assertEquals(outcome, day20ARegularMap.countRooms(minNumberOfDoors));
     }

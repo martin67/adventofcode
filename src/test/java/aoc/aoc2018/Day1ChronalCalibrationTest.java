@@ -1,5 +1,6 @@
 package aoc.aoc2018;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -10,6 +11,7 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2018: Day 1: Chronal Calibration")
 class Day1ChronalCalibrationTest {
 
     @ParameterizedTest
@@ -25,10 +27,9 @@ class Day1ChronalCalibrationTest {
     }
 
     @Test
-    void computeFrequencyFromFile() throws IOException {
+    void problem1() throws IOException {
         Day1ChronalCalibration day1ChronalCalibration = new Day1ChronalCalibration();
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day1-1.txt"))));
-
+        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day1.txt"))));
         assertEquals(582, day1ChronalCalibration.computeFrequency(input));
     }
 
@@ -46,10 +47,9 @@ class Day1ChronalCalibrationTest {
     }
 
     @Test
-    void computeDoubleFrequencyFromFile() throws IOException {
+    void problem2() throws IOException {
         Day1ChronalCalibration day1ChronalCalibration = new Day1ChronalCalibration();
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day1-1.txt"))));
-
+        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day1.txt"))));
         assertEquals(488, day1ChronalCalibration.computeDoubleFrequency(input));
     }
 

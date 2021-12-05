@@ -120,7 +120,7 @@ public class Day14ChocolateCharts {
                     }
                     //log.info("Checking for " + score + " in " + recipe);
                     if (recipe.toString().contains(score)) {
-                        log.info("Found match in " + numberOfRecipes);
+                        //log.info("Found match in " + numberOfRecipes);
                         foundMatch = true;
                         break;
                     }
@@ -139,7 +139,7 @@ public class Day14ChocolateCharts {
 
             //print();
             if (numberOfRecipes % 10000 == 0) {
-                log.info("round: " + numberOfRecipes);
+                //log.info("round: " + numberOfRecipes);
             }
         }
 

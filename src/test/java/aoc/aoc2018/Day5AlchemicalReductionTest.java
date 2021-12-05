@@ -1,41 +1,34 @@
 package aoc.aoc2018;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2018: Day 5: Alchemical Reduction")
 class Day5AlchemicalReductionTest {
 
-    @Test
-    void getPolymerLength() {
-        String input = "dabAcCaCBAcCcaDA";
+    @ParameterizedTest
+    @CsvSource({"10, src/test/resources/2018/day5-demo1.txt",
+            "9526, src/test/resources/2018/day5.txt"})
+    void problem1(int expected, String fileName) throws IOException {
+        String input = new String((Files.readAllBytes(Paths.get(fileName))));
         Day5AlchemicalReduction day5AlchemicalReduction = new Day5AlchemicalReduction();
-        assertEquals(10, day5AlchemicalReduction.getPolymerLength(input));
+        assertEquals(expected, day5AlchemicalReduction.getPolymerLength(input));
     }
 
-    @Test
-    void getPolymerLengthFromFile() throws IOException {
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day5.txt"))));
+    @ParameterizedTest
+    @CsvSource({"4, src/test/resources/2018/day5-demo1.txt",
+            "6694, src/test/resources/2018/day5.txt"})
+    void problem2(int expected, String fileName) throws IOException {
+        String input = new String((Files.readAllBytes(Paths.get(fileName))));
         Day5AlchemicalReduction day5AlchemicalReduction = new Day5AlchemicalReduction();
-        assertEquals(9526, day5AlchemicalReduction.getPolymerLength(input));
-    }
-
-    @Test
-    void findShortestPolymer() {
-        String input = "dabAcCaCBAcCcaDA";
-        Day5AlchemicalReduction day5AlchemicalReduction = new Day5AlchemicalReduction();
-        assertEquals(4, day5AlchemicalReduction.findShortestPolymer(input));
-    }
-
-    @Test
-    void findShortestPolymerFromFile() throws IOException {
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day5.txt"))));
-        Day5AlchemicalReduction day5AlchemicalReduction = new Day5AlchemicalReduction();
-        assertEquals(6694, day5AlchemicalReduction.findShortestPolymer(input));
+        assertEquals(expected, day5AlchemicalReduction.findShortestPolymer(input));
     }
 
 }

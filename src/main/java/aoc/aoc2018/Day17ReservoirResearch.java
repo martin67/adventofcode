@@ -96,7 +96,7 @@ public class Day17ReservoirResearch {
         while (running.size() != lastNumberOfRunningWater || still.size() !=lastNumberOfStillWater) {
             lastNumberOfRunningWater = running.size();
             lastNumberOfStillWater = still.size();
-            System.out.println("Iterating - running: " + running.size() + ", still: " + still.size());
+            //System.out.println("Iterating - running: " + running.size() + ", still: " + still.size());
             //printMap();
             Set<Position> runningClone = new HashSet<>(running);
             for (Position tile : runningClone) {
@@ -144,7 +144,7 @@ public class Day17ReservoirResearch {
             }
         }
         // Subtract the well
-        printMap();
+        //printMap();
         return running.size() + still.size() - 1;
     }
 

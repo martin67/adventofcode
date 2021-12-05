@@ -1,5 +1,6 @@
 package aoc.aoc2018;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -10,6 +11,7 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("2018: Day 2: Inventory Management System")
 class Day2InventoryManagementSystemTest {
 
     @ParameterizedTest
@@ -38,10 +40,9 @@ class Day2InventoryManagementSystemTest {
     }
 
     @Test
-    void computeChecksumFromFile() throws IOException {
+    void problem1() throws IOException {
         Day2InventoryManagementSystem day2InventoryManagementSystem = new Day2InventoryManagementSystem();
         String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day2.txt"))));
-
         assertEquals(8296, day2InventoryManagementSystem.computeChecksum(input));
     }
 
@@ -55,7 +56,7 @@ class Day2InventoryManagementSystemTest {
     }
 
     @Test
-    void findBoxesFromFile() throws IOException {
+    void problem2() throws IOException {
         Day2InventoryManagementSystem day2InventoryManagementSystem = new Day2InventoryManagementSystem();
         String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day2.txt"))));
         assertEquals("pazvmqbftrbeosiecxlghkwud", day2InventoryManagementSystem.findBoxes(input));

@@ -224,14 +224,14 @@ class Day13MineCartMadness {
         Position collision = null;
         int ticks = 0;
         while (carts.size() > 1) {
-            log.info("Moving " + carts.size() + " carts, tick: " + ticks);
+            //log.info("Moving " + carts.size() + " carts, tick: " + ticks);
 
             for (Cart cart : carts.stream().sorted().collect(Collectors.toList())) {
                 //log.info("Moving cart: " + cart);
                 moveCart(cart);
                 collision = checkForCollision(cart);
                 if (collision != null) {
-                    log.info("Collision after " + ticks + " ticks for cart: " + cart);
+                    //log.info("Collision after " + ticks + " ticks for cart: " + cart);
                     carts.removeIf(c -> c.getPosition().equals(cart.getPosition()));
                 }
             }

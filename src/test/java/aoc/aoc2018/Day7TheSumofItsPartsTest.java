@@ -1,52 +1,34 @@
 package aoc.aoc2018;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2018: Day 7: The Sum of Its Parts")
 class Day7TheSumofItsPartsTest {
 
-    @Test
-    void puzzleOrder() {
-            String input = "Step C must be finished before step A can begin.\n" +
-                "Step C must be finished before step F can begin.\n" +
-                "Step A must be finished before step B can begin.\n" +
-                "Step A must be finished before step D can begin.\n" +
-                "Step B must be finished before step E can begin.\n" +
-                "Step D must be finished before step E can begin.\n" +
-                "Step F must be finished before step E can begin.\n";
-            Day7TheSumofItsParts day7TheSumofItsParts = new Day7TheSumofItsParts();
-            assertEquals("CABDFE", day7TheSumofItsParts.puzzleOrder(input));
+    @ParameterizedTest
+    @CsvSource({"CABDFE, src/test/resources/2018/day7-demo1.txt",
+            "ABGKCMVWYDEHFOPQUILSTNZRJX, src/test/resources/2018/day7.txt"})
+    void problem1(String expected, String fileName) throws IOException {
+        String input = new String((Files.readAllBytes(Paths.get(fileName))));
+        Day7TheSumofItsParts day7TheSumofItsParts = new Day7TheSumofItsParts();
+        assertEquals(expected, day7TheSumofItsParts.puzzleOrder(input));
     }
 
-    @Test
-    void puzzleOrderFromFile() throws IOException {
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day7.txt"))));
+    @ParameterizedTest
+    @CsvSource({"15, 2, 0, src/test/resources/2018/day7-demo1.txt",
+            "898, 5, 60, src/test/resources/2018/day7.txt"})
+    void problem2(int expected, int numberOfWorkers, int duration, String fileName) throws IOException {
+        String input = new String((Files.readAllBytes(Paths.get(fileName))));
         Day7TheSumofItsParts day7TheSumofItsParts = new Day7TheSumofItsParts();
-        assertEquals("ABGKCMVWYDEHFOPQUILSTNZRJX", day7TheSumofItsParts.puzzleOrder(input));
+        assertEquals(expected, day7TheSumofItsParts.computeTime(input, numberOfWorkers, duration));
     }
 
-    @Test
-    void computeTime() {
-        String input = "Step C must be finished before step A can begin.\n" +
-                "Step C must be finished before step F can begin.\n" +
-                "Step A must be finished before step B can begin.\n" +
-                "Step A must be finished before step D can begin.\n" +
-                "Step B must be finished before step E can begin.\n" +
-                "Step D must be finished before step E can begin.\n" +
-                "Step F must be finished before step E can begin.\n";
-        Day7TheSumofItsParts day7TheSumofItsParts = new Day7TheSumofItsParts();
-        assertEquals(15, day7TheSumofItsParts.computeTime(input, 2, 0));
-    }
-
-    @Test
-    void computeTimeFromFile() throws IOException {
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/2018/day7.txt"))));
-        Day7TheSumofItsParts day7TheSumofItsParts = new Day7TheSumofItsParts();
-        assertEquals(898, day7TheSumofItsParts.computeTime(input, 5, 60));
-    }
 }
