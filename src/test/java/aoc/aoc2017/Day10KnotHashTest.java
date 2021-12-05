@@ -1,5 +1,6 @@
 package aoc.aoc2017;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -10,12 +11,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2017: Day 10: Knot Hash")
 class Day10KnotHashTest {
 
     @ParameterizedTest
     @CsvSource({"12, 5, src/test/resources/2017/day10-demo1.txt",
             "11375, 256, src/test/resources/2017/day10.txt"})
-    void checkKnot(int expected, int listSize, String fileName) throws IOException {
+    void problem1(int expected, int listSize, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day10KnotHash(listSize).checkKnot(inputLines.get(0)));
     }
@@ -31,7 +33,7 @@ class Day10KnotHashTest {
 
     @ParameterizedTest
     @CsvSource({"e0387e2ad112b7c2ef344e44885fe4d8, src/test/resources/2017/day10.txt"})
-    void knotHashFromFile(String expected, String fileName) throws IOException {
+    void problem2(String expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day10KnotHash(256).knotHash(inputLines.get(0)));
     }

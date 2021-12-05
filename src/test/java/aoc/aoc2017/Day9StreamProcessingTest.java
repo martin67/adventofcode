@@ -1,5 +1,6 @@
 package aoc.aoc2017;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2017: Day 9: Stream Processing")
 class Day9StreamProcessingTest {
 
     @ParameterizedTest
@@ -27,7 +29,7 @@ class Day9StreamProcessingTest {
 
     @ParameterizedTest
     @CsvSource({"13154, src/test/resources/2017/day9.txt"})
-    void scoreFromFile(int expected, String fileName) throws IOException {
+    void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day9StreamProcessing(inputLines.get(0)).score());
     }
@@ -52,7 +54,7 @@ class Day9StreamProcessingTest {
 
     @ParameterizedTest
     @CsvSource({"6369, src/test/resources/2017/day9.txt"})
-    void garbageFromFile(int expected, String fileName) throws IOException {
+    void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day9StreamProcessing(inputLines.get(0)).garbage());
     }

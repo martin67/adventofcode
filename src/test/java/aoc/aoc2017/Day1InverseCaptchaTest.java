@@ -1,5 +1,6 @@
 package aoc.aoc2017;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("2017: Day 1: Inverse Captcha")
 class Day1InverseCaptchaTest {
 
     @ParameterizedTest
@@ -23,7 +25,7 @@ class Day1InverseCaptchaTest {
     }
 
     @Test
-    void computeCaptchaFromFile() throws IOException {
+    void problem1() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2017/day1.txt"));
         for (String line : inputLines) {
             assertEquals(995, new Day1InverseCaptcha().computeCaptcha(line));
@@ -41,7 +43,7 @@ class Day1InverseCaptchaTest {
     }
 
     @Test
-    void computeHalfwayCaptchaFromFile() throws IOException {
+    void problem2() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2017/day1.txt"));
         for (String line : inputLines) {
             assertEquals(1130, new Day1InverseCaptcha().computeHalfwayCaptcha(line));

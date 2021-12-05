@@ -1,5 +1,6 @@
 package aoc.aoc2017;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("2017: Day 4: High-Entropy Passphrases")
 class Day4HighEntropyPassphrasesTest {
     @ParameterizedTest
     @CsvSource({"true, aa bb cc dd ee",
@@ -21,7 +23,7 @@ class Day4HighEntropyPassphrasesTest {
     }
 
     @Test
-    void numberOfValidPassphrases() throws IOException {
+    void problem1() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2017/day4.txt"));
         assertEquals(451, new Day4HighEntropyPassphrases().numberOfValidPassphrases(inputLines));
     }
@@ -37,7 +39,7 @@ class Day4HighEntropyPassphrasesTest {
     }
 
     @Test
-    void numberOfValidAnagramPassphrases() throws IOException {
+    void problem2() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2017/day4.txt"));
         assertEquals(223, new Day4HighEntropyPassphrases().numberOfValidAnagramPassphrases(inputLines));
     }
