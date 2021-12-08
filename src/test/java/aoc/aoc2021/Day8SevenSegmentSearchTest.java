@@ -26,7 +26,7 @@ class Day8SevenSegmentSearchTest {
     @ParameterizedTest
     @CsvSource({"5353, src/test/resources/2021/day8-demo1.txt",
             "61229, src/test/resources/2021/day8-demo2.txt",
-            "0, src/test/resources/2021/day8.txt"})
+            "1074888, src/test/resources/2021/day8.txt"})
     void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day8SevenSegmentSearch(inputLines).problem2());
