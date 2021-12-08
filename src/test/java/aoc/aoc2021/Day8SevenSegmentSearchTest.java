@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,8 +18,7 @@ class Day8SevenSegmentSearchTest {
             "26, src/test/resources/2021/day8-demo2.txt",
             "548, src/test/resources/2021/day8.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day8SevenSegmentSearch(inputLines).problem1());
+        assertEquals(expected, new Day8SevenSegmentSearch(Files.readAllLines(Paths.get(fileName))).problem1());
     }
 
     @ParameterizedTest
@@ -28,8 +26,7 @@ class Day8SevenSegmentSearchTest {
             "61229, src/test/resources/2021/day8-demo2.txt",
             "1074888, src/test/resources/2021/day8.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day8SevenSegmentSearch(inputLines).problem2());
+        assertEquals(expected, new Day8SevenSegmentSearch(Files.readAllLines(Paths.get(fileName))).problem2());
     }
 
 }

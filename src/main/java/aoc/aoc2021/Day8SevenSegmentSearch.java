@@ -14,7 +14,6 @@ public class Day8SevenSegmentSearch {
     static int SEGMENT_LOWER_RIGHT = 5;
     static int SEGMENT_BOTTOM = 6;
 
-
     List<DigitEntry> entries = new ArrayList<>();
 
     public Day8SevenSegmentSearch(List<String> inputLines) {
@@ -219,7 +218,6 @@ public class Day8SevenSegmentSearch {
                 }
             }
 
-
             Map<String, Integer> answer = new HashMap<>();
 
             for (int x = 0; x < 7; x++) {
@@ -238,7 +236,7 @@ public class Day8SevenSegmentSearch {
                         }
                     }
                 }
-                log.info("Biggest key {}, prob {}, segement {}", biggest_prob_key, biggest_prob, biggest_segment);
+                log.debug("Biggest key {}, prob {}, segment {}", biggest_prob_key, biggest_prob, biggest_segment);
                 answer.put(biggest_prob_key, biggest_segment);
                 // remove key from all probs
                 for (int i = 0; i < 7; i++) {
@@ -268,7 +266,7 @@ public class Day8SevenSegmentSearch {
                 // compare segmentPattern with all fixed patterns
                 for (Set<Integer> digitPattern : allNumbers.keySet()) {
                     if (digitPattern.equals(segmentPattern)) {
-                        log.info("Pattern {} is number {}", pattern, allNumbers.get(digitPattern));
+                        log.debug("Pattern {} is number {}", pattern, allNumbers.get(digitPattern));
                         solutions.put(pattern, allNumbers.get(digitPattern));
                     }
                 }
@@ -276,8 +274,8 @@ public class Day8SevenSegmentSearch {
             int sum = 1000 * (solutions.get(digitEntry.outputs.get(0))) +
                     100 * (solutions.get(digitEntry.outputs.get(1))) +
                     10 * (solutions.get(digitEntry.outputs.get(2))) +
-                    1 * (solutions.get(digitEntry.outputs.get(3)));
-            log.info("Number: {}", sum);
+                    (solutions.get(digitEntry.outputs.get(3)));
+            log.debug("Number: {}", sum);
             totalSum += sum;
         }
         return totalSum;
@@ -286,16 +284,6 @@ public class Day8SevenSegmentSearch {
 
     private Map<String, Integer> addProbs(Map<String, Integer> probMap, String pattern) {
         for (char c : pattern.toCharArray()) {
-            probMap.merge(String.valueOf(c), 1, Integer::sum);
-        }
-        return probMap;
-    }
-
-    private Map<String, Integer> addNegativeProbs(Map<String, Integer> probMap, String pattern) {
-        String antiPattern = "abcdefg";
-        antiPattern = antiPattern.replaceAll(pattern, "");
-
-        for (char c : antiPattern.toCharArray()) {
             probMap.merge(String.valueOf(c), 1, Integer::sum);
         }
         return probMap;
