@@ -3,7 +3,6 @@ package aoc.aoc2021;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @Slf4j
 public class Day8SevenSegmentSearch {
@@ -15,26 +14,8 @@ public class Day8SevenSegmentSearch {
     static int SEGMENT_LOWER_RIGHT = 5;
     static int SEGMENT_BOTTOM = 6;
 
-    enum Segment {
-        TOP, UPPER_LEFT, UPPER_RIGHT, MIDDLE, LOWER_LEFT, LOWER_RIGHT, BOTTOM
-    }
-
-    static final Set<Segment> NUMBER_ZERO = new HashSet<>();
-    static final Set<Segment> NUMBER_ONE = new HashSet<>();
-    static final Set<Segment> NUMBER_TWO = new HashSet<>();
-    static final Set<Segment> NUMBER_THREE = new HashSet<>();
-    static final Set<Segment> NUMBER_FOUR = new HashSet<>();
-    static final Set<Segment> NUMBER_FIVE = new HashSet<>();
-    static final Set<Segment> NUMBER_SIX = new HashSet<>();
-    static final Set<Segment> NUMBER_SEVEN = new HashSet<>();
-    static final Set<Segment> NUMBER_EIGHT = new HashSet<>();
-    static final Set<Segment> NUMBER_NINE = new HashSet<>();
-
-    static final Map<Set<Segment>, Integer> segmentNumberMap = new HashMap<>();
 
     List<DigitEntry> entries = new ArrayList<>();
-    String bobbaHighest;
-    Segment bobbaSegment;
 
     public Day8SevenSegmentSearch(List<String> inputLines) {
         inputLines.forEach(line -> {
@@ -54,76 +35,6 @@ public class Day8SevenSegmentSearch {
             }
             entries.add(digitEntry);
         });
-
-        NUMBER_ZERO.add(Segment.TOP);
-        NUMBER_ZERO.add(Segment.UPPER_LEFT);
-        NUMBER_ZERO.add(Segment.UPPER_RIGHT);
-        NUMBER_ZERO.add(Segment.LOWER_LEFT);
-        NUMBER_ZERO.add(Segment.LOWER_RIGHT);
-        NUMBER_ZERO.add(Segment.BOTTOM);
-        segmentNumberMap.put(NUMBER_ZERO, 0);
-
-        NUMBER_ONE.add(Segment.UPPER_LEFT);
-        NUMBER_ONE.add(Segment.LOWER_RIGHT);
-        segmentNumberMap.put(NUMBER_ONE, 1);
-
-        NUMBER_TWO.add(Segment.TOP);
-        NUMBER_TWO.add(Segment.UPPER_RIGHT);
-        NUMBER_TWO.add(Segment.MIDDLE);
-        NUMBER_TWO.add(Segment.LOWER_LEFT);
-        NUMBER_TWO.add(Segment.BOTTOM);
-        segmentNumberMap.put(NUMBER_TWO, 2);
-
-        NUMBER_THREE.add(Segment.TOP);
-        NUMBER_THREE.add(Segment.UPPER_RIGHT);
-        NUMBER_THREE.add(Segment.MIDDLE);
-        NUMBER_THREE.add(Segment.LOWER_RIGHT);
-        NUMBER_THREE.add(Segment.BOTTOM);
-        segmentNumberMap.put(NUMBER_THREE, 3);
-
-        NUMBER_FOUR.add(Segment.UPPER_LEFT);
-        NUMBER_FOUR.add(Segment.UPPER_RIGHT);
-        NUMBER_FOUR.add(Segment.MIDDLE);
-        NUMBER_FOUR.add(Segment.LOWER_RIGHT);
-        segmentNumberMap.put(NUMBER_FOUR, 4);
-
-        NUMBER_FIVE.add(Segment.TOP);
-        NUMBER_FIVE.add(Segment.UPPER_LEFT);
-        NUMBER_FIVE.add(Segment.MIDDLE);
-        NUMBER_FIVE.add(Segment.LOWER_RIGHT);
-        NUMBER_FIVE.add(Segment.BOTTOM);
-        segmentNumberMap.put(NUMBER_FIVE, 5);
-
-        NUMBER_SIX.add(Segment.TOP);
-        NUMBER_SIX.add(Segment.UPPER_LEFT);
-        NUMBER_SIX.add(Segment.MIDDLE);
-        NUMBER_SIX.add(Segment.LOWER_LEFT);
-        NUMBER_SIX.add(Segment.LOWER_RIGHT);
-        NUMBER_SIX.add(Segment.BOTTOM);
-        segmentNumberMap.put(NUMBER_SIX, 6);
-
-        NUMBER_SEVEN.add(Segment.TOP);
-        NUMBER_SEVEN.add(Segment.UPPER_RIGHT);
-        NUMBER_SEVEN.add(Segment.LOWER_RIGHT);
-        segmentNumberMap.put(NUMBER_SEVEN, 7);
-
-        NUMBER_EIGHT.add(Segment.TOP);
-        NUMBER_EIGHT.add(Segment.UPPER_LEFT);
-        NUMBER_EIGHT.add(Segment.UPPER_RIGHT);
-        NUMBER_EIGHT.add(Segment.MIDDLE);
-        NUMBER_EIGHT.add(Segment.LOWER_LEFT);
-        NUMBER_EIGHT.add(Segment.LOWER_RIGHT);
-        NUMBER_EIGHT.add(Segment.BOTTOM);
-        segmentNumberMap.put(NUMBER_EIGHT, 8);
-
-        NUMBER_NINE.add(Segment.TOP);
-        NUMBER_NINE.add(Segment.UPPER_LEFT);
-        NUMBER_NINE.add(Segment.UPPER_RIGHT);
-        NUMBER_NINE.add(Segment.MIDDLE);
-        NUMBER_NINE.add(Segment.LOWER_RIGHT);
-        NUMBER_NINE.add(Segment.BOTTOM);
-        segmentNumberMap.put(NUMBER_NINE, 9);
-
     }
 
     int problem1() {
@@ -214,95 +125,127 @@ public class Day8SevenSegmentSearch {
 
         for (DigitEntry digitEntry : entries) {
 
-            //Map<Integer, Map<String, Integer>> probs = new HashMap<>();
-            Map<Segment, Map<String, Integer>> probs2 = new HashMap<>();
-//            for (int i = 0; i < 7; i++) {
-//                probs.put(i, new HashMap<>());
-//            }
-            // Init maps
-            for (Segment segment : Segment.values()) {
-                probs2.put(segment, new HashMap<>());
+            Map<Integer, Map<String, Integer>> probs = new HashMap<>();
+            for (int i = 0; i < 7; i++) {
+                probs.put(i, new HashMap<>());
             }
-            // Add frequency of possible hits for each number to segment
             for (String pattern : digitEntry.patterns) {
                 switch (pattern.length()) {
                     case 2: // 1
                         for (int i = 0; i < 3; i++) {
-                            NUMBER_ONE.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
+                            probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
+                            probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
                         }
                         break;
 
                     case 3: // 7
                         for (int i = 0; i < 3; i++) {
-                            NUMBER_SEVEN.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
+                            probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
+                            probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
+                            probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
                         }
                         break;
 
                     case 4: // 4
                         for (int i = 0; i < 3; i++) {
-                            NUMBER_FOUR.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
+
+                            probs.put(SEGMENT_UPPER_LEFT, addProbs(probs.get(SEGMENT_UPPER_LEFT), pattern));
+                            probs.put(SEGMENT_MIDDLE, addProbs(probs.get(SEGMENT_MIDDLE), pattern));
+                            probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
+                            probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
                         }
                         break;
 
                     case 5: // 2, 3 or 5
-                        NUMBER_TWO.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
-                        NUMBER_THREE.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
-                        NUMBER_FIVE.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
+                        //  2
+                        probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
+                        probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
+                        probs.put(SEGMENT_MIDDLE, addProbs(probs.get(SEGMENT_MIDDLE), pattern));
+                        probs.put(SEGMENT_LOWER_LEFT, addProbs(probs.get(SEGMENT_LOWER_LEFT), pattern));
+                        probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
+
+                        // 3
+                        probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
+                        probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
+                        probs.put(SEGMENT_MIDDLE, addProbs(probs.get(SEGMENT_MIDDLE), pattern));
+                        probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
+                        probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
+
+                        // 5
+                        probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
+                        probs.put(SEGMENT_UPPER_LEFT, addProbs(probs.get(SEGMENT_UPPER_LEFT), pattern));
+                        probs.put(SEGMENT_MIDDLE, addProbs(probs.get(SEGMENT_MIDDLE), pattern));
+                        probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
+                        probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
                         break;
 
                     case 6: // 0, 6 or 9
-                        NUMBER_ZERO.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
-                        NUMBER_SIX.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
-                        NUMBER_NINE.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
+                        // 0
+                        probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
+                        probs.put(SEGMENT_UPPER_LEFT, addProbs(probs.get(SEGMENT_UPPER_LEFT), pattern));
+                        probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
+                        probs.put(SEGMENT_LOWER_LEFT, addProbs(probs.get(SEGMENT_LOWER_LEFT), pattern));
+                        probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
+                        probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
+
+                        // 6
+                        probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
+                        probs.put(SEGMENT_UPPER_LEFT, addProbs(probs.get(SEGMENT_UPPER_LEFT), pattern));
+                        probs.put(SEGMENT_MIDDLE, addProbs(probs.get(SEGMENT_MIDDLE), pattern));
+                        probs.put(SEGMENT_LOWER_LEFT, addProbs(probs.get(SEGMENT_LOWER_LEFT), pattern));
+                        probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
+                        probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
+
+                        // 9
+                        probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
+                        probs.put(SEGMENT_UPPER_LEFT, addProbs(probs.get(SEGMENT_UPPER_LEFT), pattern));
+                        probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
+                        probs.put(SEGMENT_MIDDLE, addProbs(probs.get(SEGMENT_MIDDLE), pattern));
+                        probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
+                        probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
                         break;
 
                     case 7: // 8
                         for (int i = 0; i < 3; i++) {
-                            NUMBER_EIGHT.forEach(segment -> probs2.put(segment, addProbs2(probs2.get(segment), pattern)));
+                            probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
+                            probs.put(SEGMENT_UPPER_LEFT, addProbs(probs.get(SEGMENT_UPPER_LEFT), pattern));
+                            probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
+                            probs.put(SEGMENT_MIDDLE, addProbs(probs.get(SEGMENT_MIDDLE), pattern));
+                            probs.put(SEGMENT_LOWER_LEFT, addProbs(probs.get(SEGMENT_LOWER_LEFT), pattern));
+                            probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
+                            probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
                         }
                         break;
                 }
             }
 
-            Map<String, Segment> answer = new HashMap<>();
+
+            Map<String, Integer> answer = new HashMap<>();
 
             for (int x = 0; x < 7; x++) {
-                log.info("Checking round {}", x);
                 int biggest_prob = Integer.MIN_VALUE;
                 String biggest_prob_key = null;
-                Segment biggest_segment = null;
-                Map<String, Integer> mostFrequentSet = null;
+                int biggest_segment = -1;
 
-                //for (int i = 0; i < 7; i++) {
-                for (Segment segment : Segment.values()) {
-                    log.info("Checking which letter that is most common in segment {}", segment);
-                    // find biggest prob
-                    // if the prob is equal to another, check the second highest
-                    if (!probs2.get(segment).isEmpty()) {
-                        mostFrequentSet = compareSegmentSets(probs2.get(segment), mostFrequentSet, segment);
-                        Map.Entry<String, Integer> hej = Collections.max(probs2.get(segment).entrySet(), Map.Entry.comparingByValue());
-                        if (hej.getValue() == biggest_prob) {
-                            log.info("Equal size for {} and {}", hej.getKey(), biggest_prob_key);
-                        } else if (hej.getValue() > biggest_prob) {
-                            log.info("{} is bigger than {}", hej.getValue(), biggest_prob);
+                for (int i = 0; i < 7; i++) {
+                    // find biggest prob:
+                    if (!probs.get(i).isEmpty()) {
+                        Map.Entry<String, Integer> hej = Collections.max(probs.get(i).entrySet(), Map.Entry.comparingByValue());
+                        if (hej.getValue() > biggest_prob) {
                             biggest_prob = hej.getValue();
                             biggest_prob_key = hej.getKey();
-                            biggest_segment = segment;
+                            biggest_segment = i;
                         }
                     }
                 }
-                log.info("Biggest key 1 {}, prob {}, segment {}. Removing it from frequency set", biggest_prob_key, biggest_prob, biggest_segment);
-                //Map.Entry<String, Integer> bobba = Collections.max(mostFrequentSet.entrySet(), Map.Entry.comparingByValue());
-                log.info("Biggest key 2 {}, prob {}, segment {}. Removing it from frequency set", bobbaHighest, mostFrequentSet.get(bobbaHighest), bobbaSegment);
-
+                log.info("Biggest key {}, prob {}, segement {}", biggest_prob_key, biggest_prob, biggest_segment);
                 answer.put(biggest_prob_key, biggest_segment);
-                // remove found key from all possible segments
-                //for (int i = 0; i < 7; i++) {
-                for (Segment segment : Segment.values()) {
-                    probs2.get(segment).remove(biggest_prob_key);
+                // remove key from all probs
+                for (int i = 0; i < 7; i++) {
+                    probs.get(i).remove(biggest_prob_key);
                 }
-                // remove found segment
-                probs2.get(biggest_segment).clear();
+                // empty selected prob
+                probs.get(biggest_segment).clear();
             }
 
             // Now we know
@@ -318,75 +261,41 @@ public class Day8SevenSegmentSearch {
             // kolla nu vilka siffror som mappar 1-1 mot dessa segment
             Map<String, Integer> solutions = new HashMap<>();
             for (String pattern : digitEntry.patterns) {
-                Set<Segment> segmentPattern = new HashSet<>();
+                Set<Integer> segmentPattern = new HashSet<>();
                 for (char c : pattern.toCharArray()) {
                     segmentPattern.add(answer.get(String.valueOf(c)));
                 }
                 // compare segmentPattern with all fixed patterns
-                for (Set<Segment> digitPattern : segmentNumberMap.keySet()) {
-                    log.info("Comparing {} ({}) with {} ({})", digitPattern, segmentNumberMap.get(digitPattern), segmentPattern, segmentNumberMap.get(segmentPattern));
+                for (Set<Integer> digitPattern : allNumbers.keySet()) {
                     if (digitPattern.equals(segmentPattern)) {
-                        log.info("Pattern {} is number {}", pattern, segmentNumberMap.get(digitPattern));
-                        solutions.put(pattern, segmentNumberMap.get(digitPattern));
-                        break;
+                        log.info("Pattern {} is number {}", pattern, allNumbers.get(digitPattern));
+                        solutions.put(pattern, allNumbers.get(digitPattern));
                     }
                 }
             }
             int sum = 1000 * (solutions.get(digitEntry.outputs.get(0))) +
                     100 * (solutions.get(digitEntry.outputs.get(1))) +
                     10 * (solutions.get(digitEntry.outputs.get(2))) +
-                    (solutions.get(digitEntry.outputs.get(3)));
+                    1 * (solutions.get(digitEntry.outputs.get(3)));
             log.info("Number: {}", sum);
             totalSum += sum;
         }
         return totalSum;
     }
 
-    private Map<String, Integer> compareSegmentSets(Map<String, Integer> setA, Map<String, Integer> setB, Segment segment) {
-        // compare values.
-        if (setB == null) {
-            return setA;
-        }
-        Stream<Map.Entry<String, Integer>> sortedA =
-                setA.entrySet().stream()
-                        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
-        Stream<Map.Entry<String, Integer>> sortedB =
-                setB.entrySet().stream()
-                        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
-
-        Iterator<Map.Entry<String, Integer>> iteratorA = sortedA.iterator();
-        Iterator<Map.Entry<String, Integer>> iteratorB = sortedB.iterator();
-        bobbaSegment = segment;
-        while (iteratorA.hasNext()) {
-            Map.Entry<String, Integer> a = iteratorA.next();
-            Map.Entry<String, Integer> b = iteratorB.next();
-            if (a.getValue() > b.getValue()) {
-                log.info("highest: {}", a.getKey());
-                bobbaHighest = a.getKey();
-                return setA;
-            } else if (b.getValue() > a.getValue()) {
-                log.info("highest: {}", b.getKey());
-                bobbaHighest = b.getKey();
-                return setB;
-            } else {
-                log.info("same values ({}), continuing comparison", a.getValue());
-            }
-        }
-        // should not get here !
-        log.error("Ooops...");
-        return null;
-    }
-
-    private Map<String, Integer> addProbs2(Map<String, Integer> stringIntegerMap, String pattern) {
-        for (char c : pattern.toCharArray()) {
-            stringIntegerMap.merge(String.valueOf(c), 1, Integer::sum);
-        }
-        return stringIntegerMap;
-    }
-
 
     private Map<String, Integer> addProbs(Map<String, Integer> probMap, String pattern) {
         for (char c : pattern.toCharArray()) {
+            probMap.merge(String.valueOf(c), 1, Integer::sum);
+        }
+        return probMap;
+    }
+
+    private Map<String, Integer> addNegativeProbs(Map<String, Integer> probMap, String pattern) {
+        String antiPattern = "abcdefg";
+        antiPattern = antiPattern.replaceAll(pattern, "");
+
+        for (char c : antiPattern.toCharArray()) {
             probMap.merge(String.valueOf(c), 1, Integer::sum);
         }
         return probMap;
