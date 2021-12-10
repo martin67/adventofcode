@@ -15,17 +15,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class Day20ParticleSwarmTest {
 
     @ParameterizedTest
-    @CsvSource({"4, src/test/resources/2017/day20-demo1.txt",
-            "0, src/test/resources/2017/day20.txt"})
+    @CsvSource({"0, src/test/resources/2017/day20-demo1.txt",
+            "170, src/test/resources/2017/day20.txt"})
     void problem1(int expected, String fileName) throws IOException {
         assertEquals(expected, new Day20ParticleSwarm(Files.readAllLines(Paths.get(fileName))).problem1());
     }
 
+    // 119 too low
+
     @ParameterizedTest
-    @CsvSource({"4, src/test/resources/2017/day20-demo1.txt",
-            "9423, src/test/resources/2017/day20.txt"})
+    @CsvSource({"1, src/test/resources/2017/day20-demo2.txt",
+            "571, src/test/resources/2017/day20.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        assertEquals(expected, new Day20ParticleSwarm(Files.readAllLines(Paths.get(fileName))).problem1());
+        assertEquals(expected, new Day20ParticleSwarm(Files.readAllLines(Paths.get(fileName))).problem2());
     }
 
 }
