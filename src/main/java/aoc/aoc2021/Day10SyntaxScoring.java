@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Stack;
 
 @Slf4j
-public class Day10 {
+public class Day10SyntaxScoring {
 
     List<String> lines;
 
-    public Day10(List<String> inputLines) {
+    public Day10SyntaxScoring(List<String> inputLines) {
         lines = inputLines;
     }
 
