@@ -57,8 +57,45 @@ public class Day14ExtendedPolymerization {
         return max - min;
     }
 
-
     String problem2() {
+        Map<String, Long> freq = new HashMap<>();
+        for (String key : rules.keySet()) {
+            freq.put(key, 0L);
+        }
+        for (int j = 0; j < polymer.length() - 1; j++) {
+            String pair = polymer.substring(j, j + 2);
+            freq.merge(pair, 1L, Long::sum);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            Map<String, Long> newFreq = new HashMap<>(freq);
+            for (String key : rules.keySet()) {
+                char elem = rules.get(key).output;
+                String left = "" + key.charAt(0) + elem;
+                String right = "" + elem + key.charAt(1);
+                long val = freq.get(key);
+                if (val > 0) {
+                    newFreq.put(key, freq.get(key) - val);
+                    newFreq.put(left, freq.get(left) + val);
+                    newFreq.put(right, freq.get(right) + val);
+                }
+            }
+            freq = newFreq;
+        }
+
+        // map to elements
+        Map<Character, Long> elements = new HashMap<>();
+        for (Map.Entry<String, Long> entry : freq.entrySet()) {
+            elements.merge(entry.getKey().charAt(0), entry.getValue(), Long::sum);
+            elements.merge(entry.getKey().charAt(1), entry.getValue(), Long::sum);
+        }
+        long max = elements.values().stream().mapToLong(v -> v).max().orElseThrow(NoSuchElementException::new);
+        long min = elements.values().stream().mapToLong(v -> v).min().orElseThrow(NoSuchElementException::new);
+        long hej = max - min;
+        return "";
+    }
+
+    String problem20() {
         Map<Character, BigInteger> frequencies = new HashMap<>();
         Map<String, Map<Character, BigInteger>> patternCache = new HashMap<>();
         for (int j = 0; j < polymer.length() - 1; j++) {

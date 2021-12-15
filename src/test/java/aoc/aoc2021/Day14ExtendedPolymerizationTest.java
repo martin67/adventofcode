@@ -27,7 +27,7 @@ class Day14ExtendedPolymerizationTest {
             "0, src/test/resources/2021/day14.txt"})
     void problem2(String expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day14ExtendedPolymerization(inputLines).problem23());
+        assertEquals(expected, new Day14ExtendedPolymerization(inputLines).problem2());
     }
 
 }
