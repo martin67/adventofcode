@@ -2,7 +2,6 @@ package aoc.aoc2021;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +31,10 @@ public class Day14ExtendedPolymerization {
         }
     }
 
-    long problem1(int steps) {
+    long problem1() {
         String p = polymer;
         StringBuilder nextPolymer = new StringBuilder();
-        for (int i = 0; i < steps; i++) {
+        for (int i = 0; i < 10; i++) {
             for (int j = 0; j < p.length() - 1; j++) {
                 String pair = p.substring(j, j + 2);
                 if (rules.containsKey(pair)) {
@@ -57,231 +56,36 @@ public class Day14ExtendedPolymerization {
         return max - min;
     }
 
-    String problem2() {
+    long problem2() {
         Map<String, Long> freq = new HashMap<>();
-        for (String key : rules.keySet()) {
-            freq.put(key, 0L);
-        }
         for (int j = 0; j < polymer.length() - 1; j++) {
             String pair = polymer.substring(j, j + 2);
             freq.merge(pair, 1L, Long::sum);
         }
 
-        for (int i = 0; i < 10; i++) {
-            Map<String, Long> newFreq = new HashMap<>(freq);
+        Map<Character, Long> result = new HashMap<>();
+        for (int i = 0; i < 41; i++) {
+            Map<String, Long> newFreq = new HashMap<>();
+            result.clear();
             for (String key : rules.keySet()) {
                 char elem = rules.get(key).output;
                 String left = "" + key.charAt(0) + elem;
                 String right = "" + elem + key.charAt(1);
-                long val = freq.get(key);
+                long val = freq.getOrDefault(key, 0L);
                 if (val > 0) {
-                    newFreq.put(key, freq.get(key) - val);
-                    newFreq.put(left, freq.get(left) + val);
-                    newFreq.put(right, freq.get(right) + val);
+                    result.put(key.charAt(0), result.getOrDefault(key.charAt(0), 0L) + val);
+                    newFreq.put(left, newFreq.getOrDefault(left, 0L) + val);
+                    newFreq.put(right, newFreq.getOrDefault(right, 0L) + val);
                 }
             }
             freq = newFreq;
         }
+        char lastChar = polymer.charAt(polymer.length() - 1);
+        result.put(lastChar, result.get(lastChar) + 1);
 
-        // map to elements
-        Map<Character, Long> elements = new HashMap<>();
-        for (Map.Entry<String, Long> entry : freq.entrySet()) {
-            elements.merge(entry.getKey().charAt(0), entry.getValue(), Long::sum);
-            elements.merge(entry.getKey().charAt(1), entry.getValue(), Long::sum);
-        }
-        long max = elements.values().stream().mapToLong(v -> v).max().orElseThrow(NoSuchElementException::new);
-        long min = elements.values().stream().mapToLong(v -> v).min().orElseThrow(NoSuchElementException::new);
-        long hej = max - min;
-        return "";
-    }
-
-    String problem20() {
-        Map<Character, BigInteger> frequencies = new HashMap<>();
-        Map<String, Map<Character, BigInteger>> patternCache = new HashMap<>();
-        for (int j = 0; j < polymer.length() - 1; j++) {
-            String pair = polymer.substring(j, j + 2);
-            frequencies = finder(pair, frequencies, patternCache, 0);
-        }
-
-        //BigInteger max = frequencies.values().stream().map(BigInteger::toString).max().orElseThrow(NoSuchElementException::new);
-        //BigInteger min = frequencies.values().stream().map(BigInteger::toString).min().orElseThrow(NoSuchElementException::new);
-        BigInteger max = null;
-        BigInteger min = null;
-        for (BigInteger bigInteger : frequencies.values()) {
-            if (max == null) {
-                max = bigInteger;
-            }
-            if (min == null) {
-                min = bigInteger;
-            }
-            if (bigInteger.compareTo(max) > 0) {
-                max = bigInteger;
-            }
-            if (bigInteger.compareTo(min) < 0) {
-                min = bigInteger;
-            }
-        }
-        return max.subtract(min).toString();
-        //return "";
-    }
-
-    String problem22() {
-        Map<Character, BigInteger> frequencies = new HashMap<>();
-        Map<String, Map<Character, BigInteger>> patternCache = new HashMap<>();
-        Map<String, String> cache = new HashMap<>();
-        StringBuilder result = new StringBuilder();
-        for (int j = 0; j < polymer.length() - 1; j++) {
-            String pair = polymer.substring(j, j + 2);
-            //log.info("####################### {}", pair);
-            result.append(finder2(pair, cache, 1));
-        }
-        //log.info("********************** {}", result);
-        Map<Character, Long> frequency = new HashMap<>();
-        for (char c : result.toString().toCharArray()) {
-            frequency.merge(c, 1L, Long::sum);
-        }
-        long max = frequency.values().stream().mapToLong(v -> v).max().orElseThrow(NoSuchElementException::new);
-        long min = frequency.values().stream().mapToLong(v -> v).min().orElseThrow(NoSuchElementException::new);
-        return String.valueOf(max - min);
-    }
-
-    Map<Character, BigInteger> finder(String input, Map<Character, BigInteger> frequencies, Map<String, Map<Character, BigInteger>> patternCache, int depth) {
-        log.info("finder - in; {}, freq: {}, cache: {}, depth: {}", input, frequencies, patternCache, depth);
-        Map<Character, BigInteger> newFrequencies = new HashMap<>();
-        String cacheKey = input + "-" + depth;
-        log.info("Checking cache for {}", cacheKey);
-        if (patternCache.containsKey(cacheKey)) {
-            log.info("Cache hit for {}, {}", cacheKey, patternCache.get(cacheKey));
-            return patternCache.get(cacheKey);
-        }
-        if (depth < 5) {
-            depth++;
-        } else {
-            //Map<Character, BigInteger> newFrequencies = new HashMap<>();
-            for (char c : input.toCharArray()) {
-                //newFrequencies.merge(c, 1L, Long::sum);
-                if (newFrequencies.containsKey(c)) {
-                    newFrequencies.put(c, newFrequencies.get(c).add(new BigInteger("1")));
-                } else {
-                    newFrequencies.put(c, new BigInteger("1"));
-                }
-            }
-            log.info("reached bottom, returning {}", newFrequencies);
-            return newFrequencies;
-        }
-
-        String newInput = "" + input.charAt(0) + rules.get(input.substring(0, 2)).output + input.charAt(1);
-        Map<Character, BigInteger> left = finder(newInput.substring(0, 2), new HashMap<>(frequencies), patternCache, depth);
-        Map<Character, BigInteger> right = finder(newInput.substring(1, 3), new HashMap<>(frequencies), patternCache, depth);
-
-        if (left != null) {
-            //patternCache.put(newInput.substring(0, 2), left);
-            left.forEach(
-                    (key, value) -> frequencies.merge(key, value, BigInteger::add)
-            );
-        }
-        if (right != null) {
-            //patternCache.put(newInput.substring(1, 3), right);
-            right.forEach(
-                    (key, value) -> frequencies.merge(key, value, BigInteger::add)
-            );
-        }
-        cacheKey = newInput + "-" + (depth - 1);
-
-        log.info("adding {}, {} to cache", cacheKey, frequencies);
-        patternCache.put(cacheKey, frequencies);
-
-        return frequencies;
-    }
-
-    String finder2(String input, Map<String, String> cache, int depth) {
-        //log.info("finder - in; {}, cache: {}, depth: {}", input, cache, depth);
-        String cacheKey = input + "-" + depth;
-        //log.info("Checking cache for {}", cacheKey);
-        if (cache.containsKey(cacheKey)) {
-            log.info("Cache hit for {}, {}", cacheKey, cache.get(cacheKey));
-            return cache.get(cacheKey);
-        }
-        if (depth < 41) {
-            depth++;
-        } else {
-            //log.info("reached bottom, returning {}", input);
-            return input;
-        }
-
-        String newInput = "" + input.charAt(0) + rules.get(input.substring(0, 2)).output + input.charAt(1);
-        String leftIn = newInput.substring(0, 2);
-        String rightIn = newInput.substring(1, 3);
-
-        //Map<Character, BigInteger> left = finder(newInput.substring(0, 2), new HashMap<>(frequencies), patternCache, depth);
-        //Map<Character, BigInteger> right = finder(newInput.substring(1, 3), new HashMap<>(frequencies), patternCache, depth);
-        String left = finder2(leftIn, cache, depth);
-        String right = finder2(rightIn, cache, depth);
-
-        cacheKey = newInput + "-" + (depth - 1);
-        String cacheValue = left + right.substring(1);
-        if (!cache.containsKey(cacheKey)) {
-            log.info("adding {}, {} to cache", cacheKey, cacheValue);
-            cache.put(cacheKey, cacheValue);
-        }
-
-        return cacheValue;
-    }
-
-    String problem23() {
-        Map<Character, Long> result = new HashMap<>();
-        Map<String, Map<Character, Long>> cache = new HashMap<>();
-        for (int j = 0; j < polymer.length() - 1; j++) {
-            String pair = polymer.substring(j, j + 2);
-            log.info("####################### {}", pair);
-            Map<Character, Long> r = finder3(pair, cache, 1);
-            r.forEach(
-                    (key, value) -> result.merge(key, value, Long::sum)
-            );
-        }
-        log.info("********************** {}", result);
         long max = result.values().stream().mapToLong(v -> v).max().orElseThrow(NoSuchElementException::new);
         long min = result.values().stream().mapToLong(v -> v).min().orElseThrow(NoSuchElementException::new);
-        return String.valueOf(max - min);
-    }
-
-    Map<Character, Long> finder3(String input, Map<String, Map<Character, Long>> cache, int depth) {
-        //log.info("finder - in; {}, cache: {}, depth: {}", input, cache, depth);
-        String cacheKey = input + "-" + (depth - 1);
-//        if (cache.size() % 1000 == 0) {
-//            log.info("cache size: {}", cache.size());
-//        }
-        //log.info("Checking cache for {}", cacheKey);
-        if (depth < 41) {
-            depth++;
-        } else {
-            //log.info("reached bottom, returning {}", input);
-            Map<Character, Long> result = new HashMap<>();
-            for (char c : input.toCharArray()) {
-                result.merge(c, 1L, Long::sum);
-            }
-            return result;
-        }
-
-        char middle = rules.get(input.substring(0, 2)).output;
-        String newInput = "" + input.charAt(0) + middle + input.charAt(1);
-        String leftIn = newInput.substring(0, 2);
-        String rightIn = newInput.substring(1, 3);
-
-        Map<Character, Long> left = finder3(leftIn, cache, depth);
-        Map<Character, Long> right = finder3(rightIn, cache, depth);
-
-        cacheKey = newInput + "-" + (depth - 1);
-        left.forEach(
-                (key, value) -> right.merge(key, value, Long::sum)
-        );
-        // subtract middle
-        right.put(middle, right.get(middle) - 1);
-        if (!cache.containsKey(cacheKey)) {
-            //log.info("adding {}, {} to cache", cacheKey, right);
-            cache.put(cacheKey, right);
-        }
-        return right;
+        return max - min;
     }
 
     static class Rule {

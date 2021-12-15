@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("2021: Day 14: ")
+@DisplayName("2021: Day 14: Extended Polymerization")
 class Day14ExtendedPolymerizationTest {
 
     @ParameterizedTest
@@ -19,13 +19,13 @@ class Day14ExtendedPolymerizationTest {
             "2170, src/test/resources/2021/day14.txt"})
     void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day14ExtendedPolymerization(inputLines).problem1(10));
+        assertEquals(expected, new Day14ExtendedPolymerization(inputLines).problem1());
     }
 
     @ParameterizedTest
     @CsvSource({"2188189693529, src/test/resources/2021/day14-demo1.txt",
-            "0, src/test/resources/2021/day14.txt"})
-    void problem2(String expected, String fileName) throws IOException {
+            "2422444761283, src/test/resources/2021/day14.txt"})
+    void problem2(long expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day14ExtendedPolymerization(inputLines).problem2());
     }
