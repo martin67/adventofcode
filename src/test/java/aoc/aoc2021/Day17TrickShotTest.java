@@ -11,15 +11,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("2021: Day 17: ")
-class Day17Test {
+@DisplayName("2021: Day 17: Trick Shot")
+class Day17TrickShotTest {
 
     @ParameterizedTest
-    @CsvSource({"0, src/test/resources/2021/day17-demo1.txt",
+    @CsvSource({"45, src/test/resources/2021/day17-demo1.txt",
             "0, src/test/resources/2021/day17.txt"})
     void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day17(inputLines).problem1());
+        assertEquals(expected, new Day17TrickShot(inputLines).problem1());
     }
 
     @ParameterizedTest
@@ -27,7 +27,7 @@ class Day17Test {
             "0, src/test/resources/2021/day17.txt"})
     void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day17(inputLines).problem2());
+        assertEquals(expected, new Day17TrickShot(inputLines).problem2());
     }
 
 }
