@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day17TrickShot {
 
-    Position topLeft;
+    Position upperLeft;
     Position lowerRight;
 
     public Day17TrickShot(List<String> inputLines) {
@@ -18,40 +18,57 @@ public class Day17TrickShot {
         for (String line : inputLines) {
             Matcher matcher = pattern.matcher(line);
             if (matcher.find()) {
-                topLeft = new Position(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(4)));
+                upperLeft = new Position(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(4)));
                 lowerRight = new Position(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
             }
         }
     }
 
+    int problem0(int xVelocity, int yVelocity) {
+        Probe probe = new Probe(upperLeft, lowerRight, xVelocity, yVelocity);
+        probe.fire();
+        return probe.maxHeight;
+    }
+
     int problem1() {
         int maxHeight = Integer.MIN_VALUE;
-        for (int xVelocity = 0; xVelocity < 10; xVelocity++) {
-            for (int yVelocity = -10; yVelocity < 10; yVelocity++) {
+        for (int xVelocity = 0; xVelocity < 1000; xVelocity++) {
+            for (int yVelocity = -1000; yVelocity < 1000; yVelocity++) {
                 Probe probe = new Probe(upperLeft, lowerRight, xVelocity, yVelocity);
-                //Probe probe = new Probe(7, 2);
+                probe.fire();
+                if (probe.targetHit) {
+                    if (probe.maxHeight > maxHeight) {
+                        maxHeight = probe.maxHeight;
+                    }
+                }
+            }
         }
         return maxHeight;
     }
 
     int problem2() {
-        return 0;
+        int hits = 0;
+        for (int xVelocity = 0; xVelocity < 1000; xVelocity++) {
+            for (int yVelocity = -1000; yVelocity < 1000; yVelocity++) {
+                Probe probe = new Probe(upperLeft, lowerRight, xVelocity, yVelocity);
+                probe.fire();
+                if (probe.targetHit) {
+                    hits++;
+                }
+            }
+        }
+        return hits;
     }
 
-    class Probe {
-        Position position;
+
+    static class Probe {
+        Position position = new Position(0, 0);
         Position upperLeft;
         Position lowerRight;
         int xVelocity;
         int yVelocity;
-        int maxHeight;
-
-        public Probe(int xVelocity, int yVelocity) {
-            this.position = new Position(0, 0);
-            this.xVelocity = xVelocity;
-            this.yVelocity = yVelocity;
-            this.maxHeight = Integer.MIN_VALUE;
-        }
+        int maxHeight = Integer.MIN_VALUE;
+        boolean targetHit = false;
 
         public Probe(Position upperLeft, Position lowerRight, int xVelocity, int yVelocity) {
             this.upperLeft = upperLeft;
@@ -60,22 +77,14 @@ public class Day17TrickShot {
             this.yVelocity = yVelocity;
         }
 
-        public int computeMaxHeight() {
-            boolean hitTarget = false;
+        public void fire() {
             while (!hasPassedTarget()) {
                 move();
-                //log.info("Moving to {}", probe.position);
+                //log.info("Moving to {}", position);
                 if (isInsideTarget()) {
-                    hitTarget = true;
+                    targetHit = true;
                 }
             }
-            if (hitTarget) {
-                if (height > maxHeight) {
-                    log.info("Max height: probe: {}", height);
-                    maxHeight = height;
-                }
-            }
-            log.info("Probe {} passed target", probe);
         }
 
         void move() {
@@ -103,10 +112,7 @@ public class Day17TrickShot {
             if (position.getX() > lowerRight.getX()) {
                 return true;
             }
-            if (position.getY() < lowerRight.getY() && position.getY() < maxHeight) {
-                return true;
-            }
-            return false;
+            return position.getY() < lowerRight.getY() && position.getY() < maxHeight;
         }
     }
 
