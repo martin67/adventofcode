@@ -31,4 +31,13 @@ public class SpacePosition {
         adjacent.add(new SpacePosition(x, y, z + offset)); // forward
         return adjacent;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
 }
