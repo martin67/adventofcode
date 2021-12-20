@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class Day20TrenchMapTest {
 
     @ParameterizedTest
-    @CsvSource({"0, src/test/resources/2021/day20-demo1.txt",
+    @CsvSource({"35, src/test/resources/2021/day20-demo1.txt",
             "0, src/test/resources/2021/day20.txt"})
     void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
