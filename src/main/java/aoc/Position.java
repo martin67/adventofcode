@@ -143,6 +143,17 @@ public class Position implements Comparable<Position> {
         return adjacent;
     }
 
+    // create a square with size (2 x distance) + 1 and with the position in the middle
+    public Set<Position> square(int distance) {
+        Set<Position> result = new HashSet<>();
+        for (int y = -distance; y < distance + 1; y++) {
+            for (int x = -distance; x < distance + 1; x++) {
+                result.add(new Position(this.x + x, this.y + y));
+            }
+        }
+        return result;
+    }
+
     public boolean insideSquare(int width, int height) {
         return x >= 0 && x < width && y >= 0 && y < height;
     }

@@ -16,18 +16,18 @@ class Day20TrenchMapTest {
 
     @ParameterizedTest
     @CsvSource({"35, src/test/resources/2021/day20-demo1.txt",
-            "0, src/test/resources/2021/day20.txt"})
+            "5097, src/test/resources/2021/day20.txt"})
     void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day20TrenchMap(inputLines).problem1());
     }
 
     @ParameterizedTest
-    @CsvSource({"0, src/test/resources/2021/day20-demo1.txt",
+    @CsvSource({"3351, src/test/resources/2021/day20-demo1.txt",
             "0, src/test/resources/2021/day20.txt"})
     void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
         assertEquals(expected, new Day20TrenchMap(inputLines).problem2());
     }
-
+//18251 too high
 }
