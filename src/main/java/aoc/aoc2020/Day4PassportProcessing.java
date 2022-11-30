@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Day4PassportProcessing {
-    List<Passport> passports = new ArrayList<>();
+    final List<Passport> passports = new ArrayList<>();
 
     public Day4PassportProcessing(List<String> inputLines) {
         Map<String, String> fields = new HashMap<>();

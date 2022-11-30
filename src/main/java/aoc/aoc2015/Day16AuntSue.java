@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class Day16AuntSue {
 
-    List<Sue> sues = new ArrayList<>();
+    final List<Sue> sues = new ArrayList<>();
 
     public Day16AuntSue(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^Sue (\\d+): (\\w+): (\\d+), (\\w+): (\\d+), (\\w+): (\\d+)$");
@@ -58,7 +58,7 @@ public class Day16AuntSue {
         }
     }
 
-    int sueNumber() {
+    public int sueNumber() {
         for (Sue sue : sues) {
             if ((sue.children == null || sue.children == 3) &&
                     (sue.cats == null || sue.cats == 7) &&
@@ -76,7 +76,7 @@ public class Day16AuntSue {
         return 0;
     }
 
-    int realSueNumber() {
+    public int realSueNumber() {
         for (Sue sue : sues) {
             if ((sue.children == null || sue.children == 3) &&
                     (sue.cats == null || sue.cats > 7) &&
@@ -95,7 +95,7 @@ public class Day16AuntSue {
     }
 
     static class Sue {
-        int id;
+        final int id;
         Integer children;
         Integer cats;
         Integer samoyeds;

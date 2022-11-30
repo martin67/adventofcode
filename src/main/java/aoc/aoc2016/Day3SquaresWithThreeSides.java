@@ -22,8 +22,8 @@ public class Day3SquaresWithThreeSides {
         }
     }
 
-    private Set<Triangle> triangles = new HashSet<>();
-    private Set<Triangle> verticalTriangles = new HashSet<>();
+    private final Set<Triangle> triangles = new HashSet<>();
+    private final Set<Triangle> verticalTriangles = new HashSet<>();
 
     public Day3SquaresWithThreeSides(String fileName) throws IOException {
         readData(fileName);
@@ -42,24 +42,24 @@ public class Day3SquaresWithThreeSides {
             triangles.add(new Triangle(Integer.parseInt(s[0]), Integer.parseInt(s[1]), Integer.parseInt(s[2])));
 
             switch (rows % 3) {
-                case 0:
+                case 0 -> {
                     leftTriangle = new Triangle(Integer.parseInt(s[0]), 0, 0);
                     centerTriangle = new Triangle(Integer.parseInt(s[1]), 0, 0);
                     rightTriangle = new Triangle(Integer.parseInt(s[2]), 0, 0);
-                    break;
-                case 1:
+                }
+                case 1 -> {
                     leftTriangle.sideB = Integer.parseInt(s[0]);
                     centerTriangle.sideB = Integer.parseInt(s[1]);
                     rightTriangle.sideB = Integer.parseInt(s[2]);
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     leftTriangle.sideC = Integer.parseInt(s[0]);
                     centerTriangle.sideC = Integer.parseInt(s[1]);
                     rightTriangle.sideC = Integer.parseInt(s[2]);
                     verticalTriangles.add(leftTriangle);
                     verticalTriangles.add(centerTriangle);
                     verticalTriangles.add(rightTriangle);
-                    break;
+                }
             }
             rows++;
         }

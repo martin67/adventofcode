@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Day20TrenchMap {
 
-    String algorithm;
-    Set<Position> map = new HashSet<>();
+    final String algorithm;
+    final Set<Position> map = new HashSet<>();
 
     public Day20TrenchMap(List<String> inputLines) {
         algorithm = inputLines.get(0);

@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Slf4j
 public class Day24LobbyLayout {
-    List<List<Direction>> directionList = new ArrayList<>();
+    final List<List<Direction>> directionList = new ArrayList<>();
     Map<HexPositionPointy, Color> tiles = new HashMap<>();
 
     public Day24LobbyLayout(List<String> inputLines) {

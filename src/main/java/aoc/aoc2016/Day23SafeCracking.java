@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Day23SafeCracking {
-    MonorailComputer computer;
+    final MonorailComputer computer;
 
     public Day23SafeCracking(List<String> program) {
         computer = new MonorailComputer();

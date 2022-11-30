@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day22GridComputing {
-    Map<Position, Node> nodes = new HashMap<>();
+    final Map<Position, Node> nodes = new HashMap<>();
     int maxX = 0;
     int maxY = 0;
 
@@ -107,11 +107,11 @@ public class Day22GridComputing {
     }
 
     static class Node {
-        Position pos;
-        int size;
-        int used;
-        int avail;
-        int use;
+        final Position pos;
+        final int size;
+        final int used;
+        final int avail;
+        final int use;
 
         public Node(Position pos, int size, int used, int avail, int use) {
             this.pos = pos;

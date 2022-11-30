@@ -2,7 +2,7 @@
 This is one of the top floors of the nicest tower in EBHQ. The Easter Bunny's private office is here, 
 complete with a safe hidden behind a painting, and who **wouldn't** hide a star in a safe behind a painting?
 
-The safe has a digital screen and keypad for code entry. A sticky note attached to the safe has a password hint on 
+The safe has a digital screen and keypad for code digitEntry. A sticky note attached to the safe has a password hint on 
 it: "eggs". The painting is of a large rabbit coloring some eggs. You see 7.
 
 When you go to type the code, though, nothing appears on the display; instead, the keypad comes apart in your hands, 
@@ -46,7 +46,7 @@ dec a
 
 In this example, the final value in register a is 3.
 
-The rest of the electronics seem to place the keypad entry (the number of eggs, 7) in register a, run the code, 
+The rest of the electronics seem to place the keypad digitEntry (the number of eggs, 7) in register a, run the code, 
 and then send the value left in register a to the safe.
 
 **What value** should be sent to the safe?

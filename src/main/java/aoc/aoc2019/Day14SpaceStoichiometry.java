@@ -21,8 +21,8 @@ public class Day14SpaceStoichiometry {
         long amount;
     }
 
-    Map<String, Recipe> recipes = new HashMap<>();
-    Map<String, Long> surplus = new HashMap<>();
+    final Map<String, Recipe> recipes = new HashMap<>();
+    final Map<String, Long> surplus = new HashMap<>();
 
     public Day14SpaceStoichiometry(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(((\\d+) (\\w+),? )+)=> (?<outputAmount>\\d+) (?<outputChemical>\\w+)$");

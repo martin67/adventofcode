@@ -3,7 +3,7 @@ package aoc.aoc2015;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.KShortestSimplePaths;
+import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.alg.tour.HeldKarpTSP;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
@@ -40,7 +40,7 @@ public class Day9AllInASingleNight {
         }
     }
 
-    int shortestRoute() {
+    public int shortestRoute() {
 
         HeldKarpTSP<String, DefaultWeightedEdge> tour = new HeldKarpTSP<>();
         int shortestRoute = Integer.MAX_VALUE;
@@ -65,9 +65,9 @@ public class Day9AllInASingleNight {
         return shortestRoute;
     }
 
-    int longestRoute() {
+    public int longestRoute() {
         // Very brute force... Get all possible paths and see which one that is longest.
-        KShortestSimplePaths<String, DefaultWeightedEdge> kShortestSimplePaths = new KShortestSimplePaths<>(graph);
+        YenKShortestPath<String, DefaultWeightedEdge> shortestSimplePaths = new YenKShortestPath<>(graph);
         List<GraphPath<String, DefaultWeightedEdge>> paths;
         double longest = 0;
 
@@ -75,7 +75,7 @@ public class Day9AllInASingleNight {
             for (String end : graph.vertexSet()) {
 
                 if (!start.equals(end)) {
-                    paths = kShortestSimplePaths.getPaths(start, end, 10000);
+                    paths = shortestSimplePaths.getPaths(start, end, 10000);
                     for (GraphPath<String, DefaultWeightedEdge> path : paths) {
                         if (path.getLength() == graph.vertexSet().size() - 1) {
                             double length = path.getWeight();

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 class Day2InventoryManagementSystem {
 
-    class Checksum {
+    static class Checksum {
         int numberOfTwos;
         int numberOfThrees;
     }

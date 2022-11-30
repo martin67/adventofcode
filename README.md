@@ -11,3 +11,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 * 2019 - completed!
 * 2020 - completed!
 * 2021 - ongoing
+* 2022 - ongoing

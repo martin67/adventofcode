@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Day12PassagePathing {
 
-    Map<String, Cave> caves = new HashMap<>();
+    final Map<String, Cave> caves = new HashMap<>();
 
     public Day12PassagePathing(List<String> inputLines) {
         for (String line : inputLines) {
@@ -97,8 +97,8 @@ public class Day12PassagePathing {
     }
 
     static class Cave {
-        String name;
-        Set<Cave> adjacent = new HashSet<>();
+        final String name;
+        final Set<Cave> adjacent = new HashSet<>();
 
         public Cave(String name) {
             this.name = name;

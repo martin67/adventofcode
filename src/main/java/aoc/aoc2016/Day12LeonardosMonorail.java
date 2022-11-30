@@ -9,7 +9,7 @@ import java.util.Map;
 @Slf4j
 public class Day12LeonardosMonorail {
 
-    MonorailComputer computer;
+    final MonorailComputer computer;
 
 
     public Day12LeonardosMonorail(List<String> program) {

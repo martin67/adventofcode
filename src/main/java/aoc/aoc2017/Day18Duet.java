@@ -12,7 +12,7 @@ import java.util.concurrent.*;
 public class Day18Duet {
 
     final ExecutorService executorService;
-    List<Instruction> instructions = new ArrayList<>();
+    final List<Instruction> instructions = new ArrayList<>();
 
 
     public Day18Duet(List<String> inputLines) {
@@ -97,9 +97,9 @@ public class Day18Duet {
     }
 
     static class Instruction {
-        String name;
-        String register;
-        String parameter;
+        final String name;
+        final String register;
+        final String parameter;
 
 
         public Instruction(String name, String register, String parameter) {
@@ -128,8 +128,8 @@ public class Day18Duet {
     class Tablet implements Callable<Integer> {
         private final int id;
         private BlockingQueue<Long> inputQueue;
-        private BlockingQueue<Long> outputQueue = new LinkedBlockingQueue<>();
-        Map<String, Long> registers = new HashMap<>();
+        private final BlockingQueue<Long> outputQueue = new LinkedBlockingQueue<>();
+        final Map<String, Long> registers = new HashMap<>();
 
         public Tablet(int id) {
             this.id = id;

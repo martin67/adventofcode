@@ -8,9 +8,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Day14DiskDefragmentation {
-    String key;
-    Set<Position> squares = new HashSet<>();
-    Set<Position> squaresCounted = new HashSet<>();
+    final String key;
+    final Set<Position> squares = new HashSet<>();
+    final Set<Position> squaresCounted = new HashSet<>();
 
     public Day14DiskDefragmentation(String key) {
         this.key = key;

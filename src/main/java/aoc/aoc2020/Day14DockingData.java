@@ -5,9 +5,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day14DockingData {
-    Map<Long, Long> memory = new HashMap<>();
+    final Map<Long, Long> memory = new HashMap<>();
     String mask;
-    List<String> inputLines;
+    final List<String> inputLines;
 
     public Day14DockingData(List<String> inputLines) {
         this.inputLines = inputLines;

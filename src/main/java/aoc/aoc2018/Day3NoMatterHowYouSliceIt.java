@@ -7,23 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 class Day3NoMatterHowYouSliceIt {
 
-    @Data
-    @AllArgsConstructor
-    class Claim {
-        int id;
-        int startx;
-        int starty;
-        int endx;
-        int endy;
-    }
-
-
-    private final Set[][] fabric = new HashSet[1000][1000];
+    private final Set<Claim>[][] fabric = new HashSet[1000][1000];
     private List<Claim> claimList;
 
     private void printFabric() {
@@ -44,8 +32,7 @@ class Day3NoMatterHowYouSliceIt {
         Pattern pattern = Pattern.compile(regexStr);
 
         // Split string into a list
-        List<String> inputStrings = Arrays.stream(input.trim().split("\\n+"))
-                .collect(Collectors.toList());
+        List<String> inputStrings = Arrays.stream(input.trim().split("\\n+")).toList();
 
         List<Claim> claimList = new ArrayList<>();
 
@@ -67,7 +54,6 @@ class Day3NoMatterHowYouSliceIt {
         }
         return claimList;
     }
-
 
     private void setup(String input) {
         claimList = createClaimList(input);
@@ -129,5 +115,15 @@ class Day3NoMatterHowYouSliceIt {
             }
         }
         return 0;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Claim {
+        int id;
+        int startx;
+        int starty;
+        int endx;
+        int endy;
     }
 }

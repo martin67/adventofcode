@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day13TransparentOrigami {
 
-    Set<Position> dots = new HashSet<>();
-    List<Instruction> instructions = new ArrayList<>();
+    final Set<Position> dots = new HashSet<>();
+    final List<Instruction> instructions = new ArrayList<>();
     int xSize;
     int ySize;
 
@@ -55,7 +55,7 @@ public class Day13TransparentOrigami {
         Set<Position> newDots = new HashSet<>();
         log.info("Folding {} at {}, size {}x{}", instruction.direction, instruction.line, xSize, ySize);
         switch (instruction.direction) {
-            case "x":
+            case "x" -> {
                 for (Position p : dotSet) {
                     if (p.getX() < instruction.line) {
                         newDots.add(p);
@@ -64,8 +64,8 @@ public class Day13TransparentOrigami {
                     }
                 }
                 xSize = xSize / 2;
-                break;
-            case "y":
+            }
+            case "y" -> {
                 for (Position p : dotSet) {
                     if (p.getY() < instruction.line) {
                         newDots.add(p);
@@ -74,19 +74,9 @@ public class Day13TransparentOrigami {
                     }
                 }
                 ySize = ySize / 2;
-                break;
+            }
         }
         return newDots;
-    }
-
-    static class Instruction {
-        String direction;
-        int line;
-
-        public Instruction(String direction, int line) {
-            this.direction = direction;
-            this.line = line;
-        }
     }
 
     void printPaper(Set<Position> dotSet) {
@@ -101,5 +91,15 @@ public class Day13TransparentOrigami {
             System.out.println();
         }
         System.out.println();
+    }
+
+    static class Instruction {
+        final String direction;
+        final int line;
+
+        public Instruction(String direction, int line) {
+            this.direction = direction;
+            this.line = line;
+        }
     }
 }

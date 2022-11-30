@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class Day5AMazeOfTwistyTrampolinesAllAlike {
 
-    List<Integer> instructions;
+    final List<Integer> instructions;
 
     public Day5AMazeOfTwistyTrampolinesAllAlike(List<String> input) {
         instructions = input.stream().map(Integer::parseInt).collect(Collectors.toList());

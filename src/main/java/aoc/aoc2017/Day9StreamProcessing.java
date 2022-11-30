@@ -1,7 +1,7 @@
 package aoc.aoc2017;
 
 public class Day9StreamProcessing {
-    String stream;
+    final String stream;
     int totalScore = 0;
     int totalGarbage = 0;
 

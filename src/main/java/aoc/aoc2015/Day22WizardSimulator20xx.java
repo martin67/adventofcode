@@ -9,23 +9,23 @@ import java.util.Map;
 @Slf4j
 public class Day22WizardSimulator20xx {
 
-    List<Spell> spells;
-    Spell magicMissile = new Spell("Magic Missile", 53, 4, 0, 0);
-    Spell drain = new Spell("Drain", 73, 2, 2, 0);
-    Spell shield = new Spell("Shield", 113, 0, 0, 6);
-    Spell poison = new Spell("Poison", 173, 0, 0, 6);
-    Spell recharge = new Spell("Recharge", 229, 0, 0, 5);
+    final List<Spell> spells;
+    final Spell magicMissile = new Spell("Magic Missile", 53, 4, 0, 0);
+    final Spell drain = new Spell("Drain", 73, 2, 2, 0);
+    final Spell shield = new Spell("Shield", 113, 0, 0, 6);
+    final Spell poison = new Spell("Poison", 173, 0, 0, 6);
+    final Spell recharge = new Spell("Recharge", 229, 0, 0, 5);
 
     public Day22WizardSimulator20xx() {
         spells = List.of(magicMissile, drain, shield, poison, recharge);
     }
 
-    int problem1() {
+    public int problem1() {
         Player winner = playerTurn(new Player(50, 500), new Boss(55, 8));
         return winner.mana;
     }
 
-    int problem2() {
+    public int problem2() {
         return 0;
     }
 
@@ -139,11 +139,11 @@ public class Day22WizardSimulator20xx {
 
 
     static class Spell {
-        String name;
-        int cost;
-        int damage;
-        int heal;
-        int duration;
+        final String name;
+        final int cost;
+        final int damage;
+        final int heal;
+        final int duration;
 
         public Spell(String name, int cost, int damage, int heal, int duration) {
             this.name = name;
@@ -176,7 +176,7 @@ public class Day22WizardSimulator20xx {
 
     static class Boss {
         int hitPoints;
-        int damage;
+        final int damage;
 
         public Boss(int hitPoints, int damage) {
             this.hitPoints = hitPoints;

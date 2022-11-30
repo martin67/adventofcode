@@ -7,9 +7,9 @@ import java.util.*;
 
 public class Day11SeatingSystem {
 
-    Map<Position, Character> seats = new HashMap<>();
-    int width;
-    int height;
+    final Map<Position, Character> seats = new HashMap<>();
+    final int width;
+    final int height;
 
     public Day11SeatingSystem(List<String> inputLines) {
         int y = 0;

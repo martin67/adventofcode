@@ -18,6 +18,7 @@ class Day10TheStarsAlign {
 
     @Data
     @AllArgsConstructor
+    static
     class Point {
         int xpos;
         int ypos;
@@ -106,6 +107,7 @@ class Day10TheStarsAlign {
 
 
     @Data
+    static
     class Box {
         int startx;
         int starty;
@@ -115,6 +117,7 @@ class Day10TheStarsAlign {
 
 
     @Data
+    static
     class Result {
         String message;
         int time;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day10KnotHash {
-    List<Integer> list = new ArrayList<>();
+    final List<Integer> list = new ArrayList<>();
 
     public Day10KnotHash(int listSize) {
         for (int i = 0; i < listSize; i++) {

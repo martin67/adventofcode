@@ -16,7 +16,7 @@ import static aoc.Direction.*;
 @Slf4j
 public class Day20JurassicJigsaw {
     private final Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-    Set<Tile> tiles = new HashSet<>();
+    final Set<Tile> tiles = new HashSet<>();
 
     public Day20JurassicJigsaw(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^Tile (\\d+):$");
@@ -223,13 +223,13 @@ public class Day20JurassicJigsaw {
         return seaMonster;
     }
 
-    class Tile {
-        int id;
-        int width;
-        int height;
-        Set<Position> positions = new HashSet<>();
+    static class Tile {
+        final int id;
+        final int width;
+        final int height;
+        final Set<Position> positions = new HashSet<>();
 
-        Set<String> externalEdges = new HashSet<>();
+        final Set<String> externalEdges = new HashSet<>();
 
         public Tile(int id, int width, int height) {
             this.id = id;

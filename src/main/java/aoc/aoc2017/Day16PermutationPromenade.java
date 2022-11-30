@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Day16PermutationPromenade {
     List<String> danceMoves = new ArrayList<>();
-    int programSize;
+    final int programSize;
     char[] programs;
 
     public Day16PermutationPromenade(List<String> inputLines, int programSize) {

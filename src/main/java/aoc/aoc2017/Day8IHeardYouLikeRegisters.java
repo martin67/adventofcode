@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day8IHeardYouLikeRegisters {
 
-    Map<String, Integer> registers;
-    List<String> instructions;
+    final Map<String, Integer> registers;
+    final List<String> instructions;
 
     public Day8IHeardYouLikeRegisters(List<String> input) {
         registers = new HashMap<>();

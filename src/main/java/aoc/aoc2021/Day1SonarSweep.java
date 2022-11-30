@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Day1SonarSweep {
 
-    List<Integer> inputValues = new ArrayList<>();
+    final List<Integer> inputValues = new ArrayList<>();
 
     public Day1SonarSweep(List<String> inputLines) {
         inputLines.forEach(line -> inputValues.add(Integer.parseInt(line)));

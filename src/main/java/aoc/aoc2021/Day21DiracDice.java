@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day21DiracDice {
-    List<Player> players = new ArrayList<>();
+    final List<Player> players = new ArrayList<>();
 
     public Day21DiracDice(List<String> inputLines) {
         Pattern pattern = Pattern.compile("Player (\\d+) starting position: (\\d+)");
@@ -48,7 +48,7 @@ public class Day21DiracDice {
     }
 
     static class Player {
-        int id;
+        final int id;
         int score;
         int position;
 

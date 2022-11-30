@@ -11,7 +11,7 @@ import java.util.TreeSet;
 @Slf4j
 public class Day20FirewallRules {
 
-    TreeSet<Range<Long>> ranges = new TreeSet<>(Comparator.comparing(Range::lowerEndpoint));
+    final TreeSet<Range<Long>> ranges = new TreeSet<>(Comparator.comparing(Range::lowerEndpoint));
 
     public Day20FirewallRules(List<String> inputLines) {
         for (String row : inputLines) {

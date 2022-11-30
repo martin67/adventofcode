@@ -35,6 +35,7 @@ public class Day15BeverageBandits {
 
     @Data
     @AllArgsConstructor
+    static
     class Space {
         Position position;
         Type type;

@@ -23,7 +23,7 @@ public class Day18SettlersOfTheNorthPole {
         char newType;
     }
 
-    private Set<Acre> collectionArea = new HashSet<>();
+    private final Set<Acre> collectionArea = new HashSet<>();
     private int areaWidth;
     private int areaHeight;
 

@@ -19,17 +19,9 @@ public class Day16DragonChecksum {
 
         for (int i = 0; i < input.length(); i += 2) {
             switch (input.substring(i, i + 2)) {
-                case "00":
-                case "11":
-                    checksum.append("1");
-                    break;
-                case "10":
-                case "01":
-                    checksum.append("0");
-                    break;
-                default:
-                    log.error("Wrong input {}", input.substring(i, i + 2));
-                    break;
+                case "00", "11" -> checksum.append("1");
+                case "10", "01" -> checksum.append("0");
+                default -> log.error("Wrong input {}", input.substring(i, i + 2));
             }
         }
         return (checksum.length() % 2 == 0) ? checksum(checksum.toString()) : checksum.toString();

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Slf4j
 public class Day12RainRisk {
-    List<Action> actions = new ArrayList<>();
+    final List<Action> actions = new ArrayList<>();
 
     public Day12RainRisk(List<String> inputLines) {
         for (String line : inputLines) {
@@ -175,8 +175,8 @@ public class Day12RainRisk {
     }
 
     static class Action {
-        char instruction;
-        int argument;
+        final char instruction;
+        final int argument;
 
         public Action(char instruction, int argument) {
             this.instruction = instruction;

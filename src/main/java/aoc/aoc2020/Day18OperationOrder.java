@@ -8,14 +8,14 @@ import java.util.Stack;
 
 @Slf4j
 public class Day18OperationOrder {
-    List<String> inputLines;
+    final List<String> inputLines;
     boolean problem2;
 
     public Day18OperationOrder(List<String> inputLines) {
         this.inputLines = inputLines;
     }
 
-    long problem1() throws Exception {
+    long problem1() {
         long result = 0;
         for (String line : this.inputLines) {
             List<String> answerList = getPostFixString(line);
@@ -26,7 +26,7 @@ public class Day18OperationOrder {
         return result;
     }
 
-    long problem2() throws Exception {
+    long problem2() {
         problem2 = true;
         long result = 0;
         for (String line : this.inputLines) {

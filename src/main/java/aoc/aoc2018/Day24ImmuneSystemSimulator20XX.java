@@ -116,7 +116,7 @@ public class Day24ImmuneSystemSimulator20XX {
         }
     }
 
-    private List<Group> groups = new ArrayList<>();
+    private final List<Group> groups = new ArrayList<>();
 
     public Day24ImmuneSystemSimulator20XX(String fileName) throws IOException {
         readData(fileName);

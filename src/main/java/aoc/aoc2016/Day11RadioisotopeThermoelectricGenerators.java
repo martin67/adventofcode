@@ -201,7 +201,7 @@ public class Day11RadioisotopeThermoelectricGenerators {
             List<String> signature = new ArrayList<>();
             String elevator = deviceArray[0];
             for (int i = 1; i < deviceArray.length; i += 2) {
-                String sig = deviceArray[i].substring(2, 3) + deviceArray[i + 1].substring(2, 3);
+                String sig = String.valueOf(deviceArray[i].charAt(2) + deviceArray[i + 1].charAt(2));
                 signature.add(sig);
             }
             return elevator + signature.stream().sorted().collect(Collectors.joining());

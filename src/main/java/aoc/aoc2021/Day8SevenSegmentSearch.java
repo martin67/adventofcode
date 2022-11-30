@@ -6,15 +6,15 @@ import java.util.*;
 
 @Slf4j
 public class Day8SevenSegmentSearch {
-    static int SEGMENT_TOP = 0;
-    static int SEGMENT_UPPER_LEFT = 1;
-    static int SEGMENT_UPPER_RIGHT = 2;
-    static int SEGMENT_MIDDLE = 3;
-    static int SEGMENT_LOWER_LEFT = 4;
-    static int SEGMENT_LOWER_RIGHT = 5;
-    static int SEGMENT_BOTTOM = 6;
+    static final int SEGMENT_TOP = 0;
+    static final int SEGMENT_UPPER_LEFT = 1;
+    static final int SEGMENT_UPPER_RIGHT = 2;
+    static final int SEGMENT_MIDDLE = 3;
+    static final int SEGMENT_LOWER_LEFT = 4;
+    static final int SEGMENT_LOWER_RIGHT = 5;
+    static final int SEGMENT_BOTTOM = 6;
 
-    List<DigitEntry> entries = new ArrayList<>();
+    final List<DigitEntry> entries = new ArrayList<>();
 
     public Day8SevenSegmentSearch(List<String> inputLines) {
         inputLines.forEach(line -> {
@@ -290,7 +290,7 @@ public class Day8SevenSegmentSearch {
     }
 
     static class DigitEntry {
-        List<String> patterns = new ArrayList<>();
-        List<String> outputs = new ArrayList<>();
+        final List<String> patterns = new ArrayList<>();
+        final List<String> outputs = new ArrayList<>();
     }
 }

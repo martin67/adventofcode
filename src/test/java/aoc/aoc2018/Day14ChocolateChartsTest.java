@@ -19,7 +19,7 @@ class Day14ChocolateChartsTest {
             "2018, 5941429882",
             "147061, 2145581131"
     })
-    void problem1(int numberOfRecipes, String score) throws IOException {
+    void problem1(int numberOfRecipes, String score) {
         Day14ChocolateCharts day14ChocolateCharts = new Day14ChocolateCharts();
         assertEquals(score, day14ChocolateCharts.computeScore(numberOfRecipes));
     }
@@ -32,7 +32,7 @@ class Day14ChocolateChartsTest {
             "59414, 2018",
             "147061, 20283721"
     })
-    void problem2(String score, int numberOfRecipes) throws IOException {
+    void problem2(String score, int numberOfRecipes) {
         Day14ChocolateCharts day14ChocolateCharts = new Day14ChocolateCharts();
         assertEquals(numberOfRecipes, day14ChocolateCharts.computeRecipes(score));
     }

@@ -11,9 +11,9 @@ import java.util.stream.Stream;
 @Slf4j
 public class Day7TheTreacheryOfWhales {
 
+    final int min;
+    final int max;
     List<Integer> crabs = new ArrayList<>();
-    int min;
-    int max;
 
     public Day7TheTreacheryOfWhales(List<String> inputLines) {
         inputLines.forEach(line -> crabs = Stream.of(line.split(","))

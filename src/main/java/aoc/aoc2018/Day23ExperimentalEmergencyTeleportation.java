@@ -61,11 +61,11 @@ public class Day23ExperimentalEmergencyTeleportation {
         }
     }
 
-    private Set<Nanobot> nanobots = new HashSet<>();
-    private Range xRange = new Range();
-    private Range yRange = new Range();
-    private Range zRange = new Range();
-    private Graph<Nanobot, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+    private final Set<Nanobot> nanobots = new HashSet<>();
+    private final Range xRange = new Range();
+    private final Range yRange = new Range();
+    private final Range zRange = new Range();
+    private final Graph<Nanobot, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
 
     public Day23ExperimentalEmergencyTeleportation(String fileName) throws IOException {

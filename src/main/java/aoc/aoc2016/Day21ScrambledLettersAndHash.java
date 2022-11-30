@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day21ScrambledLettersAndHash {
-    List<String> instructions;
+    final List<String> instructions;
 
     public Day21ScrambledLettersAndHash(List<String> inputLines) {
         this.instructions = inputLines;
@@ -152,7 +152,7 @@ public class Day21ScrambledLettersAndHash {
         String reverse = input.substring(x, y + 1);
         String after = (y < input.length() - 1) ? input.substring(y + 1) : "";
         StringBuilder sb = new StringBuilder(reverse).reverse();
-        return before + sb.toString() + after;
+        return before + sb + after;
     }
 
     private String move(String input, int x, int y) {

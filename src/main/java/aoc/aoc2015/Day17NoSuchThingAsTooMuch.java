@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Day17NoSuchThingAsTooMuch {
 
-    Set<Container> containers = Sets.newHashSet();
+    final Set<Container> containers = Sets.newHashSet();
 
     public Day17NoSuchThingAsTooMuch(List<String> inputLines) {
         int id = 0;
@@ -20,13 +20,13 @@ public class Day17NoSuchThingAsTooMuch {
         }
     }
 
-    long numberOfCombinations(int liters) {
+    public long numberOfCombinations(int liters) {
         return Sets.powerSet(containers).stream()
                 .filter(s -> s.stream().mapToInt(Container::getSize).sum() == liters)
                 .count();
     }
 
-    long numberOfMinimumCombinations(int liters) {
+    public long numberOfMinimumCombinations(int liters) {
         OptionalInt monValue = Sets.powerSet(containers).stream()
                 .filter(s -> s.stream().mapToInt(Container::getSize).sum() == liters)
                 .mapToInt(Set::size).min();

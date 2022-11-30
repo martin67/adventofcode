@@ -21,7 +21,7 @@ public class Day22ModeMaze {
         int geologicIndex;
         int erosionLevel;
         Type type;
-        Set<Node> nodeSet = new HashSet<>();
+        final Set<Node> nodeSet = new HashSet<>();
 
         Region(Position position) {
             this.position = position;
@@ -51,7 +51,7 @@ public class Day22ModeMaze {
     private final Position target;
     private final Position maxCave;
 
-    private Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    private final Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
 
     public Day22ModeMaze(int depth, Position target) {

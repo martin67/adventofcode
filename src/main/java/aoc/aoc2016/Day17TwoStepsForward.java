@@ -11,12 +11,12 @@ import java.util.Set;
 
 @Slf4j
 public class Day17TwoStepsForward {
-    String passcode;
-    Set<Position> rooms = new HashSet<>();
+    final String passcode;
+    final Set<Position> rooms = new HashSet<>();
     String shortestPath;
     String longestPath;
-    Position start = new Position(0, 0);
-    Position end = new Position(3, 3);
+    final Position start = new Position(0, 0);
+    final Position end = new Position(3, 3);
 
     public Day17TwoStepsForward(String passcode) {
         this.passcode = passcode;

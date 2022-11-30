@@ -8,8 +8,8 @@ import java.util.*;
 @Slf4j
 public class Day9SmokeBasin {
 
-    Map<Position, Integer> map = new HashMap<>();
-    Set<Position> lowPoints = new HashSet<>();
+    final Map<Position, Integer> map = new HashMap<>();
+    final Set<Position> lowPoints = new HashSet<>();
 
     public Day9SmokeBasin(List<String> inputLines) {
         int y = 0;

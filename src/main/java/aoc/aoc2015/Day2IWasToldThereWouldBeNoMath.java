@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Day2IWasToldThereWouldBeNoMath {
-    int getSquareFeet(List<String> inputLines) throws Exception {
+    public int getSquareFeet(List<String> inputLines) throws Exception {
         int totalArea = 0;
         for (String line : inputLines) {
             String[] parts = line.split("x");
@@ -28,7 +28,7 @@ public class Day2IWasToldThereWouldBeNoMath {
         return totalArea;
     }
 
-    int getRibbon(List<String> inputLines) {
+    public int getRibbon(List<String> inputLines) {
         int totalLength = 0;
         for (String line : inputLines) {
             String[] parts = line.split("x");

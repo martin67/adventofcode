@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class Day7HandyHaversacks {
 
-    Map<String, Bag> bags = new HashMap<>();
+    final Map<String, Bag> bags = new HashMap<>();
 
     public Day7HandyHaversacks(List<String> inputLines) {
         for (String line : inputLines) {
@@ -54,8 +54,8 @@ public class Day7HandyHaversacks {
     }
 
     static class Bag {
-        String color;
-        Map<Bag, Integer> content = new HashMap<>();
+        final String color;
+        final Map<Bag, Integer> content = new HashMap<>();
 
         public Bag(String color) {
             this.color = color;

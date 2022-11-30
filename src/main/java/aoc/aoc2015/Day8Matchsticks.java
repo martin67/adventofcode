@@ -72,11 +72,11 @@ public class Day8Matchsticks {
         }
     }
 
-    int matches() {
+    public int matches() {
         return numberOfCharacters - numberOfMemory;
     }
 
-    int encoded() {
+    public int encoded() {
         return extended - numberOfCharacters;
     }
 }

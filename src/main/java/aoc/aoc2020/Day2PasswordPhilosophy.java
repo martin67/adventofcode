@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day2PasswordPhilosophy {
-    List<PasswordAndPolicy> passwordAndPolicies = new ArrayList<>();
+    final List<PasswordAndPolicy> passwordAndPolicies = new ArrayList<>();
 
     public Day2PasswordPhilosophy(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(\\d+)-(\\d+) (\\w): (\\w+)$");
@@ -35,10 +35,10 @@ public class Day2PasswordPhilosophy {
     }
 
     static class PasswordAndPolicy {
-        int min;
-        int max;
-        char letter;
-        String password;
+        final int min;
+        final int max;
+        final char letter;
+        final String password;
 
         public PasswordAndPolicy(int min, int max, char letter, String password) {
             this.min = min;

@@ -29,9 +29,9 @@ public class Day25FourDimensionalAdventure {
         }
     }
 
-    private List<SpaceTimePosition> spacetime = new ArrayList<>();
+    private final List<SpaceTimePosition> spacetime = new ArrayList<>();
 
-    private Graph<SpaceTimePosition, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+    private final Graph<SpaceTimePosition, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
     public Day25FourDimensionalAdventure(String fileName) throws IOException {
         readData(fileName);

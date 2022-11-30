@@ -30,7 +30,7 @@ public class Day14ReindeerOlympics {
         }
     }
 
-    int distanceTraveled(int time) {
+    public int distanceTraveled(int time) {
         for (int i = 0; i < time; i++) {
             //log.info("{} {} . {}", i, reindeers.get(0).name, reindeers.get(0).flying(i));
             for (Reindeer reindeer : reindeers) {
@@ -42,7 +42,7 @@ public class Day14ReindeerOlympics {
         return reindeers.stream().max(Comparator.comparing(Reindeer::getTotalDistance)).get().totalDistance;
     }
 
-    int winningPoints(int time) {
+    public int winningPoints(int time) {
         for (int i = 0; i < time; i++) {
             //log.info("{} {} . {}", i, reindeers.get(0).name, reindeers.get(0).flying(i));
             for (Reindeer reindeer : reindeers) {
@@ -57,6 +57,7 @@ public class Day14ReindeerOlympics {
     }
 
     @Data
+    static
     class Reindeer {
         String name;
         int speed;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day21ChronalConversion {
-    private Processor processor;
+    private final Processor processor;
 
     public Day21ChronalConversion(String fileName) throws IOException {
         processor = new Processor(6);

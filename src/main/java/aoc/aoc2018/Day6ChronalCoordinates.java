@@ -18,6 +18,7 @@ class Day6ChronalCoordinates {
 
     @Data
     @RequiredArgsConstructor
+    static
     class Point {
         final int x;
         final int y;
@@ -27,6 +28,7 @@ class Day6ChronalCoordinates {
 
     @Data
     @NoArgsConstructor
+    static
     class Edges {
         int upper;
         int lower;

@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Day3PerfectlySphericalHouseInAVacuum {
-    int atLeastOnePresent(String line) {
+    public int atLeastOnePresent(String line) {
         Set<Position> housesVisited = new HashSet<>();
         Position position = new Position(0, 0);
         housesVisited.add(position);
@@ -32,7 +32,7 @@ public class Day3PerfectlySphericalHouseInAVacuum {
         return housesVisited.size();
     }
 
-    int roboSanta(String line) {
+    public int roboSanta(String line) {
         Set<Position> housesVisited = new HashSet<>();
         Position santaPosition = new Position(0, 0);
         Position robotPosition = new Position(0, 0);

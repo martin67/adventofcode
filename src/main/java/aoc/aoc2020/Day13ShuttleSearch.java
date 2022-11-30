@@ -6,7 +6,7 @@ import java.util.*;
 
 @Slf4j
 public class Day13ShuttleSearch {
-    List<Bus> buses = new ArrayList<>();
+    final List<Bus> buses = new ArrayList<>();
     int initialDelay;
     final List<Long> ids = new ArrayList<>();
 
@@ -78,8 +78,8 @@ public class Day13ShuttleSearch {
     }
 
     static class Bus {
-        int roundTripTime;
-        int departureDelay;
+        final int roundTripTime;
+        final int departureDelay;
         int location = 0;
 
         public Bus(int roundTripTime, int departureDelay) {

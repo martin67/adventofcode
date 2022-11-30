@@ -7,9 +7,9 @@ import java.util.List;
 
 @Slf4j
 public class Day21RpgSimulator20xx {
-    List<Weapon> weapons = new ArrayList<>();
-    List<Armor> armors = new ArrayList<>();
-    List<Ring> rings = new ArrayList<>();
+    final List<Weapon> weapons = new ArrayList<>();
+    final List<Armor> armors = new ArrayList<>();
+    final List<Ring> rings = new ArrayList<>();
 
     public Day21RpgSimulator20xx() {
         weapons.add(new Weapon("Dagger", 8, 4, 0));
@@ -35,7 +35,7 @@ public class Day21RpgSimulator20xx {
         rings.add(new Ring("Defense +3", 80, 0, 3));
     }
 
-    int problem1() {
+    public int problem1() {
         int lowestCost = Integer.MAX_VALUE;
 
         // Generate all player combinations
@@ -60,7 +60,7 @@ public class Day21RpgSimulator20xx {
         return lowestCost;
     }
 
-    int problem2() {
+    public int problem2() {
         int highestCost = Integer.MIN_VALUE;
 
         // Generate all player combinations
@@ -113,10 +113,10 @@ public class Day21RpgSimulator20xx {
     }
 
     static class Equipment {
-        String name;
-        int cost;
-        int damage;
-        int armor;
+        final String name;
+        final int cost;
+        final int damage;
+        final int armor;
 
         public Equipment(String name, int cost, int damage, int armor) {
             this.name = name;
@@ -151,9 +151,9 @@ public class Day21RpgSimulator20xx {
 
     static class Player {
         int hitPoints;
-        int damage;
-        int armor;
-        int cost;
+        final int damage;
+        final int armor;
+        final int cost;
 
         public Player(int hitPoints, int damage, int armor) {
             this.hitPoints = hitPoints;

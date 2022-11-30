@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 public class Day17ReservoirResearch {
 
-    private Set<Position> walls = new HashSet<>();
-    private Set<Position> running = new HashSet<>();
-    private Set<Position> still = new HashSet<>();
+    private final Set<Position> walls = new HashSet<>();
+    private final Set<Position> running = new HashSet<>();
+    private final Set<Position> still = new HashSet<>();
     private int minX = Integer.MAX_VALUE;
     private int maxX = Integer.MIN_VALUE;
     private int minY = Integer.MAX_VALUE;

@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class Day6ProbablyAFireHazard {
 
 
-    long lightsLit(List<String> inputLines, boolean nordicElvish) {
+    public long lightsLit(List<String> inputLines, boolean nordicElvish) {
 
         Map<Position, Boolean> lights = new HashMap<>();
         Map<Position, Integer> brightness = new HashMap<>();

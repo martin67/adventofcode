@@ -9,8 +9,8 @@ import java.util.List;
 
 @Slf4j
 public class Day14OneTimePad {
-    String salt;
-    boolean stretchedHash;
+    final String salt;
+    final boolean stretchedHash;
 
     public Day14OneTimePad(String salt, boolean stretchedHash) {
         this.salt = salt;

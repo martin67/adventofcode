@@ -17,6 +17,7 @@ class Day7TheSumofItsParts {
 
     @Data
     @RequiredArgsConstructor
+    static
     class Step {
         final String name;
         List<Step> beforeSteps = new ArrayList<>();

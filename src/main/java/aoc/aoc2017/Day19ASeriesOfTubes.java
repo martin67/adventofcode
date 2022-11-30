@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class Day19ASeriesOfTubes {
 
-    Map<Position, String> lines = new HashMap<>();
+    final Map<Position, String> lines = new HashMap<>();
 
     public Day19ASeriesOfTubes(List<String> inputLines) {
         int y = 0;

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day15ScienceForHungryPeople {
-    List<Ingredient> ingredients = new ArrayList<>();
+    final List<Ingredient> ingredients = new ArrayList<>();
 
     public Day15ScienceForHungryPeople(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(\\w+): capacity (-?\\d+), durability (-?\\d+), flavor (-?\\d+), texture (-?\\d+), calories (-?\\d+)$");
@@ -27,7 +27,7 @@ public class Day15ScienceForHungryPeople {
         }
     }
 
-    int totalScore(boolean countCalories) {
+    public int totalScore(boolean countCalories) {
         int maxScore = Integer.MIN_VALUE;
 
         if (ingredients.size() == 2) {
@@ -118,12 +118,12 @@ public class Day15ScienceForHungryPeople {
     }
 
     static class Ingredient {
-        String name;
-        int capacity;
-        int durability;
-        int flavor;
-        int texture;
-        int calories;
+        final String name;
+        final int capacity;
+        final int durability;
+        final int flavor;
+        final int texture;
+        final int calories;
 
         public Ingredient(String name, int capacity, int durability, int flavor, int texture, int calories) {
             this.name = name;

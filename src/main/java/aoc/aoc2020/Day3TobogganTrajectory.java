@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 public class Day3TobogganTrajectory {
-    Set<Position> trees = new HashSet<>();
-    int width;
-    int height;
+    final Set<Position> trees = new HashSet<>();
+    final int width;
+    final int height;
 
     public Day3TobogganTrajectory(List<String> inputLines) {
         int x = 0;

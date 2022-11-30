@@ -62,9 +62,9 @@ public class Day17TrickShot {
 
 
     static class Probe {
-        Position position = new Position(0, 0);
-        Position upperLeft;
-        Position lowerRight;
+        final Position position = new Position(0, 0);
+        final Position upperLeft;
+        final Position lowerRight;
         int xVelocity;
         int yVelocity;
         int maxHeight = Integer.MIN_VALUE;

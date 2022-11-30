@@ -42,7 +42,7 @@ public class Day13KnightsOfTheDinnerTable {
         }
     }
 
-    int changeInHappiness() {
+    public int changeInHappiness() {
         Collection<List<String>> permutations = Collections2.permutations(graph.vertexSet());
         int happiest = Integer.MIN_VALUE;
         for (List<String> permutation : permutations) {
@@ -57,7 +57,7 @@ public class Day13KnightsOfTheDinnerTable {
     }
 
 
-    int changeInHappinessWithMe() {
+    public int changeInHappinessWithMe() {
         graph.addVertex("Me");
         for (String vertex : graph.vertexSet()) {
             if (!vertex.equals("Me")) {

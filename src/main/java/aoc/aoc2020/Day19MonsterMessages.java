@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day19MonsterMessages {
-    Map<Integer, String> rules = new HashMap<>();
-    List<String> messages = new ArrayList<>();
+    final Map<Integer, String> rules = new HashMap<>();
+    final List<String> messages = new ArrayList<>();
 
     public Day19MonsterMessages(List<String> inputLines) {
         Pattern rulePattern = Pattern.compile("^(\\d+): (.*)$");

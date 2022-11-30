@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class Day15RambunctiousRecitation {
     // number, round
-    Map<Integer, Integer> lastSpoken = new HashMap<>();
-    Map<Integer, Integer> lastSpokenBeforeThen = new HashMap<>();
+    final Map<Integer, Integer> lastSpoken = new HashMap<>();
+    final Map<Integer, Integer> lastSpokenBeforeThen = new HashMap<>();
     int spokeLast;
 
     public Day15RambunctiousRecitation(String numbers) {

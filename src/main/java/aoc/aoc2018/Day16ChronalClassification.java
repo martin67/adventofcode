@@ -393,7 +393,7 @@ class UnknownInstruction {
 
 public class Day16ChronalClassification {
 
-    private Processor processor;
+    private final Processor processor;
     private List<Sample> samples;
     private List<UnknownInstruction> unknownInstructions;
     Map<Integer, Integer> mappingTable = new HashMap<>();

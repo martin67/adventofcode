@@ -7,7 +7,7 @@ import java.util.*;
 public class Day18LikeAGifForYourCard {
 
     Map<Position, Boolean> lights = new HashMap<>();
-    Position size = new Position();
+    final Position size = new Position();
 
     public Day18LikeAGifForYourCard(List<String> inputLines) {
         int y = 0;
@@ -23,7 +23,7 @@ public class Day18LikeAGifForYourCard {
         size.setY(y - 1);
     }
 
-    long numberOfLights(int steps, boolean setCorners) {
+    public long numberOfLights(int steps, boolean setCorners) {
         Set<Position> corners = new HashSet<>();
         if (setCorners) {
             corners.add(new Position(0, 0));

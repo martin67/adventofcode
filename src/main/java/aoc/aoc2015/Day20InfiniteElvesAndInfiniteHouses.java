@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Day20InfiniteElvesAndInfiniteHouses {
 
-    long lowestHouseNumber(long input) {
+    public long lowestHouseNumber(long input) {
         return splitNumber(input).stream().mapToLong(l -> l).sum() * 10;
     }
 
@@ -20,7 +20,7 @@ public class Day20InfiniteElvesAndInfiniteHouses {
         return factors;
     }
 
-    long lowestHouseNumber2(long input) {
+    public long lowestHouseNumber2(long input) {
         long houseNumber = 1;
         long presents;
         do {

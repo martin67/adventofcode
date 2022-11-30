@@ -9,14 +9,16 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class Day15Chiton {
 
-    Map<Position, Node> map = new HashMap<>();
-    Graph<Node, DefaultWeightedEdge> graph;
-    int height;
+    final Map<Position, Node> map = new HashMap<>();
+    final Graph<Node, DefaultWeightedEdge> graph;
+    final int height;
     int width;
 
     public Day15Chiton(List<String> inputLines) {
@@ -34,29 +36,6 @@ public class Day15Chiton {
         height = y;
 
         graph = createGraph(map);
-    }
-
-    static class Node {
-        Position position;
-        int riskLevel;
-
-        public Node(Position position, int riskLevel) {
-            this.position = position;
-            this.riskLevel = riskLevel;
-        }
-
-        int increaseRiskLevel(int value) {
-            int newLevel = riskLevel + value;
-            while (newLevel > 9) {
-                newLevel -= 9;
-            }
-            return newLevel;
-        }
-
-        @Override
-        public String toString() {
-            return "{" + position.getX() + "," + position.getY() + " " + riskLevel + "}";
-        }
     }
 
     int problem1() {
@@ -134,5 +113,28 @@ public class Day15Chiton {
             System.out.println();
         }
         System.out.println();
+    }
+
+    static class Node {
+        final Position position;
+        final int riskLevel;
+
+        public Node(Position position, int riskLevel) {
+            this.position = position;
+            this.riskLevel = riskLevel;
+        }
+
+        int increaseRiskLevel(int value) {
+            int newLevel = riskLevel + value;
+            while (newLevel > 9) {
+                newLevel -= 9;
+            }
+            return newLevel;
+        }
+
+        @Override
+        public String toString() {
+            return "{" + position.getX() + "," + position.getY() + " " + riskLevel + "}";
+        }
     }
 }

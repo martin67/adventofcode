@@ -1,8 +1,8 @@
 package aoc.aoc2017;
 
 public class Day15DuelingGenerators {
-    Generator generatorA;
-    Generator generatorB;
+    final Generator generatorA;
+    final Generator generatorB;
 
     public Day15DuelingGenerators(int startA, int startB) {
         generatorA = new Generator("A", 16807, 4, startA);
@@ -30,9 +30,9 @@ public class Day15DuelingGenerators {
     }
 
     static class Generator {
-        String name;
-        int factor;
-        int multiple;
+        final String name;
+        final int factor;
+        final int multiple;
         long current;
 
         public Generator(String name, int factor, int multiple, int start) {

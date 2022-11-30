@@ -29,9 +29,7 @@ public class Day6MemoryReallocation {
             int remaining = largestBankContents % banks.size();
 
             // update all banks with the complete redistributions
-            for (int i = 0; i < banks.size(); i++) {
-                banks.set(i, banks.get(i) + completeRedistributions);
-            }
+            banks.replaceAll(integer -> integer + completeRedistributions);
 
             // distribute to the right
             if (remaining > (banks.size() - largestBankIndex - 1)) {

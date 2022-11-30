@@ -95,7 +95,7 @@ public class Day19AnElephantNamedJoseph {
     }
 
     static class Elf {
-        int id;
+        final int id;
 
         public Elf(int id) {
             this.id = id;

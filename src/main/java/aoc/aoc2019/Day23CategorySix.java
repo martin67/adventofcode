@@ -117,6 +117,7 @@ public class Day23CategorySix {
     }
 
     @Data
+    static
     class NatRouter implements Callable<Integer> {
         ExecutorService executorService;
         List<BlockingQueue<BigInteger>> inputQueues = new ArrayList<>();

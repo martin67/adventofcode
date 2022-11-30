@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class Day5BinaryBoarding {
-    List<BoardingPass> boardingPasses = new ArrayList<>();
+    final List<BoardingPass> boardingPasses = new ArrayList<>();
 
     public Day5BinaryBoarding(List<String> inputLines) {
         for (String line : inputLines) {
@@ -38,7 +38,7 @@ public class Day5BinaryBoarding {
     }
 
     static class BoardingPass {
-        String code;
+        final String code;
 
         public BoardingPass(String code) {
             this.code = code;

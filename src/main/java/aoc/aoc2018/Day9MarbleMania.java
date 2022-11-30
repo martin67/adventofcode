@@ -13,6 +13,7 @@ class Day9MarbleMania {
 
     @Data
     @RequiredArgsConstructor
+    static
     class Marble {
         final int id;
         Marble left;
@@ -21,6 +22,7 @@ class Day9MarbleMania {
 
     @Data
     @RequiredArgsConstructor
+    static
     class Player {
         final int id;
         long score;

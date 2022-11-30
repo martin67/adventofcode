@@ -13,8 +13,8 @@ import java.util.Map;
 
 public class Day2BathroomSecurity {
 
-    private List<String> instructions = new ArrayList<>();
-    private Map<Position, Character> keypad = new HashMap<>();
+    private final List<String> instructions = new ArrayList<>();
+    private final Map<Position, Character> keypad = new HashMap<>();
 
     public Day2BathroomSecurity(String fileName) throws IOException {
         readData(fileName);
@@ -71,23 +71,13 @@ public class Day2BathroomSecurity {
         for (String instruction : instructions) {
             Direction direction;
             for (char dir : instruction.toCharArray()) {
-                switch (dir) {
-                    case 'U':
-                        direction = Direction.Up;
-                        break;
-                    case 'D':
-                        direction = Direction.Down;
-                        break;
-                    case 'R':
-                        direction = Direction.Right;
-                        break;
-                    case 'L':
-                        direction = Direction.Left;
-                        break;
-                    default:
-                        direction = Direction.Unknown;
-                        break;
-                }
+                direction = switch (dir) {
+                    case 'U' -> Direction.Up;
+                    case 'D' -> Direction.Down;
+                    case 'R' -> Direction.Right;
+                    case 'L' -> Direction.Left;
+                    default -> Direction.Unknown;
+                };
                 Position next = pos.adjacent(direction);
                 if (keypad.containsKey(next)) {
                     pos = next;

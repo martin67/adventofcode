@@ -6,8 +6,8 @@ import java.util.List;
 
 @Slf4j
 public class Day25ComboBreaker {
-    int cardPublicKey;
-    int doorPublicKey;
+    final int cardPublicKey;
+    final int doorPublicKey;
 
     public Day25ComboBreaker(List<String> inputLines) {
         cardPublicKey = Integer.parseInt(inputLines.get(0));

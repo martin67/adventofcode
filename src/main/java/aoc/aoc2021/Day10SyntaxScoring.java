@@ -10,7 +10,7 @@ import java.util.Stack;
 @Slf4j
 public class Day10SyntaxScoring {
 
-    List<String> lines;
+    final List<String> lines;
 
     public Day10SyntaxScoring(List<String> inputLines) {
         lines = inputLines;
@@ -41,41 +41,35 @@ public class Day10SyntaxScoring {
         Stack<Character> stack = new Stack<>();
         for (char c : line.toCharArray()) {
             switch (c) {
-                case '(':
-                case '[':
-                case '{':
-                case '<':
-                    stack.add(c);
-                    break;
-
-                case ')':
+                case '(', '[', '{', '<' -> stack.add(c);
+                case ')' -> {
                     r = stack.pop();
                     if (r != '(') {
                         log.info("line {}, expected (, but found {} instead", line, r);
                         return 3;
                     }
-                    break;
-                case ']':
+                }
+                case ']' -> {
                     r = stack.pop();
                     if (r != '[') {
                         log.info("line {}, expected [, but found {} instead", line, r);
                         return 57;
                     }
-                    break;
-                case '}':
+                }
+                case '}' -> {
                     r = stack.pop();
                     if (r != '{') {
                         log.info("line {}, expected {, but found {} instead", line, r);
                         return 1197;
                     }
-                    break;
-                case '>':
+                }
+                case '>' -> {
                     r = stack.pop();
                     if (r != '<') {
                         log.info("line {}, expected <, but found {} instead", line, r);
                         return 25137;
                     }
-                    break;
+                }
             }
         }
         return 0;
@@ -85,18 +79,8 @@ public class Day10SyntaxScoring {
         Stack<Character> stack = new Stack<>();
         for (char c : line.toCharArray()) {
             switch (c) {
-                case '(':
-                case '[':
-                case '{':
-                case '<':
-                    stack.add(c);
-                    break;
-                case ')':
-                case ']':
-                case '}':
-                case '>':
-                    stack.pop();
-                    break;
+                case '(', '[', '{', '<' -> stack.add(c);
+                case ')', ']', '}', '>' -> stack.pop();
             }
         }
 
@@ -106,18 +90,10 @@ public class Day10SyntaxScoring {
             int score = 0;
             char c = stack.pop();
             switch (c) {
-                case '(':
-                    score = 1;
-                    break;
-                case '[':
-                    score = 2;
-                    break;
-                case '{':
-                    score = 3;
-                    break;
-                case '<':
-                    score = 4;
-                    break;
+                case '(' -> score = 1;
+                case '[' -> score = 2;
+                case '{' -> score = 3;
+                case '<' -> score = 4;
             }
             totalScore *= 5;
             totalScore += score;

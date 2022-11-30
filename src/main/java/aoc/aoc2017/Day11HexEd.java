@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Day11HexEd {
-    List<String> directions = new ArrayList<>();
+    final List<String> directions = new ArrayList<>();
     int furthestAway = 0;
 
     public Day11HexEd(String input) {

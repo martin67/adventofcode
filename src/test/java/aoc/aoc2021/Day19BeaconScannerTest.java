@@ -15,7 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class Day19BeaconScannerTest {
 
     @ParameterizedTest
-    @CsvSource({"0, src/test/resources/2021/day19-demo1.txt",
+    @CsvSource({"6, src/test/resources/2021/day19-demo1.txt",
+            "79, src/test/resources/2021/day19-demo2.txt",
             "0, src/test/resources/2021/day19.txt"})
     void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));

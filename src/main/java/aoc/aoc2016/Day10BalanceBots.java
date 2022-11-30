@@ -48,9 +48,9 @@ public class Day10BalanceBots {
         Destination high;
     }
 
-    private HashMap<Integer, Bot> bots = new HashMap<>();
-    private HashMap<Integer, Integer> outputs = new HashMap<>();
-    private Set<Instruction> instructions = new HashSet<>();
+    private final HashMap<Integer, Bot> bots = new HashMap<>();
+    private final HashMap<Integer, Integer> outputs = new HashMap<>();
+    private final Set<Instruction> instructions = new HashSet<>();
 
     public Day10BalanceBots(String fileName) throws IOException {
         readData(fileName);
@@ -128,9 +128,9 @@ public class Day10BalanceBots {
 
     int botNumber(int compareOne, int compareTwo) {
         runFactory();
-        List target = Arrays.asList(compareOne, compareTwo);
+        List<Integer> target = Arrays.asList(compareOne, compareTwo);
         return bots.entrySet().stream()
-                .filter(e -> e.getValue().chips.containsAll(target))
+                .filter(e -> new HashSet<>(e.getValue().chips).containsAll(target))
                 .findFirst().map(Map.Entry::getKey).get();
     }
 

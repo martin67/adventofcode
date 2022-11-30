@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 public class Day19MedicineForRudolph {
 
     private final Graph<String, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-    Map<String, Set<String>> molecules = new HashMap<>();
-    Map<String, String> moleculesReverse = new HashMap<>();
-    Set<String> startPoints = new HashSet<>();
+    final Map<String, Set<String>> molecules = new HashMap<>();
+    final Map<String, String> moleculesReverse = new HashMap<>();
+    final Set<String> startPoints = new HashSet<>();
 
     Set<String> replacements = new HashSet<>();
     String outcome;
@@ -52,7 +52,7 @@ public class Day19MedicineForRudolph {
         }
     }
 
-    int distinctMolecules() {
+    public int distinctMolecules() {
         return possibleMoleculesFrom(outcome).size();
     }
 
@@ -216,7 +216,7 @@ public class Day19MedicineForRudolph {
         return shortestPath + 1;
     }
 
-    int fewestSteps3() {
+    public int fewestSteps3() {
         // reduce the outcome with the largest molecules
         //moleculesReverse
         int count = 0;

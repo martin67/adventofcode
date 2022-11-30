@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Day20ParticleSwarm {
-    List<Particle> particles = new ArrayList<>();
+    final List<Particle> particles = new ArrayList<>();
 
     public Day20ParticleSwarm(List<String> inputLines) {
         int index = 0;

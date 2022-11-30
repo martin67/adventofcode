@@ -56,11 +56,11 @@ public class Day7SomeAssemblyRequired {
         return result;
     }
 
-    int signalWire(String wireName) {
+    public int signalWire(String wireName) {
         return evaluateWire(wireName);
     }
 
-    int signalRewired(String wireName) {
+    public int signalRewired(String wireName) {
         int result = evaluateWire(wireName);
 
         for (Gate gate : gates) {
@@ -75,10 +75,10 @@ public class Day7SomeAssemblyRequired {
     }
 
     class Gate {
-        String name;
+        final String name;
         String inputX;
-        String inputY;
-        String output;
+        final String inputY;
+        final String output;
         boolean done;
         int finalResult;
 

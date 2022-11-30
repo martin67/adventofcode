@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day14ExtendedPolymerization {
 
+    final Map<String, Rule> rules = new HashMap<>();
     String polymer;
-    Map<String, Rule> rules = new HashMap<>();
 
     public Day14ExtendedPolymerization(List<String> inputLines) {
         Pattern polymerPattern = Pattern.compile("^(\\w+)$");
@@ -89,8 +89,8 @@ public class Day14ExtendedPolymerization {
     }
 
     static class Rule {
-        String input;
-        char output;
+        final String input;
+        final char output;
 
         public Rule(String input, char output) {
             this.input = input;

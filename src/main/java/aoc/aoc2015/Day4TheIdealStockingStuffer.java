@@ -6,10 +6,8 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
-import java.security.NoSuchAlgorithmException;
-
 public class Day4TheIdealStockingStuffer {
-    int lowestNumber(String secretKey, int length) {
+    public int lowestNumber(String secretKey, int length) {
         int number = 0;
         HashFunction hf = Hashing.md5();
         String start = Strings.padStart("", length, '0');

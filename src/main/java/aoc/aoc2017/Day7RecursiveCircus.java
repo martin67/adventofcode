@@ -8,11 +8,11 @@ import java.util.*;
 public class Day7RecursiveCircus {
 
     static class Program {
-        String name;
+        final String name;
         int weight;
         int weightOfChildren;
         // child, weight
-        Map<Program, Integer> children;
+        final Map<Program, Integer> children;
 
         public Program(String name, int weight) {
             this.name = name;

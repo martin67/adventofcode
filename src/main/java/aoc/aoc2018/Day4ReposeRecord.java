@@ -24,6 +24,7 @@ class Day4ReposeRecord {
 
     @Data
     @AllArgsConstructor
+    static
     class SleepInterval {
         String date;
         int start;

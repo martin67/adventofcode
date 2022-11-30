@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 
 public class Day5HydrothermalVenture {
 
-    Map<Position, Integer> vents = new HashMap<>();
-    Map<Position, Integer> diagonalVents = new HashMap<>();
+    final Map<Position, Integer> vents = new HashMap<>();
+    final Map<Position, Integer> diagonalVents = new HashMap<>();
 
     public Day5HydrothermalVenture(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(\\d+),(\\d+) -> (\\d+),(\\d+)");

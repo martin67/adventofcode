@@ -64,7 +64,7 @@ public class Day4SecurityThroughObscurity {
         }
     }
 
-    private Set<Room> rooms = new HashSet<>();
+    private final Set<Room> rooms = new HashSet<>();
 
     public Day4SecurityThroughObscurity(String fileName) throws IOException {
         readData(fileName);

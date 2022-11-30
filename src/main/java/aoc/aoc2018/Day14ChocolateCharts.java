@@ -12,18 +12,20 @@ public class Day14ChocolateCharts {
 
     @Data
     @AllArgsConstructor
+    static
     class Recipe {
         int value;
     }
 
     @Data
     @AllArgsConstructor
+    static
     class Elf {
         int recipeIndex;
     }
 
-    List<Recipe> recipes;
-    List<Elf> elves;
+    final List<Recipe> recipes;
+    final List<Elf> elves;
 
 
     public Day14ChocolateCharts() {

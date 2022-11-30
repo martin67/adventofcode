@@ -8,13 +8,13 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day12JSAbacusFramework {
-    List<String> inputLines;
+    final List<String> inputLines;
 
     public Day12JSAbacusFramework(List<String> inputLines) {
         this.inputLines = inputLines;
     }
 
-    int sumOfAllNumbers() {
+    public int sumOfAllNumbers() {
         int sumOfAllNumbers = 0;
         Pattern pattern = Pattern.compile("(-?\\d+)");
         for (String line : inputLines) {
@@ -26,7 +26,7 @@ public class Day12JSAbacusFramework {
         return sumOfAllNumbers;
     }
 
-    int sumOfAllNumbersIgnoringRed() {
+    public int sumOfAllNumbersIgnoringRed() {
         Result result = null;
         switch (inputLines.get(0).charAt(0)) {
             case '[':

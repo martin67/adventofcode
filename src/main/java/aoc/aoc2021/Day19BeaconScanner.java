@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day19BeaconScanner {
 
-    List<BeaconScanner> scanners = new ArrayList<>();
+    final List<BeaconScanner> scanners = new ArrayList<>();
 
     public Day19BeaconScanner(List<String> inputLines) {
         Pattern scannerPattern = Pattern.compile("--- scanner (\\d+) ---");
@@ -34,6 +34,33 @@ public class Day19BeaconScanner {
     }
 
     int problem1() {
+        // Compute all 24 different views
+        for (BeaconScanner scanner : scanners) {
+            Set<Set<SpacePosition>> allViews = new HashSet<>();
+            Set<SpacePosition> setB = new HashSet<>();
+            Set<SpacePosition> setC = new HashSet<>();
+            // one
+            for (int x : List.of(1, -1)) {
+                for (int y : List.of(1, -1)) {
+                    for (int z : List.of(1, -1)) {
+                        Set<SpacePosition> setA = new HashSet<>();
+                        for (SpacePosition spacePosition : scanner.beacons) {
+                            setA.add(new SpacePosition(spacePosition.getX() * x, spacePosition.getY() * y, spacePosition.getZ() * z));
+                            setA.add(new SpacePosition(spacePosition.getY() * y, spacePosition.getZ() * z, spacePosition.getX() * x));
+                            setA.add(new SpacePosition(spacePosition.getZ() * z, spacePosition.getX() * x, spacePosition.getY() * y));
+                        }
+                        allViews.add(setA);
+                    }
+                }
+            }
+            //allViews.add(setB);
+            //allViews.add(setC);
+        }
+        return 0;
+    }
+
+
+    int problem1b() {
 
         // for each beacon, compute the distance to all other beacons
         for (BeaconScanner scanner : scanners) {
@@ -112,10 +139,10 @@ public class Day19BeaconScanner {
         return 0;
     }
 
-    class BeaconScanner {
-        int id;
-        Set<SpacePosition> beacons = new HashSet<>();
-        Map<SpacePosition, Map<SpacePosition, Integer>> distances = new HashMap<>();
+    static class BeaconScanner {
+        final int id;
+        final Set<SpacePosition> beacons = new HashSet<>();
+        final Map<SpacePosition, Map<SpacePosition, Integer>> distances = new HashMap<>();
         SpacePosition offset = new SpacePosition(0, 0, 0);
 
         public BeaconScanner(int id) {

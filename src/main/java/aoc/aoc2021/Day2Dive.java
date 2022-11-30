@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Day2Dive {
 
-    List<Course> courses = new ArrayList<>();
+    final List<Course> courses = new ArrayList<>();
 
     public Day2Dive(List<String> inputLines) {
         inputLines.forEach(line -> {
@@ -20,15 +20,9 @@ public class Day2Dive {
 
         for (Course course : courses) {
             switch (course.direction) {
-                case "forward":
-                    horizontalPosition += course.distance;
-                    break;
-                case "down":
-                    depth += course.distance;
-                    break;
-                case "up":
-                    depth -= course.distance;
-                    break;
+                case "forward" -> horizontalPosition += course.distance;
+                case "down" -> depth += course.distance;
+                case "up" -> depth -= course.distance;
             }
         }
         return horizontalPosition * depth;
@@ -41,24 +35,20 @@ public class Day2Dive {
 
         for (Course course : courses) {
             switch (course.direction) {
-                case "forward":
+                case "forward" -> {
                     horizontalPosition += course.distance;
                     depth += aim * course.distance;
-                    break;
-                case "down":
-                    aim += course.distance;
-                    break;
-                case "up":
-                    aim -= course.distance;
-                    break;
+                }
+                case "down" -> aim += course.distance;
+                case "up" -> aim -= course.distance;
             }
         }
         return horizontalPosition * depth;
     }
 
     static class Course {
-        String direction;
-        int distance;
+        final String direction;
+        final int distance;
 
         public Course(String direction, int distance) {
             this.direction = direction;

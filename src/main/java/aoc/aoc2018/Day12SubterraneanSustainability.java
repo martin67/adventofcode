@@ -11,19 +11,21 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Day12SubterraneanSustainability {
 
-    Tunnel tunnel;
-    int totalGenerations;
+    final Tunnel tunnel;
+    final int totalGenerations;
     int generation = 0;
 
 
     @Data
     @AllArgsConstructor
+    static
     class Pot {
         char state;
     }
 
     @Data
     @AllArgsConstructor
+    static
     class Note {
         String pattern;
         char nextState;

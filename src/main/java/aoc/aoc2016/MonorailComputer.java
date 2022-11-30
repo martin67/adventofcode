@@ -59,7 +59,7 @@ class MonorailComputer {
             switch (s[0]) {
 
                 // cpy x y copies x (either an integer or the value of a register) into register y.
-                case "cpy":
+                case "cpy" -> {
                     c = s[1].charAt(0);
                     if (registers.containsKey(c)) {
                         x = registers.get(c);
@@ -71,25 +71,25 @@ class MonorailComputer {
                         registers.put(y, x);
                     }
                     instructionPointer++;
-                    break;
+                }
 
                 // inc x increases the value of register x by one.
-                case "inc":
+                case "inc" -> {
                     c = s[1].charAt(0);
                     registers.put(c, registers.get(c) + 1);
                     instructionPointer++;
-                    break;
+                }
 
                 // dec x decreases the value of register x by one.
-                case "dec":
+                case "dec" -> {
                     c = s[1].charAt(0);
                     registers.put(c, registers.get(c) - 1);
                     instructionPointer++;
-                    break;
+                }
 
                 // jnz x y jumps to an instruction y away (positive means forward; negative means backward),
                 // but only if x is not zero.
-                case "jnz":
+                case "jnz" -> {
                     c = s[1].charAt(0);
                     if (registers.containsKey(c)) {
                         x = registers.get(c);
@@ -106,9 +106,8 @@ class MonorailComputer {
                     } else {
                         instructionPointer++;
                     }
-                    break;
-
-                case "tgl":
+                }
+                case "tgl" -> {
                     c = s[1].charAt(0);
                     x = registers.get(c);
                     if (x + instructionPointer >= program.size()) {
@@ -118,28 +117,16 @@ class MonorailComputer {
                         String toggleInstruction = rowToToggle[0];
                         String toggleArguments = rowToToggle[1];
                         switch (toggleInstruction) {
-                            case "inc":
-                                program.set(instructionPointer + x, "dec " + toggleArguments);
-                                break;
-                            case "dec":
-                            case "tgl":
-                                program.set(instructionPointer + x, "inc " + toggleArguments);
-                                break;
-                            case "jnz":
-                                program.set(instructionPointer + x, "cpy " + toggleArguments);
-                                break;
-                            case "cpy":
-                                program.set(instructionPointer + x, "jnz " + toggleArguments);
-                                break;
-                            default:
-                                log.error("Illegal instruction : {}", instruction);
-                                break;
+                            case "inc" -> program.set(instructionPointer + x, "dec " + toggleArguments);
+                            case "dec", "tgl" -> program.set(instructionPointer + x, "inc " + toggleArguments);
+                            case "jnz" -> program.set(instructionPointer + x, "cpy " + toggleArguments);
+                            case "cpy" -> program.set(instructionPointer + x, "jnz " + toggleArguments);
+                            default -> log.error("Illegal instruction : {}", instruction);
                         }
                     }
                     instructionPointer++;
-                    break;
-
-                case "out":
+                }
+                case "out" -> {
                     c = s[1].charAt(0);
                     if (registers.containsKey(c)) {
                         x = registers.get(c);
@@ -160,11 +147,8 @@ class MonorailComputer {
                         signalRepeats++;
                         instructionPointer++;
                     }
-                    break;
-
-                default:
-                    log.error("Illegal instruction : {}", instruction);
-                    break;
+                }
+                default -> log.error("Illegal instruction : {}", instruction);
             }
         }
     }

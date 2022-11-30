@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class Day13AMazeOfTwistyLittleCubicles {
     private final Graph<Position, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-    int favoriteNumber;
+    final int favoriteNumber;
 
     public Day13AMazeOfTwistyLittleCubicles(int favoriteNumber) {
         this.favoriteNumber = favoriteNumber;

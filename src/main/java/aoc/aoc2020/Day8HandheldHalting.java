@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Day8HandheldHalting {
-    List<Instruction> instructions = new ArrayList<>();
+    final List<Instruction> instructions = new ArrayList<>();
 
     public Day8HandheldHalting(List<String> inputLines) {
         for (String line : inputLines) {
@@ -76,7 +76,7 @@ public class Day8HandheldHalting {
 
     static class Instruction {
         String operation;
-        int argument;
+        final int argument;
 
         public Instruction(String operation, int argument) {
             this.operation = operation;
@@ -85,8 +85,8 @@ public class Day8HandheldHalting {
     }
 
     static class Result {
-        boolean looped;
-        int value;
+        final boolean looped;
+        final int value;
 
         public Result(boolean looped, int value) {
             this.looped = looped;

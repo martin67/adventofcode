@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Slf4j
 public class Day5DoesntHeHaveInternElvesForThis {
-    boolean isNice(String input) {
+    public boolean isNice(String input) {
         if (input.matches(".*(ab|cd|pq|xy).*")) {
             return false;
         }
@@ -29,7 +29,7 @@ public class Day5DoesntHeHaveInternElvesForThis {
         return (vowels > 2 && twiceInARow);
     }
 
-    int isNice(List<String> inputLines) {
+    public int isNice(List<String> inputLines) {
         int niceCount = 0;
         for (String line : inputLines) {
             if (isNice(line)) {
@@ -39,7 +39,7 @@ public class Day5DoesntHeHaveInternElvesForThis {
         return niceCount;
     }
 
-    boolean isNiceNewRule(String input) {
+    public boolean isNiceNewRule(String input) {
 
         boolean pairOk = false;
         boolean gapOk = false;
@@ -76,7 +76,7 @@ public class Day5DoesntHeHaveInternElvesForThis {
     }
 
 
-    int isNiceNewRule(List<String> inputLines) {
+    public int isNiceNewRule(List<String> inputLines) {
         int niceCount = 0;
         for (String line : inputLines) {
             if (isNiceNewRule(line)) {

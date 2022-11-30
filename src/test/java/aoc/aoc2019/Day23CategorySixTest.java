@@ -21,7 +21,7 @@ class Day23CategorySixTest {
     }
 
     @Test
-    void problem2() throws IOException, ExecutionException, InterruptedException {
+    void problem2() throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/2019/day23.txt"));
         assertEquals(17091, new Day23CategorySix(inputLines).repeatedYValue());
     }

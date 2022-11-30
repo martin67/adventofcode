@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Day1ReportRepair {
     static final int SUM = 2020;
-    List<Integer> entries = new ArrayList<>();
+    final List<Integer> entries = new ArrayList<>();
 
     public Day1ReportRepair(List<String> inputLines) {
         for (String line : inputLines) {

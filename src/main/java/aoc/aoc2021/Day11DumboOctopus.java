@@ -10,9 +10,9 @@ import java.util.Map;
 @Slf4j
 public class Day11DumboOctopus {
 
-    Map<Position, Octopus> grid = new HashMap<>();
+    final Map<Position, Octopus> grid = new HashMap<>();
+    final int ySize;
     int xSize;
-    int ySize;
 
     public Day11DumboOctopus(List<String> inputLines) {
         int y = 0;
@@ -76,7 +76,7 @@ public class Day11DumboOctopus {
     }
 
     class Octopus {
-        Position position;
+        final Position position;
         int energyLevel;
         int numberOfFlashes;
         boolean flashed;

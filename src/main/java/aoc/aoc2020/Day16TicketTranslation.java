@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day16TicketTranslation {
-    List<TicketField> ticketFields = new ArrayList<>();
-    List<Ticket> tickets = new ArrayList<>();
+    final List<TicketField> ticketFields = new ArrayList<>();
+    final List<Ticket> tickets = new ArrayList<>();
     Ticket myTicket;
 
     public Day16TicketTranslation(List<String> inputLines) {
@@ -156,7 +156,7 @@ public class Day16TicketTranslation {
     }
 
     static class Ticket {
-        List<Integer> numbers;
+        final List<Integer> numbers;
 
         public Ticket(List<Integer> numbers) {
             this.numbers = numbers;
@@ -164,8 +164,8 @@ public class Day16TicketTranslation {
     }
 
     static class TicketField {
-        String name;
-        List<List<Integer>> intervals = new ArrayList<>();
+        final String name;
+        final List<List<Integer>> intervals = new ArrayList<>();
 
         public TicketField(String name) {
             this.name = name;

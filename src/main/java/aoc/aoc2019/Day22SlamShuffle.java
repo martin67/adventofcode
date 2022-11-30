@@ -52,7 +52,7 @@ public class Day22SlamShuffle {
     }
 
     class NewStack {
-        BigInteger MOD;
+        final BigInteger MOD;
         BigInteger offset;
         BigInteger increment;
 

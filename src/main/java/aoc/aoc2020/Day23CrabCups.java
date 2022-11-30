@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Slf4j
 public class Day23CrabCups {
-    int start;
+    final int start;
 
     public Day23CrabCups(int start) {
         this.start = start;
@@ -45,7 +45,7 @@ public class Day23CrabCups {
     }
 
     static class Cup {
-        int value;
+        final int value;
         Cup nextCup;
 
         Cup(int value) {
@@ -54,7 +54,7 @@ public class Day23CrabCups {
     }
 
     class Circle {
-        Map<Integer, Cup> cups = new HashMap<>();
+        final Map<Integer, Cup> cups = new HashMap<>();
         int size;
         int lowestCupValue = Integer.MAX_VALUE;
         int highestCupValue = Integer.MIN_VALUE;

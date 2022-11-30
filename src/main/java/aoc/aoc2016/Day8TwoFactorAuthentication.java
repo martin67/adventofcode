@@ -99,7 +99,7 @@ public class Day8TwoFactorAuthentication {
     }
 
 
-    private Screen screen;
+    private final Screen screen;
     private List<String> instructions;
 
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Day10AdapterArray {
-    List<Integer> adapters = new ArrayList<>();
+    final List<Integer> adapters = new ArrayList<>();
 
     public Day10AdapterArray(List<String> inputLines) {
         adapters.add(0);

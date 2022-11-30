@@ -2,7 +2,7 @@ package aoc.aoc2015;
 
 public class Day10ElvesLookElvesSay {
 
-    String input;
+    final String input;
 
     public Day10ElvesLookElvesSay(String input) {
         this.input = input;
@@ -26,7 +26,7 @@ public class Day10ElvesLookElvesSay {
         return sb.toString();
     }
 
-    int codeLength(int times) {
+    public int codeLength(int times) {
         String sequence = input;
         for (int i = 0; i < times; i++) {
             sequence = lookAndSay(sequence);

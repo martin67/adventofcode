@@ -33,8 +33,8 @@ public class Day18Snailfish {
         return 0;
     }
 
-    class SnailFishNumber {
-        SnailFishNumber parent;
+    static class SnailFishNumber {
+        final SnailFishNumber parent;
         int leftNumber;
         int rightNumber;
         SnailFishNumber leftSnailFish;

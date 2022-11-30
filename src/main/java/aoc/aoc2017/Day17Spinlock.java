@@ -6,7 +6,7 @@ import java.util.*;
 
 @Slf4j
 public class Day17Spinlock {
-    int steps;
+    final int steps;
 
     public Day17Spinlock(int steps) {
         this.steps = steps;

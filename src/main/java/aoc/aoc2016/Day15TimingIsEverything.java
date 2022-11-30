@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class Day15TimingIsEverything {
 
-    Set<Disc> discs = new HashSet<>();
+    final Set<Disc> discs = new HashSet<>();
 
     public Day15TimingIsEverything(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^Disc #\\d+ has (\\d+) positions; at time=0, it is at position (\\d+).$");
@@ -44,9 +44,9 @@ public class Day15TimingIsEverything {
     }
 
     static class Disc {
-        int numberOfPositions;
-        int startPosition;
-        int order;
+        final int numberOfPositions;
+        final int startPosition;
+        final int order;
 
         public Disc(int numberOfPositions, int startPosition, int order) {
             this.numberOfPositions = numberOfPositions;

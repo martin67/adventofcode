@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class Day21AllergenAssessment {
-    List<Food> foods = new ArrayList<>();
-    Map<String, Ingredient> ingredients = new HashMap<>();
-    Map<String, Allergen> allergens = new HashMap<>();
+    final List<Food> foods = new ArrayList<>();
+    final Map<String, Ingredient> ingredients = new HashMap<>();
+    final Map<String, Allergen> allergens = new HashMap<>();
     Set<Ingredient> usedIngredients;
 
     public Day21AllergenAssessment(List<String> inputLines) {
@@ -169,14 +169,14 @@ public class Day21AllergenAssessment {
     }
 
     class Food {
-        Set<Ingredient> ingredients = new HashSet<>();
-        Set<Allergen> allergens = new HashSet<>();
+        final Set<Ingredient> ingredients = new HashSet<>();
+        final Set<Allergen> allergens = new HashSet<>();
     }
 
     class Ingredient {
-        String name;
-        Map<Allergen, Integer> possibleAllergens = new HashMap<>();
-        Set<Food> inFoods = new HashSet<>();
+        final String name;
+        final Map<Allergen, Integer> possibleAllergens = new HashMap<>();
+        final Set<Food> inFoods = new HashSet<>();
 
         public Ingredient(String name) {
             this.name = name;
@@ -193,9 +193,9 @@ public class Day21AllergenAssessment {
     }
 
     class Allergen {
-        String name;
-        Map<Ingredient, Integer> possibleIngredients = new HashMap<>();
-        Set<Food> inFoods = new HashSet<>();
+        final String name;
+        final Map<Ingredient, Integer> possibleIngredients = new HashMap<>();
+        final Set<Food> inFoods = new HashSet<>();
 
         public Allergen(String name) {
             this.name = name;

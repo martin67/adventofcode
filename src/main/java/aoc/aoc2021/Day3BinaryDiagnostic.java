@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Day3BinaryDiagnostic {
 
-    List<Integer> numbers = new ArrayList<>();
+    final List<Integer> numbers = new ArrayList<>();
     int width;
 
     public Day3BinaryDiagnostic(List<String> inputLines) {

@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 @Slf4j
 public class Day4GiantSquid {
 
+    final List<Board> boards = new ArrayList<>();
     List<Integer> draws = new ArrayList<>();
-    List<Board> boards = new ArrayList<>();
 
     public Day4GiantSquid(List<String> inputLines) {
         int lineNumber = 0;
@@ -75,16 +75,14 @@ public class Day4GiantSquid {
     }
 
     static class Board {
-        Map<Integer, Position> numbers = new HashMap<>();
-        Set<Position> hits = new HashSet<>();
+        final Map<Integer, Position> numbers = new HashMap<>();
+        final Set<Position> hits = new HashSet<>();
 
         public Board(List<String> in) {
             for (int y = 0; y < 5; y++) {
-                String[] test = in.get(y).trim().split("\\s+");
                 List<Integer> values = Stream.of(in.get(y).trim().split("\\s+"))
                         .map(String::trim)
-                        .map(Integer::parseInt)
-                        .collect(Collectors.toList());
+                        .map(Integer::parseInt).toList();
                 for (int x = 0; x < 5; x++) {
                     numbers.put(values.get(x), new Position(x, y));
                 }

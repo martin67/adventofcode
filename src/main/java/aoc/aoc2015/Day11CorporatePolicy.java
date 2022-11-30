@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Day11CorporatePolicy {
 
-    boolean validPassword(String password) {
+    public boolean validPassword(String password) {
         if (password.contains("i") || password.contains("o") || password.contains("l")) {
             return false;
         }
@@ -50,7 +50,7 @@ public class Day11CorporatePolicy {
         return password;
     }
 
-    String nextPassword(String password) {
+    public String nextPassword(String password) {
         do {
             password = increasePassword(password);
         } while (!validPassword(password));

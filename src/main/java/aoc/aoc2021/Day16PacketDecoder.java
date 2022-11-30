@@ -7,7 +7,7 @@ import java.util.List;
 @Slf4j
 public class Day16PacketDecoder {
 
-    String binary;
+    final String binary;
     int versionNumbers = 0;
 
     public Day16PacketDecoder(List<String> inputLines) {
@@ -32,7 +32,7 @@ public class Day16PacketDecoder {
             int id = Integer.parseInt(binaryInput.substring(pos, pos += 3), 2);
 
             switch (id) {
-                case 4:
+                case 4 -> {
                     log.debug("Decoding literal, version {}, id: {}, in length: {}", version, id, binaryInput.length());
                     StringBuilder number = new StringBuilder();
                     boolean stop = false;
@@ -49,11 +49,10 @@ public class Day16PacketDecoder {
                     result.output = binaryInput.substring(pos);
                     result.value = n2;
                     return result;
-
-                case 0:
+                }
+                case 0 -> {
                     lengthTypeId = binaryInput.charAt(pos++);
                     log.debug("Decoding sum operator type {}, version {}, id: {}, in length: {}", lengthTypeId, version, id, binaryInput.length());
-
                     if (lengthTypeId == '0') {
                         length = Integer.parseInt(binaryInput.substring(pos, pos += 15), 2);
                         Result r = new Result(binaryInput.substring(pos, pos + length));
@@ -72,8 +71,8 @@ public class Day16PacketDecoder {
                         result.output = r.output;
                     }
                     return result;
-
-                case 1:
+                }
+                case 1 -> {
                     lengthTypeId = binaryInput.charAt(pos++);
                     log.debug("Decoding mul operator type {}, version {}, id: {}, in length: {}", lengthTypeId, version, id, binaryInput.length());
                     result.value = 1;
@@ -95,8 +94,8 @@ public class Day16PacketDecoder {
                         result.output = r.output;
                     }
                     return result;
-
-                case 2:
+                }
+                case 2 -> {
                     lengthTypeId = binaryInput.charAt(pos++);
                     log.debug("Decoding min operator type {}, version {}, id: {}, in length: {}", lengthTypeId, version, id, binaryInput.length());
                     result.value = Long.MAX_VALUE;
@@ -118,8 +117,8 @@ public class Day16PacketDecoder {
                         result.output = r.output;
                     }
                     return result;
-
-                case 3:
+                }
+                case 3 -> {
                     lengthTypeId = binaryInput.charAt(pos++);
                     log.debug("Decoding max operator type {}, version {}, id: {}, in length: {}", lengthTypeId, version, id, binaryInput.length());
                     result.value = Long.MIN_VALUE;
@@ -141,8 +140,8 @@ public class Day16PacketDecoder {
                         result.output = r.output;
                     }
                     return result;
-
-                case 5:
+                }
+                case 5 -> {
                     lengthTypeId = binaryInput.charAt(pos++);
                     log.debug("Decoding greater than operator type {}, version {}, id: {}, in length: {}", lengthTypeId, version, id, binaryInput.length());
                     if (lengthTypeId == '0') {
@@ -161,8 +160,8 @@ public class Day16PacketDecoder {
                         result.output = r2.output;
                     }
                     return result;
-
-                case 6:
+                }
+                case 6 -> {
                     lengthTypeId = binaryInput.charAt(pos++);
                     log.debug("Decoding less than operator type {}, version {}, id: {}, in length: {}", lengthTypeId, version, id, binaryInput.length());
                     if (lengthTypeId == '0') {
@@ -181,8 +180,8 @@ public class Day16PacketDecoder {
                         result.output = r2.output;
                     }
                     return result;
-
-                case 7:
+                }
+                case 7 -> {
                     lengthTypeId = binaryInput.charAt(pos++);
                     log.debug("Decoding equal operator type {}, version {}, id: {}, in length: {}", lengthTypeId, version, id, binaryInput.length());
                     if (lengthTypeId == '0') {
@@ -199,6 +198,7 @@ public class Day16PacketDecoder {
                         result.output = r2.output;
                     }
                     return result;
+                }
             }
         }
         return null;
