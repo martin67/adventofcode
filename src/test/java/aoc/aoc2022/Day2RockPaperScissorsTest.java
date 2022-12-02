@@ -11,24 +11,24 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("2022: Day 1: Calorie Counting")
-class Day1CalorieCountingTest {
+@DisplayName("2022: Day 2: Rock Paper Scissors")
+class Day2RockPaperScissorsTest {
 
     @ParameterizedTest
-    @CsvSource({"24000, src/test/resources/2022/day1-demo1.txt",
-            "68292, src/test/resources/2022/day1.txt"})
+    @CsvSource({"15, src/test/resources/2022/day2-demo1.txt",
+            "11873, src/test/resources/2022/day2.txt"})
     void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertThat(new Day1CalorieCounting(inputLines).problem1())
+        assertThat(new Day2RockPaperScissors(inputLines).problem1())
                 .isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"45000, src/test/resources/2022/day1-demo1.txt",
-            "203203, src/test/resources/2022/day1.txt"})
+    @CsvSource({"12, src/test/resources/2022/day2-demo1.txt",
+            "12014, src/test/resources/2022/day2.txt"})
     void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertThat(new Day1CalorieCounting(inputLines).problem2())
+        assertThat(new Day2RockPaperScissors(inputLines).problem2())
                 .isEqualTo(expected);
     }
 

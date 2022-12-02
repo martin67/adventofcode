@@ -3,7 +3,7 @@ package aoc.aoc2022;
 import java.util.*;
 
 public class Day1CalorieCounting {
-    Map<Integer, Integer> elves = new HashMap<>();
+    final Map<Integer, Integer> elves = new HashMap<>();
 
     public Day1CalorieCounting(List<String> inputLines) {
         int elv = 1;
@@ -17,11 +17,11 @@ public class Day1CalorieCounting {
         }
     }
 
-    int problem1() {
+    public int problem1() {
         return Collections.max(elves.values());
     }
 
-    int problem2() {
+    public int problem2() {
         List<Integer> sortedCalories = new ArrayList<>(elves.values());
         sortedCalories.sort(Collections.reverseOrder());
         int sum = 0;
