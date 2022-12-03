@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("2017: Day 18: Duet")
 class Day18DuetTest {
@@ -23,7 +23,7 @@ class Day18DuetTest {
 
     @ParameterizedTest
     @CsvSource({"3, src/test/resources/2017/day18-demo2.txt",
-            "0, src/test/resources/2017/day18.txt"})
+            "7620, src/test/resources/2017/day18.txt"})
     void problem2(int expected, String fileName) throws IOException, ExecutionException, InterruptedException {
         assertEquals(expected, new Day18Duet(Files.readAllLines(Paths.get(fileName))).problem2());
     }

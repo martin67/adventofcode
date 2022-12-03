@@ -11,20 +11,16 @@ import java.util.concurrent.*;
 @Slf4j
 public class Day18Duet {
 
-    final ExecutorService executorService;
-    final List<Instruction> instructions = new ArrayList<>();
-
+    private final List<Instruction> instructions = new ArrayList<>();
 
     public Day18Duet(List<String> inputLines) {
-        executorService = Executors.newCachedThreadPool();
-
         inputLines.forEach(line -> {
             String[] s = line.split(" ");
             instructions.add(new Instruction(s[0], s[1], s.length == 3 ? s[2] : null));
         });
     }
 
-    long problem1() {
+    public long problem1() {
         int pointer = 0;
         long soundPlayed = 0;
         long soundPlayedFirst = 0;
@@ -34,28 +30,28 @@ public class Day18Duet {
             Instruction instruction = instructions.get(pointer);
             log.debug("Register: {} - instruction {}, {} {}", registers, instruction.name, instruction.register, instruction.parameter);
             switch (instruction.name) {
-                case "snd":
+                case "snd" -> {
                     soundPlayed = instruction.getValue(registers);
                     log.debug("Sound played: {}", soundPlayed);
                     pointer++;
-                    break;
-                case "set":
+                }
+                case "set" -> {
                     registers.put(instruction.register, instruction.getValue(registers));
                     pointer++;
-                    break;
-                case "add":
+                }
+                case "add" -> {
                     registers.merge(instruction.register, instruction.getValue(registers), Long::sum);
                     pointer++;
-                    break;
-                case "mul":
+                }
+                case "mul" -> {
                     registers.put(instruction.register, registers.getOrDefault(instruction.register, 0L) * instruction.getValue(registers));
                     pointer++;
-                    break;
-                case "mod":
+                }
+                case "mod" -> {
                     registers.put(instruction.register, registers.getOrDefault(instruction.register, 0L) % instruction.getValue(registers));
                     pointer++;
-                    break;
-                case "rcv":
+                }
+                case "rcv" -> {
                     if (instruction.getValue(registers) != 0) {
                         if (soundPlayedFirst == 0) {
                             log.info("First time sound: {}", soundPlayed);
@@ -66,47 +62,41 @@ public class Day18Duet {
                         }
                     }
                     pointer++;
-                    break;
-                case "jgz":
+                }
+                case "jgz" -> {
                     if (registers.getOrDefault(instruction.register, 0L) > 0) {
                         pointer += instruction.getValue(registers);
                     } else {
                         pointer++;
                     }
-                    break;
-
-                default:
-                    log.error("Unknown instruction: {}", instruction.name);
-                    break;
+                }
+                default -> log.error("Unknown instruction: {}", instruction.name);
             }
         }
         return soundPlayedFirst;
     }
 
-    int problem2() throws ExecutionException, InterruptedException {
+    public int problem2() throws ExecutionException, InterruptedException {
+        ExecutorService executorService = null;
         Tablet tablet0 = new Tablet(0);
         Tablet tablet1 = new Tablet(1);
         tablet0.inputQueue = tablet1.outputQueue;
         tablet1.inputQueue = tablet0.outputQueue;
+        int result;
 
-        executorService.submit(tablet0);
-        Future<Integer> sends = executorService.submit(tablet1);
-
-
-        return sends.get();
+        try {
+            executorService = Executors.newCachedThreadPool();
+            executorService.submit(tablet0);
+            Future<Integer> sends = executorService.submit(tablet1);
+            result = sends.get();
+        } finally {
+            if (executorService != null)
+                executorService.shutdown();
+        }
+        return result;
     }
 
-    static class Instruction {
-        final String name;
-        final String register;
-        final String parameter;
-
-
-        public Instruction(String name, String register, String parameter) {
-            this.name = name;
-            this.register = register;
-            this.parameter = parameter;
-        }
+    record Instruction(String name, String register, String parameter) {
 
         long getValue(Map<String, Long> registers) {
             if (parameter == null) {
@@ -126,13 +116,11 @@ public class Day18Duet {
     }
 
     class Tablet implements Callable<Integer> {
-        private final int id;
-        private BlockingQueue<Long> inputQueue;
-        private final BlockingQueue<Long> outputQueue = new LinkedBlockingQueue<>();
         final Map<String, Long> registers = new HashMap<>();
+        private final BlockingQueue<Long> outputQueue = new LinkedBlockingQueue<>();
+        private BlockingQueue<Long> inputQueue;
 
         public Tablet(int id) {
-            this.id = id;
             registers.put("p", (long) id);
         }
 
@@ -143,56 +131,55 @@ public class Day18Duet {
             int numberOfSend = 0;
             while (pointer >= 0 && pointer < instructions.size()) {
                 Instruction instruction = instructions.get(pointer);
-                //log.debug("[{}] Register: {} - instruction {}, {} {}", id, registers, instruction.name, instruction.register, instruction.parameter);
                 switch (instruction.name) {
-                    case "snd":
-                        //log.debug("[{}] Sending: {}", id, instruction.getValue(registers));
+                    case "snd" -> {
                         outputQueue.put(instruction.getValue(registers));
                         numberOfSend++;
                         pointer++;
-                        break;
-                    case "set":
+                    }
+                    case "set" -> {
                         registers.put(instruction.register, instruction.getValue(registers));
                         pointer++;
-                        break;
-                    case "add":
+                    }
+                    case "add" -> {
                         registers.merge(instruction.register, instruction.getValue(registers), Long::sum);
                         pointer++;
-                        break;
-                    case "mul":
-                        registers.put(instruction.register, registers.getOrDefault(instruction.register, 0L) * instruction.getValue(registers));
+                    }
+                    case "mul" -> {
+                        registers.put(instruction.register, Math.multiplyExact(registers.getOrDefault(instruction.register, 0L), instruction.getValue(registers)));
                         pointer++;
-                        break;
-                    case "mod":
+                    }
+                    case "mod" -> {
                         registers.put(instruction.register, registers.getOrDefault(instruction.register, 0L) % instruction.getValue(registers));
                         pointer++;
-                        break;
-                    case "rcv":
-                        //registers.put(instruction.register, inputQueue.take());
+                    }
+                    case "rcv" -> {
+                        // deandlock after 1 sec wait
                         registers.put(instruction.register, inputQueue.poll(1, TimeUnit.SECONDS));
-                        if (registers.get(instruction.register) != 34) {
-                            log.info("[{}] Received: {}", id, registers.get(instruction.register));
-                        }
                         if (registers.get(instruction.register) == null) {
                             log.info("timeout!");
+                            return numberOfSend;
                         }
                         pointer++;
-                        break;
-                    case "jgz":
-                        if (registers.getOrDefault(instruction.register, 0L) > 0) {
+                    }
+                    case "jgz" -> {
+                        if (instruction.register.matches("\\d+")) {
+                            int val = Integer.parseInt(instruction.register);
+                            if (val > 0) {
+                                pointer += Integer.parseInt(instruction.parameter);
+                            }
+                        } else if (registers.getOrDefault(instruction.register, 0L) > 0) {
                             pointer += instruction.getValue(registers);
                         } else {
                             pointer++;
                         }
-                        break;
-
-                    default:
-                        log.error("Unknown instruction: {}", instruction.name);
-                        break;
+                    }
+                    default -> log.error("Unknown instruction: {}", instruction.name);
                 }
 
             }
-            return numberOfSend;
+            // Should not reach this...
+            return -1;
         }
     }
 }
