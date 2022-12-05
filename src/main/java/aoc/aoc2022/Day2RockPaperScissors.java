@@ -8,11 +8,11 @@ import static aoc.aoc2022.Day2RockPaperScissors.Shape.*;
 
 public class Day2RockPaperScissors {
 
-    List<String> games;
-    Map<Shape, Integer> scores = Map.of(Rock, 1, Paper, 2, Scissors, 3);
-    Map<String, Shape> opponentShapes = Map.of("A", Rock, "B", Paper, "C", Scissors);
-    Map<String, Shape> playerShapes = Map.of("X", Rock, "Y", Paper, "Z", Scissors);
-    Map<String, GameType> gameTypes = Map.of("X", Lose, "Y", Draw, "Z", Win);
+    final List<String> games;
+    final Map<Shape, Integer> scores = Map.of(Rock, 1, Paper, 2, Scissors, 3);
+    final Map<String, Shape> opponentShapes = Map.of("A", Rock, "B", Paper, "C", Scissors);
+    final Map<String, Shape> playerShapes = Map.of("X", Rock, "Y", Paper, "Z", Scissors);
+    final Map<String, GameType> gameTypes = Map.of("X", Lose, "Y", Draw, "Z", Win);
 
     public Day2RockPaperScissors(List<String> inputLines) {
         this.games = inputLines;

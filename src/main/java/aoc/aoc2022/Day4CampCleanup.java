@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day4CampCleanup {
 
-    List<Pair> pairs = new ArrayList<>();
+    final List<Pair> pairs = new ArrayList<>();
 
     public Day4CampCleanup(List<String> inputLines) {
         Pattern pattern = Pattern.compile("(\\d+)-(\\d+),(\\d+)-(\\d+)");
@@ -34,18 +34,7 @@ public class Day4CampCleanup {
         return pairs.size() - pairs.stream().filter(Pair::isSeparate).count();
     }
 
-    static class Pair {
-        int firstSectionStart;
-        int firstSectionEnd;
-        int secondSectionStart;
-        int secondSectionEnd;
-
-        public Pair(int firstSectionStart, int firstSectionEnd, int secondSectionStart, int secondSectionEnd) {
-            this.firstSectionStart = firstSectionStart;
-            this.firstSectionEnd = firstSectionEnd;
-            this.secondSectionStart = secondSectionStart;
-            this.secondSectionEnd = secondSectionEnd;
-        }
+    record Pair(int firstSectionStart, int firstSectionEnd, int secondSectionStart, int secondSectionEnd) {
 
         boolean isEnclosed() {
             return (firstSectionStart >= secondSectionStart && firstSectionEnd <= secondSectionEnd) ||

@@ -10,7 +10,7 @@ import java.util.Set;
 @Slf4j
 public class Day3RucksackReorganization {
 
-    List<Rucksack> rucksacks = new ArrayList<>();
+    final List<Rucksack> rucksacks = new ArrayList<>();
 
     public Day3RucksackReorganization(List<String> inputLines) {
         for (String line : inputLines) {
@@ -42,7 +42,7 @@ public class Day3RucksackReorganization {
     }
 
     static class Rucksack {
-        String contents;
+        final String contents;
 
         public Rucksack(String contents) {
             this.contents = contents;
