@@ -1,7 +1,7 @@
 package aoc.aoc2020;
 
-import aoc.Direction;
-import aoc.HexPositionPointy;
+import aoc.common.Direction;
+import aoc.common.HexPositionPointy;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import java.util.Map;
 
 @Slf4j
 public class Day24LobbyLayout {
-    final List<List<Direction>> directionList = new ArrayList<>();
-    Map<HexPositionPointy, Color> tiles = new HashMap<>();
+    private final List<List<Direction>> directionList = new ArrayList<>();
+    private Map<HexPositionPointy, Color> tiles = new HashMap<>();
 
     public Day24LobbyLayout(List<String> inputLines) {
         for (String line : inputLines) {
@@ -21,37 +21,34 @@ public class Day24LobbyLayout {
             directionList.add(directions);
             while (index < line.length()) {
                 switch (line.charAt(index)) {
-                    case 'e':
-                        directions.add(Direction.East);
-                        break;
-                    case 'w':
-                        directions.add(Direction.West);
-                        break;
-                    case 's':
+                    case 'e' -> directions.add(Direction.East);
+                    case 'w' -> directions.add(Direction.West);
+                    case 's' -> {
                         if (line.charAt(index + 1) == 'e') {
                             directions.add(Direction.SouthEast);
                         } else {
                             directions.add(Direction.SouthWest);
                         }
                         index++;
-                        break;
-                    case 'n':
+                    }
+                    case 'n' -> {
                         if (line.charAt(index + 1) == 'e') {
                             directions.add(Direction.NorthEast);
                         } else {
                             directions.add(Direction.NorthWest);
                         }
                         index++;
-                        break;
-                    default:
+                    }
+                    default -> {
                         assert false : "Should not get here";
+                    }
                 }
                 index++;
             }
         }
     }
 
-    long problem1() {
+    public long problem1() {
         for (List<Direction> directions : directionList) {
             HexPositionPointy targetTile = new HexPositionPointy(0, 0);
             for (Direction direction : directions) {
@@ -68,7 +65,7 @@ public class Day24LobbyLayout {
         return tiles.values().stream().filter(t -> t == Color.Black).count();
     }
 
-    long problem2() {
+    public long problem2() {
         problem1();
 
         for (int day = 0; day < 100; day++) {

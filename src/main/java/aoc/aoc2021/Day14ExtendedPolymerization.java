@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day14ExtendedPolymerization {
 
-    final Map<String, Rule> rules = new HashMap<>();
-    String polymer;
+    private final Map<String, Rule> rules = new HashMap<>();
+    private String polymer;
 
     public Day14ExtendedPolymerization(List<String> inputLines) {
         Pattern polymerPattern = Pattern.compile("^(\\w+)$");
@@ -31,7 +31,7 @@ public class Day14ExtendedPolymerization {
         }
     }
 
-    long problem1() {
+    public long problem1() {
         String p = polymer;
         StringBuilder nextPolymer = new StringBuilder();
         for (int i = 0; i < 10; i++) {
@@ -56,7 +56,7 @@ public class Day14ExtendedPolymerization {
         return max - min;
     }
 
-    long problem2() {
+    public long problem2() {
         Map<String, Long> freq = new HashMap<>();
         for (int j = 0; j < polymer.length() - 1; j++) {
             String pair = polymer.substring(j, j + 2);

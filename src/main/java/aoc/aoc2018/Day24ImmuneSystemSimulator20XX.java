@@ -14,108 +14,6 @@ import static java.util.stream.Collectors.toList;
 
 public class Day24ImmuneSystemSimulator20XX {
 
-    enum Side {
-        IMMUNE_SYSTEM {
-            @Override
-            public String toString() {
-                return "Immune System";
-            }
-        }, INFECTION {
-            @Override
-            public String toString() {
-                return "Infection";
-            }
-        }
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Group {
-        int id;
-        Side side;
-        int units;
-        int hitPoints;
-        int initiative;
-        int damage;
-        String attackType;
-        Set<String> weaknesses;
-        Set<String> immunities;
-        int boost;
-
-        Group(Group group) {
-            id = group.id;
-            side = group.side;
-            units = group.units;
-            hitPoints = group.hitPoints;
-            initiative = group.initiative;
-            damage = group.damage;
-            attackType = group.attackType;
-            weaknesses = group.weaknesses;
-            immunities = group.immunities;
-            boost = group.boost;
-        }
-
-        int effectivePower() {
-            return units * (damage + boost);
-        }
-
-        int computeDamage(Group opponent) {
-            int damage = this.effectivePower();
-            if (opponent.getImmunities().contains(this.attackType)) {
-                damage = 0;
-            } else if (opponent.getWeaknesses().contains(this.attackType)) {
-                damage *= 2;
-            }
-            return damage;
-        }
-
-        int takeDamage(int d) {
-            int killedUnits = d / hitPoints;
-            if (killedUnits < units) {
-                units -= killedUnits;
-            } else {
-                killedUnits = units;
-                units = 0;
-            }
-            return killedUnits;
-        }
-
-        @Override
-        public String toString() {
-            return side + "/id=" + id + "/u=" + units + "/h=" + hitPoints + "/i=" + initiative + "/d=" + damage + "/" + attackType + "/" + weaknesses + "/" + immunities;
-        }
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Battle {
-        Group attacker;
-        Group defender;
-    }
-
-    @Data
-    static class OrderOfBattle {
-        List<Battle> battles = new ArrayList<>();
-
-        void addAttack(Battle a) {
-            battles.add(a);
-        }
-
-        boolean isUnattacked(Group g) {
-            for (Battle b : battles) {
-                if (b.defender == g) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        Optional<Group> getDefender(Group attacker) {
-            Optional<Battle> battle = battles.stream().filter(b -> b.attacker == attacker).findFirst();
-            return battle.map(d -> d.defender);
-        }
-    }
-
     private final List<Group> groups = new ArrayList<>();
 
     public Day24ImmuneSystemSimulator20XX(String fileName) throws IOException {
@@ -236,8 +134,8 @@ public class Day24ImmuneSystemSimulator20XX {
 
         // Choose attacker in descending order of effective power, then initiative
         groupList.stream().sorted(Comparator
-                .comparing(Group::effectivePower)
-                .thenComparing(Group::getInitiative).reversed())
+                        .comparing(Group::effectivePower)
+                        .thenComparing(Group::getInitiative).reversed())
                 .forEach(attacker -> {
                     // System.out.println("Attacker: " + attacker + ", EP: " + attacker.effectivePower());
                     // Chose enemy to attack. Should not have been targeted for attack earlier.
@@ -286,6 +184,108 @@ public class Day24ImmuneSystemSimulator20XX {
             });
         });
         //System.out.println();
+    }
+
+    enum Side {
+        IMMUNE_SYSTEM {
+            @Override
+            public String toString() {
+                return "Immune System";
+            }
+        }, INFECTION {
+            @Override
+            public String toString() {
+                return "Infection";
+            }
+        }
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Group {
+        int id;
+        Side side;
+        int units;
+        int hitPoints;
+        int initiative;
+        int damage;
+        String attackType;
+        Set<String> weaknesses;
+        Set<String> immunities;
+        int boost;
+
+        Group(Group group) {
+            id = group.id;
+            side = group.side;
+            units = group.units;
+            hitPoints = group.hitPoints;
+            initiative = group.initiative;
+            damage = group.damage;
+            attackType = group.attackType;
+            weaknesses = group.weaknesses;
+            immunities = group.immunities;
+            boost = group.boost;
+        }
+
+        int effectivePower() {
+            return units * (damage + boost);
+        }
+
+        int computeDamage(Group opponent) {
+            int damage = this.effectivePower();
+            if (opponent.getImmunities().contains(this.attackType)) {
+                damage = 0;
+            } else if (opponent.getWeaknesses().contains(this.attackType)) {
+                damage *= 2;
+            }
+            return damage;
+        }
+
+        int takeDamage(int d) {
+            int killedUnits = d / hitPoints;
+            if (killedUnits < units) {
+                units -= killedUnits;
+            } else {
+                killedUnits = units;
+                units = 0;
+            }
+            return killedUnits;
+        }
+
+        @Override
+        public String toString() {
+            return side + "/id=" + id + "/u=" + units + "/h=" + hitPoints + "/i=" + initiative + "/d=" + damage + "/" + attackType + "/" + weaknesses + "/" + immunities;
+        }
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Battle {
+        Group attacker;
+        Group defender;
+    }
+
+    @Data
+    static class OrderOfBattle {
+        List<Battle> battles = new ArrayList<>();
+
+        void addAttack(Battle a) {
+            battles.add(a);
+        }
+
+        boolean isUnattacked(Group g) {
+            for (Battle b : battles) {
+                if (b.defender == g) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        Optional<Group> getDefender(Group attacker) {
+            Optional<Battle> battle = battles.stream().filter(b -> b.attacker == attacker).findFirst();
+            return battle.map(d -> d.defender);
+        }
     }
 
 }

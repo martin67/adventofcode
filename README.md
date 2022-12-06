@@ -6,7 +6,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 
 * 2015 - ongoing
 * 2016 - completed!
-* 2017 - ongoing
+* 2017 - completed!
 * 2018 - completed!
 * 2019 - completed!
 * 2020 - completed!

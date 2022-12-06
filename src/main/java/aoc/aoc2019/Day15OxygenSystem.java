@@ -1,7 +1,7 @@
 package aoc.aoc2019;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,20 +20,38 @@ import java.util.stream.Stream;
 @Slf4j
 public class Day15OxygenSystem {
 
+    private final List<String> opcodes;
+
+    public Day15OxygenSystem(List<String> inputLines) {
+        opcodes = Stream.of(inputLines.get(0).split(","))
+                .collect(Collectors.toList());
+    }
+
+    int fewestNumberOfMovementCommands(boolean secondTest) throws InterruptedException, ExecutionException {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        RemoteControl rc = new RemoteControl(secondTest);
+        rc.setInputQueue(ic.getOutputQueue());
+        rc.setOutputQueue(ic.getInputQueue());
+
+        executorService.submit(ic);
+        Future<Integer> futureSum = executorService.submit(rc);
+
+        return futureSum.get();
+    }
+
     @Data
     static class RemoteControl implements Callable<Integer> {
-        private BlockingQueue<BigInteger> inputQueue;
-        private BlockingQueue<BigInteger> outputQueue;
-
+        private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         Map<Position, Integer> map = new HashMap<>();
         Position currentPosition;
         Queue<Position> positionsToCheck = new LinkedList<>();
         Position startPosition;
         Position oxygenSystem;
         boolean secondTest;
-
-        private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+        private BlockingQueue<BigInteger> inputQueue;
+        private BlockingQueue<BigInteger> outputQueue;
 
         public RemoteControl(boolean secondTest) {
             this.secondTest = secondTest;
@@ -119,18 +137,10 @@ public class Day15OxygenSystem {
 
         int go(Direction direction) throws InterruptedException {
             switch (direction) {
-                case North:
-                    outputQueue.add(new BigInteger("1"));
-                    break;
-                case South:
-                    outputQueue.add(new BigInteger("2"));
-                    break;
-                case West:
-                    outputQueue.add(new BigInteger("3"));
-                    break;
-                case East:
-                    outputQueue.add(new BigInteger("4"));
-                    break;
+                case North -> outputQueue.add(new BigInteger("1"));
+                case South -> outputQueue.add(new BigInteger("2"));
+                case West -> outputQueue.add(new BigInteger("3"));
+                case East -> outputQueue.add(new BigInteger("4"));
             }
             return inputQueue.take().intValue();
         }
@@ -148,42 +158,16 @@ public class Day15OxygenSystem {
                     Position pos = new Position(x, y);
                     if (map.containsKey(pos)) {
                         switch (map.get(pos)) {
-                            case 0:
-                                sb.append('#');     // wall
-                                break;
-                            case 1:
-                                sb.append(".");     // normal
-                                break;
-                            case 2:
-                                sb.append("*");     // oxygen
-                                break;
+                            case 0 -> sb.append('#');     // wall
+                            case 1 -> sb.append(".");     // normal
+                            case 2 -> sb.append("*");     // oxygen
                         }
                     } else {
                         sb.append(' ');
                     }
                 }
-                System.out.println(sb.toString());
+                System.out.println(sb);
             }
         }
-    }
-
-    private final List<String> opcodes;
-
-    public Day15OxygenSystem(List<String> inputLines) {
-        opcodes = Stream.of(inputLines.get(0).split(","))
-                .collect(Collectors.toList());
-    }
-
-    int fewestNumberOfMovementCommands(boolean secondTest) throws InterruptedException, ExecutionException {
-        ExecutorService executorService = Executors.newCachedThreadPool();
-        IntcodeComputer ic = new IntcodeComputer(opcodes);
-        RemoteControl rc = new RemoteControl(secondTest);
-        rc.setInputQueue(ic.getOutputQueue());
-        rc.setOutputQueue(ic.getInputQueue());
-
-        executorService.submit(ic);
-        Future<Integer> futureSum = executorService.submit(rc);
-
-        return futureSum.get();
     }
 }

@@ -1,16 +1,16 @@
 package aoc.aoc2016;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Day18LikeARogue {
-    Map<Position, Character> lastRow = new HashMap<>();
-    int width;
-    int safeTiles;
+    private Map<Position, Character> lastRow = new HashMap<>();
+    private int width;
+    private int safeTiles;
 
     public Day18LikeARogue(List<String> inputLines) {
         for (String line : inputLines) {

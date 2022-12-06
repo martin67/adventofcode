@@ -1,7 +1,7 @@
 package aoc.aoc2015;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,18 +14,10 @@ public class Day3PerfectlySphericalHouseInAVacuum {
 
         for (char c : line.toCharArray()) {
             switch (c) {
-                case '^':
-                    position = position.adjacent(Direction.Up);
-                    break;
-                case '>':
-                    position = position.adjacent(Direction.Right);
-                    break;
-                case 'v':
-                    position = position.adjacent(Direction.Down);
-                    break;
-                case '<':
-                    position = position.adjacent(Direction.Left);
-                    break;
+                case '^' -> position = position.adjacent(Direction.Up);
+                case '>' -> position = position.adjacent(Direction.Right);
+                case 'v' -> position = position.adjacent(Direction.Down);
+                case '<' -> position = position.adjacent(Direction.Left);
             }
             housesVisited.add(position);
         }
@@ -43,20 +35,13 @@ public class Day3PerfectlySphericalHouseInAVacuum {
         for (char c : line.toCharArray()) {
             position = (santasTurn) ? santaPosition : robotPosition;
 
-            switch (c) {
-                case '^':
-                    position = position.adjacent(Direction.Up);
-                    break;
-                case '>':
-                    position = position.adjacent(Direction.Right);
-                    break;
-                case 'v':
-                    position = position.adjacent(Direction.Down);
-                    break;
-                case '<':
-                    position = position.adjacent(Direction.Left);
-                    break;
-            }
+            position = switch (c) {
+                case '^' -> position.adjacent(Direction.Up);
+                case '>' -> position.adjacent(Direction.Right);
+                case 'v' -> position.adjacent(Direction.Down);
+                case '<' -> position.adjacent(Direction.Left);
+                default -> position;
+            };
             housesVisited.add(position);
             if (santasTurn) {
                 santaPosition = position;

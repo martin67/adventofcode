@@ -1,18 +1,12 @@
 package aoc.aoc2019;
 
-import aoc.Position;
-import lombok.Data;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
 @Slf4j
 public class Day3CrossedWires {
-
-    @Data
-    static class Wire {
-        Map<Position, Integer> positions = new HashMap<>();
-    }
 
     private final List<Wire> wires = new ArrayList<>();
 
@@ -30,18 +24,10 @@ public class Day3CrossedWires {
 
                 for (int i = 0; i < distance; i++) {
                     switch (direction) {
-                        case "U":
-                            pos = new Position(pos.getX(), pos.getY() - 1);
-                            break;
-                        case "D":
-                            pos = new Position(pos.getX(), pos.getY() + 1);
-                            break;
-                        case "R":
-                            pos = new Position(pos.getX() + 1, pos.getY());
-                            break;
-                        case "L":
-                            pos = new Position(pos.getX() - 1, pos.getY());
-                            break;
+                        case "U" -> pos = new Position(pos.getX(), pos.getY() - 1);
+                        case "D" -> pos = new Position(pos.getX(), pos.getY() + 1);
+                        case "R" -> pos = new Position(pos.getX() + 1, pos.getY());
+                        case "L" -> pos = new Position(pos.getX() - 1, pos.getY());
                     }
                     totalDistance++;
                     if (!wire.positions.containsKey(pos)) {
@@ -72,5 +58,9 @@ public class Day3CrossedWires {
             }
         }
         return Collections.min(crossings.values());
+    }
+
+    static class Wire {
+        Map<Position, Integer> positions = new HashMap<>();
     }
 }

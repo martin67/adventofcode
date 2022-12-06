@@ -38,7 +38,6 @@ public class Day13KnightsOfTheDinnerTable {
                 DefaultWeightedEdge e = graph.addEdge(guest, neighbour);
                 graph.setEdgeWeight(e, happiness);
             }
-
         }
     }
 
@@ -52,10 +51,8 @@ public class Day13KnightsOfTheDinnerTable {
                 happiest = happiness;
             }
         }
-
         return happiest;
     }
-
 
     public int changeInHappinessWithMe() {
         graph.addVertex("Me");
@@ -77,7 +74,6 @@ public class Day13KnightsOfTheDinnerTable {
                 happiest = happiness;
             }
         }
-
         return happiest;
     }
 

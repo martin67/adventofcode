@@ -13,6 +13,27 @@ import java.util.stream.Stream;
 @Slf4j
 public class Day25Cryostasis {
 
+    private final ExecutorService executorService;
+    private final List<String> opcodes;
+
+    public Day25Cryostasis(List<String> inputLines) {
+        executorService = Executors.newCachedThreadPool();
+        opcodes = Stream.of(inputLines.get(0).split(","))
+                .collect(Collectors.toList());
+    }
+
+    String getPassword() throws ExecutionException, InterruptedException {
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        AsciiComputer ac = new AsciiComputer(executorService);
+        ac.setInputQueue(ic.getOutputQueue());
+        ac.setOutputQueue(ic.getInputQueue());
+
+        executorService.submit(ic);
+        Future<String> futureSum = executorService.submit(ac);
+
+        return futureSum.get();
+    }
+
     @Data
     static class AsciiComputer implements Callable<String> {
         ExecutorService executorService;
@@ -119,27 +140,6 @@ public class Day25Cryostasis {
             Thread.sleep(100000);
             return "hej";
         }
-    }
-
-    final ExecutorService executorService;
-    private final List<String> opcodes;
-
-    public Day25Cryostasis(List<String> inputLines) {
-        executorService = Executors.newCachedThreadPool();
-        opcodes = Stream.of(inputLines.get(0).split(","))
-                .collect(Collectors.toList());
-    }
-
-    String getPassword() throws ExecutionException, InterruptedException {
-        IntcodeComputer ic = new IntcodeComputer(opcodes);
-        AsciiComputer ac = new AsciiComputer(executorService);
-        ac.setInputQueue(ic.getOutputQueue());
-        ac.setOutputQueue(ic.getInputQueue());
-
-        executorService.submit(ic);
-        Future<String> futureSum = executorService.submit(ac);
-
-        return futureSum.get();
     }
 
 }

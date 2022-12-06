@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class Day15RambunctiousRecitation {
     // number, round
-    final Map<Integer, Integer> lastSpoken = new HashMap<>();
-    final Map<Integer, Integer> lastSpokenBeforeThen = new HashMap<>();
-    int spokeLast;
+    private final Map<Integer, Integer> lastSpoken = new HashMap<>();
+    private final Map<Integer, Integer> lastSpokenBeforeThen = new HashMap<>();
+    private int spokeLast;
 
     public Day15RambunctiousRecitation(String numbers) {
         int index = 1;
@@ -31,7 +31,7 @@ public class Day15RambunctiousRecitation {
                 if (lastSpoken.containsKey(0)) {
                     lastSpokenBeforeThen.put(0, lastSpoken.get(0));
                 } else {
-                    lastSpokenBeforeThen.put(0, - turn);
+                    lastSpokenBeforeThen.put(0, -turn);
                 }
                 lastSpoken.put(0, turn);
                 spokeLast = 0;
@@ -41,7 +41,7 @@ public class Day15RambunctiousRecitation {
                 if (lastSpoken.containsKey(difference)) {
                     lastSpokenBeforeThen.put(difference, lastSpoken.get(difference));
                 } else {
-                    lastSpokenBeforeThen.put(difference, - turn);
+                    lastSpokenBeforeThen.put(difference, -turn);
                 }
                 lastSpoken.put(difference, turn);
                 spokeLast = difference;

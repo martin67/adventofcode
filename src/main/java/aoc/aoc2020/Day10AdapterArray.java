@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Day10AdapterArray {
-    final List<Integer> adapters = new ArrayList<>();
+    private final List<Integer> adapters = new ArrayList<>();
 
     public Day10AdapterArray(List<String> inputLines) {
         adapters.add(0);
@@ -43,10 +43,8 @@ public class Day10AdapterArray {
             int factor = 1;
 
             switch (reachable) {
-                case 1:
-                    index++;
-                    break;
-                case 2:
+                case 1 -> index++;
+                case 2 -> {
                     factor = 2;
                     if (reachable(index + 1) == 2) {
                         factor = 3;
@@ -60,8 +58,8 @@ public class Day10AdapterArray {
                         }
                     }
                     index += 2;
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     factor = 3;
                     if (reachable(index + 1) == 2) {
                         factor = 4;
@@ -76,7 +74,7 @@ public class Day10AdapterArray {
                         }
                     }
                     index += 3;
-                    break;
+                }
             }
             combinations *= factor;
         }

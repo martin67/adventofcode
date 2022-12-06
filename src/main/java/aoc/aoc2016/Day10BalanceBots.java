@@ -1,7 +1,6 @@
 package aoc.aoc2016;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,42 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day10BalanceBots {
-
-    @Data
-    static class Bot {
-        List<Integer> chips = new ArrayList<>();
-
-        Bot(int chip) {
-            chips.add(chip);
-        }
-
-        void add(int chip) {
-            chips.add(chip);
-        }
-
-        int lower() {
-            return chips.stream().min(Integer::compare).orElse(0);
-        }
-
-        int higher() {
-            return chips.stream().max(Integer::compare).orElse(0);
-        }
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Destination {
-        String type;
-        int destination;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class Instruction {
-        int sourceBot;
-        Destination low;
-        Destination high;
-    }
 
     private final HashMap<Integer, Bot> bots = new HashMap<>();
     private final HashMap<Integer, Integer> outputs = new HashMap<>();
@@ -85,7 +48,6 @@ public class Day10BalanceBots {
     }
 
     private void runFactory() {
-
         boolean done = false;
         while (!done) {
             for (Iterator<Instruction> i = instructions.iterator(); i.hasNext(); ) {
@@ -131,11 +93,44 @@ public class Day10BalanceBots {
         List<Integer> target = Arrays.asList(compareOne, compareTwo);
         return bots.entrySet().stream()
                 .filter(e -> new HashSet<>(e.getValue().chips).containsAll(target))
-                .findFirst().map(Map.Entry::getKey).get();
+                .findFirst().map(Map.Entry::getKey).orElseThrow();
     }
 
     int multiplyOutput() {
         runFactory();
         return outputs.get(0) * outputs.get(1) * outputs.get(2);
+    }
+
+    static class Bot {
+        final List<Integer> chips = new ArrayList<>();
+
+        Bot(int chip) {
+            chips.add(chip);
+        }
+
+        void add(int chip) {
+            chips.add(chip);
+        }
+
+        int lower() {
+            return chips.stream().min(Integer::compare).orElse(0);
+        }
+
+        int higher() {
+            return chips.stream().max(Integer::compare).orElse(0);
+        }
+    }
+
+    @AllArgsConstructor
+    static class Destination {
+        String type;
+        int destination;
+    }
+
+    @AllArgsConstructor
+    static class Instruction {
+        int sourceBot;
+        Destination low;
+        Destination high;
     }
 }

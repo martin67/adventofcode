@@ -1,5 +1,7 @@
 package aoc.aoc2018;
 
+import aoc.aoc2018.Processor.Instruction;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

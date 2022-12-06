@@ -1,13 +1,13 @@
 package aoc.aoc2015;
 
-import aoc.Position;
+import aoc.common.Position;
 
 import java.util.*;
 
 public class Day18LikeAGifForYourCard {
 
     Map<Position, Boolean> lights = new HashMap<>();
-    final Position size = new Position();
+    final Position size = new Position(0,0);
 
     public Day18LikeAGifForYourCard(List<String> inputLines) {
         int y = 0;

@@ -1,7 +1,6 @@
 package aoc.aoc2016;
 
 import com.google.common.collect.Sets;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -50,7 +49,6 @@ public class Day11RadioisotopeThermoelectricGenerators {
         return new State(initialState.toString());
     }
 
-
     public Day11RadioisotopeThermoelectricGenerators(String fileName) throws IOException {
         initialState = readData(fileName);
         finalState = createFinalState(initialState);// kommer aldrig att gå att skapa alla tillstånd i förväg. I fall 2 är det +4M stycken
@@ -64,7 +62,6 @@ public class Day11RadioisotopeThermoelectricGenerators {
         //setupNewGraph(initialState, finalState);
     }
 
-    @Data
     @NoArgsConstructor
     static class State {
         String name;        // E1-HM1-PG3-HG2 etc.

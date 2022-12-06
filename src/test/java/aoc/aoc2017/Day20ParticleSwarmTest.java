@@ -20,8 +20,6 @@ class Day20ParticleSwarmTest {
         assertEquals(expected, new Day20ParticleSwarm(Files.readAllLines(Paths.get(fileName))).problem1());
     }
 
-    // 119 too low
-
     @ParameterizedTest
     @CsvSource({"1, src/test/resources/2017/day20-demo2.txt",
             "571, src/test/resources/2017/day20.txt"})

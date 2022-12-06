@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class Day21AllergenAssessment {
-    final List<Food> foods = new ArrayList<>();
-    final Map<String, Ingredient> ingredients = new HashMap<>();
-    final Map<String, Allergen> allergens = new HashMap<>();
-    Set<Ingredient> usedIngredients;
+    private final List<Food> foods = new ArrayList<>();
+    private final Map<String, Ingredient> ingredients = new HashMap<>();
+    private final Map<String, Allergen> allergens = new HashMap<>();
+    private Set<Ingredient> usedIngredients;
 
     public Day21AllergenAssessment(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(.*) \\(contains (.*)\\)$");
@@ -62,8 +62,7 @@ public class Day21AllergenAssessment {
         }
     }
 
-    int problem1() {
-
+    public int problem1() {
         // Check which allergens that have ingredients that are in every food
         usedIngredients = new HashSet<>(ingredients.values());
 
@@ -87,7 +86,7 @@ public class Day21AllergenAssessment {
         return appears;
     }
 
-    String problem2() {
+    public String problem2() {
         problem1();
         // Remove all unused ingredients
         Set<Ingredient> unusedIngredients = new HashSet<>();

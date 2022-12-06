@@ -1,6 +1,6 @@
 package aoc.aoc2021;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 @Slf4j
 public class Day4GiantSquid {
 
-    final List<Board> boards = new ArrayList<>();
-    List<Integer> draws = new ArrayList<>();
+    private final List<Board> boards = new ArrayList<>();
+    private List<Integer> draws = new ArrayList<>();
 
     public Day4GiantSquid(List<String> inputLines) {
         int lineNumber = 0;
@@ -38,7 +38,7 @@ public class Day4GiantSquid {
 
     }
 
-    int problem1() {
+    public int problem1() {
         for (int draw : draws) {
             for (Board board : boards) {
                 board.addDraw(draw);
@@ -51,7 +51,7 @@ public class Day4GiantSquid {
         return 0;
     }
 
-    int problem2() {
+    public int problem2() {
         Map<Board, Integer> winnerDraws = new HashMap<>();
         Map<Board, Integer> winnerScores = new HashMap<>();
 

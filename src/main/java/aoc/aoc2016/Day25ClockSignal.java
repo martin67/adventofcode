@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Day25ClockSignal {
-    final MonorailComputer computer;
+    private final MonorailComputer computer;
 
     public Day25ClockSignal(List<String> program) {
         computer = new MonorailComputer();

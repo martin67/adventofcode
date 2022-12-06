@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day8IHeardYouLikeRegisters {
 
-    final Map<String, Integer> registers;
-    final List<String> instructions;
+    private final Map<String, Integer> registers;
+    private final List<String> instructions;
 
     public Day8IHeardYouLikeRegisters(List<String> input) {
         registers = new HashMap<>();
@@ -20,7 +20,6 @@ public class Day8IHeardYouLikeRegisters {
     }
 
     public int largestRegisterValue(boolean partTwo) {
-
         // c dec -10 if a >= 1
         Pattern pattern = Pattern.compile("^(\\w+) (dec|inc) (-?\\d+) if (\\w+) (\\W+) (-?\\d+)$");
         Matcher matcher;
@@ -43,28 +42,16 @@ public class Day8IHeardYouLikeRegisters {
                 // Check condition
                 boolean evaluation;
                 switch (condition) {
-                    case ">":
-                        evaluation = registers.get(condReg) > condValue;
-                        break;
-                    case "<":
-                        evaluation = registers.get(condReg) < condValue;
-                        break;
-                    case ">=":
-                        evaluation = registers.get(condReg) >= condValue;
-                        break;
-                    case "<=":
-                        evaluation = registers.get(condReg) <= condValue;
-                        break;
-                    case "==":
-                        evaluation = registers.get(condReg) == condValue;
-                        break;
-                    case "!=":
-                        evaluation = registers.get(condReg) != condValue;
-                        break;
-                    default:
+                    case ">" -> evaluation = registers.get(condReg) > condValue;
+                    case "<" -> evaluation = registers.get(condReg) < condValue;
+                    case ">=" -> evaluation = registers.get(condReg) >= condValue;
+                    case "<=" -> evaluation = registers.get(condReg) <= condValue;
+                    case "==" -> evaluation = registers.get(condReg) == condValue;
+                    case "!=" -> evaluation = registers.get(condReg) != condValue;
+                    default -> {
                         log.error("Unknown operator");
                         evaluation = false;
-                        break;
+                    }
                 }
 
                 if (evaluation) {

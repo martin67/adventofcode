@@ -1,6 +1,6 @@
 package aoc.aoc2017;
 
-import aoc.SpacePosition;
+import aoc.common.SpacePosition;
 import lombok.AllArgsConstructor;
 
 import java.util.*;
@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Day20ParticleSwarm {
-    final List<Particle> particles = new ArrayList<>();
+    private final List<Particle> particles = new ArrayList<>();
 
     public Day20ParticleSwarm(List<String> inputLines) {
         int index = 0;
@@ -27,19 +27,19 @@ public class Day20ParticleSwarm {
         }
     }
 
-    int problem1() {
+    public int problem1() {
         // Lowest acceleration will be closest in the long run
-        TreeMap<Integer, Set<Particle>> accelarationMap = new TreeMap<>();
+        TreeMap<Integer, Set<Particle>> accelerationMap = new TreeMap<>();
 
         for (Particle particle : particles) {
-            accelarationMap.computeIfAbsent(particle.totalAcceleration(), k -> new HashSet<>());
-            accelarationMap.get(particle.totalAcceleration()).add(particle);
+            accelerationMap.computeIfAbsent(particle.totalAcceleration(), k -> new HashSet<>());
+            accelerationMap.get(particle.totalAcceleration()).add(particle);
         }
         // Map entries are sorted by key as it is a tree map
         int shortestDistance = Integer.MAX_VALUE;
         Particle closestParticle = null;
         SpacePosition origo = new SpacePosition(0, 0, 0);
-        for (Particle particle : accelarationMap.firstEntry().getValue()) {
+        for (Particle particle : accelerationMap.firstEntry().getValue()) {
             // select the one closest to (0,0,0)
             if (particle.distance(origo) < shortestDistance) {
                 closestParticle = particle;
@@ -50,8 +50,7 @@ public class Day20ParticleSwarm {
         return closestParticle.index;
     }
 
-    int problem2() {
-
+    public int problem2() {
         Set<Particle> remaining = new HashSet<>(particles);
         for (int i = 0; i < 100; i++) {
 

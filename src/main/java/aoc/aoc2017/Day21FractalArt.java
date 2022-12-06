@@ -3,7 +3,6 @@ package aoc.aoc2017;
 import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day21FractalArt {
-    List<Rule> rules = new ArrayList<>();
+    final List<Rule> rules = new ArrayList<>();
     Set<Position> grid = new HashSet<>();
     int gridSize = 3;
 
@@ -39,7 +38,7 @@ public class Day21FractalArt {
         grid.add(new Position(2, 2));
     }
 
-    int problem1(int iterations) throws IOException {
+    int problem1(int iterations) {
         for (int i = 0; i < iterations; i++) {
             int size;
             Set<Position> nextGrid = new HashSet<>();
@@ -105,10 +104,10 @@ public class Day21FractalArt {
     }
 
     static class Rule {
-        int id;
-        String input;
-        String output;
-        Set<String> possibleInputs = new HashSet<>();
+        final int id;
+        final String input;
+        final String output;
+        final Set<String> possibleInputs = new HashSet<>();
 
         public Rule(int id, String input, String output) {
             this.id = id;

@@ -1,6 +1,6 @@
 package aoc.aoc2016;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,6 +14,42 @@ import java.util.regex.Pattern;
 
 public class Day8TwoFactorAuthentication {
 
+    private final Screen screen;
+    private List<String> instructions;
+
+
+    public Day8TwoFactorAuthentication(int screenWidth, int screenHeight, String fileName) throws IOException {
+        readData(fileName);
+        screen = new Screen(screenWidth, screenHeight);
+    }
+
+    private void readData(String fileName) throws IOException {
+        instructions = Files.readAllLines(Paths.get(fileName));
+    }
+
+    long pixelsLit() {
+        Pattern rectPattern = Pattern.compile("^rect (\\d+)x(\\d+)$");
+        Pattern rotatePattern = Pattern.compile("^rotate (row|column) [xy]=(\\d+) by (\\d+)$");
+
+        for (String row : instructions) {
+            Matcher matcher = rectPattern.matcher(row);
+            if (matcher.find()) {
+                screen.rect(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+            }
+
+            matcher = rotatePattern.matcher(row);
+            if (matcher.find()) {
+                if (matcher.group(1).equals("row")) {
+                    screen.rotateRow(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
+                } else {
+                    screen.rotateColumn(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
+                }
+            }
+        }
+        screen.print();
+        return screen.litPixels();
+    }
+
     @Data
     @AllArgsConstructor
     static class Pixel {
@@ -21,12 +57,11 @@ public class Day8TwoFactorAuthentication {
         //Position pos;
     }
 
-    @Data
     static class Screen {
         final int screenWidth;
         final int screenHeight;
 
-        HashMap<Position, Pixel> screen = new HashMap<>();
+        final HashMap<Position, Pixel> screen = new HashMap<>();
 
         Screen(int width, int height) {
             this.screenWidth = width;
@@ -96,42 +131,5 @@ public class Day8TwoFactorAuthentication {
             }
             System.out.println();
         }
-    }
-
-
-    private final Screen screen;
-    private List<String> instructions;
-
-
-    public Day8TwoFactorAuthentication(int screenWidth, int screenHeight, String fileName) throws IOException {
-        readData(fileName);
-        screen = new Screen(screenWidth, screenHeight);
-    }
-
-    private void readData(String fileName) throws IOException {
-        instructions = Files.readAllLines(Paths.get(fileName));
-    }
-
-    long pixelsLit() {
-        Pattern rectPattern = Pattern.compile("^rect (\\d+)x(\\d+)$");
-        Pattern rotatePattern = Pattern.compile("^rotate (row|column) [xy]=(\\d+) by (\\d+)$");
-
-        for (String row : instructions) {
-            Matcher matcher = rectPattern.matcher(row);
-            if (matcher.find()) {
-                screen.rect(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
-            }
-
-            matcher = rotatePattern.matcher(row);
-            if (matcher.find()) {
-                if (matcher.group(1).equals("row")) {
-                    screen.rotateRow(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
-                } else {
-                    screen.rotateColumn(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
-                }
-            }
-        }
-        screen.print();
-        return screen.litPixels();
     }
 }

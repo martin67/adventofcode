@@ -6,29 +6,29 @@ import java.util.List;
 
 @Slf4j
 public class Day25ComboBreaker {
-    final int cardPublicKey;
-    final int doorPublicKey;
+    private final int cardPublicKey;
+    private final int doorPublicKey;
 
     public Day25ComboBreaker(List<String> inputLines) {
         cardPublicKey = Integer.parseInt(inputLines.get(0));
         doorPublicKey = Integer.parseInt(inputLines.get(1));
     }
 
-   int problem1() {
-       int cardLoopSize = transform(7, cardPublicKey);
-       int doorLoopSize = transform(7, doorPublicKey);
+    public int problem1() {
+        int cardLoopSize = transform(7, cardPublicKey);
+        int doorLoopSize = transform(7, doorPublicKey);
 
-       log.info("Card public key: {}, loop size: {}", cardPublicKey, cardLoopSize);
-       log.info("Door public key: {}, loop size: {}", doorPublicKey, doorLoopSize);
+        log.info("Card public key: {}, loop size: {}", cardPublicKey, cardLoopSize);
+        log.info("Door public key: {}, loop size: {}", doorPublicKey, doorLoopSize);
 
-       int cardEncryptionKey = encryptionKey(doorPublicKey, cardLoopSize);
-       int doorEncryptionKey = encryptionKey(cardPublicKey, doorLoopSize);
+        int cardEncryptionKey = encryptionKey(doorPublicKey, cardLoopSize);
+        int doorEncryptionKey = encryptionKey(cardPublicKey, doorLoopSize);
 
-       log.info("Card encryption key: {}", cardEncryptionKey);
-       log.info("Door encryption key: {}", doorEncryptionKey);
+        log.info("Card encryption key: {}", cardEncryptionKey);
+        log.info("Door encryption key: {}", doorEncryptionKey);
 
-       return cardEncryptionKey;
-   }
+        return cardEncryptionKey;
+    }
 
     int transform(int subjectNumber, int key) {
         int value = 1;

@@ -1,6 +1,6 @@
 package aoc.aoc2021;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day17TrickShot {
 
-    Position upperLeft;
-    Position lowerRight;
+    private Position upperLeft;
+    private Position lowerRight;
 
     public Day17TrickShot(List<String> inputLines) {
         Pattern pattern = Pattern.compile("target area: x=(-?\\d+)..(-?\\d+), y=(-?\\d+)..(-?\\d+)");
@@ -24,13 +24,13 @@ public class Day17TrickShot {
         }
     }
 
-    int problem0(int xVelocity, int yVelocity) {
+    public int problem0(int xVelocity, int yVelocity) {
         Probe probe = new Probe(upperLeft, lowerRight, xVelocity, yVelocity);
         probe.fire();
         return probe.maxHeight;
     }
 
-    int problem1() {
+    public int problem1() {
         int maxHeight = Integer.MIN_VALUE;
         for (int xVelocity = 0; xVelocity < 1000; xVelocity++) {
             for (int yVelocity = -1000; yVelocity < 1000; yVelocity++) {
@@ -46,7 +46,7 @@ public class Day17TrickShot {
         return maxHeight;
     }
 
-    int problem2() {
+    public int problem2() {
         int hits = 0;
         for (int xVelocity = 0; xVelocity < 1000; xVelocity++) {
             for (int yVelocity = -1000; yVelocity < 1000; yVelocity++) {
@@ -59,7 +59,6 @@ public class Day17TrickShot {
         }
         return hits;
     }
-
 
     static class Probe {
         final Position position = new Position(0, 0);

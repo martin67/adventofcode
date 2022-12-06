@@ -6,27 +6,85 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigInteger;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class Day12SubterraneanSustainability {
 
-    final Tunnel tunnel;
-    final int totalGenerations;
-    int generation = 0;
+    private final Tunnel tunnel;
+    private final int totalGenerations;
+    private int generation = 0;
 
+
+    public Day12SubterraneanSustainability(String input, int totalGenerations) {
+        tunnel = new Tunnel();
+        tunnel.init(input);
+        this.totalGenerations = totalGenerations;
+    }
+
+    public void CheckInitialState() {
+        tunnel.print();
+        for (int i = 0; i < totalGenerations; i++) {
+            tunnel.grow();
+            generation++;
+            log.info("potOffset: " + tunnel.getPotOffset());
+            tunnel.print();
+        }
+    }
+
+    public int ComputePlantSum() {
+        tunnel.print();
+        for (int i = 0; i < totalGenerations; i++) {
+            tunnel.grow();
+            generation++;
+            tunnel.print();
+        }
+
+        return tunnel.sumOfPlantsWithOffset();
+    }
+
+    public String ComputeBigPlantSum(BigInteger generations) {
+        // After a while, the pattern is constant, only moving to the right
+        //tunnel.print();
+        int previousSum = -1;
+        int currentSum = tunnel.sumOfPlants(0);
+        while (previousSum != currentSum) {
+            previousSum = currentSum;
+            tunnel.grow();
+            generation++;
+            currentSum = tunnel.sumOfPlants(0);
+            //tunnel.print();
+        }
+
+        // Now the tunnel does not change. Check how many plants there are
+        int numberOfPlants = tunnel.numberOfPlants();
+
+        log.info("After " + (generation - 1) + " generations, the plant pattern does not change");
+        log.info("There are now " + numberOfPlants + " plants in the pattern");
+        log.info("For generation " + generation + ", the value is " + currentSum);
+        log.info("With offset " + tunnel.getPotOffset());
+        log.info("bigsum: " + tunnel.sumOfPlantsWithOffset());
+        BigInteger generationsLeft = generations.subtract(new BigInteger(String.valueOf(generation)));
+        log.info("Generations left to go: " + generationsLeft);
+
+        BigInteger sumLeft = generationsLeft.multiply(new BigInteger(String.valueOf(numberOfPlants)));
+        log.info("Final sum: " + sumLeft);
+
+        BigInteger totalSum = sumLeft.add(new BigInteger(String.valueOf(tunnel.sumOfPlantsWithOffset())));
+        log.info("Total sum: " + totalSum);
+
+        return totalSum.toString();
+
+    }
 
     @Data
     @AllArgsConstructor
-    static
-    class Pot {
+    static class Pot {
         char state;
     }
 
     @Data
     @AllArgsConstructor
-    static
-    class Note {
+    static class Note {
         String pattern;
         char nextState;
     }
@@ -38,8 +96,7 @@ public class Day12SubterraneanSustainability {
         int potOffset;
 
         void init(String input) {
-            List<String> inputStrings = Arrays.stream(input.trim().split("\\n+"))
-                    .collect(Collectors.toList());
+            List<String> inputStrings = Arrays.stream(input.trim().split("\\n+")).toList();
 
             // First row is the initial state
             // initial state: #..#.#..##......###...###
@@ -113,7 +170,6 @@ public class Day12SubterraneanSustainability {
         }
 
         void print() {
-
             System.out.printf("%2d: ", generation);
             int sum = 0;
             int bigSum = 0;
@@ -132,7 +188,6 @@ public class Day12SubterraneanSustainability {
             }
 
             System.out.printf("Sum: %d  Bigsum: %d  Offset: %d", sum, bigSum, potOffset);
-
             System.out.println();
         }
 
@@ -166,67 +221,6 @@ public class Day12SubterraneanSustainability {
             }
             return plants;
         }
-    }
-
-    public Day12SubterraneanSustainability(String input, int totalGenerations) {
-        tunnel = new Tunnel();
-        tunnel.init(input);
-        this.totalGenerations = totalGenerations;
-    }
-
-    public void CheckInitialState() {
-        tunnel.print();
-        for (int i = 0; i < totalGenerations; i++) {
-            tunnel.grow();
-            generation++;
-            log.info("potOffset: " + tunnel.getPotOffset());
-            tunnel.print();
-        }
-    }
-
-    public int ComputePlantSum() {
-        tunnel.print();
-        for (int i = 0; i < totalGenerations; i++) {
-            tunnel.grow();
-            generation++;
-            tunnel.print();
-        }
-
-        return tunnel.sumOfPlantsWithOffset();
-    }
-
-    public String ComputeBigPlantSum(BigInteger generations) {
-        // After a while, the pattern is constant, only moving to the right
-        //tunnel.print();
-        int previousSum = -1;
-        int currentSum = tunnel.sumOfPlants(0);
-        while (previousSum != currentSum) {
-            previousSum = currentSum;
-            tunnel.grow();
-            generation++;
-            currentSum = tunnel.sumOfPlants(0);
-            //tunnel.print();
-        }
-
-        // Now the tunnel does not change. Check how many plants there are
-        int numberOfPlants = tunnel.numberOfPlants();
-
-        log.info("After " + (generation-1) + " generations, the plant pattern does not change");
-        log.info("There are now " + numberOfPlants + " plants in the pattern");
-        log.info("For generation " + generation + ", the value is " + currentSum);
-        log.info("With offset " + tunnel.getPotOffset());
-        log.info("bigsum: " + tunnel.sumOfPlantsWithOffset());
-        BigInteger generationsLeft = generations.subtract(new BigInteger(String.valueOf(generation)));
-        log.info("Generations left to go: " + generationsLeft);
-
-        BigInteger sumLeft = generationsLeft.multiply(new BigInteger(String.valueOf(numberOfPlants)));
-        log.info("Final sum: " + sumLeft);
-
-        BigInteger totalSum = sumLeft.add(new BigInteger(String.valueOf(tunnel.sumOfPlantsWithOffset())));
-        log.info("Total sum: " + totalSum);
-
-        return totalSum.toString();
-
     }
 
 }

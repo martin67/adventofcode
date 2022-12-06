@@ -1,15 +1,14 @@
 package aoc.aoc2020;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Day17ConwayCubes {
-    Set<Position3D> space3D = new HashSet<>();
-    Set<Position4D> space4D = new HashSet<>();
+    private Set<Position3D> space3D = new HashSet<>();
+    private Set<Position4D> space4D = new HashSet<>();
 
     public Day17ConwayCubes(List<String> inputLines) {
         int y = 0;
@@ -26,8 +25,7 @@ public class Day17ConwayCubes {
         }
     }
 
-    int problem1() {
-
+    public int problem1() {
         for (int cycle = 0; cycle < 6; cycle++) {
 
             Set<Position3D> nextSpace = new HashSet<>();
@@ -56,8 +54,7 @@ public class Day17ConwayCubes {
         return space3D.size();
     }
 
-    int problem2() {
-
+    public int problem2() {
         for (int cycle = 0; cycle < 6; cycle++) {
 
             Set<Position4D> nextSpace = new HashSet<>();
@@ -86,7 +83,6 @@ public class Day17ConwayCubes {
         return space4D.size();
     }
 
-    @Data
     @AllArgsConstructor
     static class Position3D {
         int x;
@@ -109,7 +105,7 @@ public class Day17ConwayCubes {
         }
     }
 
-    @Data
+
     @AllArgsConstructor
     static class Position4D {
         int x;

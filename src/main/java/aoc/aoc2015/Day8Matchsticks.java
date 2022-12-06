@@ -28,21 +28,21 @@ public class Day8Matchsticks {
                     it.next();
                     extended++;
                     switch (it.current()) {
-                        case CharacterIterator.DONE:
+                        case CharacterIterator.DONE -> {
                             log.error("Is this legal?");
                             sb.append('\\');
-                            break;
-                        case ('\\'):
+                        }
+                        case ('\\') -> {
                             sb.append('A');
                             it.next();
                             extended++;
-                            break;
-                        case '"':
+                        }
+                        case '"' -> {
                             sb.append('B');
                             it.next();
                             extended++;
-                            break;
-                        case 'x':
+                        }
+                        case 'x' -> {
                             char a = it.next();
                             char b = it.next();
                             if (Character.digit(a, 16) != -1 && Character.digit(b, 16) != -1) {
@@ -53,12 +53,12 @@ public class Day8Matchsticks {
                                 // back one
                                 it.previous();
                             }
-                            break;
-                        default:
+                        }
+                        default -> {
                             log.error("Is this legal?");
                             sb.append('C').append(it.current());
                             it.next();
-                            break;
+                        }
                     }
                 } else {
                     sb.append(it.current());

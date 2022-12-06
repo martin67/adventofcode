@@ -1,7 +1,7 @@
 package aoc.aoc2019;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -18,21 +18,53 @@ import java.util.stream.Stream;
 @Slf4j
 public class Day17SetAndForget {
 
+    private final ExecutorService executorService;
+    private final List<String> opcodes;
+
+    public Day17SetAndForget(List<String> inputLines) {
+        executorService = Executors.newCachedThreadPool();
+        opcodes = Stream.of(inputLines.get(0).split(","))
+                .collect(Collectors.toList());
+    }
+
+    int sumOfAlignmentParameters() throws InterruptedException, ExecutionException {
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        RemoteControl rc = new RemoteControl(false);
+        rc.setInputQueue(ic.getOutputQueue());
+        rc.setOutputQueue(ic.getInputQueue());
+
+        executorService.submit(ic);
+        Future<Integer> futureSum = executorService.submit(rc);
+
+        return futureSum.get();
+    }
+
+    int dustCollected() throws ExecutionException, InterruptedException {
+        opcodes.set(0, "2");
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        RemoteControl rc = new RemoteControl(true);
+        rc.setInputQueue(ic.getOutputQueue());
+        rc.setOutputQueue(ic.getInputQueue());
+
+        executorService.submit(ic);
+        Future<Integer> futureSum = executorService.submit(rc);
+
+        return futureSum.get();
+    }
+
     @Data
     static class RemoteControl implements Callable<Integer> {
-        private BlockingQueue<BigInteger> inputQueue;
-        private BlockingQueue<BigInteger> outputQueue;
-
+        private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
         Map<Position, Integer> map = new HashMap<>();
         Position robotPosition;
         Direction robotDirection;
         boolean dustCollector;
-        private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-
         String mainRoutine = "A,A,B,C,B,C,B,C,B,A";
         String pathA = "R,6,L,12,R,6";
         String pathB = "L,12,R,6,L,8,L,12";
         String pathC = "R,12,L,10,L,10";
+        private BlockingQueue<BigInteger> inputQueue;
+        private BlockingQueue<BigInteger> outputQueue;
 
         public RemoteControl(boolean dustCollector) {
             this.dustCollector = dustCollector;
@@ -46,9 +78,8 @@ public class Day17SetAndForget {
             int total = 0;
             while (total < 2497) {
                 int output = inputQueue.take().intValue();
-                switch (output) {
-                    case 35:        // #
-                    case 94:        // vacuum robot
+                switch (output) {        // #
+                    case 35, 94 -> {        // vacuum robot
                         Position pos = new Position(x, y);
                         map.put(pos, output);
                         graph.addVertex(pos);
@@ -63,18 +94,17 @@ public class Day17SetAndForget {
                             robotDirection = Direction.North;
                         }
                         x++;
-                        break;
-                    case 46:        // .
-                        x++;
-                        break;
-                    case 10:        // newline
+                    }
+                    case 46 ->        // .
+                            x++;
+                    case 10 -> {        // newline
                         x = 0;
                         y++;
-                        break;
-                    default:
+                    }
+                    default -> {
                         log.error("Oops, {} at {},{}", output, x, y);
                         x++;
-                        break;
+                    }
                 }
                 //System.out.print((char) output);
                 total++;
@@ -272,40 +302,6 @@ public class Day17SetAndForget {
         int pathSize(List<String> path) {
             return String.join(",", path).length();
         }
-    }
-
-    final ExecutorService executorService;
-    private final List<String> opcodes;
-
-    public Day17SetAndForget(List<String> inputLines) {
-        executorService = Executors.newCachedThreadPool();
-        opcodes = Stream.of(inputLines.get(0).split(","))
-                .collect(Collectors.toList());
-    }
-
-    int sumOfAlignmentParameters() throws InterruptedException, ExecutionException {
-        IntcodeComputer ic = new IntcodeComputer(opcodes);
-        RemoteControl rc = new RemoteControl(false);
-        rc.setInputQueue(ic.getOutputQueue());
-        rc.setOutputQueue(ic.getInputQueue());
-
-        executorService.submit(ic);
-        Future<Integer> futureSum = executorService.submit(rc);
-
-        return futureSum.get();
-    }
-
-    int dustCollected() throws ExecutionException, InterruptedException {
-        opcodes.set(0, "2");
-        IntcodeComputer ic = new IntcodeComputer(opcodes);
-        RemoteControl rc = new RemoteControl(true);
-        rc.setInputQueue(ic.getOutputQueue());
-        rc.setOutputQueue(ic.getInputQueue());
-
-        executorService.submit(ic);
-        Future<Integer> futureSum = executorService.submit(rc);
-
-        return futureSum.get();
     }
 
 }

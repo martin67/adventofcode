@@ -1,7 +1,7 @@
 package aoc.aoc2021;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Day20TrenchMap {
 
-    final String algorithm;
-    final Set<Position> map = new HashSet<>();
+    private final String algorithm;
+    private final Set<Position> map = new HashSet<>();
 
     public Day20TrenchMap(List<String> inputLines) {
         algorithm = inputLines.get(0);

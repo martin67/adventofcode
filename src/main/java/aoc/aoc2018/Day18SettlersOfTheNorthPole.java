@@ -1,6 +1,6 @@
 package aoc.aoc2018;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +14,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class Day18SettlersOfTheNorthPole {
-
-    @Data
-    @AllArgsConstructor
-    static class Acre {
-        Position position;
-        char type;
-        char newType;
-    }
 
     private final Set<Acre> collectionArea = new HashSet<>();
     private int areaWidth;
@@ -78,7 +70,6 @@ public class Day18SettlersOfTheNorthPole {
         return adjacentAcres;
     }
 
-
     int computeResourceValue() {
         int value = 0;
 
@@ -110,12 +101,8 @@ public class Day18SettlersOfTheNorthPole {
         collectionArea.stream().filter(acre -> acre.getType() == '#')
                 .forEach(acre -> acre.setNewType('.'));
         collectionArea.stream().filter(acre -> acre.getType() == '#')
-                .filter(acre -> getAdjacentAcres(acre).stream()
-                        .filter(acre1 -> acre1.getType() == '#')
-                        .count() >= 1)
-                .filter(acre -> getAdjacentAcres(acre).stream()
-                        .filter(acre1 -> acre1.getType() == '|')
-                        .count() >= 1)
+                .filter(acre -> getAdjacentAcres(acre).stream().anyMatch(acre1 -> acre1.getType() == '#'))
+                .filter(acre -> getAdjacentAcres(acre).stream().anyMatch(acre1 -> acre1.getType() == '|'))
                 .forEach(acre -> acre.setNewType('#'));
 
         collectionArea.forEach(acre -> acre.setType(acre.getNewType()));
@@ -127,7 +114,6 @@ public class Day18SettlersOfTheNorthPole {
     }
 
     int totalResourceValue() throws IOException {
-
         BigInteger minutes = new BigInteger("1000000000");
         BigInteger modulo = minutes.mod(new BigInteger("28"));
         // modulo = 20
@@ -183,7 +169,6 @@ public class Day18SettlersOfTheNorthPole {
                     System.out.println("Found " + matches + " matches for window : " + window + ", on pos: " + valuesIndex);
                 }
             }
-
         }
 
 
@@ -200,7 +185,6 @@ public class Day18SettlersOfTheNorthPole {
         // 189980 too low...
         // 195290 correct
 
-
         return 195290;
     }
 
@@ -212,6 +196,14 @@ public class Day18SettlersOfTheNorthPole {
             }
         }
         return match;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Acre {
+        Position position;
+        char type;
+        char newType;
     }
 
 }

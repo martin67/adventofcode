@@ -1,7 +1,7 @@
 package aoc.aoc2017;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class Day19ASeriesOfTubes {
 
-    final Map<Position, String> lines = new HashMap<>();
+    private final Map<Position, String> lines = new HashMap<>();
 
     public Day19ASeriesOfTubes(List<String> inputLines) {
         int y = 0;
@@ -26,7 +26,7 @@ public class Day19ASeriesOfTubes {
         }
     }
 
-    Result problem1() {
+    public Result problem1() {
         StringBuilder letters = new StringBuilder();
         int steps = 0;
         boolean done = false;
@@ -35,7 +35,7 @@ public class Day19ASeriesOfTubes {
         Position start = lines.entrySet().stream()
                 .filter(e -> e.getKey().getY() == 0)
                 .filter(e -> e.getValue().equals("|"))
-                .map(Map.Entry::getKey).findFirst().get();
+                .map(Map.Entry::getKey).findFirst().orElseThrow();
 
         Direction dir = Direction.Down;
         Position pos = start;

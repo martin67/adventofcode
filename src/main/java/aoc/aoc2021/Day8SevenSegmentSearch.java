@@ -6,15 +6,15 @@ import java.util.*;
 
 @Slf4j
 public class Day8SevenSegmentSearch {
-    static final int SEGMENT_TOP = 0;
-    static final int SEGMENT_UPPER_LEFT = 1;
-    static final int SEGMENT_UPPER_RIGHT = 2;
-    static final int SEGMENT_MIDDLE = 3;
-    static final int SEGMENT_LOWER_LEFT = 4;
-    static final int SEGMENT_LOWER_RIGHT = 5;
-    static final int SEGMENT_BOTTOM = 6;
+    private static final int SEGMENT_TOP = 0;
+    private static final int SEGMENT_UPPER_LEFT = 1;
+    private static final int SEGMENT_UPPER_RIGHT = 2;
+    private static final int SEGMENT_MIDDLE = 3;
+    private static final int SEGMENT_LOWER_LEFT = 4;
+    private static final int SEGMENT_LOWER_RIGHT = 5;
+    private static final int SEGMENT_BOTTOM = 6;
 
-    final List<DigitEntry> entries = new ArrayList<>();
+    private final List<DigitEntry> entries = new ArrayList<>();
 
     public Day8SevenSegmentSearch(List<String> inputLines) {
         inputLines.forEach(line -> {
@@ -36,7 +36,7 @@ public class Day8SevenSegmentSearch {
         });
     }
 
-    int problem1() {
+    public int problem1() {
         int digits = 0;
         for (DigitEntry digitEntry : entries) {
             for (String output : digitEntry.outputs) {
@@ -48,7 +48,7 @@ public class Day8SevenSegmentSearch {
         return digits;
     }
 
-    int problem2() {
+    public int problem2() {
         int totalSum = 0;
         Set<Integer> number_zero = new HashSet<>();
         number_zero.add(SEGMENT_TOP);
@@ -130,22 +130,22 @@ public class Day8SevenSegmentSearch {
             }
             for (String pattern : digitEntry.patterns) {
                 switch (pattern.length()) {
-                    case 2: // 1
+                    case 2 -> { // 1
                         for (int i = 0; i < 3; i++) {
                             probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
                             probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
                         }
-                        break;
+                    }
 
-                    case 3: // 7
+                    case 3 -> { // 7
                         for (int i = 0; i < 3; i++) {
                             probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
                             probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
                             probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
                         }
-                        break;
+                    }
 
-                    case 4: // 4
+                    case 4 -> { // 4
                         for (int i = 0; i < 3; i++) {
 
                             probs.put(SEGMENT_UPPER_LEFT, addProbs(probs.get(SEGMENT_UPPER_LEFT), pattern));
@@ -153,9 +153,9 @@ public class Day8SevenSegmentSearch {
                             probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
                             probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
                         }
-                        break;
+                    }
 
-                    case 5: // 2, 3 or 5
+                    case 5 -> { // 2, 3 or 5
                         //  2
                         probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
                         probs.put(SEGMENT_UPPER_RIGHT, addProbs(probs.get(SEGMENT_UPPER_RIGHT), pattern));
@@ -176,9 +176,9 @@ public class Day8SevenSegmentSearch {
                         probs.put(SEGMENT_MIDDLE, addProbs(probs.get(SEGMENT_MIDDLE), pattern));
                         probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
                         probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
-                        break;
+                    }
 
-                    case 6: // 0, 6 or 9
+                    case 6 -> { // 0, 6 or 9
                         // 0
                         probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
                         probs.put(SEGMENT_UPPER_LEFT, addProbs(probs.get(SEGMENT_UPPER_LEFT), pattern));
@@ -202,9 +202,9 @@ public class Day8SevenSegmentSearch {
                         probs.put(SEGMENT_MIDDLE, addProbs(probs.get(SEGMENT_MIDDLE), pattern));
                         probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
                         probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
-                        break;
+                    }
 
-                    case 7: // 8
+                    case 7 -> { // 8
                         for (int i = 0; i < 3; i++) {
                             probs.put(SEGMENT_TOP, addProbs(probs.get(SEGMENT_TOP), pattern));
                             probs.put(SEGMENT_UPPER_LEFT, addProbs(probs.get(SEGMENT_UPPER_LEFT), pattern));
@@ -214,7 +214,7 @@ public class Day8SevenSegmentSearch {
                             probs.put(SEGMENT_LOWER_RIGHT, addProbs(probs.get(SEGMENT_LOWER_RIGHT), pattern));
                             probs.put(SEGMENT_BOTTOM, addProbs(probs.get(SEGMENT_BOTTOM), pattern));
                         }
-                        break;
+                    }
                 }
             }
 

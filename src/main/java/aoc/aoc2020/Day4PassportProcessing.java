@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Day4PassportProcessing {
-    final List<Passport> passports = new ArrayList<>();
+    private final List<Passport> passports = new ArrayList<>();
 
     public Day4PassportProcessing(List<String> inputLines) {
         Map<String, String> fields = new HashMap<>();
@@ -29,30 +29,14 @@ public class Day4PassportProcessing {
         for (String key : fields.keySet()) {
             String value = fields.get(key);
             switch (key) {
-                case "byr":
-                    passport.byr = value;
-                    break;
-                case "iyr":
-                    passport.iyr = value;
-                    break;
-                case "eyr":
-                    passport.eyr = value;
-                    break;
-                case "hgt":
-                    passport.hgt = value;
-                    break;
-                case "hcl":
-                    passport.hcl = value;
-                    break;
-                case "ecl":
-                    passport.ecl = value;
-                    break;
-                case "pid":
-                    passport.pid = value;
-                    break;
-                case "cid":
-                    passport.cid = value;
-                    break;
+                case "byr" -> passport.byr = value;
+                case "iyr" -> passport.iyr = value;
+                case "eyr" -> passport.eyr = value;
+                case "hgt" -> passport.hgt = value;
+                case "hcl" -> passport.hcl = value;
+                case "ecl" -> passport.ecl = value;
+                case "pid" -> passport.pid = value;
+                case "cid" -> passport.cid = value;
             }
         }
         passports.add(passport);

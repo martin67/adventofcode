@@ -1,7 +1,6 @@
 package aoc.aoc2018;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 class Day1ChronalCalibration {
     int computeFrequency(String input) {
@@ -14,7 +13,7 @@ class Day1ChronalCalibration {
         Set<Integer> previousFrequencies = new HashSet<>();
 
         List<Integer> changes = Arrays.stream(input.trim().split("\\s+"))
-                .map(Integer::parseInt).collect(Collectors.toList());
+                .map(Integer::parseInt).toList();
 
         int sum = 0;
         previousFrequencies.add(0);

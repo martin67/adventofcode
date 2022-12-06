@@ -50,20 +50,20 @@ public class Day12JSAbacusFramework {
         while (in.charAt(index) != ']') {
             Result r;
             switch (in.charAt(index)) {
-                case '[':
+                case '[' -> {
                     r = parseArray(in.substring(index + 1));
                     index += r.index;
                     result.sum += r.sum;
-                    break;
-                case '{':
+                }
+                case '{' -> {
                     r = parseObject(in.substring(index + 1));
                     index += r.index;
                     result.sum += r.sum;
-                    break;
-                default:
+                }
+                default -> {
                     sb.append(in.charAt(index));
                     index++;
-                    break;
+                }
             }
         }
         Pattern pattern = Pattern.compile("(-?\\d+)");
@@ -83,20 +83,20 @@ public class Day12JSAbacusFramework {
         while (in.charAt(index) != '}') {
             Result r;
             switch (in.charAt(index)) {
-                case '[':
+                case '[' -> {
                     r = parseArray(in.substring(index + 1));
                     index += r.index;
                     result.sum += r.sum;
-                    break;
-                case '{':
+                }
+                case '{' -> {
                     r = parseObject(in.substring(index + 1));
                     index += r.index;
                     result.sum += r.sum;
-                    break;
-                default:
+                }
+                default -> {
                     sb.append(in.charAt(index));
                     index++;
-                    break;
+                }
             }
         }
         if (sb.toString().contains("red")) {

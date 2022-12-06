@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Slf4j
 public class Day23CrabCups {
-    final int start;
+    private final int start;
 
     public Day23CrabCups(int start) {
         this.start = start;
@@ -125,7 +125,6 @@ public class Day23CrabCups {
 
             return cups.get(label);
         }
-
 
         void insertThreeCups(Cup destinationCup, List<Integer> cupsPickedUp) {
             Cup last = destinationCup.nextCup;

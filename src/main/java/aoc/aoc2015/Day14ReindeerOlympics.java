@@ -11,10 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
-@Data
 public class Day14ReindeerOlympics {
 
-    private Set<Reindeer> reindeers = new HashSet<>();
+    private final Set<Reindeer> reindeers = new HashSet<>();
 
     public Day14ReindeerOlympics(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(\\w+) can fly (\\d+) km/s for (\\d+) seconds, but then must rest for (\\d+) seconds.$");
@@ -39,7 +38,7 @@ public class Day14ReindeerOlympics {
                 }
             }
         }
-        return reindeers.stream().max(Comparator.comparing(Reindeer::getTotalDistance)).get().totalDistance;
+        return reindeers.stream().max(Comparator.comparing(Reindeer::getTotalDistance)).orElseThrow().totalDistance;
     }
 
     public int winningPoints(int time) {
@@ -50,15 +49,14 @@ public class Day14ReindeerOlympics {
                     reindeer.totalDistance += reindeer.speed;
                 }
             }
-            int leaderDistance = reindeers.stream().max(Comparator.comparing(Reindeer::getTotalDistance)).get().totalDistance;
+            int leaderDistance = reindeers.stream().max(Comparator.comparing(Reindeer::getTotalDistance)).orElseThrow().totalDistance;
             reindeers.stream().filter(r -> r.totalDistance == leaderDistance).forEach(r2 -> r2.points++);
         }
-        return reindeers.stream().max(Comparator.comparing(Reindeer::getPoints)).get().points;
+        return reindeers.stream().max(Comparator.comparing(Reindeer::getPoints)).orElseThrow().points;
     }
 
     @Data
-    static
-    class Reindeer {
+    static class Reindeer {
         String name;
         int speed;
         int flyingTime;

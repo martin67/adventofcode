@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day19MonsterMessages {
-    final Map<Integer, String> rules = new HashMap<>();
-    final List<String> messages = new ArrayList<>();
+    private final Map<Integer, String> rules = new HashMap<>();
+    private final List<String> messages = new ArrayList<>();
 
     public Day19MonsterMessages(List<String> inputLines) {
         Pattern rulePattern = Pattern.compile("^(\\d+): (.*)$");
@@ -31,7 +31,7 @@ public class Day19MonsterMessages {
         }
     }
 
-    long problem1() {
+    public long problem1() {
         String regex = rules.get(0);
         while (!regex.matches("^[a-z |()]+$")) {
             StringBuilder builder = new StringBuilder();
@@ -49,7 +49,7 @@ public class Day19MonsterMessages {
         return messages.stream().filter(a -> a.matches(pattern)).count();
     }
 
-    long problem2() {
+    public long problem2() {
         rules.put(8, "42 | 42 8");
         rules.put(11, "42 31 | 42 11 31");
 
@@ -73,10 +73,8 @@ public class Day19MonsterMessages {
             if (count > 0 && count == prev) {
                 return count;
             }
-
             prev = count;
         }
-
     }
 
 }

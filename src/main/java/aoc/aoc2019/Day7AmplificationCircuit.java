@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class Day7AmplificationCircuit {
 
-    final ExecutorService executorService;
+    private final ExecutorService executorService;
     private final List<String> opcodes;
     private int highestSignal;
 

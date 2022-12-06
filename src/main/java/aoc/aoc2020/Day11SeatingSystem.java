@@ -1,15 +1,15 @@
 package aoc.aoc2020;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 
 import java.util.*;
 
 public class Day11SeatingSystem {
 
-    final Map<Position, Character> seats = new HashMap<>();
-    final int width;
-    final int height;
+    private final Map<Position, Character> seats = new HashMap<>();
+    private final int width;
+    private final int height;
 
     public Day11SeatingSystem(List<String> inputLines) {
         int y = 0;
@@ -125,7 +125,7 @@ public class Day11SeatingSystem {
                     sb.append('.');
                 }
             }
-            System.out.println(sb.toString());
+            System.out.println(sb);
         }
         System.out.println();
     }

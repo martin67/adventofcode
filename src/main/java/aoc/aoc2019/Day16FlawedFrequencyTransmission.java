@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Day16FlawedFrequencyTransmission {
 
-    int[] fft;
+    private int[] fft;
 
     public Day16FlawedFrequencyTransmission(String input) {
         log.info("Creating fft");

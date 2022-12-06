@@ -21,7 +21,7 @@ public class Day2IWasToldThereWouldBeNoMath {
             sides.add(side2);
             sides.add(side3);
             int smallest = sides.stream().mapToInt(i -> i).min().orElseThrow(Exception::new);
-            sides.add(smallest/2);
+            sides.add(smallest / 2);
 
             totalArea += sides.stream().mapToInt(i -> i).sum();
         }

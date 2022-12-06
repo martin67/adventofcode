@@ -1,7 +1,7 @@
 package aoc.aoc2016;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,9 +13,9 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day22GridComputing {
-    final Map<Position, Node> nodes = new HashMap<>();
-    int maxX = 0;
-    int maxY = 0;
+    private final Map<Position, Node> nodes = new HashMap<>();
+    private int maxX = 0;
+    private int maxY = 0;
 
     public Day22GridComputing(@NotNull List<String> inputLines) {
 

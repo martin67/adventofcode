@@ -1,8 +1,7 @@
 package aoc.aoc2019;
 
-import aoc.Direction;
-import aoc.Position;
-import lombok.Data;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigInteger;
@@ -17,58 +16,6 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class Day11SpacePolice {
-
-    @Data
-    static class Panel {
-        Position position;
-        int color;          // black = 0, white = 1
-        int timesPainted;
-
-        public Panel(Position position) {
-            this.position = position;
-        }
-    }
-
-    @Data
-    class Robot {
-        Panel location;
-        Direction direction;
-
-        public Robot(Panel location, Direction direction) {
-            this.location = location;
-            this.direction = direction;
-        }
-
-        void paintAndMove(int color, int turn) {
-            log.debug("Painting {} and turning {}", color, turn);
-            // Paint
-            location.color = color;
-            location.timesPainted++;
-            // Move, turn 0 = left, 1 = right
-            switch (direction) {
-                case Up:
-                    direction = (turn == 0) ? Direction.Left : Direction.Right;
-                    break;
-                case Right:
-                    direction = (turn == 0) ? Direction.Up : Direction.Down;
-                    break;
-                case Down:
-                    direction = (turn == 0) ? Direction.Right : Direction.Left;
-                    break;
-                case Left:
-                    direction = (turn == 0) ? Direction.Down : Direction.Up;
-                    break;
-            }
-            Position newPosition = location.position.adjacent(direction);
-            if (panels.containsKey(newPosition)) {
-                location = panels.get(newPosition);
-            } else {
-                Panel panel = new Panel(newPosition);
-                location = panel;
-                panels.put(newPosition, panel);
-            }
-        }
-    }
 
     private final List<String> opcodes;
     private final Map<Position, Panel> panels;
@@ -127,7 +74,49 @@ public class Day11SpacePolice {
                     sb.append('.');
                 }
             }
-            System.out.println(sb.toString());
+            System.out.println(sb);
+        }
+    }
+
+    static class Panel {
+        Position position;
+        int color;          // black = 0, white = 1
+        int timesPainted;
+
+        public Panel(Position position) {
+            this.position = position;
+        }
+    }
+
+    class Robot {
+        Panel location;
+        Direction direction;
+
+        public Robot(Panel location, Direction direction) {
+            this.location = location;
+            this.direction = direction;
+        }
+
+        void paintAndMove(int color, int turn) {
+            log.debug("Painting {} and turning {}", color, turn);
+            // Paint
+            location.color = color;
+            location.timesPainted++;
+            // Move, turn 0 = left, 1 = right
+            switch (direction) {
+                case Up -> direction = (turn == 0) ? Direction.Left : Direction.Right;
+                case Right -> direction = (turn == 0) ? Direction.Up : Direction.Down;
+                case Down -> direction = (turn == 0) ? Direction.Right : Direction.Left;
+                case Left -> direction = (turn == 0) ? Direction.Down : Direction.Up;
+            }
+            Position newPosition = location.position.adjacent(direction);
+            if (panels.containsKey(newPosition)) {
+                location = panels.get(newPosition);
+            } else {
+                Panel panel = new Panel(newPosition);
+                location = panel;
+                panels.put(newPosition, panel);
+            }
         }
     }
 }

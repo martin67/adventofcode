@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day16PermutationPromenade {
-    List<String> danceMoves = new ArrayList<>();
-    final int programSize;
-    char[] programs;
+    private final int programSize;
+    private List<String> danceMoves = new ArrayList<>();
+    private char[] programs;
 
     public Day16PermutationPromenade(List<String> inputLines, int programSize) {
         this.programSize = programSize;
@@ -24,7 +24,7 @@ public class Day16PermutationPromenade {
     String danceOrder() {
         for (String danceMove : danceMoves) {
             switch (danceMove.charAt(0)) {
-                case 's':
+                case 's' -> {
                     // shift left
                     int spin = Integer.parseInt(danceMove.substring(1));
                     spin = spin % 16;
@@ -37,18 +37,18 @@ public class Day16PermutationPromenade {
                         p2[i] = programs[pos];
                     }
                     programs = p2;
-                    break;
-                case 'x':
+                }
+                case 'x' -> {
                     String[] s = danceMove.substring(1).split("/");
                     int posA = Integer.parseInt(s[0]);
                     int posB = Integer.parseInt(s[1]);
                     swap(programs, posA, posB);
-                    break;
-                case 'p':
+                }
+                case 'p' -> {
                     char a = danceMove.charAt(1);
                     char b = danceMove.charAt(3);
-                    posA = -1;
-                    posB = -1;
+                    int posA = -1;
+                    int posB = -1;
                     for (int i = 0; i < programSize; i++) {
                         if (programs[i] == a) {
                             posA = i;
@@ -58,7 +58,7 @@ public class Day16PermutationPromenade {
                         }
                     }
                     swap(programs, posA, posB);
-                    break;
+                }
             }
         }
         return String.valueOf(programs);

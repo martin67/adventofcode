@@ -6,8 +6,8 @@ import java.util.*;
 
 @Slf4j
 public class Day22CrabCombat {
-    final Deque<Integer> deck1 = new ArrayDeque<>();
-    final Deque<Integer> deck2 = new ArrayDeque<>();
+    private final Deque<Integer> deck1 = new ArrayDeque<>();
+    private final Deque<Integer> deck2 = new ArrayDeque<>();
 
     public Day22CrabCombat(List<String> inputLines) {
         Queue<Integer> player = null;

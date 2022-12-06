@@ -1,6 +1,5 @@
 package aoc.aoc2015;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -9,11 +8,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Data
 @Slf4j
 public class Day7SomeAssemblyRequired {
 
-    Set<Gate> gates = new HashSet<>();
+    final Set<Gate> gates = new HashSet<>();
 
     public Day7SomeAssemblyRequired(List<String> inputLines) {
         //gates.add(Gate.builder().name("AND").build()
@@ -38,7 +36,6 @@ public class Day7SomeAssemblyRequired {
             if (matcher.find()) {
                 gates.add(new Gate("SRC", matcher.group(1), "", matcher.group(2)));
             }
-
         }
     }
 
@@ -76,9 +73,9 @@ public class Day7SomeAssemblyRequired {
 
     class Gate {
         final String name;
-        String inputX;
         final String inputY;
         final String output;
+        String inputX;
         boolean done;
         int finalResult;
 

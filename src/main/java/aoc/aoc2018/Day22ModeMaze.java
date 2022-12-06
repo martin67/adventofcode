@@ -1,6 +1,6 @@
 package aoc.aoc2018;
 
-import aoc.Position;
+import aoc.common.Position;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -14,45 +14,12 @@ import java.util.Set;
 
 public class Day22ModeMaze {
 
-    enum Type {Rocky, Wet, Narrow}
-
-    static class Region {
-        final Position position;
-        int geologicIndex;
-        int erosionLevel;
-        Type type;
-        final Set<Node> nodeSet = new HashSet<>();
-
-        Region(Position position) {
-            this.position = position;
-        }
-    }
-
-    enum Tool {Torch, Gear, Neither}
-
-    static class Node {
-        final Region region;
-        Tool toolUsed;
-
-        Node(Region region) {
-            this.region = region;
-        }
-
-        @Override   // [1,2]/Rocky/Gear
-        public String toString() {
-            return "[" + region.position.getX() + "," + region.position.getY() + "]/" + region.type + "/" + toolUsed;
-        }
-    }
-
-
     private final Map<Position, Region> cave = new HashMap<>();
     private final Set<Node> nodes = new HashSet<>();
     private final Position mouth;
     private final Position target;
     private final Position maxCave;
-
     private final Graph<String, DefaultWeightedEdge> g = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-
 
     public Day22ModeMaze(int depth, Position target) {
         this.mouth = new Position(0, 0);
@@ -80,15 +47,9 @@ public class Day22ModeMaze {
                 }
                 r.erosionLevel = (r.geologicIndex + depth) % 20183;
                 switch (r.erosionLevel % 3) {
-                    case 0:
-                        r.type = Type.Rocky;
-                        break;
-                    case 1:
-                        r.type = Type.Wet;
-                        break;
-                    case 2:
-                        r.type = Type.Narrow;
-                        break;
+                    case 0 -> r.type = Type.Rocky;
+                    case 1 -> r.type = Type.Wet;
+                    case 2 -> r.type = Type.Narrow;
                 }
                 cave.put(r.position, r);
             }
@@ -104,18 +65,18 @@ public class Day22ModeMaze {
             Node n2 = new Node(r);
 
             switch (r.type) {
-                case Rocky:
+                case Rocky -> {
                     n1.toolUsed = Tool.Torch;
                     n2.toolUsed = Tool.Gear;
-                    break;
-                case Wet:
+                }
+                case Wet -> {
                     n1.toolUsed = Tool.Gear;
                     n2.toolUsed = Tool.Neither;
-                    break;
-                case Narrow:
+                }
+                case Narrow -> {
                     n1.toolUsed = Tool.Torch;
                     n2.toolUsed = Tool.Neither;
-                    break;
+                }
             }
             nodes.add(n1);
             nodes.add(n2);
@@ -218,8 +179,8 @@ public class Day22ModeMaze {
 //        printCave();
         initNodes();
 
-        Node start = nodes.stream().filter(n -> n.region.position.equals(mouth) && n.toolUsed == Tool.Torch).findFirst().get();
-        Node end = nodes.stream().filter(n -> n.region.position.equals(target) && n.toolUsed == Tool.Torch).findFirst().get();
+        Node start = nodes.stream().filter(n -> n.region.position.equals(mouth) && n.toolUsed == Tool.Torch).findFirst().orElseThrow();
+        Node end = nodes.stream().filter(n -> n.region.position.equals(target) && n.toolUsed == Tool.Torch).findFirst().orElseThrow();
 
         System.out.println("Size of cave: " + maxCave.getX() * maxCave.getY() + " (" + maxCave.getX() + "x" + maxCave.getY() + ")");
         System.out.println("Number of vertexes: " + (long) g.vertexSet().size());
@@ -249,5 +210,35 @@ public class Day22ModeMaze {
 //        GraphPath<String, DefaultWeightedEdge> iPath = alg.getPath(start.toString(), end.toString());
 //        return (int) iPath.getWeight();
 
+    }
+
+    enum Type {Rocky, Wet, Narrow}
+
+    enum Tool {Torch, Gear, Neither}
+
+    static class Region {
+        final Position position;
+        final Set<Node> nodeSet = new HashSet<>();
+        int geologicIndex;
+        int erosionLevel;
+        Type type;
+
+        Region(Position position) {
+            this.position = position;
+        }
+    }
+
+    static class Node {
+        final Region region;
+        Tool toolUsed;
+
+        Node(Region region) {
+            this.region = region;
+        }
+
+        @Override   // [1,2]/Rocky/Gear
+        public String toString() {
+            return "[" + region.position.getX() + "," + region.position.getY() + "]/" + region.type + "/" + toolUsed;
+        }
     }
 }

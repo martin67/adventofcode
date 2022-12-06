@@ -42,7 +42,9 @@ public class Day6SignalsAndNoise {
         StringBuilder code = new StringBuilder();
 
         for (Map<Character, Integer> map : charFrequencies) {
-            code.append(map.entrySet().stream().max(Comparator.comparing(Map.Entry<Character, Integer>::getValue)).map(Map.Entry::getKey).get());
+            code.append(map.entrySet().stream()
+                    .max(Comparator.comparing(Map.Entry<Character, Integer>::getValue))
+                    .map(Map.Entry::getKey).orElseThrow());
         }
 
         return code.toString();
@@ -53,7 +55,9 @@ public class Day6SignalsAndNoise {
         StringBuilder code = new StringBuilder();
 
         for (Map<Character, Integer> map : charFrequencies) {
-            code.append(map.entrySet().stream().min(Comparator.comparing(Map.Entry<Character, Integer>::getValue)).map(Map.Entry::getKey).get());
+            code.append(map.entrySet().stream()
+                    .min(Comparator.comparing(Map.Entry<Character, Integer>::getValue))
+                    .map(Map.Entry::getKey).orElseThrow());
         }
 
         return code.toString();

@@ -1,7 +1,7 @@
 package aoc.aoc2019;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -16,44 +16,17 @@ import java.util.*;
 @Slf4j
 public class Day20DonutMaze {
 
-    @Data
-    static class Portal {
-        String name;
-        Position char1;
-        Position char2;
-        Position pos;
-    }
-
-    @Data
-    @EqualsAndHashCode(callSuper = true)
-    static class LayerPosition extends Position {
-        int layer;
-
-        public LayerPosition(int layer, Position pos) {
-            super(pos);
-            this.layer = layer;
-        }
-
-        @Override
-        public String toString() {
-            return "{" + layer +
-                    ": " + this.getX() +
-                    "," + this.getY() +
-                    '}';
-        }
-    }
-
-    final Set<Position> map = new HashSet<>();
-    final Map<Position, Portal> portals = new HashMap<>();
-    final Map<Position, Portal> innerPortals = new HashMap<>();
-    final Map<Position, Portal> outerPortals = new HashMap<>();
-    Position start;
-    Position end;
+    private final Map<Position, Portal> portals = new HashMap<>();
+    private final Map<Position, Portal> innerPortals = new HashMap<>();
+    private final Map<Position, Portal> outerPortals = new HashMap<>();
     private final Graph<Position, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+    private Position start;
+    private Position end;
 
     public Day20DonutMaze(List<String> inputLines) {
         int x;
         int y = 0;
+        Set<Position> map = new HashSet<>();
         for (String line : inputLines) {
             x = 0;
             for (char c : line.toCharArray()) {
@@ -208,6 +181,33 @@ public class Day20DonutMaze {
                     .findFirst().orElseThrow(NoSuchElementException::new);
             LayerPosition dst = new LayerPosition(layer - 1, innerPortal.pos);
             graph.addEdge(src, dst);
+        }
+    }
+
+    @Data
+    static class Portal {
+        String name;
+        Position char1;
+        Position char2;
+        Position pos;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    static class LayerPosition extends Position {
+        int layer;
+
+        public LayerPosition(int layer, Position pos) {
+            super(pos);
+            this.layer = layer;
+        }
+
+        @Override
+        public String toString() {
+            return "{" + layer +
+                    ": " + this.getX() +
+                    "," + this.getY() +
+                    '}';
         }
     }
 }

@@ -1,7 +1,7 @@
 package aoc.aoc2019;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -16,115 +16,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Day18ManyWorldsInterpretation {
 
-    static class Walker {
-        final Collection<Character> keys;
-        final Collection<Character> doors;
-        final String start;
-        final Graph<Character, DefaultWeightedEdge> graph;
-        final DijkstraShortestPath<Character, DefaultWeightedEdge> dijkstraAlg;
-
-        public Walker(Collection<Character> keys, Collection<Character> doors, String start, Graph<Character, DefaultWeightedEdge> graph) {
-            this.keys = keys;
-            this.doors = doors;
-            this.start = start;
-            this.graph = graph;
-            this.dijkstraAlg = new DijkstraShortestPath<>(graph);
-        }
-
-        // return all reachable keys and their distance
-        Map<Character, Map<Character, Integer>> getAllReachableKeys(String startPositions) {
-            Map<Character, Map<Character, Integer>> totalResult = new HashMap<>();
-            for (Character start : startPositions.toCharArray()) {
-                ShortestPathAlgorithm.SingleSourcePaths<Character, DefaultWeightedEdge> iPaths = dijkstraAlg.getPaths(start);
-                Map<Character, Integer> result = new HashMap<>();
-                for (Character key : keys) {
-                    // position is reachable if there are no doors on the shortest path
-                    GraphPath<Character, DefaultWeightedEdge> path = iPaths.getPath(key);
-                    if (path != null) {
-                        List<Character> pathNodes = path.getVertexList();
-                        // remove first and last (start and end)
-                        pathNodes.remove(pathNodes.size() - 1);
-                        pathNodes.remove(0);
-
-                        boolean doorOnPath = false;
-                        for (Character c : pathNodes) {
-                            if (doors.contains(c)) {
-                                doorOnPath = true;
-                                break;
-                            }
-                        }
-
-                        if (!doorOnPath) {
-                            log.debug("Distance from start {} to {}: {}", start, key, path.getWeight());
-                            result.put(key, (int) path.getWeight());
-                        }
-                    }
-                    totalResult.put(start, result);
-                }
-            }
-            return totalResult;
-        }
-
-        int findShortestPath() {
-            // Find all reachable keys and their distance
-            Map<Character, Map<Character, Integer>> allReachableKeys = getAllReachableKeys(start);
-
-            // Check that we haven't tried this path before
-            StringBuilder cacheKey = new StringBuilder();
-            cacheKey.append(start);
-            for (Character c : start.toCharArray()) {
-                Map<Character, Integer> rk = allReachableKeys.get(c);
-                if (rk != null) {
-                    cacheKey.append(rk.keySet().stream().sorted().map(String::valueOf).collect(Collectors.joining()));
-                } else {
-                    cacheKey.append("-");
-                }
-            }
-            if (pathCache.containsKey(cacheKey.toString())) {
-                return pathCache.get(cacheKey.toString());
-            }
-
-            // find the shortest path for all those keys
-            // goto key and open the door
-            int shortestPath = Integer.MAX_VALUE;
-
-            //for (Character s : start.toCharArray()) {
-            for (int i = 0; i < start.length(); i++) {
-                Character s = start.charAt(i);
-                Map<Character, Integer> reachableKeys = allReachableKeys.get(s);
-                if (reachableKeys != null) {
-                    for (Character key : reachableKeys.keySet()) {
-                        Set<Character> newKeys = new HashSet<>(keys);
-                        Set<Character> newDoors = new HashSet<>(doors);
-
-                        int path = reachableKeys.get(key);
-                        newKeys.remove(key);
-                        if (!newKeys.isEmpty()) {
-                            // open the door. Does not matter if there is no door
-                            newDoors.remove(Character.toUpperCase(key));
-                            // and continue
-                            char[] newStart = start.toCharArray();
-                            newStart[i] = key;
-                            path += new Walker(newKeys, newDoors, String.valueOf(newStart), graph).findShortestPath();
-                        }
-                        if (path < shortestPath) {
-                            shortestPath = path;
-                        }
-                    }
-                    pathCache.put(cacheKey.toString(), shortestPath);
-                }
-            }
-            return shortestPath;
-        }
-    }
-
-
-    final Map<Position, Character> keys = new HashMap<>();
-    final Map<Position, Character> doors = new HashMap<>();
-    final Map<Position, Character> starts = new HashMap<>();
+    private final static Map<String, Integer> pathCache = new HashMap<>();
+    private final Map<Position, Character> keys = new HashMap<>();
+    private final Map<Position, Character> doors = new HashMap<>();
+    private final Map<Position, Character> starts = new HashMap<>();
     private final Graph<Position, DefaultWeightedEdge> initialGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
     private final Graph<Character, DefaultWeightedEdge> reducedGraph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-    private final static Map<String, Integer> pathCache = new HashMap<>();
 
     public Day18ManyWorldsInterpretation(List<String> inputLines) {
         Set<Position> map = new HashSet<>();
@@ -254,7 +151,6 @@ public class Day18ManyWorldsInterpretation {
         return result;
     }
 
-
     int shortestPath() {
         log.info("Creating initial walker");
         return new Walker(keys.values(), doors.values(), "0", reducedGraph).findShortestPath();
@@ -263,6 +159,108 @@ public class Day18ManyWorldsInterpretation {
     int shortestMultiplePath() {
         log.info("Creating initial walker");
         return new Walker(keys.values(), doors.values(), "0123", reducedGraph).findShortestPath();
+    }
+
+    static class Walker {
+        final Collection<Character> keys;
+        final Collection<Character> doors;
+        final String start;
+        final Graph<Character, DefaultWeightedEdge> graph;
+        final DijkstraShortestPath<Character, DefaultWeightedEdge> dijkstraAlg;
+
+        public Walker(Collection<Character> keys, Collection<Character> doors, String start, Graph<Character, DefaultWeightedEdge> graph) {
+            this.keys = keys;
+            this.doors = doors;
+            this.start = start;
+            this.graph = graph;
+            this.dijkstraAlg = new DijkstraShortestPath<>(graph);
+        }
+
+        // return all reachable keys and their distance
+        Map<Character, Map<Character, Integer>> getAllReachableKeys(String startPositions) {
+            Map<Character, Map<Character, Integer>> totalResult = new HashMap<>();
+            for (Character start : startPositions.toCharArray()) {
+                ShortestPathAlgorithm.SingleSourcePaths<Character, DefaultWeightedEdge> iPaths = dijkstraAlg.getPaths(start);
+                Map<Character, Integer> result = new HashMap<>();
+                for (Character key : keys) {
+                    // position is reachable if there are no doors on the shortest path
+                    GraphPath<Character, DefaultWeightedEdge> path = iPaths.getPath(key);
+                    if (path != null) {
+                        List<Character> pathNodes = path.getVertexList();
+                        // remove first and last (start and end)
+                        pathNodes.remove(pathNodes.size() - 1);
+                        pathNodes.remove(0);
+
+                        boolean doorOnPath = false;
+                        for (Character c : pathNodes) {
+                            if (doors.contains(c)) {
+                                doorOnPath = true;
+                                break;
+                            }
+                        }
+
+                        if (!doorOnPath) {
+                            log.debug("Distance from start {} to {}: {}", start, key, path.getWeight());
+                            result.put(key, (int) path.getWeight());
+                        }
+                    }
+                    totalResult.put(start, result);
+                }
+            }
+            return totalResult;
+        }
+
+        int findShortestPath() {
+            // Find all reachable keys and their distance
+            Map<Character, Map<Character, Integer>> allReachableKeys = getAllReachableKeys(start);
+
+            // Check that we haven't tried this path before
+            StringBuilder cacheKey = new StringBuilder();
+            cacheKey.append(start);
+            for (Character c : start.toCharArray()) {
+                Map<Character, Integer> rk = allReachableKeys.get(c);
+                if (rk != null) {
+                    cacheKey.append(rk.keySet().stream().sorted().map(String::valueOf).collect(Collectors.joining()));
+                } else {
+                    cacheKey.append("-");
+                }
+            }
+            if (pathCache.containsKey(cacheKey.toString())) {
+                return pathCache.get(cacheKey.toString());
+            }
+
+            // find the shortest path for all those keys
+            // goto key and open the door
+            int shortestPath = Integer.MAX_VALUE;
+
+            //for (Character s : start.toCharArray()) {
+            for (int i = 0; i < start.length(); i++) {
+                Character s = start.charAt(i);
+                Map<Character, Integer> reachableKeys = allReachableKeys.get(s);
+                if (reachableKeys != null) {
+                    for (Character key : reachableKeys.keySet()) {
+                        Set<Character> newKeys = new HashSet<>(keys);
+                        Set<Character> newDoors = new HashSet<>(doors);
+
+                        int path = reachableKeys.get(key);
+                        newKeys.remove(key);
+                        if (!newKeys.isEmpty()) {
+                            // open the door. Does not matter if there is no door
+                            newDoors.remove(Character.toUpperCase(key));
+                            // and continue
+                            char[] newStart = start.toCharArray();
+                            newStart[i] = key;
+                            path += new Walker(newKeys, newDoors, String.valueOf(newStart), graph).findShortestPath();
+                        }
+                        if (path < shortestPath) {
+                            shortestPath = path;
+                        }
+                    }
+                    pathCache.put(cacheKey.toString(), shortestPath);
+                }
+            }
+            return shortestPath;
+        }
     }
 
 }

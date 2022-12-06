@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Day12PassagePathing {
 
-    final Map<String, Cave> caves = new HashMap<>();
+    private final Map<String, Cave> caves = new HashMap<>();
 
     public Day12PassagePathing(List<String> inputLines) {
         for (String line : inputLines) {
@@ -23,11 +23,11 @@ public class Day12PassagePathing {
         }
     }
 
-    int problem1() {
+    public int problem1() {
         return cavePath(caves.get("start"), new ArrayDeque<>());
     }
 
-    int cavePath(Cave c, Deque<Cave> explored) {
+    private int cavePath(Cave c, Deque<Cave> explored) {
         int reachedEnd = 0;
         log.debug("Exploring cave {}", c);
         explored.push(c);
@@ -49,7 +49,7 @@ public class Day12PassagePathing {
         return reachedEnd;
     }
 
-    int problem2() {
+    public int problem2() {
         Set<Cave> smallCaves = caves.values().stream()
                 .filter(Cave::isSmall)
                 .filter(c -> !c.name.equals("start"))
@@ -63,7 +63,7 @@ public class Day12PassagePathing {
         return allPaths.size();
     }
 
-    void cavePath2(Cave cave, Deque<Cave> explored, Set<String> foundPaths, Cave smallCave) {
+    private void cavePath2(Cave cave, Deque<Cave> explored, Set<String> foundPaths, Cave smallCave) {
         log.debug("Exploring cave {}, smallCave: {}", cave, smallCave);
         explored.push(cave);
 
@@ -86,7 +86,7 @@ public class Day12PassagePathing {
         log.debug("Returning from cave {}", cave);
     }
 
-    String printPath(Deque<Cave> explored) {
+    private String printPath(Deque<Cave> explored) {
         Iterator<Cave> it = explored.descendingIterator();
         StringBuilder sb = new StringBuilder();
         while (it.hasNext()) {

@@ -6,7 +6,7 @@ import java.util.*;
 
 @Slf4j
 public class Day17Spinlock {
-    final int steps;
+    private final int steps;
 
     public Day17Spinlock(int steps) {
         this.steps = steps;
@@ -69,7 +69,7 @@ public class Day17Spinlock {
 
     }
 
-    int problem2() {
+    public int problem2() {
         int pos = 0;
         int value = 0;
 

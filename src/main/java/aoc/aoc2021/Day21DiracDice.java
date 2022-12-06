@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day21DiracDice {
-    final List<Player> players = new ArrayList<>();
+    private final List<Player> players = new ArrayList<>();
 
     public Day21DiracDice(List<String> inputLines) {
         Pattern pattern = Pattern.compile("Player (\\d+) starting position: (\\d+)");
@@ -21,7 +21,7 @@ public class Day21DiracDice {
         }
     }
 
-    int problem1() {
+    public int problem1() {
         Dice dice = new Dice();
         Player winner = null;
 
@@ -43,7 +43,7 @@ public class Day21DiracDice {
         return loser.score * dice.rolls;
     }
 
-    int problem2() {
+    public int problem2() {
         return 0;
     }
 

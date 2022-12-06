@@ -20,7 +20,6 @@ public class Day9ExplosivesInCyberspace {
     }
 
     long decompressedVersion1() {
-
         long length = 0;
         for (String message : messages) {
             length = decompress(message, false);
@@ -29,7 +28,6 @@ public class Day9ExplosivesInCyberspace {
     }
 
     long decompressedVersion2() {
-
         long length = 0;
         for (String message : messages) {
             length = decompress(message, true);

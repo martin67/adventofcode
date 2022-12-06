@@ -7,10 +7,10 @@ import java.util.NoSuchElementException;
 
 public class Day13PacketScanners {
     // <Layer, Depth>
-    final Map<Integer, Integer> firewall = new HashMap<>();
+    private final Map<Integer, Integer> firewall = new HashMap<>();
     // <Layer, scanner pos>
-    final Map<Integer, Scanner> scanners = new HashMap<>();
-    final int maxLayer;
+    private final Map<Integer, Scanner> scanners = new HashMap<>();
+    private final int maxLayer;
 
     public Day13PacketScanners(List<String> inputLines) {
         for (String line : inputLines) {
@@ -104,7 +104,6 @@ public class Day13PacketScanners {
             this.position = position;
             this.direction = direction;
         }
-
     }
 
 }

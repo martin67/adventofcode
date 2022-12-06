@@ -1,7 +1,7 @@
 package aoc.aoc2016;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +11,12 @@ import java.util.Set;
 
 @Slf4j
 public class Day17TwoStepsForward {
-    final String passcode;
-    final Set<Position> rooms = new HashSet<>();
-    String shortestPath;
-    String longestPath;
-    final Position start = new Position(0, 0);
-    final Position end = new Position(3, 3);
+    private final String passcode;
+    private final Set<Position> rooms = new HashSet<>();
+    private final Position start = new Position(0, 0);
+    private final Position end = new Position(3, 3);
+    private String shortestPath;
+    private String longestPath;
 
     public Day17TwoStepsForward(String passcode) {
         this.passcode = passcode;
@@ -38,7 +38,6 @@ public class Day17TwoStepsForward {
     }
 
     void pathRunner(Position position, String path) {
-
         if (position.equals(end)) {
             log.debug("Found target {}, path {}", position, path);
             if (shortestPath == null || path.length() < shortestPath.length()) {

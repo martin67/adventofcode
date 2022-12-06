@@ -1,7 +1,7 @@
 package aoc.aoc2020;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
@@ -11,12 +11,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static aoc.Direction.*;
+import static aoc.common.Direction.*;
 
 @Slf4j
 public class Day20JurassicJigsaw {
+    private final Set<Tile> tiles = new HashSet<>();
     private final Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-    final Set<Tile> tiles = new HashSet<>();
 
     public Day20JurassicJigsaw(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^Tile (\\d+):$");
@@ -47,7 +47,7 @@ public class Day20JurassicJigsaw {
         log.info("Number of tiles: {}", tiles.size());
     }
 
-    long problem1() {
+    public long problem1() {
 
         Map<String, Integer> freq = new HashMap<>();
         for (Tile tile : tiles) {
@@ -75,7 +75,7 @@ public class Day20JurassicJigsaw {
         return value;
     }
 
-    long problem2() throws Exception {
+    public long problem2() throws Exception {
         // Find all edges
         problem1();
 
@@ -93,7 +93,7 @@ public class Day20JurassicJigsaw {
         Tile start = firstCorner.alternatives().stream()
                 .filter(t -> firstCorner.externalEdges.contains(t.edge(Up)))
                 .filter(t -> firstCorner.externalEdges.contains(t.edge(Left)))
-                .findFirst().get();
+                .findFirst().orElseThrow();
 
         log.debug("Start tile (0,0) is {}", start);
         bigMap.put(new Position(0, 0), start);
@@ -241,7 +241,7 @@ public class Day20JurassicJigsaw {
             // 3,1 -> 1,6 -> 6,8 -> 8,3
             Tile t = new Tile(id, width, height);
             switch (dir) {
-                case Left:
+                case Left -> {
                     for (int y = 0; y < height; y++) {
                         for (int x = 0; x < width; x++) {
                             if (positions.contains(new Position(x, y))) {
@@ -249,8 +249,8 @@ public class Day20JurassicJigsaw {
                             }
                         }
                     }
-                    break;
-                case Right:
+                }
+                case Right -> {
                     for (int y = 0; y < height; y++) {
                         for (int x = 0; x < width; x++) {
                             if (positions.contains(new Position(x, y))) {
@@ -258,9 +258,7 @@ public class Day20JurassicJigsaw {
                             }
                         }
                     }
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + dir);
+                }
             }
             return t;
         }

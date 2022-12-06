@@ -2,31 +2,15 @@ package aoc.aoc2017;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Slf4j
 public class Day7RecursiveCircus {
 
-    static class Program {
-        final String name;
-        int weight;
-        int weightOfChildren;
-        // child, weight
-        final Map<Program, Integer> children;
-
-        public Program(String name, int weight) {
-            this.name = name;
-            this.weight = weight;
-            this.children = new HashMap<>();
-        }
-
-        public Program(String name) {
-            this.name = name;
-            this.children = new HashMap<>();
-        }
-    }
-
-    final private Map<String, Program> tower;
+    private final Map<String, Program> tower;
 
     public Day7RecursiveCircus(List<String> input) {
         tower = new HashMap<>();
@@ -100,7 +84,7 @@ public class Day7RecursiveCircus {
         return totalWeight;
     }
 
-    private int checkforImbalance() {
+    private int checkForImbalance() {
         int lowestWeight = Integer.MAX_VALUE;
         int changedWeight = 0;
 
@@ -140,7 +124,26 @@ public class Day7RecursiveCircus {
 
     public int computeWeights() {
         recursiveWeight(tower.get(bottomProgramName()));
-        return checkforImbalance();
+        return checkForImbalance();
+    }
+
+    static class Program {
+        final String name;
+        // child, weight
+        final Map<Program, Integer> children;
+        int weight;
+        int weightOfChildren;
+
+        public Program(String name, int weight) {
+            this.name = name;
+            this.weight = weight;
+            this.children = new HashMap<>();
+        }
+
+        public Program(String name) {
+            this.name = name;
+            this.children = new HashMap<>();
+        }
     }
 
 }

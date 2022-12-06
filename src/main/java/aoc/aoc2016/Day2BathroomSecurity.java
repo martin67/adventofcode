@@ -1,7 +1,7 @@
 package aoc.aoc2016;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 
 import java.io.IOException;
 import java.nio.file.Files;

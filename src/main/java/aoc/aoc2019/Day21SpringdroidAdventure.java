@@ -14,10 +14,33 @@ import java.util.stream.Stream;
 @Slf4j
 public class Day21SpringdroidAdventure {
 
+    private final ExecutorService executorService;
+    private final List<String> opcodes;
+
+    public Day21SpringdroidAdventure(List<String> inputLines) {
+        executorService = Executors.newCachedThreadPool();
+        opcodes = Stream.of(inputLines.get(0).split(","))
+                .collect(Collectors.toList());
+    }
+
+    String hullDamage(boolean partTwo) throws ExecutionException, InterruptedException {
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        AsciiComputerInput input = new AsciiComputerInput(partTwo);
+        AsciiComputerOutput output = new AsciiComputerOutput();
+        input.setOutputQueue(ic.getInputQueue());
+        output.setInputQueue(ic.getOutputQueue());
+
+        executorService.submit(ic);
+        executorService.submit(input);
+        Future<String> futureSum = executorService.submit(output);
+
+        return futureSum.get();
+    }
+
     @Data
     static class AsciiComputerInput implements Callable<Integer> {
-        private BlockingQueue<BigInteger> outputQueue;
         boolean partTwo;
+        private BlockingQueue<BigInteger> outputQueue;
 
         public AsciiComputerInput(boolean partTwo) {
             this.partTwo = partTwo;
@@ -84,28 +107,5 @@ public class Day21SpringdroidAdventure {
                 }
             }
         }
-    }
-
-    final ExecutorService executorService;
-    private final List<String> opcodes;
-
-    public Day21SpringdroidAdventure(List<String> inputLines) {
-        executorService = Executors.newCachedThreadPool();
-        opcodes = Stream.of(inputLines.get(0).split(","))
-                .collect(Collectors.toList());
-    }
-
-    String hullDamage(boolean partTwo) throws ExecutionException, InterruptedException {
-        IntcodeComputer ic = new IntcodeComputer(opcodes);
-        AsciiComputerInput input = new AsciiComputerInput(partTwo);
-        AsciiComputerOutput output = new AsciiComputerOutput();
-        input.setOutputQueue(ic.getInputQueue());
-        output.setInputQueue(ic.getOutputQueue());
-
-        executorService.submit(ic);
-        executorService.submit(input);
-        Future<String> futureSum = executorService.submit(output);
-
-        return futureSum.get();
     }
 }

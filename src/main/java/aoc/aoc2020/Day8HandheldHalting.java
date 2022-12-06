@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Day8HandheldHalting {
-    final List<Instruction> instructions = new ArrayList<>();
+    private final List<Instruction> instructions = new ArrayList<>();
 
     public Day8HandheldHalting(List<String> inputLines) {
         for (String line : inputLines) {
@@ -27,21 +27,15 @@ public class Day8HandheldHalting {
         while (!instructionsRun.contains(pc) && pc != program.size()) {
             instructionsRun.add(pc);
             switch (program.get(pc).operation) {
-                case "nop":
-                    pc++;
-                    break;
-
-                case "acc":
+                case "nop" -> pc++;
+                case "acc" -> {
                     accumulator += program.get(pc).argument;
                     pc++;
-                    break;
-
-                case "jmp":
-                    pc += program.get(pc).argument;
-                    break;
-
-                default:
+                }
+                case "jmp" -> pc += program.get(pc).argument;
+                default -> {
                     assert false : "Ooops";
+                }
             }
         }
 
@@ -75,8 +69,8 @@ public class Day8HandheldHalting {
     }
 
     static class Instruction {
-        String operation;
         final int argument;
+        String operation;
 
         public Instruction(String operation, int argument) {
             this.operation = operation;

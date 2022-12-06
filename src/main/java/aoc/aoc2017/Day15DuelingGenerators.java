@@ -1,8 +1,8 @@
 package aoc.aoc2017;
 
 public class Day15DuelingGenerators {
-    final Generator generatorA;
-    final Generator generatorB;
+    private final Generator generatorA;
+    private final Generator generatorB;
 
     public Day15DuelingGenerators(int startA, int startB) {
         generatorA = new Generator("A", 16807, 4, startA);

@@ -10,11 +10,11 @@ import java.util.Map;
 
 @Slf4j
 @Data
-class MonorailComputer {
-    Map<Character, Integer> registers;
-    List<String> program;
-    int instructionPointer;
-    boolean multiplyHack;
+public class MonorailComputer {
+    private Map<Character, Integer> registers;
+    private List<String> program;
+    private int instructionPointer;
+    private boolean multiplyHack;
 
     public MonorailComputer() {
         registers = new HashMap<>();
@@ -22,18 +22,17 @@ class MonorailComputer {
         registers.put('b', 0);
         registers.put('c', 0);
         registers.put('d', 0);
-
     }
 
-    void loadProgram(List<String> input) {
+    public void loadProgram(List<String> input) {
         program = new ArrayList<>(input);
     }
 
-    void loadRegisters(Map<Character, Integer> newRegisters) {
+    public void loadRegisters(Map<Character, Integer> newRegisters) {
         registers = newRegisters;
     }
 
-    void run() {
+    public void run() {
         instructionPointer = 0;
         int signalRepeats = 0;
         int signalStart = getRegister('a');

@@ -1,4 +1,4 @@
-package aoc;
+package aoc.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

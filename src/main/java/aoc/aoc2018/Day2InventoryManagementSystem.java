@@ -4,14 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 class Day2InventoryManagementSystem {
-
-    static class Checksum {
-        int numberOfTwos;
-        int numberOfThrees;
-    }
 
     Checksum computeRowChecksum(String input) {
         Checksum result = new Checksum();
@@ -37,8 +31,7 @@ class Day2InventoryManagementSystem {
 
     int computeChecksum(String input) {
         // Split string into a list
-        List<String> inputStrings = Arrays.stream(input.trim().split("\\s+"))
-                .collect(Collectors.toList());
+        List<String> inputStrings = Arrays.stream(input.trim().split("\\s+")).toList();
 
         int twos = 0, threes = 0;
         for (String string : inputStrings) {
@@ -51,8 +44,7 @@ class Day2InventoryManagementSystem {
 
     String findBoxes(String input) {
         // Split string into a list
-        List<String> inputStrings = Arrays.stream(input.trim().split("\\s+"))
-                .collect(Collectors.toList());
+        List<String> inputStrings = Arrays.stream(input.trim().split("\\s+")).toList();
 
         // loop through all strings
         // compare string char by char and count the number of differences
@@ -71,5 +63,10 @@ class Day2InventoryManagementSystem {
             }
         }
         return null;
+    }
+
+    static class Checksum {
+        int numberOfTwos;
+        int numberOfThrees;
     }
 }

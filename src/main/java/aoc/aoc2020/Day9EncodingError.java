@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day9EncodingError {
-    final int preamble;
-    final List<Long> numbers = new ArrayList<>();
+    private final int preamble;
+    private final List<Long> numbers = new ArrayList<>();
 
     public Day9EncodingError(int preamble, List<String> inputLines) {
         this.preamble = preamble;

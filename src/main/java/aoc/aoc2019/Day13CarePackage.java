@@ -1,7 +1,7 @@
 package aoc.aoc2019;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +14,81 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class Day13CarePackage {
+
+    private final ExecutorService executorService;
+    private final Map<Position, Tile> tiles;
+    private final List<Position> simulatedBallPositions = new ArrayList<>();
+    private final List<Position> liveBallPositions = new ArrayList<>();
+    private final List<String> opcodes;
+    private int score;
+
+    public Day13CarePackage(List<String> inputLines) {
+        executorService = Executors.newCachedThreadPool();
+        opcodes = Stream.of(inputLines.get(0).split(","))
+                .collect(Collectors.toList());
+        tiles = new HashMap<>();
+    }
+
+    long numberOfBlockTiles() throws ExecutionException, InterruptedException {
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        Future<Integer> futureSum = executorService.submit(ic);
+        futureSum.get();
+
+        List<BigInteger> output = new ArrayList<>();
+        ic.getOutputQueue().drainTo(output);
+
+        for (int i = 0; i < output.size(); i += 3) {
+            Position pos = new Position(output.get(i).intValue(), output.get(i + 1).intValue());
+            int id = output.get(i + 2).intValue();
+            if (tiles.containsKey(pos)) {
+                tiles.get(pos).id = id;
+            } else {
+                tiles.put(pos, new Tile(pos, id));
+            }
+        }
+
+        return tiles.values().stream().filter(t -> t.getId() == 2).count();
+    }
+
+    int lastScore() throws InterruptedException, ExecutionException {
+        opcodes.set(0, "2");
+        IntcodeComputer ic = new IntcodeComputer(opcodes);
+        GameController gc = new GameController();
+        gc.setInputQueue(ic.getOutputQueue());
+        gc.setOutputQueue(ic.getInputQueue());
+
+        executorService.submit(ic);
+        Future<Integer> futureSum = executorService.submit(gc);
+        return futureSum.get();
+    }
+
+    void printGame() {
+        // find size of message
+        int minX = tiles.keySet().stream().mapToInt(Position::getX).min().orElse(0);
+        int minY = tiles.keySet().stream().mapToInt(Position::getY).min().orElse(0);
+        int maxX = tiles.keySet().stream().mapToInt(Position::getX).max().orElse(0);
+        int maxY = tiles.keySet().stream().mapToInt(Position::getY).max().orElse(0);
+
+        for (int y = minY; y <= maxY; y++) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(String.format("%02d ", y));
+            for (int x = minX; x <= maxX; x++) {
+                Position pos = new Position(x, y);
+                if (tiles.containsKey(pos)) {
+                    switch (tiles.get(pos).id) {
+                        case 0 -> sb.append('.');     // empty
+                        case 1 -> sb.append("#");     // wall
+                        case 2 -> sb.append("%");     // block
+                        case 3 -> sb.append("_");     // paddle
+                        case 4 -> sb.append("*");     // ball
+                    }
+                } else {
+                    sb.append(' ');
+                }
+            }
+            System.out.println(sb);
+        }
+    }
 
     @Data
     static class Tile {
@@ -192,93 +267,6 @@ public class Day13CarePackage {
             simulation.add(new SimulationResult(stepCounter, new Position(22, 22)));
             log.info("Simulation complete, {} steps", simulation.size());
             return simulation;
-        }
-    }
-
-
-    final ExecutorService executorService;
-    private final List<String> opcodes;
-    final Map<Position, Tile> tiles;
-    int score;
-    final List<Position> simulatedBallPositions = new ArrayList<>();
-    final List<Position> liveBallPositions = new ArrayList<>();
-
-
-    public Day13CarePackage(List<String> inputLines) {
-        executorService = Executors.newCachedThreadPool();
-        opcodes = Stream.of(inputLines.get(0).split(","))
-                .collect(Collectors.toList());
-        tiles = new HashMap<>();
-    }
-
-    long numberOfBlockTiles() throws ExecutionException, InterruptedException {
-        IntcodeComputer ic = new IntcodeComputer(opcodes);
-        Future<Integer> futureSum = executorService.submit(ic);
-        futureSum.get();
-
-        List<BigInteger> output = new ArrayList<>();
-        ic.getOutputQueue().drainTo(output);
-
-        for (int i = 0; i < output.size(); i += 3) {
-            Position pos = new Position(output.get(i).intValue(), output.get(i + 1).intValue());
-            int id = output.get(i + 2).intValue();
-            if (tiles.containsKey(pos)) {
-                tiles.get(pos).id = id;
-            } else {
-                tiles.put(pos, new Tile(pos, id));
-            }
-        }
-
-        return tiles.values().stream().filter(t -> t.getId() == 2).count();
-    }
-
-    int lastScore() throws InterruptedException, ExecutionException {
-        opcodes.set(0, "2");
-        IntcodeComputer ic = new IntcodeComputer(opcodes);
-        GameController gc = new GameController();
-        gc.setInputQueue(ic.getOutputQueue());
-        gc.setOutputQueue(ic.getInputQueue());
-
-        executorService.submit(ic);
-        Future<Integer> futureSum = executorService.submit(gc);
-        return futureSum.get();
-    }
-
-    void printGame() {
-        // find size of message
-        int minX = tiles.keySet().stream().mapToInt(Position::getX).min().orElse(0);
-        int minY = tiles.keySet().stream().mapToInt(Position::getY).min().orElse(0);
-        int maxX = tiles.keySet().stream().mapToInt(Position::getX).max().orElse(0);
-        int maxY = tiles.keySet().stream().mapToInt(Position::getY).max().orElse(0);
-
-        for (int y = minY; y <= maxY; y++) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(String.format("%02d ", y));
-            for (int x = minX; x <= maxX; x++) {
-                Position pos = new Position(x, y);
-                if (tiles.containsKey(pos)) {
-                    switch (tiles.get(pos).id) {
-                        case 0:
-                            sb.append('.');     // empty
-                            break;
-                        case 1:
-                            sb.append("#");     // wall
-                            break;
-                        case 2:
-                            sb.append("%");     // block
-                            break;
-                        case 3:
-                            sb.append("_");     // paddle
-                            break;
-                        case 4:
-                            sb.append("*");     // ball
-                            break;
-                    }
-                } else {
-                    sb.append(' ');
-                }
-            }
-            System.out.println(sb.toString());
         }
     }
 }

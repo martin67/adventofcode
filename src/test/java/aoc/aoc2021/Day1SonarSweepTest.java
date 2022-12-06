@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2021: Day 1: Sonar Sweep")
 class Day1SonarSweepTest {
@@ -19,7 +19,8 @@ class Day1SonarSweepTest {
             "1298, src/test/resources/2021/day1.txt"})
     void problem1(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day1SonarSweep(inputLines).problem1());
+        assertThat(new Day1SonarSweep(inputLines).problem1())
+                .isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -27,7 +28,8 @@ class Day1SonarSweepTest {
             "1248, src/test/resources/2021/day1.txt"})
     void problem2(int expected, String fileName) throws IOException {
         List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day1SonarSweep(inputLines).problem2());
+        assertThat(new Day1SonarSweep(inputLines).problem2())
+                .isEqualTo(expected);
     }
 
 }

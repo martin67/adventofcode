@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Day2Dive {
 
-    final List<Course> courses = new ArrayList<>();
+    private final List<Course> courses = new ArrayList<>();
 
     public Day2Dive(List<String> inputLines) {
         inputLines.forEach(line -> {
@@ -14,7 +14,7 @@ public class Day2Dive {
         });
     }
 
-    int problem1() {
+    public int problem1() {
         int horizontalPosition = 0;
         int depth = 0;
 
@@ -28,7 +28,7 @@ public class Day2Dive {
         return horizontalPosition * depth;
     }
 
-    int problem2() {
+    public int problem2() {
         int horizontalPosition = 0;
         int depth = 0;
         int aim = 0;

@@ -48,28 +48,28 @@ public class Day22WizardSimulator20xx {
                 player.mana -= spell.cost;
                 player.manaSpent += spell.cost;
                 switch (spell.name) {
-                    case "Magic Missile":
+                    case "Magic Missile" -> {
                         log.info("Player casts {}, dealing {} damage.", spell.name, spell.damage);
                         boss.hitPoints -= spell.damage;
-                        break;
-                    case "Drain":
+                    }
+                    case "Drain" -> {
                         log.info("Player casts {}, dealing {} damage, and healing {} hit points.", spell.name, spell.damage, spell.heal);
                         boss.hitPoints -= spell.damage;
                         player.hitPoints += spell.heal;
-                        break;
-                    case "Shield":
+                    }
+                    case "Shield" -> {
                         log.info("Player casts Shield, increasing armor by 7.");
                         player.duration.put(spell, spell.duration);
                         player.armor = 7;
-                        break;
-                    case "Poison":
+                    }
+                    case "Poison" -> {
                         log.info("Player casts Poison.");
                         player.duration.put(spell, spell.duration);
-                        break;
-                    case "Recharge":
+                    }
+                    case "Recharge" -> {
                         log.info("Player casts Recharge.");
                         player.duration.put(spell, spell.duration);
-                        break;
+                    }
                 }
 
                 if (boss.hitPoints > 0) {
@@ -89,25 +89,25 @@ public class Day22WizardSimulator20xx {
             if (player.duration.get(spell) > 0) {
                 player.duration.merge(spell, -1, Integer::sum);
                 switch (spell.name) {
-                    case "Shield":
+                    case "Shield" -> {
                         log.info("Shield's time is now {}.", player.duration.get(spell));
                         player.armor = 7;
                         if (player.duration.get(spell) == 0) {
                             log.info("Shield wears off, decreasing armor by 7.");
                             player.armor = 0;
                         }
-                        break;
-                    case "Poison":
+                    }
+                    case "Poison" -> {
                         log.info("Poison deals 3 damage; its timer is now {}.", player.duration.get(spell));
                         boss.hitPoints -= 3;
-                        break;
-                    case "Recharge":
+                    }
+                    case "Recharge" -> {
                         log.info("Recharge provides 101 mana; its timer is now {}.", player.duration.get(spell));
                         player.mana += 101;
                         if (player.duration.get(spell) == 0) {
                             log.info("Recharge wears off.");
                         }
-                        break;
+                    }
                 }
             }
         }

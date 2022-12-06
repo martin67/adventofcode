@@ -9,40 +9,17 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 
 @Slf4j
 class Day6ChronalCoordinates {
 
-    @Data
-    @RequiredArgsConstructor
-    static
-    class Point {
-        final int x;
-        final int y;
-        boolean infinite = false;
-        int area = 0;
-    }
-
-    @Data
-    @NoArgsConstructor
-    static
-    class Edges {
-        int upper;
-        int lower;
-        int left;
-        int right;
-    }
-
     private final List<Point> pointList = new ArrayList<>();
-
 
     private void readData(String input) {
         // Split string into a list
-        List<String> inputStrings = Arrays.stream(input.trim().split("\\n+"))
-                .collect(Collectors.toList());
+        List<String> inputStrings = Arrays.stream(input.trim().split("\\n+")).toList();
 
         for (String inputString : inputStrings) {
             pointList.add(new Point(
@@ -55,7 +32,6 @@ class Day6ChronalCoordinates {
     private Edges findEdges() {
 
         // Find the points that are on the edges
-
         Edges edges = new Edges();
 
         // Set an initial value;
@@ -95,14 +71,14 @@ class Day6ChronalCoordinates {
         Edges edges = findEdges();
 
         // Loop through all coordinates and find the closest Point.
-        for (int y = edges.getUpper(); y < edges.getLower()+1; y++) {
-            for (int x = edges.getLeft(); x < edges.getRight()+1; x++) {
+        for (int y = edges.getUpper(); y < edges.getLower() + 1; y++) {
+            for (int x = edges.getLeft(); x < edges.getRight() + 1; x++) {
                 // compute the distance to all points
                 int shortestDistance = -1;
                 Point closestPoint = null;
                 for (Point point : pointList) {
                     int distance = abs(x - point.getX()) + abs(y - point.getY());
-                   // log.info("Distance from " + x + "," + y + " to point " + point + ": " + distance);
+                    // log.info("Distance from " + x + "," + y + " to point " + point + ": " + distance);
 
                     if (shortestDistance == -1 || distance < shortestDistance) {
                         shortestDistance = distance;
@@ -142,7 +118,7 @@ class Day6ChronalCoordinates {
         int regionSize = 0;
 
         // Loop through all coordinates and find the closest Point.
-        for (int y = edges.getUpper(); y < edges.getLower()+1; y++) {
+        for (int y = edges.getUpper(); y < edges.getLower() + 1; y++) {
             for (int x = edges.getLeft(); x < edges.getRight() + 1; x++) {
                 // compute the distance to all points
                 int distance = 0;
@@ -158,5 +134,23 @@ class Day6ChronalCoordinates {
         }
 
         return regionSize;
+    }
+
+    @Data
+    @RequiredArgsConstructor
+    static class Point {
+        final int x;
+        final int y;
+        boolean infinite = false;
+        int area = 0;
+    }
+
+    @Data
+    @NoArgsConstructor
+    static class Edges {
+        int upper;
+        int lower;
+        int left;
+        int right;
     }
 }

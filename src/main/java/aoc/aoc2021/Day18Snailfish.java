@@ -25,11 +25,11 @@ public class Day18Snailfish {
         return snailFishNumber.toString();
     }
 
-    int problem1() {
+    public int problem1() {
         return 0;
     }
 
-    int problem2() {
+    public int problem2() {
         return 0;
     }
 

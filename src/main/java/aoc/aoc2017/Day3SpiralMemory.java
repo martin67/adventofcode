@@ -1,6 +1,6 @@
 package aoc.aoc2017;
 
-import aoc.Position;
+import aoc.common.Position;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package aoc.aoc2021;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -10,10 +10,10 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day13TransparentOrigami {
 
-    final Set<Position> dots = new HashSet<>();
-    final List<Instruction> instructions = new ArrayList<>();
-    int xSize;
-    int ySize;
+    private final Set<Position> dots = new HashSet<>();
+    private final List<Instruction> instructions = new ArrayList<>();
+    private int xSize;
+    private int ySize;
 
     public Day13TransparentOrigami(List<String> inputLines) {
         Pattern dotPattern = Pattern.compile("(\\d+),(\\d+)");
@@ -37,12 +37,12 @@ public class Day13TransparentOrigami {
         }
     }
 
-    int problem1() {
+    public int problem1() {
         Set<Position> newSet = fold(instructions.get(0), dots);
         return newSet.size();
     }
 
-    int problem2() {
+    public int problem2() {
         Set<Position> newSet = new HashSet<>(dots);
         for (Instruction instruction : instructions) {
             newSet = fold(instruction, newSet);
@@ -51,7 +51,7 @@ public class Day13TransparentOrigami {
         return 0;
     }
 
-    Set<Position> fold(Instruction instruction, Set<Position> dotSet) {
+    private Set<Position> fold(Instruction instruction, Set<Position> dotSet) {
         Set<Position> newDots = new HashSet<>();
         log.info("Folding {} at {}, size {}x{}", instruction.direction, instruction.line, xSize, ySize);
         switch (instruction.direction) {
@@ -79,7 +79,7 @@ public class Day13TransparentOrigami {
         return newDots;
     }
 
-    void printPaper(Set<Position> dotSet) {
+    private void printPaper(Set<Position> dotSet) {
         for (int y = 0; y < ySize; y++) {
             for (int x = 0; x < xSize; x++) {
                 if (dotSet.contains(new Position(x, y))) {

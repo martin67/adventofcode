@@ -10,13 +10,13 @@ import java.util.Stack;
 @Slf4j
 public class Day10SyntaxScoring {
 
-    final List<String> lines;
+    private final List<String> lines;
 
     public Day10SyntaxScoring(List<String> inputLines) {
         lines = inputLines;
     }
 
-    int problem1() {
+    public int problem1() {
         int points = 0;
         for (String line : lines) {
             points += checkLine(line);
@@ -24,7 +24,7 @@ public class Day10SyntaxScoring {
         return points;
     }
 
-    long problem2() {
+    public long problem2() {
         List<Long> points = new ArrayList<>();
         for (String line : lines) {
             if (checkLine(line) == 0) {

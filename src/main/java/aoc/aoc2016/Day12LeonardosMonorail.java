@@ -11,9 +11,7 @@ public class Day12LeonardosMonorail {
 
     final MonorailComputer computer;
 
-
     public Day12LeonardosMonorail(List<String> program) {
-
         computer = new MonorailComputer();
         computer.loadProgram(program);
     }

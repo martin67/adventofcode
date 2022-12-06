@@ -1,4 +1,4 @@
-package aoc;
+package aoc.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,28 +18,18 @@ public class HexPositionPointy {
     public HexPositionPointy adjacent(Direction direction) {
         HexPositionPointy adj = new HexPositionPointy(col, row);
         switch (direction) {
-            case NorthEast:
+            case NorthEast -> {
                 adj.col++;
                 adj.row--;
-                break;
-            case NorthWest:
-                adj.row--;
-                break;
-            case SouthEast:
-                adj.row++;
-                break;
-            case SouthWest:
+            }
+            case NorthWest -> adj.row--;
+            case SouthEast -> adj.row++;
+            case SouthWest -> {
                 adj.col--;
                 adj.row++;
-                break;
-            case East:
-                adj.col++;
-                break;
-            case West:
-                adj.col--;
-                break;
-            default:
-                assert false : "Illegal direction";
+            }
+            case East -> adj.col++;
+            case West -> adj.col--;
         }
         return adj;
     }

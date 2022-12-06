@@ -9,27 +9,9 @@ import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
-class Day9MarbleMania {
+public class Day9MarbleMania {
 
-    @Data
-    @RequiredArgsConstructor
-    static
-    class Marble {
-        final int id;
-        Marble left;
-        Marble right;
-    }
-
-    @Data
-    @RequiredArgsConstructor
-    static
-    class Player {
-        final int id;
-        long score;
-    }
-
-    long computeScore(int players, int points) {
-
+    public long computeScore(int players, int points) {
         List<Player> playerList = new ArrayList<>();
         for (int i = 0; i < players; i++) {
             playerList.add(new Player(i + 1));
@@ -83,8 +65,23 @@ class Day9MarbleMania {
         }
 
         // Find max score
-        Player highScore = playerList.stream().max(Comparator.comparingLong(Player::getScore)).get();
+        Player highScore = playerList.stream().max(Comparator.comparingLong(Player::getScore)).orElseThrow();
         return highScore.getScore();
+    }
+
+    @Data
+    @RequiredArgsConstructor
+    static class Marble {
+        final int id;
+        Marble left;
+        Marble right;
+    }
+
+    @Data
+    @RequiredArgsConstructor
+    static class Player {
+        final int id;
+        long score;
     }
 
 }

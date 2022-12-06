@@ -25,7 +25,6 @@ public class Day15TimingIsEverything {
     }
 
     int firstTime() {
-
         int time = 0;
         boolean fallThrough = false;
 

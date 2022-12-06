@@ -2,13 +2,14 @@ package aoc.aoc2020;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class Day13ShuttleSearch {
-    final List<Bus> buses = new ArrayList<>();
-    int initialDelay;
-    final List<Long> ids = new ArrayList<>();
+    private final List<Bus> buses = new ArrayList<>();
+    private final List<Long> ids = new ArrayList<>();
+    private int initialDelay;
 
     public Day13ShuttleSearch(List<String> inputLines) {
         initialDelay = Integer.parseInt(inputLines.get(0));
@@ -21,7 +22,6 @@ public class Day13ShuttleSearch {
             }
             departureDelay++;
         }
-
     }
 
     public Day13ShuttleSearch(String input) {
@@ -90,7 +90,6 @@ public class Day13ShuttleSearch {
         void move(int timestamps) {
             location = (location + timestamps + roundTripTime) % roundTripTime;
         }
-
     }
 
 }

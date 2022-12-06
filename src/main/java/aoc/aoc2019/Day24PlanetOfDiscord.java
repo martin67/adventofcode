@@ -1,6 +1,6 @@
 package aoc.aoc2019;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -8,9 +8,9 @@ import java.util.*;
 @Slf4j
 public class Day24PlanetOfDiscord {
 
-    Map<Position, Character> map = new HashMap<>();
-    final Set<String> previousMaps = new HashSet<>();
-    Map<Integer, Character[][]> grids = new TreeMap<>();
+    private final Set<String> previousMaps = new HashSet<>();
+    private Map<Position, Character> map = new HashMap<>();
+    private Map<Integer, Character[][]> grids = new TreeMap<>();
 
     public Day24PlanetOfDiscord(List<String> inputLines) {
         int x;

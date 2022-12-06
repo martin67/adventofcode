@@ -5,17 +5,17 @@ import java.util.List;
 
 public class Day1SonarSweep {
 
-    final List<Integer> inputValues = new ArrayList<>();
+    private final List<Integer> inputValues = new ArrayList<>();
 
     public Day1SonarSweep(List<String> inputLines) {
         inputLines.forEach(line -> inputValues.add(Integer.parseInt(line)));
     }
 
-    int problem1() {
+    public int problem1() {
         return countIncreases(inputValues);
     }
 
-    int problem2() {
+    public int problem2() {
         List<Integer> slidingWindow = new ArrayList<>();
 
         for (int i = 0; i < inputValues.size(); i++) {
@@ -23,7 +23,6 @@ public class Day1SonarSweep {
                 slidingWindow.add(inputValues.get(i) + inputValues.get(i - 1) + inputValues.get(i - 2));
             }
         }
-
         return countIncreases(slidingWindow);
     }
 

@@ -7,8 +7,8 @@ import java.util.List;
 @Slf4j
 public class Day16PacketDecoder {
 
-    final String binary;
-    int versionNumbers = 0;
+    private final String binary;
+    private int versionNumbers = 0;
 
     public Day16PacketDecoder(List<String> inputLines) {
         StringBuilder sb = new StringBuilder();
@@ -20,7 +20,7 @@ public class Day16PacketDecoder {
         binary = sb.toString();
     }
 
-    Result decodePacket(String binaryInput) {
+    private Result decodePacket(String binaryInput) {
         Result result = new Result();
         char lengthTypeId;
         int length;
@@ -204,12 +204,12 @@ public class Day16PacketDecoder {
         return null;
     }
 
-    int problem1() {
+    public int problem1() {
         decodePacket(binary);
         return versionNumbers;
     }
 
-    long problem2() {
+    public long problem2() {
         return decodePacket(binary).value;
     }
 

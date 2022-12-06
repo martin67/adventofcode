@@ -1,7 +1,6 @@
 package aoc.aoc2019;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -13,16 +12,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day14SpaceStoichiometry {
 
-    @Data
-    @AllArgsConstructor
-    static class Recipe {
-        Map<String, Long> inputs;
-        String chemical;
-        long amount;
-    }
-
-    final Map<String, Recipe> recipes = new HashMap<>();
-    final Map<String, Long> surplus = new HashMap<>();
+    private final Map<String, Recipe> recipes = new HashMap<>();
+    private final Map<String, Long> surplus = new HashMap<>();
 
     public Day14SpaceStoichiometry(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(((\\d+) (\\w+),? )+)=> (?<outputAmount>\\d+) (?<outputChemical>\\w+)$");
@@ -83,5 +74,12 @@ public class Day14SpaceStoichiometry {
         } else {
             return search(mid, high);
         }
+    }
+
+    @AllArgsConstructor
+    static class Recipe {
+        Map<String, Long> inputs;
+        String chemical;
+        long amount;
     }
 }

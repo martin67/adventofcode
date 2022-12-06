@@ -10,23 +10,8 @@ import java.util.List;
 @Slf4j
 public class Day14ChocolateCharts {
 
-    @Data
-    @AllArgsConstructor
-    static
-    class Recipe {
-        int value;
-    }
-
-    @Data
-    @AllArgsConstructor
-    static
-    class Elf {
-        int recipeIndex;
-    }
-
-    final List<Recipe> recipes;
-    final List<Elf> elves;
-
+    private final List<Recipe> recipes;
+    private final List<Elf> elves;
 
     public Day14ChocolateCharts() {
         this.recipes = new ArrayList<>();
@@ -38,9 +23,7 @@ public class Day14ChocolateCharts {
     }
 
     void print() {
-        recipes.stream().forEach(r -> {
-            System.out.printf(" %d ", r.getValue());
-        });
+        recipes.forEach(r -> System.out.printf(" %d ", r.getValue()));
         System.out.println();
         System.out.println(elves);
     }
@@ -48,7 +31,7 @@ public class Day14ChocolateCharts {
     String computeScore(int numberOfRecipes) {
         //print();
 
-        for (int round = 0; round < numberOfRecipes+10; round++) {
+        for (int round = 0; round < numberOfRecipes + 10; round++) {
 
             // Compute new recipe
             int newRecipe = 0;
@@ -76,8 +59,8 @@ public class Day14ChocolateCharts {
 
         // get scores for 10 recipes
         StringBuilder score = new StringBuilder();
-        for (int i = numberOfRecipes; i < numberOfRecipes+10; i++) {
-            score.append(String.valueOf(recipes.get(i).value));
+        for (int i = numberOfRecipes; i < numberOfRecipes + 10; i++) {
+            score.append(recipes.get(i).value);
         }
         return score.toString();
     }
@@ -85,7 +68,7 @@ public class Day14ChocolateCharts {
     int computeRecipes(String score) {
 
         List<Recipe> scoreList = new ArrayList<>();
-        for(char c : score.toCharArray()) {
+        for (char c : score.toCharArray()) {
             scoreList.add(new Recipe(Character.getNumericValue(c)));
         }
         boolean foundMatch = false;
@@ -127,7 +110,6 @@ public class Day14ChocolateCharts {
                         break;
                     }
                 }
-
             }
 
             // Move elves
@@ -138,7 +120,6 @@ public class Day14ChocolateCharts {
                 }
             }
 
-
             //print();
             if (numberOfRecipes % 10000 == 0) {
                 //log.info("round: " + numberOfRecipes);
@@ -146,5 +127,17 @@ public class Day14ChocolateCharts {
         }
 
         return numberOfRecipes - score.length();
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Recipe {
+        int value;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Elf {
+        int recipeIndex;
     }
 }

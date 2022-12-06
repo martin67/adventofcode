@@ -10,37 +10,6 @@ public class Day8SpaceImageFormat {
     private final static int LAYER_WIDTH = 25;
     private final static int LAYER_HEIGHT = 6;
     private final static int LAYER_SIZE = LAYER_WIDTH * LAYER_HEIGHT;
-
-    static class Layer {
-        final String pixels;
-
-        Layer(String line) {
-            this.pixels = line;
-        }
-
-        Map<Integer, Integer> getDigitFrequency() {
-            Map<Integer, Integer> digitFrequency = new HashMap<>();
-            for (char c : this.pixels.toCharArray()) {
-                int digit = Character.getNumericValue(c);
-                if (digitFrequency.containsKey(digit)) {
-                    digitFrequency.put(digit, digitFrequency.get(digit) + 1);
-                } else {
-                    digitFrequency.put(digit, 1);
-                }
-            }
-            return digitFrequency;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder output = new StringBuilder();
-            for (int i = 0; i < LAYER_HEIGHT; i++) {
-                output.append(this.pixels, i * LAYER_WIDTH, (i + 1) * LAYER_WIDTH).append("\n");
-            }
-            return output.toString().replaceAll("0", ".");
-        }
-    }
-
     private final List<Layer> layers;
 
     public Day8SpaceImageFormat(List<String> inputLines) {
@@ -78,5 +47,35 @@ public class Day8SpaceImageFormat {
         }
         Layer finalLayer = new Layer(finalString.toString());
         System.out.println(finalLayer);
+    }
+
+    static class Layer {
+        final String pixels;
+
+        Layer(String line) {
+            this.pixels = line;
+        }
+
+        Map<Integer, Integer> getDigitFrequency() {
+            Map<Integer, Integer> digitFrequency = new HashMap<>();
+            for (char c : this.pixels.toCharArray()) {
+                int digit = Character.getNumericValue(c);
+                if (digitFrequency.containsKey(digit)) {
+                    digitFrequency.put(digit, digitFrequency.get(digit) + 1);
+                } else {
+                    digitFrequency.put(digit, 1);
+                }
+            }
+            return digitFrequency;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder output = new StringBuilder();
+            for (int i = 0; i < LAYER_HEIGHT; i++) {
+                output.append(this.pixels, i * LAYER_WIDTH, (i + 1) * LAYER_WIDTH).append("\n");
+            }
+            return output.toString().replaceAll("0", ".");
+        }
     }
 }

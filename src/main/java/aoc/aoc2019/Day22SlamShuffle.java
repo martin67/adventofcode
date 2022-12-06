@@ -12,6 +12,52 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day22SlamShuffle {
 
+    private final List<String> inputLines;
+
+    public Day22SlamShuffle(List<String> inputLines) {
+        this.inputLines = inputLines;
+    }
+
+    int cardPosition(int numberOfCards) {
+        Stack stack = new Stack(numberOfCards);
+
+        Pattern patternDealIntoNewStack = Pattern.compile("^deal into new stack$");
+        Pattern patternDealWithIncrement = Pattern.compile("^deal with increment (-?\\d+)$");
+        Pattern patternCut = Pattern.compile("^cut (-?\\d+)$");
+
+        for (String line : inputLines) {
+            log.info(line);
+            Matcher matcher = patternDealIntoNewStack.matcher(line);
+            if (matcher.find()) {
+                stack.dealIntoNewStack();
+            } else {
+                matcher = patternDealWithIncrement.matcher(line);
+                if (matcher.find()) {
+                    stack.dealWithIncrement(Integer.parseInt(matcher.group(1)));
+                } else {
+                    matcher = patternCut.matcher(line);
+                    if (matcher.find()) {
+                        stack.cut(Integer.parseInt(matcher.group(1)));
+                    }
+                }
+            }
+            log.debug(stack.cards.toString());
+        }
+
+        if (numberOfCards == 10) {
+            return 0;
+        } else {
+            return stack.cards.indexOf(2019);
+        }
+    }
+
+    String numberOnCard(String numberOfCards, String numberOfShuffles) {
+        NewStack ns = new NewStack(new BigInteger(numberOfCards));
+
+        ns.shuffle(new BigInteger(numberOfShuffles));
+        return ns.cardAtPosition(new BigInteger("2020")).toString();
+    }
+
     static class Stack {
         List<Integer> cards = new ArrayList<>();
 
@@ -137,51 +183,5 @@ public class Day22SlamShuffle {
             assert (increment.compareTo(MOD) < 0);
             assert (offset.compareTo(MOD) < 0);
         }
-    }
-
-    final List<String> inputLines;
-
-    public Day22SlamShuffle(List<String> inputLines) {
-        this.inputLines = inputLines;
-    }
-
-    int cardPosition(int numberOfCards) {
-        Stack stack = new Stack(numberOfCards);
-
-        Pattern patternDealIntoNewStack = Pattern.compile("^deal into new stack$");
-        Pattern patternDealWithIncrement = Pattern.compile("^deal with increment (-?\\d+)$");
-        Pattern patternCut = Pattern.compile("^cut (-?\\d+)$");
-
-        for (String line : inputLines) {
-            log.info(line);
-            Matcher matcher = patternDealIntoNewStack.matcher(line);
-            if (matcher.find()) {
-                stack.dealIntoNewStack();
-            } else {
-                matcher = patternDealWithIncrement.matcher(line);
-                if (matcher.find()) {
-                    stack.dealWithIncrement(Integer.parseInt(matcher.group(1)));
-                } else {
-                    matcher = patternCut.matcher(line);
-                    if (matcher.find()) {
-                        stack.cut(Integer.parseInt(matcher.group(1)));
-                    }
-                }
-            }
-            log.debug(stack.cards.toString());
-        }
-
-        if (numberOfCards == 10) {
-            return 0;
-        } else {
-            return stack.cards.indexOf(2019);
-        }
-    }
-
-    String numberOnCard(String numberOfCards, String numberOfShuffles) {
-        NewStack ns = new NewStack(new BigInteger(numberOfCards));
-
-        ns.shuffle(new BigInteger(numberOfShuffles));
-        return ns.cardAtPosition(new BigInteger("2020")).toString();
     }
 }

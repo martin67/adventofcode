@@ -1,6 +1,6 @@
 package aoc.aoc2021;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -10,9 +10,9 @@ import java.util.Map;
 @Slf4j
 public class Day11DumboOctopus {
 
-    final Map<Position, Octopus> grid = new HashMap<>();
-    final int ySize;
-    int xSize;
+    private final Map<Position, Octopus> grid = new HashMap<>();
+    private final int ySize;
+    private int xSize;
 
     public Day11DumboOctopus(List<String> inputLines) {
         int y = 0;
@@ -29,7 +29,7 @@ public class Day11DumboOctopus {
         ySize = y;
     }
 
-    int problem1() {
+    public int problem1() {
         log.info("Before");
         printGrid();
 
@@ -42,7 +42,7 @@ public class Day11DumboOctopus {
         return grid.values().stream().mapToInt(o -> o.numberOfFlashes++).sum();
     }
 
-    int problem2() {
+    public int problem2() {
         boolean allFlashed = false;
         int steps = 0;
         int finalStep = 0;
@@ -65,7 +65,7 @@ public class Day11DumboOctopus {
         return finalStep;
     }
 
-    void printGrid() {
+    private void printGrid() {
         for (int y = 0; y < ySize; y++) {
             for (int x = 0; x < xSize; x++) {
                 System.out.print(grid.get(new Position(x, y)).energyLevel);

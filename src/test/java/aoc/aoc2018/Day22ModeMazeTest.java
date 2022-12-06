@@ -1,6 +1,6 @@
 package aoc.aoc2018;
 
-import aoc.Position;
+import aoc.common.Position;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

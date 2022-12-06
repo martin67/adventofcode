@@ -1,7 +1,7 @@
 package aoc.aoc2019;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,14 +16,35 @@ import java.util.stream.Stream;
 @Slf4j
 public class Day19TractorBeam {
 
+    private final ExecutorService executorService;
+    private final List<String> opcodes;
+
+    public Day19TractorBeam(List<String> inputLines) {
+        executorService = Executors.newCachedThreadPool();
+        opcodes = Stream.of(inputLines.get(0).split(","))
+                .collect(Collectors.toList());
+    }
+
+    int pointsAffected() throws ExecutionException, InterruptedException {
+        DroneController dc = new DroneController(executorService, opcodes, false);
+        Future<Integer> futureSum = executorService.submit(dc);
+        return futureSum.get();
+    }
+
+    int closetSquare() throws ExecutionException, InterruptedException {
+        DroneController dc = new DroneController(executorService, opcodes, true);
+        Future<Integer> futureSum = executorService.submit(dc);
+        return futureSum.get();
+    }
+
     @Data
     static class DroneController implements Callable<Integer> {
-        private BlockingQueue<BigInteger> inputQueue;
-        private BlockingQueue<BigInteger> outputQueue;
         Set<Position> map = new HashSet<>();
         ExecutorService executorService;
         List<String> opcodes;
         boolean squareMode;
+        private BlockingQueue<BigInteger> inputQueue;
+        private BlockingQueue<BigInteger> outputQueue;
 
         public DroneController(ExecutorService executorService, List<String> opcodes, boolean squareMode) {
             this.executorService = executorService;
@@ -107,29 +128,8 @@ public class Day19TractorBeam {
                         sb.append('.');     // wall
                     }
                 }
-                System.out.println(sb.toString());
+                System.out.println(sb);
             }
         }
-    }
-
-    final ExecutorService executorService;
-    private final List<String> opcodes;
-
-    public Day19TractorBeam(List<String> inputLines) {
-        executorService = Executors.newCachedThreadPool();
-        opcodes = Stream.of(inputLines.get(0).split(","))
-                .collect(Collectors.toList());
-    }
-
-    int pointsAffected() throws ExecutionException, InterruptedException {
-        DroneController dc = new DroneController(executorService, opcodes, false);
-        Future<Integer> futureSum = executorService.submit(dc);
-        return futureSum.get();
-    }
-
-    int closetSquare() throws ExecutionException, InterruptedException {
-        DroneController dc = new DroneController(executorService, opcodes, true);
-        Future<Integer> futureSum = executorService.submit(dc);
-        return futureSum.get();
     }
 }

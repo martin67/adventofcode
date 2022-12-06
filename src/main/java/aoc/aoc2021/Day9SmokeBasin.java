@@ -1,6 +1,6 @@
 package aoc.aoc2021;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -8,8 +8,8 @@ import java.util.*;
 @Slf4j
 public class Day9SmokeBasin {
 
-    final Map<Position, Integer> map = new HashMap<>();
-    final Set<Position> lowPoints = new HashSet<>();
+    private final Map<Position, Integer> map = new HashMap<>();
+    private final Set<Position> lowPoints = new HashSet<>();
 
     public Day9SmokeBasin(List<String> inputLines) {
         int y = 0;
@@ -23,7 +23,7 @@ public class Day9SmokeBasin {
         }
     }
 
-    int problem1() {
+    public int problem1() {
         int riskLevel = 0;
         for (Position p : map.keySet()) {
             boolean lowPoint = true;
@@ -41,7 +41,7 @@ public class Day9SmokeBasin {
         return riskLevel;
     }
 
-    int problem2() {
+    public int problem2() {
         problem1();
 
         Set<Position> alreadyCounted = new HashSet<>();

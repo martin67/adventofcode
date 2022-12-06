@@ -1,7 +1,6 @@
 package aoc.aoc2019;
 
 import com.google.common.collect.Sets;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -11,107 +10,9 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day12TheNBodyProblem {
 
-    @Data
-    static class Position {
-        int x;
-        int y;
-        int z;
-
-        public Position(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-    }
-
-    @Data
-    static class Velocity {
-        int x;
-        int y;
-        int z;
-
-        public Velocity(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-    }
-
-    static class Moon {
-        final Position position;
-        final Velocity velocity;
-
-        public Moon(Position position) {
-            this.position = position;
-            this.velocity = new Velocity(0, 0, 0);
-        }
-
-        void applyGravity(Moon target) {
-            if (position.x > target.position.x) {
-                velocity.x--;
-                target.velocity.x++;
-            } else if (position.x < target.position.x) {
-                velocity.x++;
-                target.velocity.x--;
-            }
-
-            if (position.y > target.position.y) {
-                velocity.y--;
-                target.velocity.y++;
-            } else if (position.y < target.position.y) {
-                velocity.y++;
-                target.velocity.y--;
-            }
-
-            if (position.z > target.position.z) {
-                velocity.z--;
-                target.velocity.z++;
-            } else if (position.z < target.position.z) {
-                velocity.z++;
-                target.velocity.z--;
-            }
-        }
-
-        void applyVelocity() {
-            position.x += velocity.x;
-            position.y += velocity.y;
-            position.z += velocity.z;
-        }
-
-        int potentialEnergy() {
-            return Math.abs(position.x) + Math.abs(position.y) + Math.abs(position.z);
-        }
-
-        int kineticEnergy() {
-            return Math.abs(velocity.x) + Math.abs(velocity.y) + Math.abs(velocity.z);
-        }
-
-        int totalEnergy() {
-            return potentialEnergy() * kineticEnergy();
-        }
-
-        @Override
-        public String toString() {
-            return String.format("pos=<x=%d, y=%d, z=%d>, vel=<x=%d, y=%d, z=%d>",
-                    position.x, position.y, position.z, velocity.x, velocity.y, velocity.z);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            return position.toString().equals(o.toString());
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(toString());
-        }
-    }
-
-    final Set<Moon> moonSet;
-    final List<Moon> moonList;
-    final List<Moon> initialMoonList;
+    private final Set<Moon> moonSet;
+    private final List<Moon> moonList;
+    private final List<Moon> initialMoonList;
 
     public Day12TheNBodyProblem(List<String> inputLines) {
         String regexStr = "^<x=(-?\\d+), y=(-?\\d+), z=(-?\\d+)>$";
@@ -136,8 +37,19 @@ public class Day12TheNBodyProblem {
         }
     }
 
-    int totalEnergy(int steps) {
+    private static long gcd(long x, long y) {
+        return (y == 0) ? x : gcd(y, x % y);
+    }
 
+    public static long gcd(long... numbers) {
+        return Arrays.stream(numbers).reduce(0, Day12TheNBodyProblem::gcd);
+    }
+
+    public static long lcm(long... numbers) {
+        return Arrays.stream(numbers).reduce(1, (x, y) -> x * (y / gcd(x, y)));
+    }
+
+    int totalEnergy(int steps) {
         Set<Set<Moon>> moonPairs = Sets.combinations(moonSet, 2);
 
         for (int step = 0; step < steps; step++) {
@@ -231,15 +143,99 @@ public class Day12TheNBodyProblem {
         return lcm(xCycle, yCycle, zCycle);
     }
 
-    private static long gcd(long x, long y) {
-        return (y == 0) ? x : gcd(y, x % y);
+    static class Position {
+        int x;
+        int y;
+        int z;
+
+        public Position(int x, int y, int z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
     }
 
-    public static long gcd(long... numbers) {
-        return Arrays.stream(numbers).reduce(0, Day12TheNBodyProblem::gcd);
+    static class Velocity {
+        int x;
+        int y;
+        int z;
+
+        public Velocity(int x, int y, int z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
     }
 
-    public static long lcm(long... numbers) {
-        return Arrays.stream(numbers).reduce(1, (x, y) -> x * (y / gcd(x, y)));
+    static class Moon {
+        final Position position;
+        final Velocity velocity;
+
+        public Moon(Position position) {
+            this.position = position;
+            this.velocity = new Velocity(0, 0, 0);
+        }
+
+        void applyGravity(Moon target) {
+            if (position.x > target.position.x) {
+                velocity.x--;
+                target.velocity.x++;
+            } else if (position.x < target.position.x) {
+                velocity.x++;
+                target.velocity.x--;
+            }
+
+            if (position.y > target.position.y) {
+                velocity.y--;
+                target.velocity.y++;
+            } else if (position.y < target.position.y) {
+                velocity.y++;
+                target.velocity.y--;
+            }
+
+            if (position.z > target.position.z) {
+                velocity.z--;
+                target.velocity.z++;
+            } else if (position.z < target.position.z) {
+                velocity.z++;
+                target.velocity.z--;
+            }
+        }
+
+        void applyVelocity() {
+            position.x += velocity.x;
+            position.y += velocity.y;
+            position.z += velocity.z;
+        }
+
+        int potentialEnergy() {
+            return Math.abs(position.x) + Math.abs(position.y) + Math.abs(position.z);
+        }
+
+        int kineticEnergy() {
+            return Math.abs(velocity.x) + Math.abs(velocity.y) + Math.abs(velocity.z);
+        }
+
+        int totalEnergy() {
+            return potentialEnergy() * kineticEnergy();
+        }
+
+        @Override
+        public String toString() {
+            return String.format("pos=<x=%d, y=%d, z=%d>, vel=<x=%d, y=%d, z=%d>",
+                    position.x, position.y, position.z, velocity.x, velocity.y, velocity.z);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            return position.toString().equals(o.toString());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(toString());
+        }
     }
 }

@@ -11,43 +11,7 @@ import java.util.stream.Collectors;
 @Slf4j
 class Day8MemoryManeuver {
 
-    @Data
-    class Node {
-        final int id;
-        int length; // length of node
-        int numberOfChildNodes;
-        int numberOfMetadataEntries;
-        int value = -1;
-        final List<Node> childNodes = new ArrayList<>();
-        final List<Integer> metadata = new ArrayList<>();
-
-        Node(int id, List<Integer> numbers, int start) {
-            this.id = id;
-            this.length = 2;
-            this.numberOfChildNodes = numbers.get(start);
-            this.numberOfMetadataEntries = numbers.get(start + 1);
-            //log.info("Constructing new node " + id + " at " + start);
-
-            // create children
-            for (int i = 0; i < numberOfChildNodes; i++) {
-                Node child = new Node(id + 1, numbers, start + length);
-                childNodes.add(child);
-                length += child.length;
-            }
-            // create metadata
-            for (int i = 0; i < numberOfMetadataEntries; i++) {
-                metadata.add(numbers.get(start + length + i));
-            }
-            length += numberOfMetadataEntries;
-
-            // also add it to the global nodelist so we can traverse all nodes later
-            nodeList.add(this);
-        }
-
-    }
-
     private final List<Node> nodeList = new ArrayList<>();
-
 
     private Node readData(String input) {
         // Split string into a list
@@ -57,7 +21,6 @@ class Day8MemoryManeuver {
 
         return new Node(1, inputList, 0);
     }
-
 
     int computeSumOfMetadata(String input) {
 
@@ -69,7 +32,6 @@ class Day8MemoryManeuver {
         }
         return sum;
     }
-
 
     int computeRootNode(String input) {
         Node start = readData(input);
@@ -98,7 +60,7 @@ class Day8MemoryManeuver {
                         node.value = 0;
                         for (int i : node.getMetadata()) {
                             // check for valid index
-                            if (i-1 < node.numberOfChildNodes) {
+                            if (i - 1 < node.numberOfChildNodes) {
                                 node.value += node.getChildNodes().get(i - 1).getValue();
                             }
                         }
@@ -111,6 +73,41 @@ class Day8MemoryManeuver {
         }
         // Root node has id = 1, saved from earlier
         return start.getValue();
+    }
+
+    @Data
+    class Node {
+        final int id;
+        final List<Node> childNodes = new ArrayList<>();
+        final List<Integer> metadata = new ArrayList<>();
+        int length; // length of node
+        int numberOfChildNodes;
+        int numberOfMetadataEntries;
+        int value = -1;
+
+        Node(int id, List<Integer> numbers, int start) {
+            this.id = id;
+            this.length = 2;
+            this.numberOfChildNodes = numbers.get(start);
+            this.numberOfMetadataEntries = numbers.get(start + 1);
+            //log.info("Constructing new node " + id + " at " + start);
+
+            // create children
+            for (int i = 0; i < numberOfChildNodes; i++) {
+                Node child = new Node(id + 1, numbers, start + length);
+                childNodes.add(child);
+                length += child.length;
+            }
+            // create metadata
+            for (int i = 0; i < numberOfMetadataEntries; i++) {
+                metadata.add(numbers.get(start + length + i));
+            }
+            length += numberOfMetadataEntries;
+
+            // also add it to the global nodelist so we can traverse all nodes later
+            nodeList.add(this);
+        }
+
     }
 
 }

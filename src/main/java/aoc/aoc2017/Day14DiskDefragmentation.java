@@ -1,6 +1,6 @@
 package aoc.aoc2017;
 
-import aoc.Position;
+import aoc.common.Position;
 import com.google.common.base.Strings;
 
 import java.math.BigInteger;
@@ -8,23 +8,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Day14DiskDefragmentation {
-    final String key;
-    final Set<Position> squares = new HashSet<>();
-    final Set<Position> squaresCounted = new HashSet<>();
+    private final String key;
+    private final Set<Position> squares = new HashSet<>();
+    private final Set<Position> squaresCounted = new HashSet<>();
 
     public Day14DiskDefragmentation(String key) {
         this.key = key;
     }
 
     int squaresUsed() {
-
         for (int row = 0; row < 128; row++) {
             String hashKey = key + '-' + row;
 
             Day10KnotHash day10KnotHash = new Day10KnotHash(256);
             String hash = day10KnotHash.knotHash(hashKey);
             String binaryHash = new BigInteger(hash, 16).toString(2);
-            // pad to length 128 if needed
+            // pad to strength 128 if needed
             if (binaryHash.length() < 128) {
                 binaryHash = Strings.padStart(binaryHash, 128, '0');
             }
@@ -35,7 +34,6 @@ public class Day14DiskDefragmentation {
                 }
             }
         }
-
         return squares.size();
     }
 

@@ -1,7 +1,7 @@
 package aoc.aoc2021;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 
 public class Day5HydrothermalVenture {
 
-    final Map<Position, Integer> vents = new HashMap<>();
-    final Map<Position, Integer> diagonalVents = new HashMap<>();
+    private final Map<Position, Integer> vents = new HashMap<>();
+    private final Map<Position, Integer> diagonalVents = new HashMap<>();
 
     public Day5HydrothermalVenture(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(\\d+),(\\d+) -> (\\d+),(\\d+)");
@@ -49,13 +49,13 @@ public class Day5HydrothermalVenture {
         return line;
     }
 
-    long problem1() {
+    public long problem1() {
         return vents.values().stream()
                 .filter(s -> s > 1)
                 .count();
     }
 
-    long problem2() {
+    public long problem2() {
         return diagonalVents.values().stream()
                 .filter(s -> s > 1)
                 .count();

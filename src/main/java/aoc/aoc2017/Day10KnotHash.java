@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day10KnotHash {
-    final List<Integer> list = new ArrayList<>();
+    private final List<Integer> list = new ArrayList<>();
 
     public Day10KnotHash(int listSize) {
         for (int i = 0; i < listSize; i++) {
@@ -51,7 +51,7 @@ public class Day10KnotHash {
         for (int round = 0; round < numberOfRounds; round++) {
 
             for (int length : lengths) {
-                // reverse from currentPosition, length: length
+                // reverse from currentPosition, strength: strength
                 for (int i = 0; i < length / 2; i++) {
                     // Reverse
                     int p1 = currentPosition + i;

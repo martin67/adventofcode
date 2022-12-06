@@ -1,5 +1,6 @@
-package aoc;
+package aoc.common;
 
+import aoc.common.HexPosition;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

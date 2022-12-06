@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day1ReportRepair {
-    static final int SUM = 2020;
-    final List<Integer> entries = new ArrayList<>();
+    private static final int SUM = 2020;
+    private final List<Integer> entries = new ArrayList<>();
 
     public Day1ReportRepair(List<String> inputLines) {
         for (String line : inputLines) {

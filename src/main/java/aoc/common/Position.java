@@ -1,8 +1,6 @@
-package aoc;
+package aoc.common;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
@@ -10,15 +8,21 @@ import java.util.Set;
 
 @Slf4j
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Position implements Comparable<Position> {
-    int x;
-    int y;
+    private int x;
+    private int y;
+
+    public Position() {
+    }
+
+    public Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public Position(Position p) {
-        x = p.x;
-        y = p.y;
+        this.x = p.x;
+        this.y = p.y;
     }
 
     @Override
@@ -37,38 +41,26 @@ public class Position implements Comparable<Position> {
     public Position adjacent(Direction direction) {
         Position adj = new Position(x, y);
         switch (direction) {
-            case North:
-            case Up:
-                adj.y--;
-                break;
-            case East:
-            case Right:
-                adj.x++;
-                break;
-            case South:
-            case Down:
-                adj.y++;
-                break;
-            case West:
-            case Left:
-                adj.x--;
-                break;
-            case NorthEast:
+            case North, Up -> adj.y--;
+            case East, Right -> adj.x++;
+            case South, Down -> adj.y++;
+            case West, Left -> adj.x--;
+            case NorthEast -> {
                 adj.x++;
                 adj.y--;
-                break;
-            case NorthWest:
+            }
+            case NorthWest -> {
                 adj.x--;
                 adj.y--;
-                break;
-            case SouthEast:
+            }
+            case SouthEast -> {
                 adj.x++;
                 adj.y++;
-                break;
-            case SouthWest:
+            }
+            case SouthWest -> {
                 adj.x--;
                 adj.y++;
-                break;
+            }
         }
         return adj;
     }
@@ -120,25 +112,23 @@ public class Position implements Comparable<Position> {
     public Set<Position> adjacentDiagonal(Direction dir) {
         Set<Position> adjacent = new HashSet<>();
         switch (dir) {
-            case NorthEast:
+            case NorthEast -> {
                 adjacent.add(adjacent(Direction.North));
                 adjacent.add(adjacent(Direction.East));
-                break;
-            case NorthWest:
+            }
+            case NorthWest -> {
                 adjacent.add(adjacent(Direction.North));
                 adjacent.add(adjacent(Direction.West));
-                break;
-            case SouthEast:
+            }
+            case SouthEast -> {
                 adjacent.add(adjacent(Direction.South));
                 adjacent.add(adjacent(Direction.East));
-                break;
-            case SouthWest:
+            }
+            case SouthWest -> {
                 adjacent.add(adjacent(Direction.South));
                 adjacent.add(adjacent(Direction.West));
-                break;
-            default:
-                log.error("Not a diagonal direction");
-                break;
+            }
+            default -> log.error("Not a diagonal direction");
         }
         return adjacent;
     }

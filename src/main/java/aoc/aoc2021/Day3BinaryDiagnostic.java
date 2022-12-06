@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Day3BinaryDiagnostic {
 
-    final List<Integer> numbers = new ArrayList<>();
-    int width;
+    private final List<Integer> numbers = new ArrayList<>();
+    private int width;
 
     public Day3BinaryDiagnostic(List<String> inputLines) {
         for (String line : inputLines) {
@@ -15,7 +15,7 @@ public class Day3BinaryDiagnostic {
         }
     }
 
-    int problem1() {
+    public int problem1() {
         int gamma = 0;
         int epsilon = 0;
 
@@ -40,7 +40,7 @@ public class Day3BinaryDiagnostic {
         return gamma * epsilon;
     }
 
-    int problem2() {
+    public int problem2() {
 
         List<Integer> numbersCopy = new ArrayList<>(numbers);
         for (int i = 0; i < width; i++) {
@@ -57,7 +57,7 @@ public class Day3BinaryDiagnostic {
         return oxygen * co2;
     }
 
-    List<Integer> bitCriteria(List<Integer> in, int position, boolean oxygen) {
+    private List<Integer> bitCriteria(List<Integer> in, int position, boolean oxygen) {
         List<Integer> zeros = new ArrayList<>();
         List<Integer> ones = new ArrayList<>();
 

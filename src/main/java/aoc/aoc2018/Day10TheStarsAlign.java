@@ -9,12 +9,56 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 class Day10TheStarsAlign {
 
     private final Sky sky = new Sky();
+
+    private void readData(String input) {
+        log.debug("Reading data");
+
+        // Split string into a list
+        List<String> inputStrings = Arrays.stream(input.trim().split("\\n")).toList();
+
+
+        for (String s : inputStrings) {
+            String s1 = StringUtils.substringBetween(s, "position=<", ">");
+            String s2 = StringUtils.substringBetween(s, "velocity=<", ">");
+            sky.addPoint(new Point(
+                    Integer.parseInt(StringUtils.substringBefore(s1, ",").trim()),
+                    Integer.parseInt(StringUtils.substringAfter(s1, ",").trim()),
+                    Integer.parseInt(StringUtils.substringBefore(s2, ",").trim()),
+                    Integer.parseInt(StringUtils.substringAfter(s2, ",").trim())));
+        }
+    }
+
+    Result getMessage(String input) {
+        readData(input);
+
+        // Assume that the message is when the box is as small as possible
+        boolean keepGoing = true;
+        int waitingTime = 0;
+        while (keepGoing) {
+            Box box = sky.getSkyBoundary();
+            Box nextBox = sky.movePointsForward().getSkyBoundary();
+            if (nextBox.getHeight() > box.getHeight() || nextBox.getWidth() > box.getWidth()) {
+                keepGoing = false;
+            }
+            waitingTime++;
+        }
+
+        // Back up one step
+        sky.movePointsBackward().print();
+        waitingTime--;
+        log.info("Box, width: " + sky.getSkyBoundary().getWidth() + ", height: " + sky.getSkyBoundary().getHeight());
+        log.info("time " + waitingTime);
+
+        Result result = new Result();
+        result.setMessage("HI");
+        result.setTime(waitingTime);
+        return result;
+    }
 
     @Data
     @AllArgsConstructor
@@ -27,7 +71,7 @@ class Day10TheStarsAlign {
     }
 
     @Data
-    class Sky {
+    static class Sky {
         final List<Point> pointList = new ArrayList<>();
 
         void addPoint(Point point) {
@@ -56,10 +100,10 @@ class Day10TheStarsAlign {
             // Loop and find the highest and lowest of xpos and ypos. This gives the box
             Box theSize = new Box();
 
-            int lowX = pointList.stream().min(Comparator.comparingInt(Point::getXpos)).get().getXpos();
-            int highX = pointList.stream().max(Comparator.comparingInt(Point::getXpos)).get().getXpos();
-            int lowY = pointList.stream().min(Comparator.comparingInt(Point::getYpos)).get().getYpos();
-            int highY = pointList.stream().max(Comparator.comparingInt(Point::getYpos)).get().getYpos();
+            int lowX = pointList.stream().min(Comparator.comparingInt(Point::getXpos)).orElseThrow().getXpos();
+            int highX = pointList.stream().max(Comparator.comparingInt(Point::getXpos)).orElseThrow().getXpos();
+            int lowY = pointList.stream().min(Comparator.comparingInt(Point::getYpos)).orElseThrow().getYpos();
+            int highY = pointList.stream().max(Comparator.comparingInt(Point::getYpos)).orElseThrow().getYpos();
 
             theSize.setStartx(lowX);
             theSize.setStarty(lowY);
@@ -105,68 +149,17 @@ class Day10TheStarsAlign {
         }
     }
 
-
     @Data
-    static
-    class Box {
+    static class Box {
         int startx;
         int starty;
         int width;
         int height;
     }
 
-
     @Data
-    static
-    class Result {
+    static class Result {
         String message;
         int time;
-    }
-
-
-    private void readData(String input) {
-        log.debug("Reading data");
-
-        // Split string into a list
-        List<String> inputStrings = Arrays.stream(input.trim().split("\\n")).collect(Collectors.toList());
-
-
-        for (String s : inputStrings) {
-            String s1 = StringUtils.substringBetween(s, "position=<", ">");
-            String s2 = StringUtils.substringBetween(s, "velocity=<", ">");
-            sky.addPoint(new Point(
-                    Integer.parseInt(StringUtils.substringBefore(s1, ",").trim()),
-                    Integer.parseInt(StringUtils.substringAfter(s1, ",").trim()),
-                    Integer.parseInt(StringUtils.substringBefore(s2, ",").trim()),
-                    Integer.parseInt(StringUtils.substringAfter(s2, ",").trim())));
-        }
-    }
-
-
-    Result getMessage(String input) {
-        readData(input);
-
-        // Assume that the message is when the box is as small as possible
-        boolean keepGoing = true;
-        int waitingTime = 0;
-        while (keepGoing) {
-            Box box = sky.getSkyBoundary();
-            Box nextBox = sky.movePointsForward().getSkyBoundary();
-            if (nextBox.getHeight() > box.getHeight() || nextBox.getWidth() > box.getWidth()) {
-                keepGoing = false;
-            }
-            waitingTime++;
-        }
-
-        // Back up one step
-        sky.movePointsBackward().print();
-        waitingTime--;
-        log.info("Box, width: " + sky.getSkyBoundary().getWidth() + ", height: " + sky.getSkyBoundary().getHeight());
-        log.info("time " + waitingTime);
-
-        Result result = new Result();
-        result.setMessage("HI");
-        result.setTime(waitingTime);
-        return result;
     }
 }

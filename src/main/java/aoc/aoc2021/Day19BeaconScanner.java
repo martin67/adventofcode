@@ -1,6 +1,6 @@
 package aoc.aoc2021;
 
-import aoc.SpacePosition;
+import aoc.common.SpacePosition;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day19BeaconScanner {
 
-    final List<BeaconScanner> scanners = new ArrayList<>();
+    private final List<BeaconScanner> scanners = new ArrayList<>();
 
     public Day19BeaconScanner(List<String> inputLines) {
         Pattern scannerPattern = Pattern.compile("--- scanner (\\d+) ---");
@@ -33,7 +33,7 @@ public class Day19BeaconScanner {
         }
     }
 
-    int problem1() {
+    public int problem1() {
         // Compute all 24 different views
         for (BeaconScanner scanner : scanners) {
             Set<Set<SpacePosition>> allViews = new HashSet<>();
@@ -135,7 +135,7 @@ public class Day19BeaconScanner {
         return 0;
     }
 
-    int problem2() {
+    public int problem2() {
         return 0;
     }
 

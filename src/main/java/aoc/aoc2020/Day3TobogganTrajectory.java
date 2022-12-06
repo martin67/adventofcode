@@ -1,15 +1,15 @@
 package aoc.aoc2020;
 
-import aoc.Position;
+import aoc.common.Position;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Day3TobogganTrajectory {
-    final Set<Position> trees = new HashSet<>();
-    final int width;
-    final int height;
+    private final Set<Position> trees = new HashSet<>();
+    private final int width;
+    private final int height;
 
     public Day3TobogganTrajectory(List<String> inputLines) {
         int x = 0;

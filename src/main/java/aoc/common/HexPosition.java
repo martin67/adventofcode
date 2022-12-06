@@ -1,4 +1,4 @@
-package aoc;
+package aoc.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,28 +18,18 @@ public class HexPosition {
     public HexPosition adjacent(Direction direction) {
         HexPosition adj = new HexPosition(col, row);
         switch (direction) {
-            case North:
-                adj.row--;
-                break;
-            case South:
-                adj.row++;
-                break;
-            case NorthEast:
+            case North -> adj.row--;
+            case South -> adj.row++;
+            case NorthEast -> {
                 adj.col++;
                 adj.row--;
-                break;
-            case NorthWest:
-                adj.col--;
-                break;
-            case SouthEast:
-                adj.col++;
-                break;
-            case SouthWest:
+            }
+            case NorthWest -> adj.col--;
+            case SouthEast -> adj.col++;
+            case SouthWest -> {
                 adj.col--;
                 adj.row++;
-                break;
-            default:
-                assert false : "Illegal direction";
+            }
         }
         return adj;
     }

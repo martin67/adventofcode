@@ -8,9 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day16TicketTranslation {
-    final List<TicketField> ticketFields = new ArrayList<>();
-    final List<Ticket> tickets = new ArrayList<>();
-    Ticket myTicket;
+    private final List<TicketField> ticketFields = new ArrayList<>();
+    private final List<Ticket> tickets = new ArrayList<>();
+    private Ticket myTicket;
 
     public Day16TicketTranslation(List<String> inputLines) {
         Pattern fieldPattern = Pattern.compile("^(.*): (\\d+)-(\\d+) or (\\d+)-(\\d+)$");
@@ -45,7 +45,7 @@ public class Day16TicketTranslation {
         }
     }
 
-    int problem1() {
+    public int problem1() {
         int ticketErrorSum = 0;
         for (Ticket ticket : tickets) {
             for (int number : ticket.numbers) {
@@ -64,7 +64,7 @@ public class Day16TicketTranslation {
         return ticketErrorSum;
     }
 
-    long problem2() {
+    public long problem2() {
         List<Ticket> validTickets = new ArrayList<>();
 
         for (Ticket ticket : tickets) {

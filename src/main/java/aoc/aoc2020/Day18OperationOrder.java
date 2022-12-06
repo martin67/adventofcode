@@ -8,14 +8,14 @@ import java.util.Stack;
 
 @Slf4j
 public class Day18OperationOrder {
-    final List<String> inputLines;
-    boolean problem2;
+    private final List<String> inputLines;
+    private boolean problem2;
 
     public Day18OperationOrder(List<String> inputLines) {
         this.inputLines = inputLines;
     }
 
-    long problem1() {
+    public long problem1() {
         long result = 0;
         for (String line : this.inputLines) {
             List<String> answerList = getPostFixString(line);
@@ -26,7 +26,7 @@ public class Day18OperationOrder {
         return result;
     }
 
-    long problem2() {
+    public long problem2() {
         problem2 = true;
         long result = 0;
         for (String line : this.inputLines) {
@@ -54,21 +54,11 @@ public class Day18OperationOrder {
         Stack<Long> stack = new Stack<>();
         for (String word : postFixList) {
             switch (word.charAt(0)) {
-                case '+':
-                    stack.push(stack.pop() + stack.pop());
-                    break;
-                case '-':
-                    stack.push(stack.pop() - stack.pop());
-                    break;
-                case '*':
-                    stack.push(stack.pop() * stack.pop());
-                    break;
-                case '/':
-                    stack.push(stack.pop() / stack.pop());
-                    break;
-                default:
-                    stack.push(Long.parseLong(word));
-                    break;
+                case '+' -> stack.push(stack.pop() + stack.pop());
+                case '-' -> stack.push(stack.pop() - stack.pop());
+                case '*' -> stack.push(stack.pop() * stack.pop());
+                case '/' -> stack.push(stack.pop() / stack.pop());
+                default -> stack.push(Long.parseLong(word));
             }
         }
         return stack.pop();

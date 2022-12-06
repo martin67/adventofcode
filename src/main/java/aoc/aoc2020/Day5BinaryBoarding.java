@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class Day5BinaryBoarding {
-    final List<BoardingPass> boardingPasses = new ArrayList<>();
+    private final List<BoardingPass> boardingPasses = new ArrayList<>();
 
     public Day5BinaryBoarding(List<String> inputLines) {
         for (String line : inputLines) {
@@ -26,8 +25,7 @@ public class Day5BinaryBoarding {
 
     int myId() {
         List<BoardingPass> sorted = boardingPasses.stream()
-                .sorted(Comparator.comparing(BoardingPass::id))
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(BoardingPass::id)).toList();
 
         for (int i = 1; i < sorted.size(); i++) {
             if (sorted.get(i - 1).id() != sorted.get(i).id() - 1) {

@@ -9,40 +9,16 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 class Day4ReposeRecord {
 
-    @Data
-    @RequiredArgsConstructor
-    class Guard {
-        final int id;
-        List<SleepInterval> sleepIntervals = new ArrayList<>();
-    }
-
-
-    @Data
-    @AllArgsConstructor
-    static
-    class SleepInterval {
-        String date;
-        int start;
-        int end;
-
-        boolean asleep(int minute) {
-            return (minute >= start && minute < end);
-        }
-    }
-
-
     private final List<Guard> guardList = new ArrayList<>();
-
 
     private void loadData(String input) {
 
         // Split string into a list and sort it
-        List<String> inputStrings = Arrays.stream(input.trim().split("\\n+")).sorted().collect(Collectors.toList());
+        List<String> inputStrings = Arrays.stream(input.trim().split("\\n+")).sorted().toList();
 
         Guard activeGuard = null;
         int lastAsleep = 0;
@@ -116,7 +92,6 @@ class Day4ReposeRecord {
         return sleepiestGuard.getId() * sleepiestMinute;
     }
 
-
     int computeChecksum2(String input) {
         loadData(input);
 
@@ -140,6 +115,25 @@ class Day4ReposeRecord {
             }
         }
         return sleepiestMinute * sleepiestGuard.getId();
+    }
+
+    @Data
+    @RequiredArgsConstructor
+    static class Guard {
+        final int id;
+        List<SleepInterval> sleepIntervals = new ArrayList<>();
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class SleepInterval {
+        String date;
+        int start;
+        int end;
+
+        boolean asleep(int minute) {
+            return (minute >= start && minute < end);
+        }
     }
 
 }

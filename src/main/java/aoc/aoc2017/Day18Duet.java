@@ -154,7 +154,7 @@ public class Day18Duet {
                         pointer++;
                     }
                     case "rcv" -> {
-                        // deandlock after 1 sec wait
+                        // deadlock after 1 sec wait
                         registers.put(instruction.register, inputQueue.poll(1, TimeUnit.SECONDS));
                         if (registers.get(instruction.register) == null) {
                             log.info("timeout!");

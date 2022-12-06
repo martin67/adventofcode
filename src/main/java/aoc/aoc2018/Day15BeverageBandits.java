@@ -1,6 +1,6 @@
 package aoc.aoc2018;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -8,39 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Data
-class BfsNode {
-    Position position;
-    BfsNode parent;
-
-    BfsNode(Position position) {
-        this.position = position;
-    }
-}
-
-@Data
-@AllArgsConstructor
-class Unit {
-    Position position;
-    Day15BeverageBandits.Type type;
-    int attackPower;
-    int hitPoints;
-}
-
-
 @Slf4j
 public class Day15BeverageBandits {
-
-    enum Type {Elf, Goblin}
-
-    @Data
-    @AllArgsConstructor
-    static
-    class Space {
-        Position position;
-        Type type;
-        int hitPoints;
-    }
 
     private Set<Position> walls;
     private List<Unit> units;
@@ -50,7 +19,6 @@ public class Day15BeverageBandits {
     private int finalHitPoints;
     private int numberOfElves;
     private int numberOfGoblins;
-
 
     private void init(String input) {
         walls = new HashSet<>();
@@ -67,8 +35,7 @@ public class Day15BeverageBandits {
     }
 
     private void readMap(String input) {
-        List<String> inputStrings = Arrays.stream(input.split("\\n+"))
-                .collect(Collectors.toList());
+        List<String> inputStrings = Arrays.stream(input.split("\\n+")).toList();
 
         int x = 0;
         int y = 0;
@@ -77,17 +44,15 @@ public class Day15BeverageBandits {
             for (char c : row.toCharArray()) {
                 Position position = new Position(x, y);
                 switch (c) {
-                    case '#':
-                        walls.add(position);
-                        break;
-                    case 'E':
+                    case '#' -> walls.add(position);
+                    case 'E' -> {
                         units.add(new Unit(position, Type.Elf, 3, 200));
                         numberOfElves++;
-                        break;
-                    case 'G':
+                    }
+                    case 'G' -> {
                         units.add(new Unit(position, Type.Goblin, 3, 200));
                         numberOfGoblins++;
-                        break;
+                    }
                 }
                 x++;
             }
@@ -132,7 +97,7 @@ public class Day15BeverageBandits {
         while (!gameOver) {
             System.out.println("------------------- Starting game round " + rounds);
 
-            for (Unit unit : units.stream().sorted(Comparator.comparing(Unit::getPosition)).collect(Collectors.toList())) {
+            for (Unit unit : units.stream().sorted(Comparator.comparing(Unit::getPosition)).toList()) {
 
                 // Exit if there are no more targets remaining
                 if ((unit.getType() == Type.Elf && numberOfGoblins == 0) ||
@@ -152,7 +117,7 @@ public class Day15BeverageBandits {
 
                         // identify targets => alla unit of different type than self
                         Type targetType = unit.getType() == Type.Elf ? Type.Goblin : Type.Elf;
-                        List<Unit> targets = units.stream().filter(u -> u.getType() == targetType).collect(Collectors.toList());
+                        List<Unit> targets = units.stream().filter(u -> u.getType() == targetType).toList();
 
                         // list all possible positions for all targets
                         Set<Position> positionsInRange = new HashSet<>();
@@ -161,7 +126,7 @@ public class Day15BeverageBandits {
                         }
                         // remove all positions that have a wall or a unit in them
                         positionsInRange.removeAll(new ArrayList<>(walls));
-                        positionsInRange.removeAll(units.stream().map(Unit::getPosition).collect(Collectors.toList()));
+                        positionsInRange.removeAll(units.stream().map(Unit::getPosition).toList());
                         //printMap(positionsInRange, '?');
 
                         // nearest
@@ -324,4 +289,34 @@ public class Day15BeverageBandits {
 
         return result;
     }
+
+    enum Type {Elf, Goblin}
+
+    @Data
+    @AllArgsConstructor
+    static class Space {
+        Position position;
+        Type type;
+        int hitPoints;
+    }
+
+    @Data
+    static class BfsNode {
+        Position position;
+        BfsNode parent;
+
+        BfsNode(Position position) {
+            this.position = position;
+        }
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Unit {
+        Position position;
+        Day15BeverageBandits.Type type;
+        int attackPower;
+        int hitPoints;
+    }
+
 }

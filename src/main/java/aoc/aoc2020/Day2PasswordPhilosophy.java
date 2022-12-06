@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day2PasswordPhilosophy {
-    final List<PasswordAndPolicy> passwordAndPolicies = new ArrayList<>();
+    private final List<PasswordAndPolicy> passwordAndPolicies = new ArrayList<>();
 
     public Day2PasswordPhilosophy(List<String> inputLines) {
         Pattern pattern = Pattern.compile("^(\\d+)-(\\d+) (\\w): (\\w+)$");

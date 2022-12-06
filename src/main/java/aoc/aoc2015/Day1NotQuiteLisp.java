@@ -15,12 +15,8 @@ public class Day1NotQuiteLisp {
         int position = 1;
         for (char c : input.toCharArray()) {
             switch (c) {
-                case '(':
-                    level++;
-                    break;
-                case ')':
-                    level--;
-                    break;
+                case '(' -> level++;
+                case ')' -> level--;
             }
             if (level == -1) {
                 return position;

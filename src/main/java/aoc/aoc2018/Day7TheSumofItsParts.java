@@ -10,29 +10,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 class Day7TheSumofItsParts {
 
-    @Data
-    @RequiredArgsConstructor
-    static
-    class Step {
-        final String name;
-        List<Step> beforeSteps = new ArrayList<>();
-        boolean available = true;
-        boolean busy = false;
-        @NonNull
-        Integer timeLeft;
-    }
-
     private final List<Step> stepList = new ArrayList<>();
-
 
     private void readData(String input, int duration) {
         // Split string into a list
-        List<String> inputStrings = Arrays.stream(input.trim().split("\\n")).collect(Collectors.toList());
+        List<String> inputStrings = Arrays.stream(input.trim().split("\\n")).toList();
         for (String string : inputStrings) {
             String before = StringUtils.substringBetween(string, "Step ", " must");
             String after = StringUtils.substringBetween(string, "step ", " can");
@@ -52,7 +38,6 @@ class Day7TheSumofItsParts {
         }
         log.info("Read " + inputStrings.size() + " lines, creating " + stepList.size() + " steps");
     }
-
 
     String puzzleOrder(String input) {
         readData(input, 0);
@@ -80,7 +65,6 @@ class Day7TheSumofItsParts {
 
         return result.toString();
     }
-
 
     int computeTime(String input, int numberOfWorkers, int duration) {
         readData(input, duration);
@@ -116,7 +100,7 @@ class Day7TheSumofItsParts {
                     filter(s -> s.getTimeLeft() == 0).
                     forEach(s -> {
                         result.append(s.getName());
-                        log.info("Step " +  s.getName() + " finished");
+                        log.info("Step " + s.getName() + " finished");
                         s.setBusy(false);
                         s.setAvailable(false);
                         stepList.stream().filter(s2 -> s2.getBeforeSteps().contains(s)).forEach(s2 -> s2.getBeforeSteps().remove(s));
@@ -126,5 +110,16 @@ class Day7TheSumofItsParts {
         } while (stepList.stream().anyMatch(Step::isAvailable));
 
         return totalTime;
+    }
+
+    @Data
+    @RequiredArgsConstructor
+    static class Step {
+        final String name;
+        List<Step> beforeSteps = new ArrayList<>();
+        boolean available = true;
+        boolean busy = false;
+        @NonNull
+        Integer timeLeft;
     }
 }

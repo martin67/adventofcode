@@ -66,7 +66,7 @@ class Day3NoMatterHowYouSliceIt {
             for (int y = claim.getStarty(); y < claim.getEndy(); y++) {
                 for (int x = claim.getStartx(); x < claim.getEndx(); x++) {
                     if (fabric[x][y] == null) {
-                        fabric[x][y] = new HashSet<Claim>();
+                        fabric[x][y] = new HashSet<>();
                     }
                     fabric[x][y].add(claim);
                 }

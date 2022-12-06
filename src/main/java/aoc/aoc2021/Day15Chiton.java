@@ -1,6 +1,6 @@
 package aoc.aoc2021;
 
-import aoc.Position;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -16,10 +16,10 @@ import java.util.Map;
 @Slf4j
 public class Day15Chiton {
 
-    final Map<Position, Node> map = new HashMap<>();
-    final Graph<Node, DefaultWeightedEdge> graph;
-    final int height;
-    int width;
+    private final Map<Position, Node> map = new HashMap<>();
+    private final Graph<Node, DefaultWeightedEdge> graph;
+    private final int height;
+    private int width;
 
     public Day15Chiton(List<String> inputLines) {
         int y = 0;
@@ -38,7 +38,7 @@ public class Day15Chiton {
         graph = createGraph(map);
     }
 
-    int problem1() {
+    public int problem1() {
         DijkstraShortestPath<Node, DefaultWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
         Node start = map.get(new Position(0, 0));
         Node end = map.get(new Position(width - 1, height - 1));
@@ -54,7 +54,7 @@ public class Day15Chiton {
         return riskLevel;
     }
 
-    int problem2() {
+    public int problem2() {
         // expand map
         Map<Position, Node> newMap = new HashMap<>();
         for (int y = 0; y < 5; y++) {
@@ -105,7 +105,7 @@ public class Day15Chiton {
         return graph;
     }
 
-    void printMap(Map<Position, Node> map, int width, int height) {
+    private void printMap(Map<Position, Node> map, int width, int height) {
         for (int y = 0; y < height * 5; y++) {
             for (int x = 0; x < width * 5; x++) {
                 System.out.print(map.get(new Position(x, y)).riskLevel);

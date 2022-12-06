@@ -1,7 +1,6 @@
 package aoc.aoc2018;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
 import org.jgrapht.graph.DefaultEdge;
@@ -16,21 +15,7 @@ import java.util.Set;
 
 public class Day25FourDimensionalAdventure {
 
-    @Data
-    @AllArgsConstructor
-    static class SpaceTimePosition {
-        int x;
-        int y;
-        int z;
-        int t;
-
-        int distance(SpaceTimePosition p) {
-            return Math.abs(x - p.x) + Math.abs(y - p.y) + Math.abs(z - p.z) + Math.abs(t - p.t);
-        }
-    }
-
     private final List<SpaceTimePosition> spacetime = new ArrayList<>();
-
     private final Graph<SpaceTimePosition, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
     public Day25FourDimensionalAdventure(String fileName) throws IOException {
@@ -50,7 +35,7 @@ public class Day25FourDimensionalAdventure {
 
     private void setupGraph() {
         System.out.println("Setting up graph; adding vertices");
-        spacetime.forEach(n -> graph.addVertex(n));
+        spacetime.forEach(graph::addVertex);
 
         System.out.println("Setting up graph; adding edges");
         for (SpaceTimePosition stp1 : spacetime) {
@@ -69,5 +54,17 @@ public class Day25FourDimensionalAdventure {
 
         List<Set<SpaceTimePosition>> constellations = connectivityInspector.connectedSets();
         return constellations.size();
+    }
+
+    @AllArgsConstructor
+    static class SpaceTimePosition {
+        int x;
+        int y;
+        int z;
+        int t;
+
+        int distance(SpaceTimePosition p) {
+            return Math.abs(x - p.x) + Math.abs(y - p.y) + Math.abs(z - p.z) + Math.abs(t - p.t);
+        }
     }
 }

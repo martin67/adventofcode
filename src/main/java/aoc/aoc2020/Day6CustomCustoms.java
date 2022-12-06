@@ -3,7 +3,7 @@ package aoc.aoc2020;
 import java.util.*;
 
 public class Day6CustomCustoms {
-    final List<String> answers;
+    private final List<String> answers;
 
     public Day6CustomCustoms(List<String> inputLines) {
         answers = inputLines;

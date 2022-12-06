@@ -1,9 +1,9 @@
 package aoc.aoc2017;
 
 public class Day9StreamProcessing {
-    final String stream;
-    int totalScore = 0;
-    int totalGarbage = 0;
+    private final String stream;
+    private int totalScore = 0;
+    private int totalGarbage = 0;
 
     public Day9StreamProcessing(String stream) {
         this.stream = stream;
@@ -24,23 +24,15 @@ public class Day9StreamProcessing {
         totalScore += level;
         while (currentPosition < input.length()) {
             switch (input.charAt(currentPosition)) {
-                case '{':
-                    currentPosition += doGroup(input.substring(currentPosition + 1), level + 1) + 1;
-                    break;
-
-                case '}':
+                case '{' -> currentPosition += doGroup(input.substring(currentPosition + 1), level + 1) + 1;
+                case '}' -> {
                     return currentPosition + 1;
-
-                case '<':
-                    currentPosition += doGarbage(input.substring(currentPosition + 1)) + 1;
-                    break;
-
-                case ',':
-                    currentPosition++;
-                    break;
-
-                default:
+                }
+                case '<' -> currentPosition += doGarbage(input.substring(currentPosition + 1)) + 1;
+                case ',' -> currentPosition++;
+                default -> {
                     assert false : "Should not get here!";
+                }
             }
         }
 
@@ -51,18 +43,14 @@ public class Day9StreamProcessing {
         int currentPosition = 0;
         while (currentPosition < input.length()) {
             switch (input.charAt(currentPosition)) {
-
-                case '>':
+                case '>' -> {
                     return currentPosition + 1;
-
-                case '!':
-                    currentPosition += 2;
-                    break;
-
-                default:
+                }
+                case '!' -> currentPosition += 2;
+                default -> {
                     currentPosition++;
                     totalGarbage++;
-                    break;
+                }
             }
         }
         return 0;

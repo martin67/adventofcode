@@ -1,7 +1,7 @@
 package aoc.aoc2016;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import org.apache.commons.lang3.StringUtils;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Day13AMazeOfTwistyLittleCubicles {
+    private final int favoriteNumber;
     private final Graph<Position, DefaultEdge> graph = new DefaultUndirectedGraph<>(DefaultEdge.class);
-    final int favoriteNumber;
 
     public Day13AMazeOfTwistyLittleCubicles(int favoriteNumber) {
         this.favoriteNumber = favoriteNumber;
@@ -48,7 +48,6 @@ public class Day13AMazeOfTwistyLittleCubicles {
         DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
         ShortestPathAlgorithm.SingleSourcePaths<Position, DefaultEdge> iPaths = dijkstraAlg.getPaths(new Position(1, 1));
         return iPaths.getPath(endPosition).getLength();
-
     }
 
     int numberOfLocations() {

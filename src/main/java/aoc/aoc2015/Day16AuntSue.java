@@ -18,39 +18,19 @@ public class Day16AuntSue {
                 Sue sue = new Sue(Integer.parseInt(matcher.group(1)));
                 for (int i = 0; i < 3; i++) {
                     switch (matcher.group(2 + i * 2)) {
-                        case "children":
-                            sue.children = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        case "cats":
-                            sue.cats = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        case "samoyeds":
-                            sue.samoyeds = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        case "pomeranians":
-                            sue.pomeranians = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        case "akitas":
-                            sue.akitas = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        case "vizslas":
-                            sue.vizslas = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        case "goldfish":
-                            sue.goldfish = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        case "trees":
-                            sue.trees = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        case "cars":
-                            sue.cars = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        case "perfumes":
-                            sue.perfumes = Integer.parseInt(matcher.group(3 + i * 2));
-                            break;
-                        default:
+                        case "children" -> sue.children = Integer.parseInt(matcher.group(3 + i * 2));
+                        case "cats" -> sue.cats = Integer.parseInt(matcher.group(3 + i * 2));
+                        case "samoyeds" -> sue.samoyeds = Integer.parseInt(matcher.group(3 + i * 2));
+                        case "pomeranians" -> sue.pomeranians = Integer.parseInt(matcher.group(3 + i * 2));
+                        case "akitas" -> sue.akitas = Integer.parseInt(matcher.group(3 + i * 2));
+                        case "vizslas" -> sue.vizslas = Integer.parseInt(matcher.group(3 + i * 2));
+                        case "goldfish" -> sue.goldfish = Integer.parseInt(matcher.group(3 + i * 2));
+                        case "trees" -> sue.trees = Integer.parseInt(matcher.group(3 + i * 2));
+                        case "cars" -> sue.cars = Integer.parseInt(matcher.group(3 + i * 2));
+                        case "perfumes" -> sue.perfumes = Integer.parseInt(matcher.group(3 + i * 2));
+                        default -> {
                             assert false;
-                            break;
+                        }
                     }
                 }
                 sues.add(sue);

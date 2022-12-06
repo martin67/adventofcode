@@ -1,7 +1,7 @@
 package aoc.aoc2020;
 
-import aoc.Direction;
-import aoc.Position;
+import aoc.common.Direction;
+import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Slf4j
 public class Day12RainRisk {
-    final List<Action> actions = new ArrayList<>();
+    private final List<Action> actions = new ArrayList<>();
 
     public Day12RainRisk(List<String> inputLines) {
         for (String line : inputLines) {
@@ -23,29 +23,17 @@ public class Day12RainRisk {
 
         for (Action action : actions) {
             switch (action.instruction) {
-                case 'N':
-                    pos.setY(pos.getY() - action.argument);
-                    break;
-                case 'S':
-                    pos.setY(pos.getY() + action.argument);
-                    break;
-                case 'E':
-                    pos.setX(pos.getX() + action.argument);
-                    break;
-                case 'W':
-                    pos.setX(pos.getX() - action.argument);
-                    break;
-                case 'L':
-                    dir = dir.turn(Direction.Left, action.argument);
-                    break;
-                case 'R':
-                    dir = dir.turn(Direction.Right, action.argument);
-                    break;
-                case 'F':
+                case 'N' -> pos.setY(pos.getY() - action.argument);
+                case 'S' -> pos.setY(pos.getY() + action.argument);
+                case 'E' -> pos.setX(pos.getX() + action.argument);
+                case 'W' -> pos.setX(pos.getX() - action.argument);
+                case 'L' -> dir = dir.turn(Direction.Left, action.argument);
+                case 'R' -> dir = dir.turn(Direction.Right, action.argument);
+                case 'F' -> {
                     for (int i = 0; i < action.argument; i++) {
                         pos = pos.adjacent(dir);
                     }
-                    break;
+                }
             }
         }
         return pos.distance(new Position(0, 0));
@@ -59,24 +47,13 @@ public class Day12RainRisk {
 
         for (Action action : actions) {
             switch (action.instruction) {
-                case 'N':
-                    waypoint.setY(waypoint.getY() - action.argument);
-                    break;
-                case 'S':
-                    waypoint.setY(waypoint.getY() + action.argument);
-                    break;
-                case 'E':
-                    waypoint.setX(waypoint.getX() + action.argument);
-                    break;
-                case 'W':
-                    waypoint.setX(waypoint.getX() - action.argument);
-                    break;
-
-                case 'L':
-                case 'R':
+                case 'N' -> waypoint.setY(waypoint.getY() - action.argument);
+                case 'S' -> waypoint.setY(waypoint.getY() + action.argument);
+                case 'E' -> waypoint.setX(waypoint.getX() + action.argument);
+                case 'W' -> waypoint.setX(waypoint.getX() - action.argument);
+                case 'L', 'R' -> {
                     dX = Math.abs(waypoint.getX() - pos.getX());
                     dY = Math.abs(waypoint.getY() - pos.getY());
-
                     if (action.instruction == 'L' && action.argument == 90 ||
                             action.instruction == 'R' && action.argument == 270) {
                         if (inUpperRightQuadrant(pos, waypoint)) {
@@ -133,9 +110,8 @@ public class Day12RainRisk {
                     } else {
                         log.error("Ooops");
                     }
-                    break;
-
-                case 'F':
+                }
+                case 'F' -> {
                     dX = Math.abs(waypoint.getX() - pos.getX());
                     if (waypoint.getX() < pos.getX()) {
                         dX = -dX;
@@ -144,14 +120,13 @@ public class Day12RainRisk {
                     if (waypoint.getY() < pos.getY()) {
                         dY = -dY;
                     }
-
                     for (int i = 0; i < action.argument; i++) {
                         pos.setX(pos.getX() + dX);
                         pos.setY(pos.getY() + dY);
                     }
                     waypoint.setX(pos.getX() + dX);
                     waypoint.setY(pos.getY() + dY);
-                    break;
+                }
             }
         }
         return pos.distance(new Position(0, 0));
