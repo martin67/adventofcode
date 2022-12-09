@@ -16,18 +16,9 @@ class Day19GoWithTheFlowTest {
             "6, src/test/resources/2018/day19-demo1.txt",
             "1836, src/test/resources/2018/day19.txt"
     })
-    void getLeftInRegister(int outcome, String fileName) throws IOException {
+    void problem1(int outcome, String fileName) throws IOException {
         Day19GoWithTheFlow day19GoWithTheFlow = new Day19GoWithTheFlow(fileName);
         assertEquals(outcome, day19GoWithTheFlow.getLeftInRegister());
-    }
-
-    @ParameterizedTest
-    @CsvSource({
-            "1836, src/test/resources/2018/day19.txt"
-    })
-    void getLeftInRegister2(int outcome, String fileName) throws IOException {
-        Day19GoWithTheFlow day19GoWithTheFlow = new Day19GoWithTheFlow(fileName);
-        assertEquals(outcome, day19GoWithTheFlow.getLeftInRegister2());
     }
 
     @ParameterizedTest

@@ -19,23 +19,21 @@ public class Day19GoWithTheFlow {
     int getLeftInRegister() {
 
         boolean programEnd = false;
-        int iterations = 0;
-        while (!programEnd && iterations < 1000) {
+        while (!programEnd) {
             processor.saveInstructionPointer();
-            System.out.print("ip=" + processor.getInstructionPointer() + " " + processor.registerToString());
+            //System.out.print("ip=" + processor.getInstructionPointer() + " " + processor.registerToString());
             Instruction instruction = processor.getInstructions().get(processor.getInstructionPointer());
-            System.out.print(instruction + " ");
+            //System.out.print(instruction + " ");
             // update the instruction pointer register to the current value of the instruction pointer
 
             instruction.getOpCode().operator(instruction.getA(), instruction.getB(), instruction.getC());
-            System.out.println(processor.registerToString());
+            //System.out.println(processor.registerToString());
 
             processor.loadInstructionPointer();
             processor.incrementInstructionPointer();
             if (processor.getInstructionPointer() >= processor.getInstructions().size()) {
                 programEnd = true;
             }
-            iterations++;
         }
         return processor.getRegister()[0];
     }
@@ -93,7 +91,7 @@ public class Day19GoWithTheFlow {
             r3 = r3 + 1;
         }
 
-        return (int)r0;
+        return (int) r0;
     }
 
     int findFactors(int number) {
@@ -101,13 +99,13 @@ public class Day19GoWithTheFlow {
         List<Integer> factors = new ArrayList<>();
 
         System.out.print("Factors of " + number + " are: ");
-        for(int i = 1; i <= number; ++i) {
+        for (int i = 1; i <= number; ++i) {
             if (number % i == 0) {
                 factors.add(i);
                 System.out.print(i + " ");
             }
         }
-        System.out.println ("Factors of " + number + " are: " + factors.size());
+        System.out.println("Factors of " + number + " are: " + factors.size());
 
         return factors.stream().mapToInt(Integer::intValue).sum();
     }

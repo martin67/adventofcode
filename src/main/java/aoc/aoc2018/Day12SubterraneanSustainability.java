@@ -10,36 +10,48 @@ import java.util.*;
 @Slf4j
 public class Day12SubterraneanSustainability {
 
-    private final Tunnel tunnel;
-    private final int totalGenerations;
+    LinkedList<Pot> pots = new LinkedList<>();
+    List<Note> notes = new ArrayList<>();
+    int potOffset;
+    private Tunnel tunnel;
     private int generation = 0;
 
+    public Day12SubterraneanSustainability(List<String> inputLines) {
+
+        // First row is the initial state
+        // initial state: #..#.#..##......###...###
+        for (char c : inputLines.get(0).toCharArray()) {
+            if (c == '.' || c == '#') {
+                pots.add(new Pot(c));
+            }
+        }
+        log.info("Reading {} states", pots.size());
+
+
+        // Then it's the growth patterns
+        // ...## => #
+        for (String line : inputLines.subList(2, inputLines.size())) {
+            notes.add(new Note(line.substring(0, 5), line.charAt(9)));
+        }
+        log.info("Reading {}", notes.size());
+    }
 
     public Day12SubterraneanSustainability(String input, int totalGenerations) {
         tunnel = new Tunnel();
         tunnel.init(input);
-        this.totalGenerations = totalGenerations;
     }
 
-    public void CheckInitialState() {
-        tunnel.print();
-        for (int i = 0; i < totalGenerations; i++) {
-            tunnel.grow();
-            generation++;
-            log.info("potOffset: " + tunnel.getPotOffset());
-            tunnel.print();
-        }
-    }
-
-    public int ComputePlantSum() {
-        tunnel.print();
-        for (int i = 0; i < totalGenerations; i++) {
-            tunnel.grow();
-            generation++;
-            tunnel.print();
+    long problem1(long generations) {
+        for (long i = 0; i < generations; i++) {
+            grow();
         }
 
-        return tunnel.sumOfPlantsWithOffset();
+        int checksum = 0;
+        for (int i = 0; i < pots.size(); i++)
+            if (pots.get(i).getState() == '#') {
+                checksum += i + potOffset;
+            }
+        return checksum;
     }
 
     public String ComputeBigPlantSum(BigInteger generations) {
@@ -76,6 +88,55 @@ public class Day12SubterraneanSustainability {
 
     }
 
+    void grow() {
+        // add four empty pots to the left of the list and four to the right
+        for (int i = 0; i < 4; i++) {
+            pots.addFirst(new Pot('.'));
+        }
+        for (int i = 0; i < 4; i++) {
+            pots.addLast(new Pot('.'));
+        }
+
+        // Create a new temporary potlist to store results
+        LinkedList<Pot> newPots = new LinkedList<>();
+
+        // Start comparing patterns from pos 2 till end-2
+        for (int i = 2; i < pots.size() - 2; i++) {
+            //log.info("Checking pot " + (i-4) + " for pattern match");
+
+            Pot newPot = new Pot('.');
+            // Go through all patterns and check if there's a hit
+            for (Note note : notes) {
+                if (note.getPattern().charAt(0) == pots.get(i - 2).getState() &&
+                        note.getPattern().charAt(1) == pots.get(i - 1).getState() &&
+                        note.getPattern().charAt(2) == pots.get(i).getState() &&
+                        note.getPattern().charAt(3) == pots.get(i + 1).getState() &&
+                        note.getPattern().charAt(4) == pots.get(i + 2).getState()) {
+                    //log.info("Found match on pot " + (i-4) + " for note: " + note);
+                    newPot.setState(note.getNextState());
+                }
+            }
+
+            newPots.add(newPot);
+        }
+        pots = newPots;
+
+        // remove empty pots on each end
+        ListIterator<Pot> pi = pots.listIterator();
+        int potsAddedToStart = -2;
+        while (pi.hasNext() && pi.next().getState() == '.') {
+            pi.remove();
+            potsAddedToStart++;
+        }
+        //log.info("Pots added to start: " + potsAddedToStart);
+        potOffset += potsAddedToStart;
+
+        pi = pots.listIterator(pots.size());
+        while (pi.hasPrevious() && pi.previous().getState() == '.') {
+            pi.remove();
+        }
+    }
+
     @Data
     @AllArgsConstructor
     static class Pot {
@@ -90,6 +151,7 @@ public class Day12SubterraneanSustainability {
     }
 
     @Data
+    static
     class Tunnel {
         LinkedList<Pot> pots = new LinkedList<>();
         List<Note> notes = new ArrayList<>();
@@ -167,28 +229,6 @@ public class Day12SubterraneanSustainability {
             while (pi.hasPrevious() && pi.previous().getState() == '.') {
                 pi.remove();
             }
-        }
-
-        void print() {
-            System.out.printf("%2d: ", generation);
-            int sum = 0;
-            int bigSum = 0;
-//            for(Pot pot: pots) {
-//                System.out.print(pot.getState());
-//                sum +=
-//            }
-
-            for (int i = 0; i < pots.size(); i++) {
-                Pot pot = pots.get(i);
-                if (pot.getState() == '#') {
-                    sum += i;
-                    bigSum += i + potOffset;
-                }
-                System.out.print(pot.getState());
-            }
-
-            System.out.printf("Sum: %d  Bigsum: %d  Offset: %d", sum, bigSum, potOffset);
-            System.out.println();
         }
 
         int sumOfPlants(int offset) {

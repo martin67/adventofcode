@@ -1,7 +1,6 @@
 package aoc.aoc2018;
 
 import aoc.common.Position;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 public class Day18SettlersOfTheNorthPole {
 
     private final Set<Acre> collectionArea = new HashSet<>();
+    Map<Position, Acre> map = new HashMap<>();
     private int areaWidth;
     private int areaHeight;
 
@@ -25,30 +25,23 @@ public class Day18SettlersOfTheNorthPole {
 
     private void readData(String fileName) throws IOException {
         List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
-
+        Map<Character, AcreContent> contentMap = Map.of('.', AcreContent.Open, '|', AcreContent.Wood, '#', AcreContent.Lumberyard);
         int x = 0;
         int y = 0;
         for (String row : inputStrings) {
             x = 0;
             for (char c : row.toCharArray()) {
-                collectionArea.add(new Acre(new Position(x, y), c, ' '));
+                Position position = new Position(x, y);
+                Acre acre = new Acre(position, c);
+                collectionArea.add(acre);
+                acre.content = contentMap.get(c);
+                map.put(position, acre);
                 x++;
             }
             y++;
         }
         areaHeight = y;
         areaWidth = x;
-    }
-
-    private void printMap() {
-        for (int y = 0; y < areaHeight; y++) {
-            for (int x = 0; x < areaWidth; x++) {
-                System.out.print(getAcre(new Position(x, y))
-                        .orElse(new Acre(new Position(x, y), ' ', ' '))
-                        .getType());
-            }
-            System.out.println();
-        }
     }
 
     private Optional<Acre> getAcre(Position position) {
@@ -70,8 +63,8 @@ public class Day18SettlersOfTheNorthPole {
         return adjacentAcres;
     }
 
-    int computeResourceValue() {
-        int value = 0;
+    long computeResourceValue() {
+        long value = 0;
 
         for (int minutes = 0; minutes < 10; minutes++) {
             value = resourceValue();
@@ -80,35 +73,95 @@ public class Day18SettlersOfTheNorthPole {
         return value;
     }
 
-    private int resourceValue() {
+    private long resourceValue() {
 
-        //System.out.println("Minute: " + minutes);
-        //printMap();
+        for (Acre acre : map.values()) {
+            acre.newType = acre.type;
+            acre.newContent = acre.content;
 
-        collectionArea.forEach(acre -> acre.setNewType(acre.getType()));
+            switch (acre.content) {
+                case Open -> {
+                    int wood = 0;
+                    for (Position p : acre.getPosition().allAdjacentIncludingDiagonal()) {
+                        if (map.containsKey(p) && map.get(p).content == AcreContent.Wood) {
+                            wood++;
+                        }
+                    }
+                    if (wood >= 3) {
+                        acre.newContent = AcreContent.Wood;
+                    }
+//                    long trees = acre.getPosition().allAdjacentIncludingDiagonal().stream()
+//                            .filter(a -> acre.getContent() == AcreContent.Wood).count();
+                }
+                case Wood -> {
+                    int lumberyards = 0;
+                    for (Position p : acre.getPosition().allAdjacentIncludingDiagonal()) {
+                        if (map.containsKey(p) && map.get(p).content == AcreContent.Lumberyard) {
+                            lumberyards++;
+                        }
+                    }
+                    if (lumberyards >= 3) {
+                        acre.newContent = AcreContent.Lumberyard;
+                    }
+//                    long lumberyards = acre.getPosition().allAdjacentIncludingDiagonal().stream()
+//                            .filter(a -> acre.getContent() == AcreContent.Wood).count();
+                }
+                case Lumberyard -> {
+                    int wood = 0;
+                    int lumberyards = 0;
+                    for (Position p : acre.getPosition().allAdjacentIncludingDiagonal()) {
+                        if (map.containsKey(p)) {
+                            if (map.get(p).content == AcreContent.Lumberyard) {
+                                lumberyards++;
+                            }
+                            if (map.get(p).content == AcreContent.Wood) {
+                                wood++;
+                            }
+                        }
+                    }
+//                    long lumberyards = acre.getPosition().allAdjacentIncludingDiagonal().stream()
+//                            .filter(a -> acre.getContent() == AcreContent.Lumberyard).count();
+//                    long trees = acre.getPosition().allAdjacentIncludingDiagonal().stream()
+//                            .filter(a -> acre.getContent() == AcreContent.Wood).count();
+                    if (lumberyards == 0 || wood == 0) {
+                        acre.newContent = AcreContent.Open;
+                    }
+                }
+            }
+        }
+        collectionArea.forEach(acre -> acre.setContent(acre.getNewContent()));
 
-        collectionArea.stream().filter(acre -> acre.getType() == '.')
-                .filter(acre -> getAdjacentAcres(acre).stream()
-                        .filter(acre1 -> acre1.getType() == '|').count() >= 3)
-                .forEach(acre -> acre.setNewType('|'));
+        if (false) {
 
-        collectionArea.stream().filter(acre -> acre.getType() == '|')
-                .filter(acre -> getAdjacentAcres(acre).stream()
-                        .filter(acre1 -> acre1.getType() == '#')
-                        .count() >= 3)
-                .forEach(acre -> acre.setNewType('#'));
+            collectionArea.forEach(acre -> acre.setNewType(acre.getType()));
 
-        collectionArea.stream().filter(acre -> acre.getType() == '#')
-                .forEach(acre -> acre.setNewType('.'));
-        collectionArea.stream().filter(acre -> acre.getType() == '#')
-                .filter(acre -> getAdjacentAcres(acre).stream().anyMatch(acre1 -> acre1.getType() == '#'))
-                .filter(acre -> getAdjacentAcres(acre).stream().anyMatch(acre1 -> acre1.getType() == '|'))
-                .forEach(acre -> acre.setNewType('#'));
+            collectionArea.stream()
+                    .filter(acre -> acre.getType() == '.')
+                    .filter(acre -> getAdjacentAcres(acre).stream()
+                            .filter(acre1 -> acre1.getType() == '|').count() >= 3)
+                    .forEach(acre -> acre.setNewType('|'));
+            collectionArea.stream()
+                    .filter(acre -> acre.getType() == '|')
+                    .filter(acre -> getAdjacentAcres(acre).stream()
+                            .filter(acre1 -> acre1.getType() == '#')
+                            .count() >= 3)
+                    .forEach(acre -> acre.setNewType('#'));
+            collectionArea.stream()
+                    .filter(acre -> acre.getType() == '#')
+                    .forEach(acre -> acre.setNewType('.'));
+            collectionArea.stream()
+                    .filter(acre -> acre.getType() == '#')
+                    .filter(acre -> getAdjacentAcres(acre).stream().anyMatch(acre1 -> acre1.getType() == '#'))
+                    .filter(acre -> getAdjacentAcres(acre).stream().anyMatch(acre1 -> acre1.getType() == '|'))
+                    .forEach(acre -> acre.setNewType('#'));
 
-        collectionArea.forEach(acre -> acre.setType(acre.getNewType()));
+            collectionArea.forEach(acre -> acre.setType(acre.getNewType()));
+        }
 
-        int wood = Math.toIntExact(collectionArea.stream().filter(acre -> acre.getType() == '|').count());
-        int lumberyards = Math.toIntExact(collectionArea.stream().filter(acre -> acre.getType() == '#').count());
+//        int wood = Math.toIntExact(collectionArea.stream().filter(acre -> acre.getType() == '|').count());
+//        int lumberyards = Math.toIntExact(collectionArea.stream().filter(acre -> acre.getType() == '#').count());
+        long wood = collectionArea.stream().filter(acre -> acre.getContent() == AcreContent.Wood).count();
+        long lumberyards = collectionArea.stream().filter(acre -> acre.getContent() == AcreContent.Lumberyard).count();
 
         return wood * lumberyards;
     }
@@ -126,7 +179,7 @@ public class Day18SettlersOfTheNorthPole {
 
         if (false) {
             for (int i = 0; i < 1000; i++) {
-                int value = resourceValue();
+                int value = (int) resourceValue();
                 System.out.println("Minutes: " + i + ", value: " + value);
                 values.add(value);
             }
@@ -137,8 +190,8 @@ public class Day18SettlersOfTheNorthPole {
                 log.error("Unable to write out names", e);
             }
         } else {
-            List<String> strings = Files.readAllLines(Paths.get("resourceValues.txt"));
-            values = strings.stream().map(Integer::valueOf).collect(Collectors.toList());
+            //List<String> strings = Files.readAllLines(Paths.get("resourceValues.txt"));
+            //values = strings.stream().map(Integer::valueOf).collect(Collectors.toList());
         }
         int length = values.size();
 
@@ -198,12 +251,20 @@ public class Day18SettlersOfTheNorthPole {
         return match;
     }
 
+    enum AcreContent {Open, Wood, Lumberyard}
+
     @Data
-    @AllArgsConstructor
     static class Acre {
         Position position;
         char type;
         char newType;
+        AcreContent content;
+        AcreContent newContent;
+
+        public Acre(Position position, char type) {
+            this.position = position;
+            this.type = type;
+        }
     }
 
 }

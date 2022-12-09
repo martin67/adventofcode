@@ -147,4 +147,9 @@ public class Position implements Comparable<Position> {
     public boolean insideSquare(int width, int height) {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
+
+    @Override
+    public String toString() {
+        return x + "," + y;
+    }
 }

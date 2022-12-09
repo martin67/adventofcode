@@ -15,8 +15,7 @@ class Day18SettlersOfTheNorthPoleTest {
     @ParameterizedTest
     @CsvSource({
             "1147, src/test/resources/2018/day18-demo1.txt",
-            "588436, src/test/resources/2018/day18.txt"
-    })
+            "588436, src/test/resources/2018/day18.txt"})
     void problem1(int outcome, String fileName) throws IOException {
         Day18SettlersOfTheNorthPole day18SettlersOfTheNorthPole = new Day18SettlersOfTheNorthPole(fileName);
         assertEquals(outcome, day18SettlersOfTheNorthPole.computeResourceValue());

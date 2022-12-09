@@ -1,5 +1,6 @@
 package aoc.aoc2018;
 
+import aoc.common.Position;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -17,9 +18,9 @@ class Day11ChronalChargeTest {
             "101,153, 71, 4"
     })
     void checkPowerLevel(int x, int y, int serial, int powerLevel) {
-        Day11ChronalCharge.Coordinate coordinate = new Day11ChronalCharge.Coordinate(x, y);
+        Position position = new Position(x, y);
         Day11ChronalCharge day11ChronalCharge = new Day11ChronalCharge();
-        int result = day11ChronalCharge.getPowerLevel(coordinate, serial);
+        int result = day11ChronalCharge.getPowerLevel(position, serial);
         assertEquals(powerLevel, result);
     }
 
@@ -31,7 +32,7 @@ class Day11ChronalChargeTest {
     })
     void problem1(int serial, String coord) {
         Day11ChronalCharge day11ChronalCharge = new Day11ChronalCharge();
-        Day11ChronalCharge.Coordinate answer = day11ChronalCharge.findLargestTotalPower(serial);
+        Position answer = day11ChronalCharge.findLargestTotalPower(serial);
         assertEquals(coord, answer.toString());
     }
 
