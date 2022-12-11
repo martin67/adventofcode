@@ -66,6 +66,7 @@ public class Day11MonkeyInTheMiddle {
         return sortedMonkeys.get(0).inspections * sortedMonkeys.get(1).inspections;
     }
 
+    @SuppressWarnings("DataFlowIssue")
     class Monkey {
         int id;
         Deque<Long> items = new ArrayDeque<>();
@@ -129,12 +130,9 @@ public class Day11MonkeyInTheMiddle {
             inspections++;
             long item = items.pollLast();
             long worryLevel = operate(item);
-            if (worryLevel < 0) {
-                log.error("oops {}", worryLevel);
-            }
 
             long rest = worryLevel / lcd;
-            if (rest >= 1) {
+            if (rest > 0) {
                 worryLevel -= rest * lcd;
             }
 
