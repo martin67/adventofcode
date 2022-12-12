@@ -17,6 +17,7 @@ public class Day12HillClimbingAlgorithm {
 
     Map<Position, Integer> map = new HashMap<>();
     Graph<Position, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+    DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
     Position start;
     Position end;
 
@@ -59,12 +60,10 @@ public class Day12HillClimbingAlgorithm {
     }
 
     int problem1() {
-        DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
         return dijkstraAlg.getPath(start, end).getLength();
     }
 
     int problem2() {
-        DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
         List<Position> startPositions = map.entrySet().stream()
                 .filter(entry -> entry.getValue() == 0)
                 .map(Map.Entry::getKey)
@@ -73,10 +72,7 @@ public class Day12HillClimbingAlgorithm {
         for (Position p : startPositions) {
             GraphPath<Position, DefaultEdge> path = dijkstraAlg.getPath(p, end);
             if (path != null) {
-                int length = path.getLength();
-                if (length < shortestLength) {
-                    shortestLength = length;
-                }
+                shortestLength = Math.min(path.getLength(), shortestLength);
             }
         }
         return shortestLength;
