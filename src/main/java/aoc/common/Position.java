@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Slf4j
@@ -23,6 +24,42 @@ public class Position implements Comparable<Position> {
     public Position(Position p) {
         this.x = p.x;
         this.y = p.y;
+    }
+
+    static public void printMap(Set<Position> map) {
+        printMap(map, null, false);
+    }
+    static public void printMap(Set<Position> map, String msg) {
+        printMap(map, msg, false);
+    }
+
+    static public void printMap(Set<Position> map, boolean coordinates) {
+        printMap(map, null, coordinates);
+    }
+
+    static public void printMap(Set<Position> map, String msg, boolean coordinates) {
+        int xMin = map.stream().mapToInt(Position::getX).min().orElseThrow(NoSuchElementException::new);
+        int xMax = map.stream().mapToInt(Position::getX).max().orElseThrow(NoSuchElementException::new);
+        int yMin = map.stream().mapToInt(Position::getY).min().orElseThrow(NoSuchElementException::new);
+        int yMax = map.stream().mapToInt(Position::getY).max().orElseThrow(NoSuchElementException::new);
+
+        if (msg != null) {
+            System.out.println(msg);
+        }
+        if (coordinates) {
+            System.out.printf("Upper left <%d,%d>, lower right: <%d,%d>\n", xMin, xMax, yMin, yMax);
+        }
+        for (int y = yMin; y < yMax + 1; y++) {
+            for (int x = xMin; x < xMax + 1; x++) {
+                if (map.contains(new Position(x, y))) {
+                    System.out.print("#");
+                } else {
+                    System.out.print(".");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 
     @Override
@@ -152,4 +189,6 @@ public class Position implements Comparable<Position> {
     public String toString() {
         return x + "," + y;
     }
+
 }
+
