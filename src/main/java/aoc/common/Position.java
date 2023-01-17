@@ -47,7 +47,7 @@ public class Position implements Comparable<Position> {
             System.out.println(msg);
         }
         if (coordinates) {
-            System.out.printf("Upper left <%d,%d>, lower right: <%d,%d>\n", xMin, xMax, yMin, yMax);
+            System.out.printf("Upper left <%d,%d>, lower right: <%d,%d>\n", xMin, yMin, xMax, yMax);
         }
         for (int y = yMin; y < yMax + 1; y++) {
             for (int x = xMin; x < xMax + 1; x++) {

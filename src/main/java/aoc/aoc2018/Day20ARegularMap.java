@@ -15,9 +15,9 @@ public class Day20ARegularMap {
     public Day20ARegularMap(String fileName, String output, boolean blockDetours) throws IOException {
         dag = new DAG(blockDetours);
         readData(fileName);
-        if (output != null) {
-            dag.toGML(output);
-        }
+//        if (output != null) {
+//            dag.toGML(output);
+//        }
     }
 
     private void readData(String fileName) throws IOException {

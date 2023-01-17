@@ -1,17 +1,27 @@
 package aoc.common;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
 public class SpacePosition {
     private int x;
     private int y;
     private int z;
+
+    public SpacePosition(int x, int y, int z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public SpacePosition(String x, String y, String z) {
+        this.x = Integer.parseInt(x);
+        this.y = Integer.parseInt(y);
+        this.z = Integer.parseInt(z);
+    }
 
     public int distance(SpacePosition s) {
         return Math.abs(x - s.x) + Math.abs(y - s.y) + Math.abs(z - s.z);
