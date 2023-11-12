@@ -1,31 +1,31 @@
 package aoc.aoc2017;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2017: Day 18: Duet")
 class Day18DuetTest {
 
     @ParameterizedTest
-    @CsvSource({"4, src/test/resources/day18-demo1.txt",
-            "9423, src/test/resources/day18.txt"})
+    @CsvSource({"4, day18-demo1.txt",
+            "9423, day18.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        assertEquals(expected, new Day18Duet(Files.readAllLines(Paths.get(fileName))).problem1());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day18Duet(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"3, src/test/resources/day18-demo2.txt",
-            "7620, src/test/resources/day18.txt"})
+    @CsvSource({"3, day18-demo2.txt",
+            "7620, day18.txt"})
     void problem2(int expected, String fileName) throws IOException, ExecutionException, InterruptedException {
-        assertEquals(expected, new Day18Duet(Files.readAllLines(Paths.get(fileName))).problem2());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day18Duet(inputLines).problem2()).isEqualTo(expected);
     }
-
 }

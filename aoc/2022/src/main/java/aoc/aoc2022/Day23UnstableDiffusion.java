@@ -2,6 +2,7 @@ package aoc.aoc2022;
 
 import aoc.common.Direction;
 import aoc.common.Position;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Day23UnstableDiffusion {
 
-    Set<Elf> elves = new HashSet<>();
+    final Set<Elf> elves = new HashSet<>();
 
     public Day23UnstableDiffusion(List<String> inputLines) {
         int y = 0;
@@ -101,6 +102,7 @@ public class Day23UnstableDiffusion {
     }
 
     static class Elf {
+        @Getter
         Position position;
         Position proposedPosition;
 
@@ -188,8 +190,5 @@ public class Day23UnstableDiffusion {
             }
         }
 
-        public Position getPosition() {
-            return position;
-        }
     }
 }

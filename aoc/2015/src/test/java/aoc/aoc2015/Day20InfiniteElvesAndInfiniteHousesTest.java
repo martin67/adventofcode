@@ -22,8 +22,7 @@ class Day20InfiniteElvesAndInfiniteHousesTest {
             "29000000, 0"
     })
     void problem1(Long input, Long expected) {
-        assertThat(new Day20InfiniteElvesAndInfiniteHouses().lowestHouseNumber(input))
-                .isEqualTo(expected);
+        assertThat(new Day20InfiniteElvesAndInfiniteHouses().lowestHouseNumber(input)).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -40,7 +39,6 @@ class Day20InfiniteElvesAndInfiniteHousesTest {
             "29000000, 0"
     })
     void problem2(Long input, Long expected) {
-        assertThat(new Day20InfiniteElvesAndInfiniteHouses().lowestHouseNumber2(input))
-                .isEqualTo(expected);
+        assertThat(new Day20InfiniteElvesAndInfiniteHouses().lowestHouseNumber2(input)).isEqualTo(expected);
     }
 }

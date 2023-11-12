@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day15BeaconExclusionZone {
 
-    Map<Position, Sensor> sensors = new HashMap<>();
-    Set<Position> beacons = new HashSet<>();
+    final Map<Position, Sensor> sensors = new HashMap<>();
+    final Set<Position> beacons = new HashSet<>();
 
     public Day15BeaconExclusionZone(List<String> inputLines) {
         Pattern pattern = Pattern.compile("Sensor at x=(-?\\d+), y=(-?\\d+): closest beacon is at x=(-?\\d+), y=(-?\\d+)");
@@ -87,7 +87,7 @@ public class Day15BeaconExclusionZone {
     }
 
     static class Sensor {
-        Position position;
+        final Position position;
         Position closestBeacon;
 
         public Sensor(Position position) {

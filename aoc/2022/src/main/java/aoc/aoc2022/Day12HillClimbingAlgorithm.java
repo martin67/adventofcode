@@ -15,9 +15,9 @@ import java.util.Map;
 @Slf4j
 public class Day12HillClimbingAlgorithm {
 
-    Map<Position, Integer> map = new HashMap<>();
-    Graph<Position, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
-    DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+    final Map<Position, Integer> map = new HashMap<>();
+    final Graph<Position, DefaultEdge> graph = new SimpleDirectedGraph<>(DefaultEdge.class);
+    final DijkstraShortestPath<Position, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
     Position start;
     Position end;
 

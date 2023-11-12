@@ -1,15 +1,13 @@
 package aoc.aoc2017;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2017: Day 9: Stream Processing")
 class Day9StreamProcessingTest {
@@ -24,14 +22,14 @@ class Day9StreamProcessingTest {
             "9, '{{<!!>},{<!!>},{<!!>},{<!!>}}'",
             "3, '{{<a!>},{<a!>},{<a!>},{<ab>}}'"})
     void score(int expected, String stream) {
-        assertEquals(expected, new Day9StreamProcessing(stream).score());
+        assertThat(new Day9StreamProcessing(stream).score()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"13154, src/test/resources/day9.txt"})
+    @CsvSource({"13154, day9.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day9StreamProcessing(inputLines.get(0)).score());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day9StreamProcessing(inputLines.get(0)).score()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -49,13 +47,13 @@ class Day9StreamProcessingTest {
             "0, <!!!>>",
             "10, '<{o\"i!a,<{i<a>'"})
     void garbage(int expected, String stream) {
-        assertEquals(expected, new Day9StreamProcessing(stream).garbage());
+        assertThat(new Day9StreamProcessing(stream).garbage()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"6369, src/test/resources/day9.txt"})
+    @CsvSource({"6369, day9.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day9StreamProcessing(inputLines.get(0)).garbage());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day9StreamProcessing(inputLines.get(0)).garbage()).isEqualTo(expected);
     }
 }

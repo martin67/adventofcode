@@ -7,7 +7,7 @@ import java.util.List;
 @Slf4j
 public class Day10CathodeRayTube {
 
-    List<String> instructions;
+    final List<String> instructions;
 
     public Day10CathodeRayTube(List<String> inputLines) {
         this.instructions = inputLines;

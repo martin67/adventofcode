@@ -34,30 +34,19 @@ public class Day2PasswordPhilosophy {
         return passwordAndPolicies.stream().filter(PasswordAndPolicy::validPasswordNewPolicy).count();
     }
 
-    static class PasswordAndPolicy {
-        final int min;
-        final int max;
-        final char letter;
-        final String password;
-
-        public PasswordAndPolicy(int min, int max, char letter, String password) {
-            this.min = min;
-            this.max = max;
-            this.letter = letter;
-            this.password = password;
-        }
+    record PasswordAndPolicy(int min, int max, char letter, String password) {
 
         boolean validPassword() {
-            int frequency = CharMatcher.is(letter).countIn(password);
+                int frequency = CharMatcher.is(letter).countIn(password);
 
-            return (frequency >= min && frequency <= max);
+                return (frequency >= min && frequency <= max);
+            }
+
+            boolean validPasswordNewPolicy() {
+                boolean firstPos = (password.charAt(min - 1) == letter);
+                boolean secondPos = (password.charAt(max - 1) == letter);
+
+                return ((firstPos && !secondPos) || (!firstPos && secondPos));
+            }
         }
-
-        boolean validPasswordNewPolicy() {
-            boolean firstPos = (password.charAt(min - 1) == letter);
-            boolean secondPos = (password.charAt(max - 1) == letter);
-
-            return ((firstPos && !secondPos) || (!firstPos && secondPos));
-        }
-    }
 }

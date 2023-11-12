@@ -1,34 +1,31 @@
 package aoc.aoc2020;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2020: Day 4: Passport Processing")
 class Day4PassportProcessingTest {
 
     @ParameterizedTest
-    @CsvSource({"2, src/test/resources/day4-demo1.txt",
-            "219, src/test/resources/day4.txt"})
+    @CsvSource({"2, day4-demo1.txt",
+            "219, day4.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day4PassportProcessing(inputLines).validPassports());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day4PassportProcessing(inputLines).validPassports()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"0, src/test/resources/day4-demo2.txt",
-            "4, src/test/resources/day4-demo3.txt",
-            "127, src/test/resources/day4.txt"})
+    @CsvSource({"0, day4-demo2.txt",
+            "4, day4-demo3.txt",
+            "127, day4.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day4PassportProcessing(inputLines).presentAndValidPassports());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day4PassportProcessing(inputLines).presentAndValidPassports()).isEqualTo(expected);
     }
-
 }

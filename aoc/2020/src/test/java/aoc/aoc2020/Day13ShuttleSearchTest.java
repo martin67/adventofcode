@@ -1,25 +1,23 @@
 package aoc.aoc2020;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2020: Day 13: Shuttle Search")
 class Day13ShuttleSearchTest {
 
     @ParameterizedTest
-    @CsvSource({"295, src/test/resources/day13-demo1.txt",
-            "2935, src/test/resources/day13.txt"})
+    @CsvSource({"295, day13-demo1.txt",
+            "2935, day13.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day13ShuttleSearch(inputLines).busWait());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day13ShuttleSearch(inputLines).busWait()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -30,15 +28,14 @@ class Day13ShuttleSearchTest {
             "1261476, '67,7,x,59,61'",
             "1202161486, '1789,37,47,1889'"})
     void earliestTimestamp(long expected, String input) {
-        assertEquals(expected, new Day13ShuttleSearch(input).earliestTimestamp());
+        assertThat(new Day13ShuttleSearch(input).earliestTimestamp()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"1068781, src/test/resources/day13-demo1.txt",
-            "836024966345345, src/test/resources/day13.txt"})
+    @CsvSource({"1068781, day13-demo1.txt",
+            "836024966345345, day13.txt"})
     void problem2(long expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day13ShuttleSearch(inputLines.get(1)).earliestTimestamp());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day13ShuttleSearch(inputLines.get(1)).earliestTimestamp()).isEqualTo(expected);
     }
-
 }

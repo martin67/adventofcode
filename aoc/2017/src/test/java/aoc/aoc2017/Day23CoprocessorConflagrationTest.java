@@ -1,13 +1,12 @@
 package aoc.aoc2017;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,17 +14,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Day23CoprocessorConflagrationTest {
 
     @ParameterizedTest
-    @CsvSource({"9409, src/test/resources/day23.txt"})
+    @CsvSource({"9409, day23.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        assertThat(new Day23CoprocessorConflagration(Files.readAllLines(Paths.get(fileName))).problem1())
-                .isEqualTo(expected);
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day23CoprocessorConflagration(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"1001, src/test/resources/day23.txt"})
+    @CsvSource({"1001, day23.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        assertThat(new Day23CoprocessorConflagration(Files.readAllLines(Paths.get(fileName))).problem2())
-                .isEqualTo(expected);
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day23CoprocessorConflagration(inputLines).problem2()).isEqualTo(expected);
     }
 
     @Test

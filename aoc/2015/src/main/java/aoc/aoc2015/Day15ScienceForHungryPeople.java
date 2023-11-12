@@ -117,21 +117,6 @@ public class Day15ScienceForHungryPeople {
         return maxScore;
     }
 
-    static class Ingredient {
-        final String name;
-        final int capacity;
-        final int durability;
-        final int flavor;
-        final int texture;
-        final int calories;
-
-        public Ingredient(String name, int capacity, int durability, int flavor, int texture, int calories) {
-            this.name = name;
-            this.capacity = capacity;
-            this.durability = durability;
-            this.flavor = flavor;
-            this.texture = texture;
-            this.calories = calories;
-        }
+    record Ingredient(String name, int capacity, int durability, int flavor, int texture, int calories) {
     }
 }

@@ -16,18 +16,15 @@ public class Day16FlawedFrequencyTransmission {
         position++;
 
         int group = position / (row + 1);
-        switch (group % 4) {
-            case 0:
-            case 2:
-                return 0;
-            case 1:
-                return value;
-            case 3:
-                return -value;
-            default:
+        return switch (group % 4) {
+            case 0, 2 -> 0;
+            case 1 -> value;
+            case 3 -> -value;
+            default -> {
                 log.error("Oops");
-                return 0;
-        }
+                yield 0;
+            }
+        };
     }
 
     String firstEightDigits(int phases) {

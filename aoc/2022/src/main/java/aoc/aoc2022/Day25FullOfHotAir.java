@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Slf4j
 public class Day25FullOfHotAir {
-    List<String> snafus;
+    final List<String> snafus;
 
     public Day25FullOfHotAir(List<String> inputLines) {
         snafus = inputLines;

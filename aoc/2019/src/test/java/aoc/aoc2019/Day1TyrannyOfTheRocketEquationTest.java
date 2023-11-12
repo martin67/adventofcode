@@ -1,16 +1,14 @@
 package aoc.aoc2019;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2019: Day 1: The Tyranny of the Rocket Equation")
 class Day1TyrannyOfTheRocketEquationTest {
@@ -21,13 +19,13 @@ class Day1TyrannyOfTheRocketEquationTest {
             "654, 1969",
             "33583, 100756"})
     void fuelRequirement(int checksum, int mass) {
-        assertEquals(checksum, new Day1TyrannyOfTheRocketEquation().fuelRequirement(mass));
+        assertThat(new Day1TyrannyOfTheRocketEquation().fuelRequirement(mass)).isEqualTo(checksum);
     }
 
     @Test
     void problem1() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day1.txt"));
-        assertEquals(3478233, new Day1TyrannyOfTheRocketEquation().sumOfFuelRequirements(inputLines));
+        var inputLines = AocFiles.readAllLines("day1.txt");
+        assertThat(new Day1TyrannyOfTheRocketEquation().sumOfFuelRequirements(inputLines)).isEqualTo(3478233);
     }
 
     @ParameterizedTest
@@ -35,13 +33,12 @@ class Day1TyrannyOfTheRocketEquationTest {
             "966, 1969",
             "50346, 100756"})
     void fuelRequirementAddedFuel(int checksum, int mass) {
-        assertEquals(checksum, new Day1TyrannyOfTheRocketEquation().fuelRequirementAddedFuel(mass));
+        assertThat(new Day1TyrannyOfTheRocketEquation().fuelRequirementAddedFuel(mass)).isEqualTo(checksum);
     }
 
     @Test
     void problem2() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day1.txt"));
-        assertEquals(5214475, new Day1TyrannyOfTheRocketEquation().sumOfFuelRequirementsAddedFuelFromFile(inputLines));
+        var inputLines = AocFiles.readAllLines("day1.txt");
+        assertThat(new Day1TyrannyOfTheRocketEquation().sumOfFuelRequirementsAddedFuelFromFile(inputLines)).isEqualTo(5214475);
     }
-
 }

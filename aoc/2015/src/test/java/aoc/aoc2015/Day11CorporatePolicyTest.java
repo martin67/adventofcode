@@ -15,8 +15,7 @@ class Day11CorporatePolicyTest {
             "true, abcdffaa",
             "true, ghjaabcc"})
     void problem1(boolean expected, String password) {
-        assertThat(new Day11CorporatePolicy().validPassword(password))
-                .isEqualTo(expected);
+        assertThat(new Day11CorporatePolicy().validPassword(password)).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -25,7 +24,6 @@ class Day11CorporatePolicyTest {
             "vzbxxyzz, vzbxkghb",
             "vzcaabcc, vzbxxyzz"})
     void problem2(String expected, String password) {
-        assertThat(new Day11CorporatePolicy().nextPassword(password))
-                .isEqualTo(expected);
+        assertThat(new Day11CorporatePolicy().nextPassword(password)).isEqualTo(expected);
     }
 }

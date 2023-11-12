@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2016: Day 9: Explosives in Cyberspace")
 class Day9ExplosivesInCyberspaceTest {
@@ -20,7 +20,7 @@ class Day9ExplosivesInCyberspaceTest {
             "18, src/test/resources/day9-demo6.txt",
             "70186, src/test/resources/day9.txt"})
     void problem1(long expected, String fileName) throws IOException {
-        assertEquals(expected, new Day9ExplosivesInCyberspace(fileName).decompressedVersion1());
+        assertThat(new Day9ExplosivesInCyberspace(fileName).decompressedVersion1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -30,7 +30,6 @@ class Day9ExplosivesInCyberspaceTest {
             "445, src/test/resources/day9-demo8.txt",
             "10915059201, src/test/resources/day9.txt"})
     void problem2(long expected, String fileName) throws IOException {
-        assertEquals(expected, new Day9ExplosivesInCyberspace(fileName).decompressedVersion2());
+        assertThat(new Day9ExplosivesInCyberspace(fileName).decompressedVersion2()).isEqualTo(expected);
     }
-
 }

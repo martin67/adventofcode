@@ -35,35 +35,30 @@ public class Day5BinaryBoarding {
         return 0;
     }
 
-    static class BoardingPass {
-        final String code;
-
-        public BoardingPass(String code) {
-            this.code = code;
-        }
+    record BoardingPass(String code) {
 
         int row() {
-            int maxRowNumber = 128;
-            for (int i = 0; i < 7; i++) {
-                if (code.charAt(i) == 'F') {
-                    maxRowNumber -= Math.pow(2, 6 - i);
+                int maxRowNumber = 128;
+                for (int i = 0; i < 7; i++) {
+                    if (code.charAt(i) == 'F') {
+                        maxRowNumber -= Math.pow(2, 6 - i);
+                    }
                 }
+                return maxRowNumber - 1;
             }
-            return maxRowNumber - 1;
-        }
 
-        int column() {
-            int maxColumnNumber = 8;
-            for (int i = 0; i < 3; i++) {
-                if (code.charAt(i + 7) == 'L') {
-                    maxColumnNumber -= Math.pow(2, 2 - i);
+            int column() {
+                int maxColumnNumber = 8;
+                for (int i = 0; i < 3; i++) {
+                    if (code.charAt(i + 7) == 'L') {
+                        maxColumnNumber -= Math.pow(2, 2 - i);
+                    }
                 }
+                return maxColumnNumber - 1;
             }
-            return maxColumnNumber - 1;
-        }
 
-        int id() {
-            return row() * 8 + column();
+            int id() {
+                return row() * 8 + column();
+            }
         }
-    }
 }

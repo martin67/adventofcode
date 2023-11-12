@@ -1,15 +1,13 @@
 package aoc.aoc2015;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,9 +23,8 @@ class Day2IWasToldThereWouldBeNoMathTest {
 
     @Test
     void getSquareFeet() throws Exception {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day2.txt"));
-        assertThat(new Day2IWasToldThereWouldBeNoMath().getSquareFeet(inputLines))
-                .isEqualTo(1588178);
+        var inputLines = AocFiles.readAllLines("day2.txt");
+        assertThat(new Day2IWasToldThereWouldBeNoMath().getSquareFeet(inputLines)).isEqualTo(1588178);
     }
 
     @ParameterizedTest
@@ -40,8 +37,7 @@ class Day2IWasToldThereWouldBeNoMathTest {
 
     @Test
     void getRibbon() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day2.txt"));
-        assertThat(new Day2IWasToldThereWouldBeNoMath().getRibbon(inputLines))
-                .isEqualTo(3783758);
+        var inputLines = AocFiles.readAllLines("day2.txt");
+        assertThat(new Day2IWasToldThereWouldBeNoMath().getRibbon(inputLines)).isEqualTo(3783758);
     }
 }

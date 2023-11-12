@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2019: Day 4: Secure Container")
 class Day4SecureContainerTest {
@@ -15,12 +15,12 @@ class Day4SecureContainerTest {
             "false, 223450",
             "false, 123789"})
     void validPassword(boolean expected, int password) {
-        assertEquals(expected, new Day4SecureContainer().validPassword(password));
+        assertThat(new Day4SecureContainer().validPassword(password)).isEqualTo(expected);
     }
 
     @Test
     void problem1() {
-        assertEquals(454, new Day4SecureContainer().validPasswordRange(402328, 864247));
+        assertThat(new Day4SecureContainer().validPasswordRange(402328, 864247)).isEqualTo(454);
     }
 
     @ParameterizedTest
@@ -28,11 +28,11 @@ class Day4SecureContainerTest {
             "false, 123444",
             "true, 111122"})
     void validPasswordNoGroup(boolean expected, int password) {
-        assertEquals(expected, new Day4SecureContainer().validPasswordNoGroup(password));
+        assertThat(new Day4SecureContainer().validPasswordNoGroup(password)).isEqualTo(expected);
     }
 
     @Test
     void problem2() {
-        assertEquals(288, new Day4SecureContainer().validPasswordNoGroupRange(402328, 864247));
+        assertThat(new Day4SecureContainer().validPasswordNoGroupRange(402328, 864247)).isEqualTo(288);
     }
 }

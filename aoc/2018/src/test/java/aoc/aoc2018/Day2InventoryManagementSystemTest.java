@@ -1,13 +1,12 @@
 package aoc.aoc2018;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +41,7 @@ class Day2InventoryManagementSystemTest {
     @Test
     void problem1() throws IOException {
         Day2InventoryManagementSystem day2InventoryManagementSystem = new Day2InventoryManagementSystem();
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/day2.txt"))));
+        String input = new String(AocFiles.readAllBytes("day2.txt"));
         assertThat(day2InventoryManagementSystem.computeChecksum(input)).isEqualTo(8296);
     }
 
@@ -58,7 +57,7 @@ class Day2InventoryManagementSystemTest {
     @Test
     void problem2() throws IOException {
         Day2InventoryManagementSystem day2InventoryManagementSystem = new Day2InventoryManagementSystem();
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/day2.txt"))));
+        String input = new String(AocFiles.readAllBytes("day2.txt"));
         assertThat(day2InventoryManagementSystem.findBoxes(input)).isEqualTo("pazvmqbftrbeosiecxlghkwud");
     }
 }

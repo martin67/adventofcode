@@ -106,24 +106,11 @@ public class Day22GridComputing {
         }
     }
 
-    static class Node {
-        final Position pos;
-        final int size;
-        final int used;
-        final int avail;
-        final int use;
-
-        public Node(Position pos, int size, int used, int avail, int use) {
-            this.pos = pos;
-            this.size = size;
-            this.used = used;
-            this.avail = avail;
-            this.use = use;
-        }
+    record Node(Position pos, int size, int used, int avail, int use) {
 
         @Override
-        public String toString() {
-            return "Node [" + pos.getX() + "," + pos.getY() + "] " + used + "T/" + size + "T";
+            public String toString() {
+                return "Node [" + pos.getX() + "," + pos.getY() + "] " + used + "T/" + size + "T";
+            }
         }
-    }
 }

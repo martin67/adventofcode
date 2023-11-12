@@ -1,8 +1,6 @@
 package aoc.aoc2022;
 
 import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
@@ -17,9 +15,9 @@ import java.util.regex.Pattern;
 @Slf4j
 public class Day16ProboscideaVolcanium {
 
-    Map<String, Valve> valves = new HashMap<>();
-    Graph<Valve, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-    DijkstraShortestPath<Valve, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
+    final Map<String, Valve> valves = new HashMap<>();
+    final Graph<Valve, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+    final DijkstraShortestPath<Valve, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
 
 
     public Day16ProboscideaVolcanium(List<String> inputLines) {
@@ -124,10 +122,10 @@ public class Day16ProboscideaVolcanium {
     }
 
     class Valve {
-        String name;
+        final String name;
         int flowRate;
-        Set<Valve> tunnels = new HashSet<>();
-        Map<Valve, Integer> distances = new HashMap<>();
+        final Set<Valve> tunnels = new HashSet<>();
+        final Map<Valve, Integer> distances = new HashMap<>();
 
         public Valve(String name) {
             this.name = name;

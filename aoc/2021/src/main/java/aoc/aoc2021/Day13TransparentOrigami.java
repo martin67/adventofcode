@@ -93,13 +93,6 @@ public class Day13TransparentOrigami {
         System.out.println();
     }
 
-    static class Instruction {
-        final String direction;
-        final int line;
-
-        public Instruction(String direction, int line) {
-            this.direction = direction;
-            this.line = line;
-        }
+    record Instruction(String direction, int line) {
     }
 }

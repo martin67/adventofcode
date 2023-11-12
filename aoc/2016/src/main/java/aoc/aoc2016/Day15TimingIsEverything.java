@@ -42,19 +42,10 @@ public class Day15TimingIsEverything {
         return time - 1;
     }
 
-    static class Disc {
-        final int numberOfPositions;
-        final int startPosition;
-        final int order;
-
-        public Disc(int numberOfPositions, int startPosition, int order) {
-            this.numberOfPositions = numberOfPositions;
-            this.startPosition = startPosition;
-            this.order = order;
-        }
+    record Disc(int numberOfPositions, int startPosition, int order) {
 
         int getCurrentPosition(int time) {
-            return (time + startPosition + order) % numberOfPositions;
+                return (time + startPosition + order) % numberOfPositions;
+            }
         }
-    }
 }

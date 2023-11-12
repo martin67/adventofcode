@@ -138,20 +138,7 @@ public class Day22WizardSimulator20xx {
     }
 
 
-    static class Spell {
-        final String name;
-        final int cost;
-        final int damage;
-        final int heal;
-        final int duration;
-
-        public Spell(String name, int cost, int damage, int heal, int duration) {
-            this.name = name;
-            this.cost = cost;
-            this.damage = damage;
-            this.heal = heal;
-            this.duration = duration;
-        }
+    record Spell(String name, int cost, int damage, int heal, int duration) {
     }
 
     static class Player {

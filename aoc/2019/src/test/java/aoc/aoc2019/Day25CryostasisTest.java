@@ -1,23 +1,20 @@
 package aoc.aoc2019;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2019: Day 25: Cryostasis")
 class Day25CryostasisTest {
 
     @Test
     void problem1() throws IOException, InterruptedException, ExecutionException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day25.txt"));
-        assertEquals("password", new Day25Cryostasis(inputLines).getPassword());
+        var inputLines = AocFiles.readAllLines("day25.txt");
+        assertThat(new Day25Cryostasis(inputLines).getPassword()).isEqualTo("password");
     }
-
 }

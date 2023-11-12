@@ -78,13 +78,6 @@ public class Day8HandheldHalting {
         }
     }
 
-    static class Result {
-        final boolean looped;
-        final int value;
-
-        public Result(boolean looped, int value) {
-            this.looped = looped;
-            this.value = value;
-        }
+    record Result(boolean looped, int value) {
     }
 }

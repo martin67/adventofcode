@@ -1,5 +1,5 @@
 rootProject.name = 'Advent of Code'
-include 'common'
+include 'aoc:common'
 include 'aoc:2015'
 include 'aoc:2016'
 include 'aoc:2017'

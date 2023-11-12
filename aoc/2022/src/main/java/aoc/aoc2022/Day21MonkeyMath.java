@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day21MonkeyMath {
-    Map<String, Monkey> monkeys = new HashMap<>();
+    final Map<String, Monkey> monkeys = new HashMap<>();
 
     public Day21MonkeyMath(List<String> inputLines) {
         Pattern pattern1 = Pattern.compile("(\\w+): (\\w+) (\\W) (\\w+)");
@@ -91,7 +91,7 @@ public class Day21MonkeyMath {
     }
 
     static class Monkey {
-        String name;
+        final String name;
         long number;
         Monkey monkeyA;
         Monkey monkeyB;

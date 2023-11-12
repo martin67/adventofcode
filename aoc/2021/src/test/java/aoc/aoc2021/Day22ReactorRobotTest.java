@@ -1,6 +1,7 @@
 package aoc.aoc2021;
 
 import aoc.aoc2021.Day22ReactorRobot.Cuboid;
+import aoc.common.AocFiles;
 import aoc.common.SpacePosition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,31 +9,27 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("2021: Day 22: Reactor Robot")
 class Day22ReactorRobotTest {
 
     @ParameterizedTest
-    @CsvSource({"39, src/test/resources/day22-demo1.txt",
-            "590784, src/test/resources/day22-demo2.txt",
-            "606484, src/test/resources/day22.txt"})
+    @CsvSource({"39, day22-demo1.txt",
+            "590784, day22-demo2.txt",
+            "606484, day22.txt"})
     void problem1(long expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day22ReactorRobot(inputLines).problem1b());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day22ReactorRobot(inputLines).problem1b()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"2758514936282235, src/test/resources/day22-demo3.txt",
-            "0, src/test/resources/day22.txt"})
+    @CsvSource({"2758514936282235, day22-demo3.txt",
+            "0, day22.txt"})
     void problem2(String expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day22ReactorRobot(inputLines).problem2());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day22ReactorRobot(inputLines).problem2()).isEqualTo(expected);
     }
 
     @Test
@@ -71,21 +68,21 @@ class Day22ReactorRobotTest {
         assertThat(base.isFullyOutsideOf(base2)).isTrue();
 
         assertThat(base.intersection(cube3)).isEqualTo(union);
-        assertThat(Cuboid.complement(cube3, base).size()).isEqualTo(7);
-        assertThat(Cuboid.complement(base, cube3).size()).isEqualTo(7);
+        assertThat(Cuboid.complement(cube3, base)).hasSize(7);
+        assertThat(Cuboid.complement(base, cube3)).hasSize(7);
 
         // base cuboid inside big
         assertThat(Cuboid.complement(big, base)).singleElement().isEqualTo(base);
-        assertThat(Cuboid.complement(base, big).size()).isEqualTo(8);
+        assertThat(Cuboid.complement(base, big)).hasSize(8);
 
         // base cuboid contains small
         assertThat(Cuboid.complement(small, base)).singleElement().isEqualTo(small);
         assertThat(Cuboid.complement(base, small)).singleElement().isEqualTo(small);
 
-        assertThat(Cuboid.complement(cube3, base).size()).isEqualTo(8);
-        assertThat(Cuboid.complement(base, cube3).size()).isEqualTo(1);
-        assertThat(Cuboid.complement(cube4, base).size()).isEqualTo(2);
-        assertThat(Cuboid.complement(base, cube4).size()).isEqualTo(1);
+        assertThat(Cuboid.complement(cube3, base)).hasSize(8);
+        assertThat(Cuboid.complement(base, cube3)).hasSize(1);
+        assertThat(Cuboid.complement(cube4, base)).hasSize(2);
+        assertThat(Cuboid.complement(base, cube4)).hasSize(1);
 
         assertThat(Cuboid.complement(
                 new Cuboid(11, 11, 11, 13, 13, 13),

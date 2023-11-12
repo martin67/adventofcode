@@ -1,14 +1,12 @@
 package aoc.aoc2015;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,13 +17,12 @@ class Day3PerfectlySphericalHouseInAVacuumTest {
             "^>v<, 4",
             "^v^v^v^v^v, 2"})
     void atLeastOnePresentDemo(String input, int expected) {
-        assertThat(new Day3PerfectlySphericalHouseInAVacuum().atLeastOnePresent(input))
-                .isEqualTo(expected);
+        assertThat(new Day3PerfectlySphericalHouseInAVacuum().atLeastOnePresent(input)).isEqualTo(expected);
     }
 
     @Test
     void atLeastOnePresent() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day3.txt"));
+        var inputLines = AocFiles.readAllLines("day3.txt");
         assertThat(new Day3PerfectlySphericalHouseInAVacuum().atLeastOnePresent(inputLines.get(0)))
                 .isEqualTo(2592);
     }
@@ -35,14 +32,12 @@ class Day3PerfectlySphericalHouseInAVacuumTest {
             "^>v<, 3",
             "^v^v^v^v^v, 11"})
     void roboSantaDemo(String input, int expected) {
-        assertThat(new Day3PerfectlySphericalHouseInAVacuum().roboSanta(input))
-                .isEqualTo(expected);
+        assertThat(new Day3PerfectlySphericalHouseInAVacuum().roboSanta(input)).isEqualTo(expected);
     }
 
     @Test
     void roboSanta() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day3.txt"));
-        assertThat(new Day3PerfectlySphericalHouseInAVacuum().roboSanta(inputLines.get(0)))
-                .isEqualTo(2360);
+        var inputLines = AocFiles.readAllLines("day3.txt");
+        assertThat(new Day3PerfectlySphericalHouseInAVacuum().roboSanta(inputLines.get(0))).isEqualTo(2360);
     }
 }

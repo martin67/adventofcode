@@ -4,7 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2020: Day 15: Rambunctious Recitation")
 class Day15RambunctiousRecitationTest {
@@ -19,7 +19,7 @@ class Day15RambunctiousRecitationTest {
             "1836, '3,1,2'",
             "870, '11,0,1,10,5,19'"})
     void problem1(long expected, String numbers) {
-        assertEquals(expected, new Day15RambunctiousRecitation(numbers).numberSpoken(2020));
+        assertThat(new Day15RambunctiousRecitation(numbers).numberSpoken(2020)).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -32,7 +32,6 @@ class Day15RambunctiousRecitationTest {
             "362, '3,1,2'",
             "9136, '11,0,1,10,5,19'"})
     void problem2(long expected, String numbers) {
-        assertEquals(expected, new Day15RambunctiousRecitation(numbers).numberSpoken(30000000));
+        assertThat(new Day15RambunctiousRecitation(numbers).numberSpoken(30000000)).isEqualTo(expected);
     }
-
 }

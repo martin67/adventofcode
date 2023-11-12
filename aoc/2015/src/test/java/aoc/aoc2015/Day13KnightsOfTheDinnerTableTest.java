@@ -1,13 +1,11 @@
 package aoc.aoc2015;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,21 +13,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Day13KnightsOfTheDinnerTableTest {
 
     @ParameterizedTest
-    @CsvSource({"330, src/test/resources/day13-demo1.txt",
-            "664, src/test/resources/day13.txt"})
+    @CsvSource({"330, day13-demo1.txt",
+            "664, day13.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertThat(new Day13KnightsOfTheDinnerTable(inputLines).changeInHappiness())
-                .isEqualTo(expected);
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day13KnightsOfTheDinnerTable(inputLines).changeInHappiness()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"286, src/test/resources/day13-demo1.txt",
-            "640, src/test/resources/day13.txt"})
+    @CsvSource({"286, day13-demo1.txt",
+            "640, day13.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertThat(new Day13KnightsOfTheDinnerTable(inputLines).changeInHappinessWithMe())
-                .isEqualTo(expected);
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day13KnightsOfTheDinnerTable(inputLines).changeInHappinessWithMe()).isEqualTo(expected);
     }
 
 }

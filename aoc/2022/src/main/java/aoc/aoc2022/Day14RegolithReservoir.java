@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day14RegolithReservoir {
-    Set<Position> map = new HashSet<>();
-    Position source = new Position(500, 0);
+    final Set<Position> map = new HashSet<>();
+    final Position source = new Position(500, 0);
     int xMin;
     int xMax;
     int yMax;

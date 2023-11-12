@@ -1,33 +1,30 @@
 package aoc.aoc2020;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2020: Day 11: Seating System")
 class Day11SeatingSystemTest {
 
     @ParameterizedTest
-    @CsvSource({"37, src/test/resources/day11-demo1.txt",
-            "2204, src/test/resources/day11.txt"})
+    @CsvSource({"37, day11-demo1.txt",
+            "2204, day11.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day11SeatingSystem(inputLines).seatsOccupied());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day11SeatingSystem(inputLines).seatsOccupied()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"26, src/test/resources/day11-demo1.txt",
-            "1986, src/test/resources/day11.txt"})
+    @CsvSource({"26, day11-demo1.txt",
+            "1986, day11.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day11SeatingSystem(inputLines).seatsOccupied2());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day11SeatingSystem(inputLines).seatsOccupied2()).isEqualTo(expected);
     }
-
 }

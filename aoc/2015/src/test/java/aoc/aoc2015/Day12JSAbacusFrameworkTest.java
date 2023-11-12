@@ -1,14 +1,12 @@
 package aoc.aoc2015;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,11 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Day12JSAbacusFrameworkTest {
 
     @ParameterizedTest
-    @CsvSource({"191164, src/test/resources/day12.txt"})
+    @CsvSource({"191164, day12.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertThat(new Day12JSAbacusFramework(inputLines).sumOfAllNumbers())
-                .isEqualTo(expected);
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day12JSAbacusFramework(inputLines).sumOfAllNumbers()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -36,10 +33,9 @@ class Day12JSAbacusFrameworkTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"87842, src/test/resources/day12.txt"})
+    @CsvSource({"87842, day12.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertThat(new Day12JSAbacusFramework(inputLines).sumOfAllNumbersIgnoringRed())
-                .isEqualTo(expected);
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day12JSAbacusFramework(inputLines).sumOfAllNumbersIgnoringRed()).isEqualTo(expected);
     }
 }

@@ -1,16 +1,14 @@
 package aoc.aoc2017;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2017: Day 1: Inverse Captcha")
 class Day1InverseCaptchaTest {
@@ -21,14 +19,14 @@ class Day1InverseCaptchaTest {
             "0, 1234",
             "9, 91212129"})
     void computeCaptcha(int checksum, String sequence) {
-        assertEquals(checksum, new Day1InverseCaptcha().computeCaptcha(sequence));
+        assertThat(new Day1InverseCaptcha().computeCaptcha(sequence)).isEqualTo(checksum);
     }
 
     @Test
     void problem1() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day1.txt"));
+        var inputLines = AocFiles.readAllLines("day1.txt");
         for (String line : inputLines) {
-            assertEquals(995, new Day1InverseCaptcha().computeCaptcha(line));
+            assertThat(new Day1InverseCaptcha().computeCaptcha(line)).isEqualTo(995);
         }
     }
 
@@ -39,15 +37,14 @@ class Day1InverseCaptchaTest {
             "12, 123123",
             "4, 12131415"})
     void computeHalfwayCaptcha(int checksum, String sequence) {
-        assertEquals(checksum, new Day1InverseCaptcha().computeHalfwayCaptcha(sequence));
+        assertThat(new Day1InverseCaptcha().computeHalfwayCaptcha(sequence)).isEqualTo(checksum);
     }
 
     @Test
     void problem2() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day1.txt"));
+        var inputLines = AocFiles.readAllLines("day1.txt");
         for (String line : inputLines) {
-            assertEquals(1130, new Day1InverseCaptcha().computeHalfwayCaptcha(line));
+            assertThat(new Day1InverseCaptcha().computeHalfwayCaptcha(line)).isEqualTo(1130);
         }
     }
-
 }

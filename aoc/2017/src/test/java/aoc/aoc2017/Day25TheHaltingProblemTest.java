@@ -10,14 +10,11 @@ class Day25TheHaltingProblemTest {
 
     @Test
     void problem1demo() {
-        assertThat(new Day25TheHaltingProblem().problem1demo())
-                .isEqualTo(3);
+        assertThat(new Day25TheHaltingProblem().problem1demo()).isEqualTo(3);
     }
 
     @Test
     void problem1() {
-        assertThat(new Day25TheHaltingProblem().problem1())
-                .isEqualTo(4385);
+        assertThat(new Day25TheHaltingProblem().problem1()).isEqualTo(4385);
     }
-
 }

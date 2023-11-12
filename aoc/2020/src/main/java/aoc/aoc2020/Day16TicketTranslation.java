@@ -155,12 +155,7 @@ public class Day16TicketTranslation {
         return number;
     }
 
-    static class Ticket {
-        final List<Integer> numbers;
-
-        public Ticket(List<Integer> numbers) {
-            this.numbers = numbers;
-        }
+    record Ticket(List<Integer> numbers) {
     }
 
     static class TicketField {

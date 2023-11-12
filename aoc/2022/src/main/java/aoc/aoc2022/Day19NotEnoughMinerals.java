@@ -14,7 +14,7 @@ import static aoc.aoc2022.Day19NotEnoughMinerals.Mineral.*;
 @Slf4j
 public class Day19NotEnoughMinerals {
 
-    List<Blueprint> blueprints = new ArrayList<>();
+    final List<Blueprint> blueprints = new ArrayList<>();
 
     public Day19NotEnoughMinerals(List<String> inputLines) {
         Pattern pattern = Pattern.compile("Blueprint (\\d+): Each ore robot costs (\\d+) ore. Each clay robot costs (\\d+) ore. Each obsidian robot costs (\\d+) ore and (\\d+) clay. Each geode robot costs (\\d+) ore and (\\d+) obsidian.");
@@ -104,16 +104,16 @@ public class Day19NotEnoughMinerals {
         Ore, Clay, Obsidian, Geode
     }
 
-    class Blueprint {
+    static class Blueprint {
         Robot oreRobot;
         Robot clayRobot;
         Robot obsidianRobot;
         Robot geodeRobot;
     }
 
-    class Robot {
-        Mineral produces;
-        Map<Mineral, Integer> buildCost = new HashMap<>();
+    static class Robot {
+        final Mineral produces;
+        final Map<Mineral, Integer> buildCost = new HashMap<>();
 
         public Robot(Mineral produces) {
             this.produces = produces;

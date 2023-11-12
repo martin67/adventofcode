@@ -8,8 +8,8 @@ import java.util.List;
 @Slf4j
 public class Day20GrovePositioningSystem {
 
-    List<Long> numbers = new ArrayList<>();
-    CircularLinkedList cll = new CircularLinkedList();
+    final List<Long> numbers = new ArrayList<>();
+    final CircularLinkedList cll = new CircularLinkedList();
 
     public Day20GrovePositioningSystem(List<String> inputLines) {
         int index = 0;
@@ -48,8 +48,8 @@ public class Day20GrovePositioningSystem {
     }
 
     static class Node {
-        long value;
-        int index;
+        final long value;
+        final int index;
         Node next;
         Node previous;
 

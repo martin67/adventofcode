@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Day24BlizzardBasin {
 
-    Set<Blizzard> map = new HashSet<>();
+    final Set<Blizzard> map = new HashSet<>();
     int width;
-    int height;
+    final int height;
 
     public Day24BlizzardBasin(List<String> inputLines) {
         int y = 0;
@@ -55,7 +55,7 @@ public class Day24BlizzardBasin {
 
     class Blizzard {
         Position position;
-        Direction direction;
+        final Direction direction;
 
         public Blizzard(Position position, Direction direction) {
             this.position = position;

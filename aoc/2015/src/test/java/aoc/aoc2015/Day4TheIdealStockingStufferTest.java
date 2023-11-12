@@ -14,8 +14,7 @@ class Day4TheIdealStockingStufferTest {
             "pqrstuv, 1048970",
             "iwrupvqb, 346386"})
     void problem1(String secretKey, int expected) {
-        assertThat(new Day4TheIdealStockingStuffer().lowestNumber(secretKey, 5))
-                .isEqualTo(expected);
+        assertThat(new Day4TheIdealStockingStuffer().lowestNumber(secretKey, 5)).isEqualTo(expected);
     }
 
     @Test

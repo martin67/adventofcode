@@ -1,5 +1,6 @@
 package aoc.aoc2022;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -7,7 +8,7 @@ import java.util.*;
 @Slf4j
 public class Day11MonkeyInTheMiddle {
 
-    List<Monkey> monkeys = new ArrayList<>();
+    final List<Monkey> monkeys = new ArrayList<>();
     long lcd = 1;
 
     public Day11MonkeyInTheMiddle(List<String> inputLines) {
@@ -68,12 +69,13 @@ public class Day11MonkeyInTheMiddle {
 
     @SuppressWarnings("DataFlowIssue")
     class Monkey {
-        int id;
-        Deque<Long> items = new ArrayDeque<>();
+        final int id;
+        final Deque<Long> items = new ArrayDeque<>();
         long divisor;
         String operation;
         Monkey trueTarget;
         Monkey falseTarget;
+        @Getter
         long inspections = 0;
 
         public Monkey(int id) {
@@ -143,8 +145,5 @@ public class Day11MonkeyInTheMiddle {
             }
         }
 
-        public long getInspections() {
-            return inspections;
-        }
     }
 }

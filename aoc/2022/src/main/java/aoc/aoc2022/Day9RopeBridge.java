@@ -12,8 +12,8 @@ import java.util.Set;
 @Slf4j
 public class Day9RopeBridge {
 
-    List<Motion> motions = new ArrayList<>();
-    Set<Position> tailVisit = new HashSet<>();
+    final List<Motion> motions = new ArrayList<>();
+    final Set<Position> tailVisit = new HashSet<>();
 
     public Day9RopeBridge(List<String> inputLines) {
         for (String line : inputLines) {
@@ -95,8 +95,8 @@ public class Day9RopeBridge {
     }
 
     static class Motion {
-        Direction direction;
-        int steps;
+        final Direction direction;
+        final int steps;
 
         public Motion(Direction direction, int steps) {
             this.direction = direction;

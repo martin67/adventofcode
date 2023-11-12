@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2017: Day 3: Spiral Memory")
 class Day3SpiralMemoryTest {
@@ -18,7 +18,7 @@ class Day3SpiralMemoryTest {
             "31, 1024",
             "475, 277678"})
     void problem1(int steps, int dataLocation) {
-        assertEquals(steps, new Day3SpiralMemory().stepsRequired(dataLocation));
+        assertThat(new Day3SpiralMemory().stepsRequired(dataLocation)).isEqualTo(steps);
     }
 
     @ParameterizedTest
@@ -33,7 +33,7 @@ class Day3SpiralMemoryTest {
             "1, -1, 9",
             "2, -1, 10"})
     void testPosition(int x, int y, int dataLocation) {
-        assertEquals(new Position(x, y), new Day3SpiralMemory().getPosition(dataLocation));
+        assertThat(new Day3SpiralMemory().getPosition(dataLocation)).isEqualTo(new Position(x, y));
     }
 
     @ParameterizedTest
@@ -41,6 +41,6 @@ class Day3SpiralMemoryTest {
             "747, 500",
             "279138, 277678"})
     void problem2(int value, int maxValue) {
-        assertEquals(value, new Day3SpiralMemory().stressTest(maxValue));
+        assertThat(new Day3SpiralMemory().stressTest(maxValue)).isEqualTo(value);
     }
 }

@@ -11,14 +11,12 @@ class Day22WizardSimulator20xxTest {
     @Test
     void problem1() {
         Day22WizardSimulator20xx day22WizardSimulator20xx = new Day22WizardSimulator20xx();
-        assertThat(day22WizardSimulator20xx.problem1())
-                .isEqualTo(111);
+        assertThat(day22WizardSimulator20xx.problem1()).isEqualTo(111);
     }
 
     @Test
     void problem2() {
         Day22WizardSimulator20xx day22WizardSimulator20xx = new Day22WizardSimulator20xx();
-        assertThat(day22WizardSimulator20xx.problem2())
-                .isEqualTo(188);
+        assertThat(day22WizardSimulator20xx.problem2()).isEqualTo(188);
     }
 }

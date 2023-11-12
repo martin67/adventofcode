@@ -14,10 +14,10 @@ import static aoc.common.Direction.*;
 @Slf4j
 public class Day22MonkeyMap {
 
-    Map<Position, Character> map = new HashMap<>();
-    List<Step> path = new ArrayList<>();
+    final Map<Position, Character> map = new HashMap<>();
+    final List<Step> path = new ArrayList<>();
     Position start;
-    int dimension;
+    final int dimension;
 
     // map1     map2
     //   1        12
@@ -160,7 +160,7 @@ public class Day22MonkeyMap {
         return problem1(true);
     }
 
-    class Step {
+    static class Step {
         int number;
         Direction turn;
 

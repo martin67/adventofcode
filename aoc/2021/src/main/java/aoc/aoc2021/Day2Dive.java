@@ -46,13 +46,6 @@ public class Day2Dive {
         return horizontalPosition * depth;
     }
 
-    static class Course {
-        final String direction;
-        final int distance;
-
-        public Course(String direction, int distance) {
-            this.direction = direction;
-            this.distance = distance;
-        }
+    record Course(String direction, int distance) {
     }
 }

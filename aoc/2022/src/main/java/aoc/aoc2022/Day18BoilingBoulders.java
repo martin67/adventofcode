@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Slf4j
 public class Day18BoilingBoulders {
-    Set<SpacePosition> cubes = new HashSet<>();
+    final Set<SpacePosition> cubes = new HashSet<>();
 
     public Day18BoilingBoulders(List<String> inputLines) {
         for (String line : inputLines) {
@@ -54,7 +54,7 @@ public class Day18BoilingBoulders {
         unexplored.add(new SpacePosition(xMin - 1, yMin - 1, zMin - 1));
         int outsideBorders = 0;
 
-        while (unexplored.size() > 0) {
+        while (!unexplored.isEmpty()) {
             SpacePosition sp = unexplored.iterator().next();
             unexplored.remove(sp);
             Set<SpacePosition> adjacent = sp.adjacent();

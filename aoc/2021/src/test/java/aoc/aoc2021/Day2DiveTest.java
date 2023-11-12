@@ -1,13 +1,11 @@
 package aoc.aoc2021;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,21 +13,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Day2DiveTest {
 
     @ParameterizedTest
-    @CsvSource({"150, src/test/resources/day2-demo1.txt",
-            "1728414, src/test/resources/day2.txt"})
+    @CsvSource({"150, day2-demo1.txt",
+            "1728414, day2.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertThat(new Day2Dive(inputLines).problem1())
-                .isEqualTo(expected);
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day2Dive(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"900, src/test/resources/day2-demo1.txt",
-            "1765720035, src/test/resources/day2.txt"})
+    @CsvSource({"900, day2-demo1.txt",
+            "1765720035, day2.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertThat(new Day2Dive(inputLines).problem2())
-                .isEqualTo(expected);
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day2Dive(inputLines).problem2()).isEqualTo(expected);
     }
-
 }

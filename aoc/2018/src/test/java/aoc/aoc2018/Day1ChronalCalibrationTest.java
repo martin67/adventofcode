@@ -1,13 +1,12 @@
 package aoc.aoc2018;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,7 +28,7 @@ class Day1ChronalCalibrationTest {
     @Test
     void problem1() throws IOException {
         Day1ChronalCalibration day1ChronalCalibration = new Day1ChronalCalibration();
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/day1.txt"))));
+        String input = new String(AocFiles.readAllBytes("day1.txt"));
         assertThat(day1ChronalCalibration.computeFrequency(input)).isEqualTo(582);
     }
 
@@ -49,7 +48,7 @@ class Day1ChronalCalibrationTest {
     @Test
     void problem2() throws IOException {
         Day1ChronalCalibration day1ChronalCalibration = new Day1ChronalCalibration();
-        String input = new String((Files.readAllBytes(Paths.get("src/test/resources/day1.txt"))));
+        String input = new String(AocFiles.readAllBytes("day1.txt"));
         assertThat(day1ChronalCalibration.computeDoubleFrequency(input)).isEqualTo(488);
     }
 }

@@ -1,5 +1,6 @@
 package aoc.aoc2021;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -7,9 +8,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2021: Day 17: Trick Shot")
 class Day17TrickShotTest {
@@ -20,24 +20,23 @@ class Day17TrickShotTest {
             "0, 9, 0",
             "-4, 17, -4"})
     void problem0(int expected, int xVelocity, int yVelocity) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day17-demo1.txt"));
-        assertEquals(expected, new Day17TrickShot(inputLines).problem0(xVelocity, yVelocity));
+        var inputLines = Files.readAllLines(Paths.get("day17-demo1.txt"));
+        assertThat(new Day17TrickShot(inputLines).problem0(xVelocity, yVelocity)).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"45, src/test/resources/day17-demo1.txt",
-            "12090, src/test/resources/day17.txt"})
+    @CsvSource({"45, day17-demo1.txt",
+            "12090, day17.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day17TrickShot(inputLines).problem1());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day17TrickShot(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"112, src/test/resources/day17-demo1.txt",
-            "5059, src/test/resources/day17.txt"})
+    @CsvSource({"112, day17-demo1.txt",
+            "5059, day17.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day17TrickShot(inputLines).problem2());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day17TrickShot(inputLines).problem2()).isEqualTo(expected);
     }
-
 }

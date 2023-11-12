@@ -41,41 +41,36 @@ public class Day3RucksackReorganization {
         return prioritySum;
     }
 
-    static class Rucksack {
-        final String contents;
-
-        public Rucksack(String contents) {
-            this.contents = contents;
-        }
+    record Rucksack(String contents) {
 
         static int itemScore(Character c) {
-            if (c > 96) {
-                // lowercase
-                return c - 96;
-            } else
-                // uppercase
-                return c - 38;
-        }
-
-        Character findCommonItem() {
-            Set<Character> compartment1 = new HashSet<>();
-            for (Character c : contents.substring(0, contents.length() / 2).toCharArray()) {
-                compartment1.add(c);
+                if (c > 96) {
+                    // lowercase
+                    return c - 96;
+                } else
+                    // uppercase
+                    return c - 38;
             }
-            for (Character c : contents.substring(contents.length() / 2).toCharArray()) {
-                if (compartment1.contains(c)) {
-                    return c;
+
+            Character findCommonItem() {
+                Set<Character> compartment1 = new HashSet<>();
+                for (Character c : contents.substring(0, contents.length() / 2).toCharArray()) {
+                    compartment1.add(c);
                 }
+                for (Character c : contents.substring(contents.length() / 2).toCharArray()) {
+                    if (compartment1.contains(c)) {
+                        return c;
+                    }
+                }
+                return null;
             }
-            return null;
-        }
 
-        Set<Character> items() {
-            Set<Character> items = new HashSet<>();
-            for (Character c : contents.toCharArray()) {
-                items.add(c);
+            Set<Character> items() {
+                Set<Character> items = new HashSet<>();
+                for (Character c : contents.toCharArray()) {
+                    items.add(c);
+                }
+                return items;
             }
-            return items;
         }
-    }
 }

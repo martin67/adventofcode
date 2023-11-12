@@ -1,33 +1,30 @@
 package aoc.aoc2020;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2020: Day 8: Handheld Halting")
 class Day8HandheldHaltingTest {
 
     @ParameterizedTest
-    @CsvSource({"5, src/test/resources/day8-demo1.txt",
-            "1915, src/test/resources/day8.txt"})
+    @CsvSource({"5, day8-demo1.txt",
+            "1915, day8.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day8HandheldHalting(inputLines).accumulatorValue());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day8HandheldHalting(inputLines).accumulatorValue()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"8, src/test/resources/day8-demo1.txt",
-            "944, src/test/resources/day8.txt"})
+    @CsvSource({"8, day8-demo1.txt",
+            "944, day8.txt"})
     void problem2(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day8HandheldHalting(inputLines).accumulatorValueNoLoop());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day8HandheldHalting(inputLines).accumulatorValueNoLoop()).isEqualTo(expected);
     }
-
 }

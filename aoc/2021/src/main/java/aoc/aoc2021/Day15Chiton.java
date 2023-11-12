@@ -115,26 +115,19 @@ public class Day15Chiton {
         System.out.println();
     }
 
-    static class Node {
-        final Position position;
-        final int riskLevel;
-
-        public Node(Position position, int riskLevel) {
-            this.position = position;
-            this.riskLevel = riskLevel;
-        }
+    record Node(Position position, int riskLevel) {
 
         int increaseRiskLevel(int value) {
-            int newLevel = riskLevel + value;
-            while (newLevel > 9) {
-                newLevel -= 9;
+                int newLevel = riskLevel + value;
+                while (newLevel > 9) {
+                    newLevel -= 9;
+                }
+                return newLevel;
             }
-            return newLevel;
-        }
 
-        @Override
-        public String toString() {
-            return "{" + position.getX() + "," + position.getY() + " " + riskLevel + "}";
+            @Override
+            public String toString() {
+                return "{" + position.getX() + "," + position.getY() + " " + riskLevel + "}";
+            }
         }
-    }
 }

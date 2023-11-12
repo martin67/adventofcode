@@ -1,16 +1,14 @@
 package aoc.aoc2019;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2019: Day 2: Program Alarm")
 class Day2ProgramAlarmTest {
@@ -22,23 +20,22 @@ class Day2ProgramAlarmTest {
             "2, '2,4,4,5,99,0'",
             "30, '1,1,1,4,99,5,6,0,99'"})
     void valueAtProgramHalt(int finalValue, String opcodes) {
-        assertEquals(finalValue, new Day2ProgramAlarm().valueAtProgramHalt(opcodes, null, null));
+        assertThat(new Day2ProgramAlarm().valueAtProgramHalt(opcodes, null, null)).isEqualTo(finalValue);
     }
 
     @Test
     void problem1() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day2.txt"));
+        var inputLines = AocFiles.readAllLines("day2.txt");
         for (String opcodes : inputLines) {
-            assertEquals(5098658, new Day2ProgramAlarm().valueAtProgramHalt(opcodes, 12, 2));
+            assertThat(new Day2ProgramAlarm().valueAtProgramHalt(opcodes, 12, 2)).isEqualTo(5098658);
         }
     }
 
     @Test
     void problem2() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day2.txt"));
+        var inputLines = AocFiles.readAllLines("day2.txt");
         for (String opcodes : inputLines) {
-            assertEquals(5064, new Day2ProgramAlarm().nounAndVerb(opcodes));
+            assertThat(new Day2ProgramAlarm().nounAndVerb(opcodes)).isEqualTo(5064);
         }
     }
-
 }

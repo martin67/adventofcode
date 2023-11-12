@@ -149,14 +149,7 @@ public class Day12RainRisk {
         return w.getX() >= p.getX() && w.getY() >= p.getY();
     }
 
-    static class Action {
-        final char instruction;
-        final int argument;
-
-        public Action(char instruction, int argument) {
-            this.instruction = instruction;
-            this.argument = argument;
-        }
+    record Action(char instruction, int argument) {
     }
 }
 

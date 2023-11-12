@@ -1,33 +1,30 @@
 package aoc.aoc2020;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2020: Day 9: Encoding Error")
 class Day9EncodingErrorTest {
 
     @ParameterizedTest
-    @CsvSource({"127, 5, src/test/resources/day9-demo1.txt",
-            "373803594, 25, src/test/resources/day9.txt"})
+    @CsvSource({"127, 5, day9-demo1.txt",
+            "373803594, 25, day9.txt"})
     void problem1(long expected, int preamble, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day9EncodingError(preamble, inputLines).invalidNumber());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day9EncodingError(preamble, inputLines).invalidNumber()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"62, 5, src/test/resources/day9-demo1.txt",
-            "51152360, 25, src/test/resources/day9.txt"})
+    @CsvSource({"62, 5, day9-demo1.txt",
+            "51152360, 25, day9.txt"})
     void problem2(long expected, int preamble, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day9EncodingError(preamble, inputLines).encryptionWeakness());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day9EncodingError(preamble, inputLines).encryptionWeakness()).isEqualTo(expected);
     }
-
 }

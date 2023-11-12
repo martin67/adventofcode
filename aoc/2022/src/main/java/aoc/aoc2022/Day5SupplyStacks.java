@@ -78,15 +78,6 @@ public class Day5SupplyStacks {
         return sb.toString();
     }
 
-    static class Move {
-        final int amount;
-        final int from;
-        final int to;
-
-        public Move(int amount, int from, int to) {
-            this.amount = amount;
-            this.from = from;
-            this.to = to;
-        }
+    record Move(int amount, int from, int to) {
     }
 }

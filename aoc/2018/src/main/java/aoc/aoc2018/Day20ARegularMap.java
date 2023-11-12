@@ -220,14 +220,7 @@ public class Day20ARegularMap {
             }
         }
 
-        static class AddNodesResult {
-            final List<Node> parents;
-            final List<Node> children;
-
-            AddNodesResult(List<Node> parents, List<Node> children) {
-                this.parents = parents;
-                this.children = children;
-            }
+        record AddNodesResult(List<Node> parents, List<Node> children) {
         }
     }
 

@@ -88,13 +88,6 @@ public class Day14ExtendedPolymerization {
         return max - min;
     }
 
-    static class Rule {
-        final String input;
-        final char output;
-
-        public Rule(String input, char output) {
-            this.input = input;
-            this.output = output;
-        }
+    record Rule(String input, char output) {
     }
 }

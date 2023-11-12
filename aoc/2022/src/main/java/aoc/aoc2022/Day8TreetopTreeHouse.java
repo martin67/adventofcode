@@ -11,10 +11,10 @@ import java.util.Map;
 @Slf4j
 public class Day8TreetopTreeHouse {
 
-    Map<Position, Integer> trees = new HashMap<>();
-    Map<Position, Integer> viewingDistances = new HashMap<>();
+    final Map<Position, Integer> trees = new HashMap<>();
+    final Map<Position, Integer> viewingDistances = new HashMap<>();
     int width;
-    int height;
+    final int height;
 
     public Day8TreetopTreeHouse(List<String> inputLines) {
         int y = 0;

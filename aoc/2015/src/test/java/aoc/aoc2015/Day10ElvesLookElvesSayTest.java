@@ -14,7 +14,6 @@ class Day10ElvesLookElvesSayTest {
             "360154, 1113122113, 40",
             "5103798, 1113122113, 50"})
     void problem(int expected, String start, int iterations) {
-        assertThat(new Day10ElvesLookElvesSay(start).codeLength(iterations))
-                .isEqualTo(expected);
+        assertThat(new Day10ElvesLookElvesSay(start).codeLength(iterations)).isEqualTo(expected);
     }
 }

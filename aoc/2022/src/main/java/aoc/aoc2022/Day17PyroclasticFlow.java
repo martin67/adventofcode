@@ -15,9 +15,9 @@ import static aoc.common.Direction.Down;
 @Slf4j
 public class Day17PyroclasticFlow {
 
-    List<Shape> shapes = new ArrayList<>();
-    Set<Position> cave = new HashSet<>();
-    String jets;
+    final List<Shape> shapes = new ArrayList<>();
+    final Set<Position> cave = new HashSet<>();
+    final String jets;
     int jetPosition = 0;
 
     public Day17PyroclasticFlow(List<String> inputLines) {
@@ -192,9 +192,9 @@ public class Day17PyroclasticFlow {
 
     class Shape {
         Position position;
-        int width;
-        int height;
-        Set<Position> pattern;
+        final int width;
+        final int height;
+        final Set<Position> pattern;
 
         public Shape(int width, int height, Set<Position> pattern) {
             this.width = width;

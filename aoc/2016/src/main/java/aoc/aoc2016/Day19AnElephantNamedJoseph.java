@@ -94,11 +94,6 @@ public class Day19AnElephantNamedJoseph {
         return right.poll();
     }
 
-    static class Elf {
-        final int id;
-
-        public Elf(int id) {
-            this.id = id;
-        }
+    record Elf(int id) {
     }
 }

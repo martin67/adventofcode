@@ -1,15 +1,14 @@
 package aoc.aoc2021;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2021: Day 16: Packet Decoder")
 class Day16PacketDecoderTest {
@@ -23,14 +22,14 @@ class Day16PacketDecoderTest {
             "23, C0015000016115A2E0802F182340",
             "31, A0016C880162017C3686B18A3D4780"})
     void problem11(int expected, String input) {
-        assertEquals(expected, new Day16PacketDecoder(List.of(input)).problem1());
+        assertThat(new Day16PacketDecoder(List.of(input)).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"1014, src/test/resources/day16.txt"})
+    @CsvSource({"1014, day16.txt"})
     void problem1(long expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day16PacketDecoder(inputLines).problem1());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day16PacketDecoder(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -43,13 +42,13 @@ class Day16PacketDecoderTest {
             "0, 9C005AC2F8F0",
             "1, 9C0141080250320F1802104A08"})
     void problem21(int expected, String input) {
-        assertEquals(expected, new Day16PacketDecoder(List.of(input)).problem2());
+        assertThat(new Day16PacketDecoder(List.of(input)).problem2()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"1922490999789, src/test/resources/day16.txt"})
+    @CsvSource({"1922490999789, day16.txt"})
     void problem2(long expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day16PacketDecoder(inputLines).problem2());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day16PacketDecoder(inputLines).problem2()).isEqualTo(expected);
     }
 }

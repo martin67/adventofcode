@@ -1,25 +1,23 @@
 package aoc.aoc2017;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2017: Day 10: Knot Hash")
 class Day10KnotHashTest {
 
     @ParameterizedTest
-    @CsvSource({"12, 5, src/test/resources/day10-demo1.txt",
-            "11375, 256, src/test/resources/day10.txt"})
+    @CsvSource({"12, 5, day10-demo1.txt",
+            "11375, 256, day10.txt"})
     void problem1(int expected, int listSize, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day10KnotHash(listSize).checkKnot(inputLines.get(0)));
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day10KnotHash(listSize).checkKnot(inputLines.get(0))).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -28,14 +26,13 @@ class Day10KnotHashTest {
             "3efbe78a8d82f29979031a4aa0b16a9d, '1,2,3'",
             "63960835bcdc130f0b66d7ff4f6a5a8e, '1,2,4'"})
     void knotHash(String expected, String input) {
-        assertEquals(expected, new Day10KnotHash(256).knotHash(input));
+        assertThat(new Day10KnotHash(256).knotHash(input)).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"e0387e2ad112b7c2ef344e44885fe4d8, src/test/resources/day10.txt"})
+    @CsvSource({"e0387e2ad112b7c2ef344e44885fe4d8, day10.txt"})
     void problem2(String expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day10KnotHash(256).knotHash(inputLines.get(0)));
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day10KnotHash(256).knotHash(inputLines.get(0))).isEqualTo(expected);
     }
-
 }

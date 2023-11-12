@@ -144,14 +144,7 @@ public class Day22ReactorRobot {
         return "0";
     }
 
-    static class Step {
-        final boolean on;
-        final Cuboid cuboid;
-
-        public Step(boolean on, Cuboid cuboid) {
-            this.on = on;
-            this.cuboid = cuboid;
-        }
+    record Step(boolean on, Cuboid cuboid) {
     }
 
     public static class Cuboid {

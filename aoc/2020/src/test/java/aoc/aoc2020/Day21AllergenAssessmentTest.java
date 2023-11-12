@@ -1,33 +1,30 @@
 package aoc.aoc2020;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("2020: Day 21: Allergen Assessment")
 class Day21AllergenAssessmentTest {
 
     @ParameterizedTest
-    @CsvSource({"5, src/test/resources/day21-demo1.txt",
-            "2798, src/test/resources/day21.txt"})
+    @CsvSource({"5, day21-demo1.txt",
+            "2798, day21.txt"})
     void problem1(int expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day21AllergenAssessment(inputLines).problem1());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day21AllergenAssessment(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"'mxmxvkd,sqjhc,fvjkl', src/test/resources/day21-demo1.txt",
-            "'gbt,rpj,vdxb,dtb,bqmhk,vqzbq,zqjm,nhjrzzj', src/test/resources/day21.txt"})
+    @CsvSource({"'mxmxvkd,sqjhc,fvjkl', day21-demo1.txt",
+            "'gbt,rpj,vdxb,dtb,bqmhk,vqzbq,zqjm,nhjrzzj', day21.txt"})
     void problem2(String expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertEquals(expected, new Day21AllergenAssessment(inputLines).problem2());
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day21AllergenAssessment(inputLines).problem2()).isEqualTo(expected);
     }
-
 }

@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 @Slf4j
 class Day6ChronalCoordinates {
 

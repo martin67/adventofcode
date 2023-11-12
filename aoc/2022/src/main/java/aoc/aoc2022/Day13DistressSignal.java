@@ -8,7 +8,7 @@ import java.util.*;
 @Slf4j
 public class Day13DistressSignal {
 
-    List<PacketPair> packetPairs = new ArrayList<>();
+    final List<PacketPair> packetPairs = new ArrayList<>();
 
     public Day13DistressSignal(List<String> inputLines) {
         String a = null;
@@ -53,6 +53,18 @@ public class Day13DistressSignal {
         return result;
     }
 
+    void compare(PacketData left, String right) {
+
+    }
+
+    class PacketData {
+        String start;
+
+        public PacketData(String start) {
+            this.start = start;
+        }
+    }
+
     void flatten(List<Packet> packetList, Packet start) {
         packetList.add(start);
         if (start.isNumber()) {
@@ -71,13 +83,13 @@ public class Day13DistressSignal {
 
 
     class PacketPair {
-        int index;
-        Packet left;
-        Packet right;
-        Packet left2 = new Packet();
-        Packet right2 = new Packet();
-        String leftStr;
-        String rightStr;
+        final int index;
+        final Packet left;
+        final Packet right;
+        final Packet left2 = new Packet();
+        final Packet right2 = new Packet();
+        final String leftStr;
+        final String rightStr;
 
         public PacketPair(int index, String leftStr, String rightStr) {
             this.index = index;
@@ -121,7 +133,7 @@ public class Day13DistressSignal {
 
         String createPacketQueue(Packet packet, String in) {
 
-            while (in.length() > 0) {
+            while (!in.isEmpty()) {
                 if (in.charAt(0) == '[') {
                     Packet p = new Packet();
                     in = createPacketQueue(p, in.substring(1));
@@ -325,8 +337,8 @@ public class Day13DistressSignal {
     class Packet implements Iterable<Packet> {
         Packet parent;
         Integer number;
-        List<Packet> packets = new ArrayList<>();
-        Deque<Packet> packets2 = new ArrayDeque<>();
+        final List<Packet> packets = new ArrayList<>();
+        final Deque<Packet> packets2 = new ArrayDeque<>();
         int nextIndex = 0;
 
         public Packet() {

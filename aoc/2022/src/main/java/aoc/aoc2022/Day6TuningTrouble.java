@@ -9,7 +9,7 @@ import java.util.Set;
 @Slf4j
 public class Day6TuningTrouble {
 
-    String line;
+    final String line;
 
     public Day6TuningTrouble(List<String> inputLines) {
         line = inputLines.get(0);

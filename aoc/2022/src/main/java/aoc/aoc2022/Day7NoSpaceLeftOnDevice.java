@@ -1,5 +1,6 @@
 package aoc.aoc2022;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -7,7 +8,7 @@ import java.util.*;
 @Slf4j
 public class Day7NoSpaceLeftOnDevice {
 
-    Content root;
+    final Content root;
 
     public Day7NoSpaceLeftOnDevice(List<String> inputLines) {
         root = new Content("/", null);
@@ -71,11 +72,12 @@ public class Day7NoSpaceLeftOnDevice {
     enum ContentType {Directory, File}
 
     static class Content {
-        String name;
+        final String name;
+        @Getter
         int size;
-        ContentType type;
-        Content parent;
-        Set<Content> contents = new HashSet<>();
+        final ContentType type;
+        final Content parent;
+        final Set<Content> contents = new HashSet<>();
 
         public Content(String name, Content parent) {
             this.name = name;
@@ -88,10 +90,6 @@ public class Day7NoSpaceLeftOnDevice {
             this.type = ContentType.File;
             this.parent = parent;
             this.size = size;
-        }
-
-        public int getSize() {
-            return size;
         }
 
         Set<Content> getAllContent() {

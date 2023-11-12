@@ -1,12 +1,10 @@
 package aoc.aoc2015;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,15 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Day6ProbablyAFireHazardTest {
     @Test
     void problem1() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day6.txt"));
-        assertThat(new Day6ProbablyAFireHazard().lightsLit(inputLines, false))
-                .isEqualTo(543903);
+        var inputLines = AocFiles.readAllLines("day6.txt");
+        assertThat(new Day6ProbablyAFireHazard().lightsLit(inputLines, false)).isEqualTo(543903);
     }
 
     @Test
     void problem2() throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get("src/test/resources/day6.txt"));
-        assertThat(new Day6ProbablyAFireHazard().lightsLit(inputLines, true))
-                .isEqualTo(14687245);
+        var inputLines = AocFiles.readAllLines("day6.txt");
+        assertThat(new Day6ProbablyAFireHazard().lightsLit(inputLines, true)).isEqualTo(14687245);
     }
 }

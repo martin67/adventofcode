@@ -1,13 +1,11 @@
 package aoc.aoc2022;
 
+import aoc.common.AocFiles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,12 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Day25FullOfHotAirTest {
 
     @ParameterizedTest
-    @CsvSource({"2=-1=0, src/test/resources/day25-demo1.txt",
-            "20-1-0=-2=-2220=0011, src/test/resources/day25.txt"})
+    @CsvSource({"2=-1=0, day25-demo1.txt",
+            "20-1-0=-2=-2220=0011, day25.txt"})
     void problem1(String expected, String fileName) throws IOException {
-        List<String> inputLines = Files.readAllLines(Paths.get(fileName));
-        assertThat(new Day25FullOfHotAir(inputLines).problem1())
-                .isEqualTo(expected);
+        var inputLines = AocFiles.readAllLines(fileName);
+        assertThat(new Day25FullOfHotAir(inputLines).problem1()).isEqualTo(expected);
     }
-
 }
