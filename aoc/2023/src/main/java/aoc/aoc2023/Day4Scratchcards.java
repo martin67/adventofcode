@@ -13,7 +13,7 @@ public class Day4Scratchcards {
     final List<Card> cards = new ArrayList<>();
 
     public Day4Scratchcards(List<String> inputLines) {
-        var pattern = Pattern.compile("Card\\s+(\\d+):(.*) \\| (.*)");
+        var pattern = Pattern.compile("Card\\s+(\\d+):\\s+(.*) \\|\\s+(.*)");
         Matcher matcher;
 
         for (String line : inputLines) {
@@ -21,17 +21,11 @@ public class Day4Scratchcards {
             if (matcher.find()) {
                 var card = new Card();
                 card.id = Integer.parseInt(matcher.group(1));
-                String[] s = matcher.group(2).split(" ");
-                for (String number : s) {
-                    if (!number.isBlank()) {
-                        card.winningNumbers.add(Integer.parseInt(number));
-                    }
+                for (String number : matcher.group(2).split("\\s+")) {
+                    card.winningNumbers.add(Integer.parseInt(number));
                 }
-                s = matcher.group(3).split(" ");
-                for (String number : s) {
-                    if (!number.isBlank()) {
-                        card.numbers.add(Integer.parseInt(number));
-                    }
+                for (String number : matcher.group(3).split("\\s+")) {
+                    card.numbers.add(Integer.parseInt(number));
                 }
                 cards.add(card);
             }
