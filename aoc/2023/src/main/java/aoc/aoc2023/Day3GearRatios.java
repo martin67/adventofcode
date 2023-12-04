@@ -1,17 +1,19 @@
 package aoc.aoc2023;
 
 import aoc.common.Position;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 public class Day3GearRatios {
 
-    Set<Number> numbers = new HashSet<>();
-    Set<Position> symbols = new HashSet<>();
-    Set<Position> gears = new HashSet<>();
+    final Set<Number> numbers = new HashSet<>();
+    final Set<Position> symbols = new HashSet<>();
+    final Set<Position> gears = new HashSet<>();
 
     public Day3GearRatios(List<String> inputLines) {
         int y = 0;
@@ -75,16 +77,16 @@ public class Day3GearRatios {
     }
 
     static class Number {
-        List<Position> positions = new ArrayList<>();
-        String value = "";
+        final List<Position> positions = new ArrayList<>();
+        final StringBuilder stringBuilder = new StringBuilder();
 
         void add(Position position, char c) {
             positions.add(position);
-            value += c;
+            stringBuilder.append(c);
         }
 
         int getNumber() {
-            return Integer.parseInt(value);
+            return Integer.parseInt(stringBuilder.toString());
         }
     }
 }

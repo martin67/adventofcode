@@ -8,7 +8,7 @@ import java.util.List;
 @Slf4j
 public class Day1Trebuchet {
     static final List<String> numbers = List.of("one", "two", "three", "four", "five", "six", "seven", "eight", "nine");
-    List<List<Integer>> calibrationValues = new ArrayList<>();
+    final List<List<Integer>> calibrationValues = new ArrayList<>();
 
     public Day1Trebuchet(List<String> inputLines, boolean useStrings) {
         for (String line : inputLines) {
@@ -40,7 +40,7 @@ public class Day1Trebuchet {
             int last = cv.get(cv.size() - 1);
             int value = first * 10 + last;
             sum += value;
-            log.info("{} + {} = {}", first, last, value);
+            log.debug("{} + {} = {}", first, last, value);
         }
         return sum;
     }

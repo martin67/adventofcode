@@ -11,17 +11,17 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day2CubeConundrum {
-    List<Game> games = new ArrayList<>();
+    final List<Game> games = new ArrayList<>();
 
     public Day2CubeConundrum(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("(\\d+) (\\w+)");
+        var pattern = Pattern.compile("(\\d+) (\\w+)");
         Matcher matcher;
         for (String line : inputLines) {
-            Game game = new Game();
+            var game = new Game();
             String[] s = line.substring(line.indexOf(":") + 1).split(";");
             for (String cubeset : s) {
                 String[] s2 = cubeset.split(",");
-                CubeSet cubeSet = new CubeSet();
+                var cubeSet = new CubeSet();
                 for (String cs : s2) {
                     matcher = pattern.matcher(cs);
                     if (matcher.find()) {
@@ -50,9 +50,9 @@ public class Day2CubeConundrum {
     public int problem1() {
         int gameIndex = 1;
         int sum = 0;
-        for (Game game : games) {
+        for (var game : games) {
             boolean gameOk = true;
-            for (CubeSet cubeSet : game.cubeSets) {
+            for (var cubeSet : game.cubeSets) {
                 if (cubeSet.red > 12 || cubeSet.green > 13 || cubeSet.blue > 14) {
                     gameOk = false;
                     break;
@@ -69,11 +69,11 @@ public class Day2CubeConundrum {
 
     public int problem2() {
         int sum = 0;
-        for (Game game : games) {
+        for (var game : games) {
             int maxRed = 0;
             int maxBlue = 0;
             int maxGreen = 0;
-            for (CubeSet cubeSet : game.cubeSets) {
+            for (var cubeSet : game.cubeSets) {
                 maxRed = Math.max(maxRed, cubeSet.red);
                 maxBlue = Math.max(maxBlue, cubeSet.blue);
                 maxGreen = Math.max(maxGreen, cubeSet.green);
@@ -90,6 +90,6 @@ public class Day2CubeConundrum {
     }
 
     static class Game {
-        Set<CubeSet> cubeSets = new HashSet<>();
+        final Set<CubeSet> cubeSets = new HashSet<>();
     }
 }
