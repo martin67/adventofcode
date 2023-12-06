@@ -16,15 +16,15 @@ class Day5IfYouGiveASeedAFertilizerTest {
     @ParameterizedTest
     @CsvSource({"35, day5-demo1.txt",
             "57075758, day5.txt"})
-    void problem1(String expected, String fileName) throws IOException {
+    void problem1(long expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
         assertThat(new Day5IfYouGiveASeedAFertilizer(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
     @CsvSource({"46, day5-demo1.txt",
-            "0, day5.txt"})
-    void problem2(String expected, String fileName) throws IOException {
+            "31161857, day5.txt"})
+    void problem2(long expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
         assertThat(new Day5IfYouGiveASeedAFertilizer(inputLines).problem2()).isEqualTo(expected);
     }
