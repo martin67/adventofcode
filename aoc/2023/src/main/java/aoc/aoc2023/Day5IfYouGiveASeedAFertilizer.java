@@ -20,9 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Day5IfYouGiveASeedAFertilizer {
 
-    List<SeedMap> seedMaps = new ArrayList<>();
-    List<Long> seeds = new ArrayList<>();
-    List<Range<Long>> seedRanges = new ArrayList<>();
+    final List<SeedMap> seedMaps = new ArrayList<>();
+    final List<Long> seeds = new ArrayList<>();
+    final List<Range<Long>> seedRanges = new ArrayList<>();
 
     public Day5IfYouGiveASeedAFertilizer(List<String> inputLines) {
         var pattern = Pattern.compile("(\\w+)-to-(\\w+) map:");
@@ -58,7 +58,8 @@ public class Day5IfYouGiveASeedAFertilizer {
     }
 
     public long problem1() {
-        long lowestLocation = -1;
+        long lowestLocation = Integer.MAX_VALUE;
+
         for (long seed : seeds) {
             String source = "seed";
             long value = seed;
@@ -70,19 +71,15 @@ public class Day5IfYouGiveASeedAFertilizer {
                 value = seedMap.map(value);
                 source = seedMap.destination;
             }
-            if (lowestLocation == -1) {
-                lowestLocation = value;
-            } else {
-                lowestLocation = Math.min(value, lowestLocation);
-            }
+            lowestLocation = Math.min(value, lowestLocation);
         }
         return lowestLocation;
     }
 
     public long problem2() {
         long totalLow = Long.MAX_VALUE;
+
         for (var seedRange : seedRanges) {
-            log.info("### Evaluating: {}", seedRange);
             String source = "seed";
             var ranges = Set.of(seedRange);
             while (!source.equals("location")) {
@@ -90,13 +87,10 @@ public class Day5IfYouGiveASeedAFertilizer {
                 var seedMap = seedMaps.stream()
                         .filter(sm -> sm.source.equals(finalSource))
                         .findFirst().orElseThrow();
-                var nextRanges = seedMap.map(ranges);
-                log.debug("{} ({}) -> {} ({})", source, ranges.size(), seedMap.destination, nextRanges.size());
-                ranges = nextRanges;
+                ranges = seedMap.map(ranges);
                 source = seedMap.destination;
             }
             long lowestValue = ranges.stream().mapToLong(Range::lowerEndpoint).min().orElseThrow();
-            log.debug("Lowest value: {}", lowestValue);
             totalLow = Math.min(lowestValue, totalLow);
         }
         return totalLow;

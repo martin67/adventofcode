@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Day6WaitForIt {
-    List<Race> races = new ArrayList<>();
+    final List<Race> races = new ArrayList<>();
 
     public Day6WaitForIt(List<String> inputLines) {
         for (String line : inputLines) {

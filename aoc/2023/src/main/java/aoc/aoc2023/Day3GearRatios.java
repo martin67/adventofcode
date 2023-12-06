@@ -47,8 +47,9 @@ public class Day3GearRatios {
         Set<Number> foundNumbers = new HashSet<>();
 
         for (var position : symbols) {
+            Set<Position> neighbourPositions = position.allAdjacentIncludingDiagonal();
             for (var number : numbers) {
-                if (position.allAdjacentIncludingDiagonal().stream().anyMatch(number.positions::contains)) {
+                if (neighbourPositions.stream().anyMatch(number.positions::contains)) {
                     foundNumbers.add(number);
                 }
             }
@@ -62,9 +63,10 @@ public class Day3GearRatios {
 
         for (var position : gears) {
             Set<Number> foundNumbers = new HashSet<>();
+            Set<Position> neighbourPositions = position.allAdjacentIncludingDiagonal();
 
             for (var number : numbers) {
-                if (position.allAdjacentIncludingDiagonal().stream().anyMatch(number.positions::contains)) {
+                if (neighbourPositions.stream().anyMatch(number.positions::contains)) {
                     foundNumbers.add(number);
                 }
             }

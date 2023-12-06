@@ -64,14 +64,11 @@ humidity-to-location map:
 
 The almanac starts by listing which seeds need to be planted: seeds 79, 14, 55, and 13.
 
-The rest of the almanac contains a list of **maps** which describe how to convert numbers from a *
-*source
-category** into numbers in a **destination category**. That is, the section that starts with
-seed-to-soil
-map: describes how to convert a **seed number** (the source) to a **soil number** (the destination).
-This
-lets the gardener and his team know which soil to use with which seeds, which water to use with
-which fertilizer, and so on.
+The rest of the almanac contains a list of **maps** which describe how to convert numbers from a
+**source category** into numbers in a **destination category**. That is, the section that starts
+with seed-to-soil map: describes how to convert a **seed number** (the source) to a **soil
+number** (the destination). This lets the gardener and his team know which soil to use with which
+seeds, which water to use with which fertilizer, and so on.
 
 Rather than list every source number and its corresponding destination number one by one, the maps
 describe entire **ranges** of numbers that can be converted. Each line within a map contains three
@@ -84,23 +81,18 @@ Consider again the example seed-to-soil map:
 52 50 48
 ```
 
-The first line has a **destination range start** of 50, a **source range start** of 98, and a *
-*range
-length** of 2. This line means that the source range starts at 98 and contains two values: 98 and
-
-99. The
-    destination range is the same length, but it starts at 50, so its two values are 50 and 51. With
-    this information, you know that seed number 98 corresponds to soil number 50 and that seed
-    number 99
-    corresponds to soil number 51.
+The first line has a **destination range start** of 50, a **source range start** of 98, and a
+**range length** of 2. This line means that the source range starts at 98 and contains two values:
+98 and 99. The destination range is the same length, but it starts at 50, so its two values are 50
+and 51. With this information, you know that seed number 98 corresponds to soil number 50 and that
+seed number 99 corresponds to soil number 51.
 
 The second line means that the source range starts at 50 and contains 48 values: 50, 51, ...,
 96, 97. This corresponds to a destination range starting at 52 and also containing 48 values: 52,
 53, ..., 98, 99. So, seed number 53 corresponds to soil number 55.
 
 Any source numbers that **aren't mapped** correspond to the **same** destination number. So, seed
-number 10
-corresponds to soil number 10.
+number 10 corresponds to soil number 10.
 
 So, the entire list of seed numbers and their corresponding soil numbers looks like this:
 
@@ -130,8 +122,7 @@ With this map, you can look up the soil number required for each initial seed nu
 The gardener and his team want to get started as soon as possible, so they'd like to know the
 closest location that needs a seed. Using these maps, find **the lowest location number that
 corresponds to any of the initial seeds**. To do this, you'll need to convert each seed number
-through
-other categories until you can find its corresponding location number. In this example, the
+through other categories until you can find its corresponding location number. In this example, the
 corresponding types are:
 
 * Seed 79, soil 81, fertilizer 81, water 81, light 74, temperature 78, humidity 78, **location 82**.
@@ -168,8 +159,8 @@ In the above example, the lowest location number can be obtained from seed numbe
 corresponds to soil 84, fertilizer 84, water 84, light 77, temperature 45, humidity 46, and
 location 46. So, the lowest location number is **46**.
 
-Consider all of the initial seed numbers listed in the ranges on the first line of the almanac. **What
-is the lowest location number that corresponds to any of the initial seed numbers?**
+Consider all of the initial seed numbers listed in the ranges on the first line of the almanac.
+**What is the lowest location number that corresponds to any of the initial seed numbers?**
 
 Your puzzle answer was 31161857.
 

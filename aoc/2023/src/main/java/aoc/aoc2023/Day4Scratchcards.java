@@ -58,7 +58,6 @@ public class Day4Scratchcards {
                 cards.get(card.id + i).instances += card.instances;
             }
         }
-
         return cards.stream().mapToInt(Card::getInstances).sum();
     }
 
