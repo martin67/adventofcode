@@ -1,11 +1,14 @@
 package aoc.aoc2019;
 
 import com.google.common.collect.Sets;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static aoc.common.Math.lcm;
 
 @Slf4j
 public class Day12TheNBodyProblem {
@@ -35,18 +38,6 @@ public class Day12TheNBodyProblem {
                 initialMoonList.add(moon2);
             }
         }
-    }
-
-    private static long gcd(long x, long y) {
-        return (y == 0) ? x : gcd(y, x % y);
-    }
-
-    public static long gcd(long... numbers) {
-        return Arrays.stream(numbers).reduce(0, Day12TheNBodyProblem::gcd);
-    }
-
-    public static long lcm(long... numbers) {
-        return Arrays.stream(numbers).reduce(1, (x, y) -> x * (y / gcd(x, y)));
     }
 
     int totalEnergy(int steps) {

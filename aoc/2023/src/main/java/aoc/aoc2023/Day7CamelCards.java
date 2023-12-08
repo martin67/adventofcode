@@ -46,7 +46,7 @@ public class Day7CamelCards {
                 case 3 -> cardMap.containsValue(3) ? Type.THREE_OF_A_KIND : Type.TWO_PAIR;
                 case 4 -> Type.ONE_PAIR;
                 case 5 -> Type.HIGH_CARD;
-                default -> throw new IllegalStateException("Unexpected value: " + cardMap.size());
+                default -> throw new IllegalStateException();
             };
         }
 
@@ -64,14 +64,12 @@ public class Day7CamelCards {
                 case THREE_OF_A_KIND -> switch (numberOfJokers) {
                     case 1, 3 -> Type.FOUR_OF_A_KIND;
                     case 2 -> Type.FIVE_OF_A_KIND;
-                    default ->
-                            throw new IllegalStateException("Unexpected value: " + numberOfJokers);
+                    default -> throw new IllegalStateException();
                 };
                 case TWO_PAIR -> switch (numberOfJokers) {
                     case 1 -> Type.FULL_HOUSE;
                     case 2 -> Type.FOUR_OF_A_KIND;
-                    default ->
-                            throw new IllegalStateException("Unexpected value: " + numberOfJokers);
+                    default -> throw new IllegalStateException();
                 };
                 case ONE_PAIR -> Type.THREE_OF_A_KIND;
                 case HIGH_CARD -> Type.ONE_PAIR;
