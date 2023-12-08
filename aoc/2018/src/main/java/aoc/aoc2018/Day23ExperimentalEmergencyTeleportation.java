@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -30,10 +29,10 @@ public class Day23ExperimentalEmergencyTeleportation {
     private void readData(String fileName) throws IOException {
         List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
 
-        Pattern pattern = Pattern.compile("^pos=<(-?\\d+),(-?\\d+),(-?\\d+)>, r=(\\d+)$");
+        var pattern = Pattern.compile("^pos=<(-?\\d+),(-?\\d+),(-?\\d+)>, r=(\\d+)$");
 
         for (String row : inputStrings) {
-            Matcher matcher = pattern.matcher(row);
+            var matcher = pattern.matcher(row);
             if (matcher.find()) {
                 long x = Long.parseLong(matcher.group(1));
                 long y = Long.parseLong(matcher.group(2));

@@ -8,7 +8,7 @@ import aoc.common.WrappingCounter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import static aoc.common.Math.lcm;
+import static aoc.common.AocMath.lcm;
 
 @Slf4j
 class Day8HauntedWasteland {

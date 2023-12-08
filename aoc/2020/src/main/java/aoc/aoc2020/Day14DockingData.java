@@ -17,12 +17,11 @@ public class Day14DockingData {
     long problem1() {
         // mask = 11110X1XXX11001X01X00011001X00X00000
         // mem[28496] = 122879146
-        Pattern maskPattern = Pattern.compile("^mask = (\\w+)$");
-        Pattern memPattern = Pattern.compile("^mem\\[(\\d+)] = (\\d+)$");
-        Matcher matcher;
+        var maskPattern = Pattern.compile("^mask = (\\w+)$");
+        var memPattern = Pattern.compile("^mem\\[(\\d+)] = (\\d+)$");
 
         for (String line : inputLines) {
-            matcher = maskPattern.matcher(line);
+            var matcher = maskPattern.matcher(line);
             if (matcher.find()) {
                 mask = matcher.group(1);
             }

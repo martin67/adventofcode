@@ -3,7 +3,6 @@ package aoc.aoc2020;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -15,10 +14,10 @@ public class Day21AllergenAssessment {
     private Set<Ingredient> usedIngredients;
 
     public Day21AllergenAssessment(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^(.*) \\(contains (.*)\\)$");
+        var pattern = Pattern.compile("^(.*) \\(contains (.*)\\)$");
 
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 Food food = new Food();
                 for (String name : matcher.group(1).split(" ")) {
@@ -111,7 +110,7 @@ public class Day21AllergenAssessment {
         Ingredient foundIngredient = null;
         Allergen foundAllergen = null;
 
-        while (allergens.size() > 0) {
+        while (!allergens.isEmpty()) {
             // Loop through all allergens and
             for (Allergen allergen : allergens.values()) {
                 Map<Ingredient, Integer> ingredientFrequency = new HashMap<>();

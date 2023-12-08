@@ -8,7 +8,7 @@ import java.util.Set;
 @Slf4j
 class Day5AlchemicalReduction {
 
-    Set<String> units = new HashSet<>();
+    final Set<String> units = new HashSet<>();
 
     public Day5AlchemicalReduction() {
         for (char i = 'a'; i <= 'z'; i++) {

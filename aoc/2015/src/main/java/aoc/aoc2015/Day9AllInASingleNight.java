@@ -9,7 +9,6 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -18,11 +17,10 @@ public class Day9AllInASingleNight {
     private final Graph<String, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
     public Day9AllInASingleNight(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^(\\w+) to (\\w+) = (\\d+)$");
-        Matcher matcher;
+        var pattern = Pattern.compile("^(\\w+) to (\\w+) = (\\d+)$");
 
         for (String line : inputLines) {
-            matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 String start = matcher.group(1);
                 String end = matcher.group(2);

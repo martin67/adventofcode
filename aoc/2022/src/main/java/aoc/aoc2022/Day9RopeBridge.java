@@ -94,13 +94,6 @@ public class Day9RopeBridge {
         }
     }
 
-    static class Motion {
-        final Direction direction;
-        final int steps;
-
-        public Motion(Direction direction, int steps) {
-            this.direction = direction;
-            this.steps = steps;
-        }
+    record Motion(Direction direction, int steps) {
     }
 }

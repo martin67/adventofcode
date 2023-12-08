@@ -8,7 +8,6 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -25,12 +24,11 @@ public class Day19MedicineForRudolph {
 
 
     public Day19MedicineForRudolph(List<String> inputLines) {
-        Pattern replacementPattern = Pattern.compile("^(\\w+) => (\\w+)$");
-        Pattern outcomePattern = Pattern.compile("^(\\w+)$");
-        Matcher matcher;
+        var replacementPattern = Pattern.compile("^(\\w+) => (\\w+)$");
+        var outcomePattern = Pattern.compile("^(\\w+)$");
 
         for (String line : inputLines) {
-            matcher = replacementPattern.matcher(line);
+            var matcher = replacementPattern.matcher(line);
             if (matcher.find()) {
                 String in = matcher.group(1);
                 String out = matcher.group(2);

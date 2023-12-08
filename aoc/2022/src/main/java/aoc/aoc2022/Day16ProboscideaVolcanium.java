@@ -9,7 +9,6 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -21,10 +20,10 @@ public class Day16ProboscideaVolcanium {
 
 
     public Day16ProboscideaVolcanium(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("Valve (\\w+) has flow rate=(\\d+); tunnels? leads? to valves? ((\\w+)(,\\s*\\w+)*)");
-        Matcher matcher;
+        var pattern = Pattern.compile("Valve (\\w+) has flow rate=(\\d+); tunnels? leads? to valves? ((\\w+)(,\\s*\\w+)*)");
+
         for (String line : inputLines) {
-            matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 String valveName = matcher.group(1);
                 int flowRate = Integer.parseInt((matcher.group(2)));

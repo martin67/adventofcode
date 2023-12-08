@@ -26,13 +26,13 @@ public class Day11RadioisotopeThermoelectricGenerators {
 
     private State readData(String fileName) throws IOException {
         List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
-        Pattern pattern = Pattern.compile("(a|, a| and a|, and a) (\\w+)(-compatible)? (generator|microchip)");
+        var pattern = Pattern.compile("(a|, a| and a|, and a) (\\w+)(-compatible)? (generator|microchip)");
 
         int floor = 1;
         Set<String> newDevices = new HashSet<>();
 
         for (String row : inputStrings) {
-            Matcher matcher = pattern.matcher(row);
+            var matcher = pattern.matcher(row);
             while (matcher.find()) {
                 // hydrogen generator on 3rd floor => HG3
                 String material = matcher.group(2).substring(0, 1).toUpperCase();
@@ -161,7 +161,7 @@ public class Day11RadioisotopeThermoelectricGenerators {
             // Remove all sets that are 0 (elevator can't be empty) or bigger than 2 (max for the elevator)
             Set<Set<String>> combinations = new HashSet<>();
             for (Set<String> set : allCombinations) {
-                if (set.size() > 0 && set.size() < 3) {
+                if (!set.isEmpty() && set.size() < 3) {
                     combinations.add(set);
                 }
             }

@@ -4,7 +4,6 @@ import aoc.common.SpacePosition;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -13,12 +12,12 @@ public class Day19BeaconScanner {
     private final List<BeaconScanner> scanners = new ArrayList<>();
 
     public Day19BeaconScanner(List<String> inputLines) {
-        Pattern scannerPattern = Pattern.compile("--- scanner (\\d+) ---");
-        Pattern beaconPattern = Pattern.compile("(-?\\d+),(-?\\d+),(-?\\d+)");
+        var scannerPattern = Pattern.compile("--- scanner (\\d+) ---");
+        var beaconPattern = Pattern.compile("(-?\\d+),(-?\\d+),(-?\\d+)");
 
         BeaconScanner scanner = null;
         for (String line : inputLines) {
-            Matcher matcher = scannerPattern.matcher(line);
+            var matcher = scannerPattern.matcher(line);
             if (matcher.find()) {
                 scanner = new BeaconScanner(Integer.parseInt(matcher.group(1)));
                 scanners.add(scanner);

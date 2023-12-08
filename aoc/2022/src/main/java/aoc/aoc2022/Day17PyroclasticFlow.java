@@ -36,7 +36,7 @@ public class Day17PyroclasticFlow {
         log.info("Number of jets: {}", jets.length());
     }
 
-    int problem1() throws IOException {
+    int problem1() {
         int highestRock = 0;
         for (int i = 0; i < 2022; i++) {
             Shape s = new Shape(shapes.get(i % 5));

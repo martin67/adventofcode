@@ -4,7 +4,6 @@ import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -14,9 +13,10 @@ public class Day17TrickShot {
     private Position lowerRight;
 
     public Day17TrickShot(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("target area: x=(-?\\d+)..(-?\\d+), y=(-?\\d+)..(-?\\d+)");
+        var pattern = Pattern.compile("target area: x=(-?\\d+)..(-?\\d+), y=(-?\\d+)..(-?\\d+)");
+
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 upperLeft = new Position(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(4)));
                 lowerRight = new Position(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));

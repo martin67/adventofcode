@@ -67,8 +67,8 @@ public class Day23CategorySix {
 
     static class NatRouter implements Callable<Integer> {
         ExecutorService executorService;
-        List<BlockingQueue<BigInteger>> inputQueues = new ArrayList<>();
-        List<IntcodeComputer> computers;
+        final List<BlockingQueue<BigInteger>> inputQueues = new ArrayList<>();
+        final List<IntcodeComputer> computers;
 
         public NatRouter(ExecutorService executorService, List<IntcodeComputer> computers) {
             this.computers = computers;

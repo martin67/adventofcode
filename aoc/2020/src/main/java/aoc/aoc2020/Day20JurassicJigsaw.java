@@ -8,7 +8,6 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static aoc.common.Direction.*;
@@ -19,14 +18,14 @@ public class Day20JurassicJigsaw {
     private final Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
     public Day20JurassicJigsaw(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^Tile (\\d+):$");
+        var pattern = Pattern.compile("^Tile (\\d+):$");
 
         Tile tile = null;
         int x;
         int y = 0;
 
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 tile = new Tile(Integer.parseInt(matcher.group(1)), 10, 10);
                 tiles.add(tile);

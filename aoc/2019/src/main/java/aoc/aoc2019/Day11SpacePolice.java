@@ -79,7 +79,7 @@ public class Day11SpacePolice {
     }
 
     static class Panel {
-        Position position;
+        final Position position;
         int color;          // black = 0, white = 1
         int timesPainted;
 

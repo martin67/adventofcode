@@ -8,7 +8,6 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -17,10 +16,10 @@ public class Day13KnightsOfTheDinnerTable {
     private final Graph<String, DefaultWeightedEdge> graph = new SimpleDirectedWeightedGraph<>(DefaultWeightedEdge.class);
 
     public Day13KnightsOfTheDinnerTable(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^(\\w+) would (gain|lose) (\\d+) happiness units by sitting next to (\\w+).$");
+        var pattern = Pattern.compile("^(\\w+) would (gain|lose) (\\d+) happiness units by sitting next to (\\w+).$");
 
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 String guest = matcher.group(1);
                 String neighbour = matcher.group(4);

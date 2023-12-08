@@ -24,15 +24,13 @@ public class Day21ScrambledLettersAndHash {
         // reverse positions X through Y
         // move position X to position Y
 
-        Pattern pattern;
-        Matcher matcher;
         String password = input;
 
         log.info("Starting with: {}", input);
         for (String instruction : instructions) {
 
-            pattern = Pattern.compile("^swap position (\\d+) with position (\\d+)$");
-            matcher = pattern.matcher(instruction);
+            var pattern = Pattern.compile("^swap position (\\d+) with position (\\d+)$");
+            var matcher = pattern.matcher(instruction);
             if (matcher.find()) {
                 password = swapPosition(password, Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
                 log.info("{}: {}", instruction, password);

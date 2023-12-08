@@ -3,7 +3,6 @@ package aoc.aoc2016;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day15TimingIsEverything {
@@ -11,10 +10,10 @@ public class Day15TimingIsEverything {
     final Set<Disc> discs = new HashSet<>();
 
     public Day15TimingIsEverything(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^Disc #\\d+ has (\\d+) positions; at time=0, it is at position (\\d+).$");
+        var pattern = Pattern.compile("^Disc #\\d+ has (\\d+) positions; at time=0, it is at position (\\d+).$");
         int order = 1;
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
 
             if (matcher.find()) {
                 discs.add(new Disc(Integer.parseInt(matcher.group(1)),
@@ -45,7 +44,7 @@ public class Day15TimingIsEverything {
     record Disc(int numberOfPositions, int startPosition, int order) {
 
         int getCurrentPosition(int time) {
-                return (time + startPosition + order) % numberOfPositions;
-            }
+            return (time + startPosition + order) % numberOfPositions;
         }
+    }
 }

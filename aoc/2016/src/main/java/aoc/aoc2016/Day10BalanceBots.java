@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day10BalanceBots {
@@ -21,11 +20,11 @@ public class Day10BalanceBots {
 
     private void readData(String fileName) throws IOException {
         List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
-        Pattern initPattern = Pattern.compile("^value (\\d+) goes to bot (\\d+)$");
-        Pattern instructionPattern = Pattern.compile("^bot (\\d+) gives low to (bot|output) (\\d+) and high to (bot|output) (\\d+)$");
+        var initPattern = Pattern.compile("^value (\\d+) goes to bot (\\d+)$");
+        var instructionPattern = Pattern.compile("^bot (\\d+) gives low to (bot|output) (\\d+) and high to (bot|output) (\\d+)$");
 
         for (String row : inputStrings) {
-            Matcher matcher = initPattern.matcher(row);
+            var matcher = initPattern.matcher(row);
             // value 41 goes to bot 12
             if (matcher.find()) {
                 int value = Integer.parseInt(matcher.group(1));

@@ -16,9 +16,10 @@ public class Day12JSAbacusFramework {
 
     public int sumOfAllNumbers() {
         int sumOfAllNumbers = 0;
-        Pattern pattern = Pattern.compile("(-?\\d+)");
+        var pattern = Pattern.compile("(-?\\d+)");
+
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             while (matcher.find()) {
                 sumOfAllNumbers += Integer.parseInt(matcher.group(1));
             }

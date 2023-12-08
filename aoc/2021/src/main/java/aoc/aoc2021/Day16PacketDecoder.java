@@ -59,7 +59,7 @@ public class Day16PacketDecoder {
                         do {
                             r = decodePacket(r.output);
                             result.value += r.value;
-                        } while (r.output.length() > 0);
+                        } while (!r.output.isEmpty());
                         result.output = binaryInput.substring(pos + length);
                     } else {
                         length = Integer.parseInt(binaryInput.substring(pos, pos += 11), 2);
@@ -82,7 +82,7 @@ public class Day16PacketDecoder {
                         do {
                             r = decodePacket(r.output);
                             result.value *= r.value;
-                        } while (r.output.length() > 0);
+                        } while (!r.output.isEmpty());
                         result.output = binaryInput.substring(pos + length);
                     } else {
                         length = Integer.parseInt(binaryInput.substring(pos, pos += 11), 2);
@@ -105,7 +105,7 @@ public class Day16PacketDecoder {
                         do {
                             r = decodePacket(r.output);
                             result.value = Math.min(result.value, r.value);
-                        } while (r.output.length() > 0);
+                        } while (!r.output.isEmpty());
                         result.output = binaryInput.substring(pos + length);
                     } else {
                         length = Integer.parseInt(binaryInput.substring(pos, pos += 11), 2);
@@ -128,7 +128,7 @@ public class Day16PacketDecoder {
                         do {
                             r = decodePacket(r.output);
                             result.value = Math.max(result.value, r.value);
-                        } while (r.output.length() > 0);
+                        } while (!r.output.isEmpty());
                         result.output = binaryInput.substring(pos + length);
                     } else {
                         length = Integer.parseInt(binaryInput.substring(pos, pos += 11), 2);

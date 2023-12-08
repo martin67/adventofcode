@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -14,10 +13,9 @@ public class Day4Scratchcards {
 
     public Day4Scratchcards(List<String> inputLines) {
         var pattern = Pattern.compile("Card\\s+(\\d+):\\s+(.*) \\|\\s+(.*)");
-        Matcher matcher;
 
         for (String line : inputLines) {
-            matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 var card = new Card();
                 card.id = Integer.parseInt(matcher.group(1));

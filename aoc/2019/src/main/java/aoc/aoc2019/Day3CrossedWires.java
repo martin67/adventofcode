@@ -61,6 +61,6 @@ public class Day3CrossedWires {
     }
 
     static class Wire {
-        Map<Position, Integer> positions = new HashMap<>();
+        final Map<Position, Integer> positions = new HashMap<>();
     }
 }

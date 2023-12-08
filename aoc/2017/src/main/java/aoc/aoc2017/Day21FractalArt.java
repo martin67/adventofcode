@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -18,10 +17,10 @@ public class Day21FractalArt {
 
     public Day21FractalArt(List<String> inputLines) {
         int id = 1;
-        Pattern pattern = Pattern.compile("(\\W+) => (\\W+)");
-        Matcher matcher;
+        var pattern = Pattern.compile("(\\W+) => (\\W+)");
+
         for (String line : inputLines) {
-            matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 rules.add(new Rule(id, matcher.group(1), matcher.group(2)));
                 id++;

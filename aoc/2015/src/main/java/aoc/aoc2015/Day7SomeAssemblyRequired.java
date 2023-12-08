@@ -15,12 +15,10 @@ public class Day7SomeAssemblyRequired {
 
     public Day7SomeAssemblyRequired(List<String> inputLines) {
         //gates.add(Gate.builder().name("AND").build()
-        Pattern pattern;
-        Matcher matcher;
+        var pattern = Pattern.compile("^(\\w+) (\\w+) (\\w+) -> (\\w+)$");
 
         for (String line : inputLines) {
-            pattern = Pattern.compile("^(\\w+) (\\w+) (\\w+) -> (\\w+)$");
-            matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 gates.add(new Gate(matcher.group(2), matcher.group(1), matcher.group(3), matcher.group(4)));
             }

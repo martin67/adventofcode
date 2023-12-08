@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day16TicketTranslation {
@@ -13,12 +12,11 @@ public class Day16TicketTranslation {
     private Ticket myTicket;
 
     public Day16TicketTranslation(List<String> inputLines) {
-        Pattern fieldPattern = Pattern.compile("^(.*): (\\d+)-(\\d+) or (\\d+)-(\\d+)$");
-        Pattern ticketPattern = Pattern.compile("^((\\d+)(,\\d+)*)$");
-        Matcher matcher;
+        var fieldPattern = Pattern.compile("^(.*): (\\d+)-(\\d+) or (\\d+)-(\\d+)$");
+        var ticketPattern = Pattern.compile("^((\\d+)(,\\d+)*)$");
 
         for (String line : inputLines) {
-            matcher = fieldPattern.matcher(line);
+            var matcher = fieldPattern.matcher(line);
             if (matcher.find()) {
                 TicketField ticketField = new TicketField(matcher.group(1));
                 for (int i = 0; i < 2; i++) {
@@ -139,7 +137,7 @@ public class Day16TicketTranslation {
             ticketFields.remove(finalTicketfield);
             positions.remove(finalPosition);
 
-            if (positions.size() == 0) {
+            if (positions.isEmpty()) {
                 done = true;
             }
         }

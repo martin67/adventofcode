@@ -23,9 +23,9 @@ public class Day24ImmuneSystemSimulator20XX {
     private void readData(String fileName) throws IOException {
         List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
 
-        Pattern pattern = Pattern.compile("^(?<units>\\d+) units each with (?<hitPoints>\\d+) hit points (?<modifiers>\\((.*)\\) )?with an attack that does (?<damage>\\d+) (?<attackType>\\w+) damage at initiative (?<initiative>\\d+)$");
-        Pattern weaknessPattern = Pattern.compile("weak to ([\\w, ]*)");
-        Pattern immunePattern = Pattern.compile("immune to ([\\w, ]*)");
+        var pattern = Pattern.compile("^(?<units>\\d+) units each with (?<hitPoints>\\d+) hit points (?<modifiers>\\((.*)\\) )?with an attack that does (?<damage>\\d+) (?<attackType>\\w+) damage at initiative (?<initiative>\\d+)$");
+        var weaknessPattern = Pattern.compile("weak to ([\\w, ]*)");
+        var immunePattern = Pattern.compile("immune to ([\\w, ]*)");
         Side activeSide = null;
         int numberOfSystems = 0;
 
@@ -37,7 +37,7 @@ public class Day24ImmuneSystemSimulator20XX {
                 activeSide = Side.INFECTION;
                 numberOfSystems = 0;
             } else {
-                Matcher matcher = pattern.matcher(row);
+                var matcher = pattern.matcher(row);
                 if (matcher.find()) {
                     int units = Integer.parseInt(matcher.group("units"));
                     int hitPoints = Integer.parseInt(matcher.group("hitPoints"));

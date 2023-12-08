@@ -4,7 +4,6 @@ import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -16,11 +15,11 @@ public class Day13TransparentOrigami {
     private int ySize;
 
     public Day13TransparentOrigami(List<String> inputLines) {
-        Pattern dotPattern = Pattern.compile("(\\d+),(\\d+)");
-        Pattern foldPattern = Pattern.compile("fold along (\\w)=(\\d+)");
-        Matcher matcher;
+        var dotPattern = Pattern.compile("(\\d+),(\\d+)");
+        var foldPattern = Pattern.compile("fold along (\\w)=(\\d+)");
+
         for (String line : inputLines) {
-            matcher = dotPattern.matcher(line);
+            var matcher = dotPattern.matcher(line);
             if (matcher.find()) {
                 dots.add(new Position(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
             }

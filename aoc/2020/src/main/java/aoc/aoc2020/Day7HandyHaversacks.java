@@ -3,7 +3,6 @@ package aoc.aoc2020;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -25,9 +24,9 @@ public class Day7HandyHaversacks {
                 bags.put(color, bag);
             }
 
-            Pattern pattern = Pattern.compile("(\\d+) (\\w+ \\w+) bag.*");
+            var pattern = Pattern.compile("(\\d+) (\\w+ \\w+) bag.*");
             for (String content : contentList) {
-                Matcher matcher = pattern.matcher(content);
+                var matcher = pattern.matcher(content);
                 if (matcher.find()) {
                     int amount = Integer.parseInt(matcher.group(1));
                     String secondColor = matcher.group(2);

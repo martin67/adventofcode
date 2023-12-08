@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day5HydrothermalVenture {
@@ -16,10 +15,10 @@ public class Day5HydrothermalVenture {
     private final Map<Position, Integer> diagonalVents = new HashMap<>();
 
     public Day5HydrothermalVenture(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^(\\d+),(\\d+) -> (\\d+),(\\d+)");
-        Matcher matcher;
+        var pattern = Pattern.compile("^(\\d+),(\\d+) -> (\\d+),(\\d+)");
+
         for (String line : inputLines) {
-            matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 Position start = new Position(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
                 Position end = new Position(Integer.parseInt(matcher.group(3)), Integer.parseInt(matcher.group(4)));

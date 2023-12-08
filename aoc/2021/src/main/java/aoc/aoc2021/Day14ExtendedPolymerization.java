@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -16,11 +15,11 @@ public class Day14ExtendedPolymerization {
     private String polymer;
 
     public Day14ExtendedPolymerization(List<String> inputLines) {
-        Pattern polymerPattern = Pattern.compile("^(\\w+)$");
-        Pattern rulePattern = Pattern.compile("(\\w+) -> (\\w)");
-        Matcher matcher;
+        var polymerPattern = Pattern.compile("^(\\w+)$");
+        var rulePattern = Pattern.compile("(\\w+) -> (\\w)");
+
         for (String line : inputLines) {
-            matcher = polymerPattern.matcher(line);
+            var matcher = polymerPattern.matcher(line);
             if (matcher.find()) {
                 polymer = matcher.group(1);
             }

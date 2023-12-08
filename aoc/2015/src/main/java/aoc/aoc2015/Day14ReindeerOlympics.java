@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -16,10 +15,10 @@ public class Day14ReindeerOlympics {
     private final Set<Reindeer> reindeers = new HashSet<>();
 
     public Day14ReindeerOlympics(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^(\\w+) can fly (\\d+) km/s for (\\d+) seconds, but then must rest for (\\d+) seconds.$");
+        var pattern = Pattern.compile("^(\\w+) can fly (\\d+) km/s for (\\d+) seconds, but then must rest for (\\d+) seconds.$");
 
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 reindeers.add(new Reindeer(matcher.group(1),
                         Integer.parseInt(matcher.group(2)),

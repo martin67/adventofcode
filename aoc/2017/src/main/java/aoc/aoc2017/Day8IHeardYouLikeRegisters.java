@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -21,12 +20,11 @@ public class Day8IHeardYouLikeRegisters {
 
     public int largestRegisterValue(boolean partTwo) {
         // c dec -10 if a >= 1
-        Pattern pattern = Pattern.compile("^(\\w+) (dec|inc) (-?\\d+) if (\\w+) (\\W+) (-?\\d+)$");
-        Matcher matcher;
+        var pattern = Pattern.compile("^(\\w+) (dec|inc) (-?\\d+) if (\\w+) (\\W+) (-?\\d+)$");
         int largestRegisterValueEver = Integer.MIN_VALUE;
 
         for (String line : instructions) {
-            matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 String destReg = matcher.group(1);
                 String operator = matcher.group(2);

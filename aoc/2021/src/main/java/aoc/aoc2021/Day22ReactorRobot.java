@@ -4,7 +4,6 @@ import aoc.common.SpacePosition;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -14,9 +13,10 @@ public class Day22ReactorRobot {
     private final List<Step> steps = new ArrayList<>();
 
     public Day22ReactorRobot(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("(\\w+) x=(-?\\d+)..(-?\\d+),y=(-?\\d+)..(-?\\d+),z=(-?\\d+)..(-?\\d+)");
+        var pattern = Pattern.compile("(\\w+) x=(-?\\d+)..(-?\\d+),y=(-?\\d+)..(-?\\d+),z=(-?\\d+)..(-?\\d+)");
+
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 steps.add(new Step(
                         matcher.group(1).equals("on"),

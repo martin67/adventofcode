@@ -5,7 +5,6 @@ import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -17,11 +16,11 @@ public class Day14RegolithReservoir {
     int yMax;
 
     public Day14RegolithReservoir(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("(\\d+),(\\d+)");
-        Matcher matcher;
+        var pattern = Pattern.compile("(\\d+),(\\d+)");
+
         for (String line : inputLines) {
             List<Position> positions = new ArrayList<>();
-            matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             while (matcher.find()) {
                 positions.add(new Position(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
             }

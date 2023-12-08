@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -12,9 +11,10 @@ public class Day21DiracDice {
     private final List<Player> players = new ArrayList<>();
 
     public Day21DiracDice(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("Player (\\d+) starting position: (\\d+)");
+        var pattern = Pattern.compile("Player (\\d+) starting position: (\\d+)");
+
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 players.add(new Player(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
             }

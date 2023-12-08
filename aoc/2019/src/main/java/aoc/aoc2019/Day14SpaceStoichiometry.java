@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -16,9 +15,10 @@ public class Day14SpaceStoichiometry {
     private final Map<String, Long> surplus = new HashMap<>();
 
     public Day14SpaceStoichiometry(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^(((\\d+) (\\w+),? )+)=> (?<outputAmount>\\d+) (?<outputChemical>\\w+)$");
+        var pattern = Pattern.compile("^(((\\d+) (\\w+),? )+)=> (?<outputAmount>\\d+) (?<outputChemical>\\w+)$");
+
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 Map<String, Long> inputs = new HashMap<>();
                 String indata = matcher.group(1);

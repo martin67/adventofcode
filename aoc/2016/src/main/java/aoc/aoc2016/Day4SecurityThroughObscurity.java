@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -73,10 +72,10 @@ public class Day4SecurityThroughObscurity {
     private void readData(String fileName) throws IOException {
         List<String> inputStrings = Files.readAllLines(Paths.get(fileName));
 
-        Pattern pattern = Pattern.compile("^([\\w-]+)(\\d\\d\\d)\\[(\\w+)]$");
+        var pattern = Pattern.compile("^([\\w-]+)(\\d\\d\\d)\\[(\\w+)]$");
 
         for (String row : inputStrings) {
-            Matcher matcher = pattern.matcher(row);
+            var matcher = pattern.matcher(row);
             if (matcher.find()) {
                 String name = matcher.group(1);
                 int sectorId = Integer.parseInt(matcher.group(2));

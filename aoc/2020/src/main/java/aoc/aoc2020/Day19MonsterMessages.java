@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -15,12 +14,11 @@ public class Day19MonsterMessages {
     private final List<String> messages = new ArrayList<>();
 
     public Day19MonsterMessages(List<String> inputLines) {
-        Pattern rulePattern = Pattern.compile("^(\\d+): (.*)$");
-        Pattern messagePattern = Pattern.compile("^(\\w+)$");
-        Matcher matcher;
+        var rulePattern = Pattern.compile("^(\\d+): (.*)$");
+        var messagePattern = Pattern.compile("^(\\w+)$");
 
         for (String line : inputLines) {
-            matcher = rulePattern.matcher(line);
+            var matcher = rulePattern.matcher(line);
             if (matcher.find()) {
                 rules.put(Integer.parseInt(matcher.group(1)), matcher.group(2).replaceAll("\"", ""));
             }

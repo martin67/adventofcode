@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class Day18SettlersOfTheNorthPole {
 
     private final Set<Acre> collectionArea = new HashSet<>();
-    Map<Position, Acre> map = new HashMap<>();
+    final Map<Position, Acre> map = new HashMap<>();
     private int areaWidth;
     private int areaHeight;
 
@@ -166,7 +166,7 @@ public class Day18SettlersOfTheNorthPole {
         return wood * lumberyards;
     }
 
-    int totalResourceValue() throws IOException {
+    int totalResourceValue() {
         BigInteger minutes = new BigInteger("1000000000");
         BigInteger modulo = minutes.mod(new BigInteger("28"));
         // modulo = 20

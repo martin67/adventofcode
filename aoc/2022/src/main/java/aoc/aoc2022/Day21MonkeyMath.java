@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -15,9 +14,9 @@ public class Day21MonkeyMath {
     public Day21MonkeyMath(List<String> inputLines) {
         Pattern pattern1 = Pattern.compile("(\\w+): (\\w+) (\\W) (\\w+)");
         Pattern pattern2 = Pattern.compile("(\\w+): (\\d+)");
-        Matcher matcher;
+
         for (String line : inputLines) {
-            matcher = pattern1.matcher(line);
+            var matcher = pattern1.matcher(line);
             if (matcher.find()) {
                 final String monkeyName = matcher.group(1);
                 Monkey start = monkeys.computeIfAbsent(monkeyName, m -> new Monkey(monkeyName));

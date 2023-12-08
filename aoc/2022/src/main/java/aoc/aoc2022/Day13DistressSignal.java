@@ -58,7 +58,7 @@ public class Day13DistressSignal {
     }
 
     class PacketData {
-        String start;
+        final String start;
 
         public PacketData(String start) {
             this.start = start;

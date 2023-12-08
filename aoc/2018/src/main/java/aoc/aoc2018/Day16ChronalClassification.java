@@ -77,7 +77,7 @@ public class Day16ChronalClassification {
         List<OpCode> opCodesToResolve = new ArrayList<>(processor.getOpCodes());
         List<Sample> samplesToResolve = new ArrayList<>(samples);
 
-        while (opCodesToResolve.size() > 0) {
+        while (!opCodesToResolve.isEmpty()) {
             Map<Integer, List<String>> matches = new HashMap<>();
             for (OpCode opCode : opCodesToResolve) {
                 // find all samples with opcode = i

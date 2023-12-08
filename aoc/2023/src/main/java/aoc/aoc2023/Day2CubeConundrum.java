@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -15,7 +14,7 @@ public class Day2CubeConundrum {
 
     public Day2CubeConundrum(List<String> inputLines) {
         var pattern = Pattern.compile("(\\d+) (\\w+)");
-        Matcher matcher;
+
         for (String line : inputLines) {
             var game = new Game();
             String[] s = line.substring(line.indexOf(":") + 1).split(";");
@@ -23,7 +22,7 @@ public class Day2CubeConundrum {
                 String[] s2 = cubeset.split(",");
                 var cubeSet = new CubeSet();
                 for (String cs : s2) {
-                    matcher = pattern.matcher(cs);
+                    var matcher = pattern.matcher(cs);
                     if (matcher.find()) {
                         int value = Integer.parseInt(matcher.group(1));
                         switch (matcher.group(2)) {

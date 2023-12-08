@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lombok.Data;
@@ -26,7 +25,6 @@ public class Day5IfYouGiveASeedAFertilizer {
 
     public Day5IfYouGiveASeedAFertilizer(List<String> inputLines) {
         var pattern = Pattern.compile("(\\w+)-to-(\\w+) map:");
-        Matcher matcher;
 
         SeedMap seedMap = null;
         for (String line : inputLines) {
@@ -42,7 +40,7 @@ public class Day5IfYouGiveASeedAFertilizer {
                     }
                 }
             } else {
-                matcher = pattern.matcher(line);
+                var matcher = pattern.matcher(line);
                 if (matcher.find()) {
                     seedMap = new SeedMap(matcher.group(1), matcher.group(2));
                     seedMaps.add(seedMap);

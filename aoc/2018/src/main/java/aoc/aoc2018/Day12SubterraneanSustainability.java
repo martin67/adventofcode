@@ -11,7 +11,7 @@ import java.util.*;
 public class Day12SubterraneanSustainability {
 
     LinkedList<Pot> pots = new LinkedList<>();
-    List<Note> notes = new ArrayList<>();
+    final List<Note> notes = new ArrayList<>();
     int potOffset;
     private Tunnel tunnel;
     private int generation = 0;

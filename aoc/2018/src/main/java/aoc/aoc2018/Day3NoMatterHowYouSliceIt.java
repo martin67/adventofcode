@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -29,7 +28,7 @@ class Day3NoMatterHowYouSliceIt {
         // Input string: #1 @ 1,3: 4x4
         String regexStr = "^#(\\d+) @ (\\d+),(\\d+): (\\d+)x(\\d+)$";
         // Compile the regex String into a Pattern
-        Pattern pattern = Pattern.compile(regexStr);
+        var pattern = Pattern.compile(regexStr);
 
         // Split string into a list
         List<String> inputStrings = Arrays.stream(input.trim().split("\\n+")).toList();
@@ -39,7 +38,7 @@ class Day3NoMatterHowYouSliceIt {
         for (String string : inputStrings) {
             // Split into individual parts
             // Create a matcher with the input String
-            Matcher matcher = pattern.matcher(string);
+            var matcher = pattern.matcher(string);
 
             // If we find a match
             if (matcher.find()) {

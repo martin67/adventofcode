@@ -3,9 +3,9 @@ package aoc.common;
 import java.util.Arrays;
 import java.util.List;
 
-public class Math {
+public class AocMath {
 
-    private Math() {
+    private AocMath() {
     }
 
     public static long gcd(long x, long y) {

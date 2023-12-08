@@ -17,7 +17,7 @@ public class Day22CrabCombat {
                 player = deck1;
             } else if (line.equals("Player 2:")) {
                 player = deck2;
-            } else if (line.length() > 0) {
+            } else if (!line.isEmpty()) {
                 player.add(Integer.parseInt(line));
             }
         }
@@ -25,7 +25,7 @@ public class Day22CrabCombat {
 
     int problem1() {
         int round = 1;
-        while (deck1.size() > 0 && deck2.size() > 0) {
+        while (!deck1.isEmpty() && !deck2.isEmpty()) {
             log.info("Round {}", round);
             log.info("Player 1's deck: {}", deck1);
             log.info("Player 2's deck: {}", deck2);
@@ -45,7 +45,7 @@ public class Day22CrabCombat {
             round++;
         }
         Deque<Integer> winner;
-        if (deck1.size() > 0) {
+        if (!deck1.isEmpty()) {
             winner = deck1;
         } else {
             winner = deck2;
@@ -62,7 +62,7 @@ public class Day22CrabCombat {
         recursiveCombat(1, deck1, deck2);
 
         Deque<Integer> winner;
-        if (deck1.size() > 0) {
+        if (!deck1.isEmpty()) {
             winner = deck1;
         } else {
             winner = deck2;
@@ -79,7 +79,7 @@ public class Day22CrabCombat {
         Set<String> previousGames = new HashSet<>();
         int round = 1;
 
-        while (deck1.size() > 0 && deck2.size() > 0) {
+        while (!deck1.isEmpty() && !deck2.isEmpty()) {
             log.debug("-- Round {} (Game {}) --", round, game);
             log.debug("Player 1's deck: {}", deck1);
             log.debug("Player 2's deck: {}", deck2);
@@ -131,7 +131,7 @@ public class Day22CrabCombat {
         }
 
         int winner;
-        if (deck1.size() > 0) {
+        if (!deck1.isEmpty()) {
             winner = 1;
         } else {
             winner = 2;

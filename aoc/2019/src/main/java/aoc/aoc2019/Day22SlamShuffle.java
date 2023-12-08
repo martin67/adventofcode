@@ -21,13 +21,13 @@ public class Day22SlamShuffle {
     int cardPosition(int numberOfCards) {
         Stack stack = new Stack(numberOfCards);
 
-        Pattern patternDealIntoNewStack = Pattern.compile("^deal into new stack$");
-        Pattern patternDealWithIncrement = Pattern.compile("^deal with increment (-?\\d+)$");
-        Pattern patternCut = Pattern.compile("^cut (-?\\d+)$");
+        var patternDealIntoNewStack = Pattern.compile("^deal into new stack$");
+        var patternDealWithIncrement = Pattern.compile("^deal with increment (-?\\d+)$");
+        var patternCut = Pattern.compile("^cut (-?\\d+)$");
 
         for (String line : inputLines) {
             log.info(line);
-            Matcher matcher = patternDealIntoNewStack.matcher(line);
+            var matcher = patternDealIntoNewStack.matcher(line);
             if (matcher.find()) {
                 stack.dealIntoNewStack();
             } else {

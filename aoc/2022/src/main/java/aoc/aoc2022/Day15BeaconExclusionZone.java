@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -17,10 +16,10 @@ public class Day15BeaconExclusionZone {
     final Set<Position> beacons = new HashSet<>();
 
     public Day15BeaconExclusionZone(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("Sensor at x=(-?\\d+), y=(-?\\d+): closest beacon is at x=(-?\\d+), y=(-?\\d+)");
-        Matcher matcher;
+        var  pattern = Pattern.compile("Sensor at x=(-?\\d+), y=(-?\\d+): closest beacon is at x=(-?\\d+), y=(-?\\d+)");
+
         for (String line : inputLines) {
-            matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 Sensor sensor = new Sensor(new Position(Integer.parseInt(matcher.group(1)),
                         Integer.parseInt(matcher.group(2))));

@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day8TwoFactorAuthentication {
@@ -28,11 +27,11 @@ public class Day8TwoFactorAuthentication {
     }
 
     long pixelsLit() {
-        Pattern rectPattern = Pattern.compile("^rect (\\d+)x(\\d+)$");
-        Pattern rotatePattern = Pattern.compile("^rotate (row|column) [xy]=(\\d+) by (\\d+)$");
+        var rectPattern = Pattern.compile("^rect (\\d+)x(\\d+)$");
+        var rotatePattern = Pattern.compile("^rotate (row|column) [xy]=(\\d+) by (\\d+)$");
 
         for (String row : instructions) {
-            Matcher matcher = rectPattern.matcher(row);
+            var matcher = rectPattern.matcher(row);
             if (matcher.find()) {
                 screen.rect(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
             }

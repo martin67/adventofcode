@@ -5,10 +5,9 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static aoc.common.Math.lcm;
+import static aoc.common.AocMath.lcm;
 
 @Slf4j
 public class Day12TheNBodyProblem {
@@ -19,13 +18,13 @@ public class Day12TheNBodyProblem {
 
     public Day12TheNBodyProblem(List<String> inputLines) {
         String regexStr = "^<x=(-?\\d+), y=(-?\\d+), z=(-?\\d+)>$";
-        Pattern pattern = Pattern.compile(regexStr);
+        var pattern = Pattern.compile(regexStr);
         moonSet = new HashSet<>();
         moonList = new ArrayList<>();
         initialMoonList = new ArrayList<>();
 
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 Moon moon = new Moon(new Position(Integer.parseInt(matcher.group(1)),
                         Integer.parseInt(matcher.group(2)),

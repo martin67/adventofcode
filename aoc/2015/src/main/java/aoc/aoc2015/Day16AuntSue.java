@@ -2,7 +2,6 @@ package aoc.aoc2015;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day16AuntSue {
@@ -10,10 +9,10 @@ public class Day16AuntSue {
     final List<Sue> sues = new ArrayList<>();
 
     public Day16AuntSue(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^Sue (\\d+): (\\w+): (\\d+), (\\w+): (\\d+), (\\w+): (\\d+)$");
+        var pattern = Pattern.compile("^Sue (\\d+): (\\w+): (\\d+), (\\w+): (\\d+), (\\w+): (\\d+)$");
 
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 Sue sue = new Sue(Integer.parseInt(matcher.group(1)));
                 for (int i = 0; i < 3; i++) {

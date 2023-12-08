@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -12,10 +11,10 @@ public class Day15ScienceForHungryPeople {
     final List<Ingredient> ingredients = new ArrayList<>();
 
     public Day15ScienceForHungryPeople(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("^(\\w+): capacity (-?\\d+), durability (-?\\d+), flavor (-?\\d+), texture (-?\\d+), calories (-?\\d+)$");
+        var pattern = Pattern.compile("^(\\w+): capacity (-?\\d+), durability (-?\\d+), flavor (-?\\d+), texture (-?\\d+), calories (-?\\d+)$");
 
         for (String line : inputLines) {
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 ingredients.add(new Ingredient(matcher.group(1),
                         Integer.parseInt(matcher.group(2)),

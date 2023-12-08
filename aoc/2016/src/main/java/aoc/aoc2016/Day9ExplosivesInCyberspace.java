@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day9ExplosivesInCyberspace {
@@ -36,13 +35,13 @@ public class Day9ExplosivesInCyberspace {
     }
 
     private long decompress(String message, boolean version2) {
-        Pattern pattern = Pattern.compile("^(\\((\\d+)x(\\d+)\\))");
+        var pattern = Pattern.compile("^(\\((\\d+)x(\\d+)\\))");
         int index = 0;
         long length = 0;
 
         while (index < message.length()) {
             String input = message.substring(index);
-            Matcher matcher = pattern.matcher(input);
+            var matcher = pattern.matcher(input);
             if (matcher.find()) {
                 String header = matcher.group(1);
                 int decompressedLength = Integer.parseInt(matcher.group(2));

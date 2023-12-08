@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -28,13 +27,13 @@ public class Day6ProbablyAFireHazard {
         }
         // toggle 461,550 through 564,900
         // turn off 370,39 through 425,839
-        Pattern pattern = Pattern.compile("(.*) (\\d+),(\\d+) through (\\d+),(\\d+)");
+        var pattern = Pattern.compile("(.*) (\\d+),(\\d+) through (\\d+),(\\d+)");
 
         for (String line : inputLines) {
             // commands
             // toggle, turn on, turn off
 
-            Matcher matcher = pattern.matcher(line);
+            var matcher = pattern.matcher(line);
             if (matcher.find()) {
                 String command = matcher.group(1);
                 Position start = new Position(Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));

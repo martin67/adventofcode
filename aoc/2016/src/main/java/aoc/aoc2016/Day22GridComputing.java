@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -20,10 +19,10 @@ public class Day22GridComputing {
     public Day22GridComputing(@NotNull List<String> inputLines) {
 
         // /dev/grid/node-x0-y0     94T   73T    21T   77%
-        Pattern pattern = Pattern.compile("^/dev/grid/node-x(\\d+)-y(\\d+)\\s+(\\d+)T\\s+(\\d+)T\\s+(\\d+)T\\s+(\\d+)%$");
+        var pattern = Pattern.compile("^/dev/grid/node-x(\\d+)-y(\\d+)\\s+(\\d+)T\\s+(\\d+)T\\s+(\\d+)T\\s+(\\d+)%$");
 
         for (String row : inputLines) {
-            Matcher matcher = pattern.matcher(row);
+            var matcher = pattern.matcher(row);
             if (matcher.find()) {
                 int x = Integer.parseInt(matcher.group(1));
                 int y = Integer.parseInt(matcher.group(2));
