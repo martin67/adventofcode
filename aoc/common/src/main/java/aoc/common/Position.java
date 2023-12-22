@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
@@ -26,18 +27,19 @@ public class Position implements Comparable<Position> {
         this.y = p.y;
     }
 
-    static public void printMap(Set<Position> map) {
+    public static void printMap(Set<Position> map) {
         printMap(map, null, false);
     }
-    static public void printMap(Set<Position> map, String msg) {
+
+    public static void printMap(Set<Position> map, String msg) {
         printMap(map, msg, false);
     }
 
-    static public void printMap(Set<Position> map, boolean coordinates) {
+    public static void printMap(Set<Position> map, boolean coordinates) {
         printMap(map, null, coordinates);
     }
 
-    static public void printMap(Set<Position> map, String msg, boolean coordinates) {
+    public static void printMap(Set<Position> map, String msg, boolean coordinates) {
         int xMin = map.stream().mapToInt(Position::getX).min().orElseThrow(NoSuchElementException::new);
         int xMax = map.stream().mapToInt(Position::getX).max().orElseThrow(NoSuchElementException::new);
         int yMin = map.stream().mapToInt(Position::getY).min().orElseThrow(NoSuchElementException::new);
@@ -60,6 +62,30 @@ public class Position implements Comparable<Position> {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public static int getXMax(Set<Position> map) {
+        return map.stream().mapToInt(Position::getX).max().orElseThrow();
+    }
+
+    public static int getYMax(Set<Position> map) {
+        return map.stream().mapToInt(Position::getY).max().orElseThrow();
+    }
+
+    public static int getXMin(Set<Position> map) {
+        return map.stream().mapToInt(Position::getX).min().orElseThrow();
+    }
+
+    public static int getYMin(Set<Position> map) {
+        return map.stream().mapToInt(Position::getY).min().orElseThrow();
+    }
+
+    public static int getHeight(Set<Position> map) {
+        return getYMax(map) - getYMin(map) + 1;
+    }
+
+    public static int getWidth(Set<Position> map) {
+        return getXMax(map) - getXMin(map) + 1;
     }
 
     @Override
@@ -190,5 +216,17 @@ public class Position implements Comparable<Position> {
         return x + "," + y;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return x == position.x && y == position.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
 }
 

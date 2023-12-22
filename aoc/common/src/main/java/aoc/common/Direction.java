@@ -226,4 +226,13 @@ public enum Direction {
             default -> "?";
         };
     }
+
+    public static Direction fromString(String in) {
+        for (var direction : values()) {
+            if (direction.name().equals(in) || direction.shortName().equals(in)) {
+                return direction;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
 }
