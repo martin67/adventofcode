@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
@@ -211,22 +210,30 @@ public class Position implements Comparable<Position> {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
+    public boolean insideMap(Set<Position> map) {
+        var ul = upperLeft(map);
+        var lr = lowerRight(map);
+
+        return x >= ul.getX() && x <= lr.getX() && y >= ul.getY() && y <= lr.getY();
+    }
+
+    public static Position upperLeft(Set<Position> map) {
+        int x = map.stream().mapToInt(Position::getX).min().orElseThrow();
+        int y = map.stream().mapToInt(Position::getY).min().orElseThrow();
+        return new Position(x, y);
+    }
+
+    public static Position lowerRight(Set<Position> map) {
+        int x = map.stream().mapToInt(Position::getX).max().orElseThrow();
+        int y = map.stream().mapToInt(Position::getY).max().orElseThrow();
+        return new Position(x, y);
+    }
+
     @Override
     public String toString() {
         return x + "," + y;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Position position = (Position) o;
-        return x == position.x && y == position.y;
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
-    }
 }
 
