@@ -8,14 +8,14 @@ import java.util.Stack;
 
 @Slf4j
 public class Day18OperationOrder {
-    private final List<String> inputLines;
-    private boolean problem2;
+    final List<String> inputLines;
+    boolean problem2;
 
-    public Day18OperationOrder(List<String> inputLines) {
+    Day18OperationOrder(List<String> inputLines) {
         this.inputLines = inputLines;
     }
 
-    public long problem1() {
+    long problem1() {
         long result = 0;
         for (String line : this.inputLines) {
             List<String> answerList = getPostFixString(line);
@@ -26,18 +26,18 @@ public class Day18OperationOrder {
         return result;
     }
 
-    public long problem2() {
+    long problem2() {
         problem2 = true;
         long result = 0;
         for (String line : this.inputLines) {
-            List<String> answerList = getPostFixString(line);
+            var answerList = getPostFixString(line);
             long answer = calculatePostFix(answerList);
             result += answer;
         }
         return result;
     }
 
-    private int getPreference(char c) {
+    int getPreference(char c) {
         if (!problem2) {
             if (c == '+' || c == '-') return 1;
             else if (c == '*' || c == '/') return 1;
@@ -50,7 +50,7 @@ public class Day18OperationOrder {
     }
 
 
-    private long calculatePostFix(List<String> postFixList) {
+    long calculatePostFix(List<String> postFixList) {
         Stack<Long> stack = new Stack<>();
         for (String word : postFixList) {
             switch (word.charAt(0)) {
@@ -64,7 +64,7 @@ public class Day18OperationOrder {
         return stack.pop();
     }
 
-    private List<String> getPostFixString(String s) {
+    List<String> getPostFixString(String s) {
         Stack<Character> stack = new Stack<>();
         List<String> postFixList = new ArrayList<>();
         boolean flag = false;
@@ -96,7 +96,7 @@ public class Day18OperationOrder {
                 stack.push(word);
             } else {
                 if (flag) {
-                    String lastNumber = postFixList.get(postFixList.size() - 1);
+                    String lastNumber = postFixList.getLast();
                     lastNumber += word;
                     postFixList.set(postFixList.size() - 1, lastNumber);
                 } else

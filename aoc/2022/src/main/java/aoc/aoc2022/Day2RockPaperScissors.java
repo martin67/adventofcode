@@ -14,7 +14,7 @@ public class Day2RockPaperScissors {
     final Map<String, Shape> playerShapes = Map.of("X", Rock, "Y", Paper, "Z", Scissors);
     final Map<String, GameType> gameTypes = Map.of("X", Lose, "Y", Draw, "Z", Win);
 
-    public Day2RockPaperScissors(List<String> inputLines) {
+    Day2RockPaperScissors(List<String> inputLines) {
         this.games = inputLines;
     }
 
@@ -27,8 +27,8 @@ public class Day2RockPaperScissors {
     }
 
     int play1(String game) {
-        Shape opponent = opponentShapes.get(game.substring(0, 1));
-        Shape player = playerShapes.get(game.substring(2, 3));
+        var opponent = opponentShapes.get(game.substring(0, 1));
+        var player = playerShapes.get(game.substring(2, 3));
         int score = 0;
 
         if (opponent.equals(player)) {

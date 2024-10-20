@@ -6,22 +6,22 @@ import java.util.*;
 
 @Slf4j
 public class Day8SevenSegmentSearch {
-    private static final int SEGMENT_TOP = 0;
-    private static final int SEGMENT_UPPER_LEFT = 1;
-    private static final int SEGMENT_UPPER_RIGHT = 2;
-    private static final int SEGMENT_MIDDLE = 3;
-    private static final int SEGMENT_LOWER_LEFT = 4;
-    private static final int SEGMENT_LOWER_RIGHT = 5;
-    private static final int SEGMENT_BOTTOM = 6;
+    static final int SEGMENT_TOP = 0;
+    static final int SEGMENT_UPPER_LEFT = 1;
+    static final int SEGMENT_UPPER_RIGHT = 2;
+    static final int SEGMENT_MIDDLE = 3;
+    static final int SEGMENT_LOWER_LEFT = 4;
+    static final int SEGMENT_LOWER_RIGHT = 5;
+    static final int SEGMENT_BOTTOM = 6;
 
-    private final List<DigitEntry> entries = new ArrayList<>();
+    final List<DigitEntry> entries = new ArrayList<>();
 
-    public Day8SevenSegmentSearch(List<String> inputLines) {
+    Day8SevenSegmentSearch(List<String> inputLines) {
         inputLines.forEach(line -> {
             String[] s = line.split("\\|");
             String[] patterns = s[0].trim().split(" ");
             String[] outputs = s[1].trim().split(" ");
-            DigitEntry digitEntry = new DigitEntry();
+            var digitEntry = new DigitEntry();
             for (String pattern : patterns) {
                 char[] sortedPattern = pattern.toCharArray();
                 Arrays.sort(sortedPattern);
@@ -36,7 +36,7 @@ public class Day8SevenSegmentSearch {
         });
     }
 
-    public int problem1() {
+    int problem1() {
         int digits = 0;
         for (DigitEntry digitEntry : entries) {
             for (String output : digitEntry.outputs) {
@@ -48,7 +48,7 @@ public class Day8SevenSegmentSearch {
         return digits;
     }
 
-    public int problem2() {
+    int problem2() {
         int totalSum = 0;
         Set<Integer> number_zero = new HashSet<>();
         number_zero.add(SEGMENT_TOP);
@@ -122,7 +122,7 @@ public class Day8SevenSegmentSearch {
         allNumbers.put(number_eight, 8);
         allNumbers.put(number_nine, 9);
 
-        for (DigitEntry digitEntry : entries) {
+        for (var digitEntry : entries) {
 
             Map<Integer, Map<String, Integer>> probs = new HashMap<>();
             for (int i = 0; i < 7; i++) {
@@ -264,7 +264,7 @@ public class Day8SevenSegmentSearch {
                     segmentPattern.add(answer.get(String.valueOf(c)));
                 }
                 // compare segmentPattern with all fixed patterns
-                for (Set<Integer> digitPattern : allNumbers.keySet()) {
+                for (var digitPattern : allNumbers.keySet()) {
                     if (digitPattern.equals(segmentPattern)) {
                         log.debug("Pattern {} is number {}", pattern, allNumbers.get(digitPattern));
                         solutions.put(pattern, allNumbers.get(digitPattern));
@@ -280,7 +280,6 @@ public class Day8SevenSegmentSearch {
         }
         return totalSum;
     }
-
 
     private Map<String, Integer> addProbs(Map<String, Integer> probMap, String pattern) {
         for (char c : pattern.toCharArray()) {

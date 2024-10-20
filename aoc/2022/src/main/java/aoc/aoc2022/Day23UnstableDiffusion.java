@@ -33,7 +33,7 @@ public class Day23UnstableDiffusion {
         for (int i = 0; i < 10; i++) {
             elfPos = elves.stream().map(Elf::getPosition).collect(Collectors.toSet());
             Map<Position, Integer> proposalCount = new HashMap<>();
-            for (Elf elf : elves) {
+            for (var elf : elves) {
                 if (elf.hasNeighbour(elfPos)) {
                     Position proposal = elf.propose(elfPos, i);
                     proposalCount.merge(proposal, 1, Integer::sum);
@@ -49,7 +49,7 @@ public class Day23UnstableDiffusion {
                     .forEach(e -> e.proposedPosition = e.position);
 
             // move all elves:
-            for (Elf elf : elves) {
+            for (var elf : elves) {
                 if (elf.proposedPosition != null) {
                     elf.position = elf.proposedPosition;
                     elf.proposedPosition = null;
@@ -73,13 +73,13 @@ public class Day23UnstableDiffusion {
         do {
             Set<Position> elfPos = elves.stream().map(Elf::getPosition).collect(Collectors.toSet());
             proposalCount = new HashMap<>();
-            for (Elf elf : elves) {
+            for (var elf : elves) {
                 if (elf.hasNeighbour(elfPos)) {
                     Position proposal = elf.propose(elfPos, rounds);
                     proposalCount.merge(proposal, 1, Integer::sum);
                 }
             }
-            Set<Position> duplicateProposals = proposalCount.entrySet().stream()
+            var duplicateProposals = proposalCount.entrySet().stream()
                     .filter(entry -> entry.getValue() > 1)
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toSet());
@@ -89,7 +89,7 @@ public class Day23UnstableDiffusion {
                     .forEach(e -> e.proposedPosition = e.position);
 
             // move all elves:
-            for (Elf elf : elves) {
+            for (var elf : elves) {
                 if (elf.proposedPosition != null) {
                     elf.position = elf.proposedPosition;
                     elf.proposedPosition = null;

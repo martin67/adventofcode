@@ -17,7 +17,7 @@ class Day13ShuttleSearchTest {
             "2935, day13.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day13ShuttleSearch(inputLines).busWait()).isEqualTo(expected);
+        assertThat(new Day13ShuttleSearch(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -28,7 +28,7 @@ class Day13ShuttleSearchTest {
             "1261476, '67,7,x,59,61'",
             "1202161486, '1789,37,47,1889'"})
     void earliestTimestamp(long expected, String input) {
-        assertThat(new Day13ShuttleSearch(input).earliestTimestamp()).isEqualTo(expected);
+        assertThat(new Day13ShuttleSearch(input).problem2()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -36,6 +36,6 @@ class Day13ShuttleSearchTest {
             "836024966345345, day13.txt"})
     void problem2(long expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day13ShuttleSearch(inputLines.get(1)).earliestTimestamp()).isEqualTo(expected);
+        assertThat(new Day13ShuttleSearch(inputLines.get(1)).problem2()).isEqualTo(expected);
     }
 }

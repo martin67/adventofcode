@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Day10AdapterArray {
-    private final List<Integer> adapters = new ArrayList<>();
+    final List<Integer> adapters = new ArrayList<>();
 
-    public Day10AdapterArray(List<String> inputLines) {
+    Day10AdapterArray(List<String> inputLines) {
         adapters.add(0);
         for (String line : inputLines) {
             adapters.add(Integer.parseInt(line));
@@ -17,7 +17,7 @@ public class Day10AdapterArray {
         adapters.add(max + 3);
     }
 
-    int joltDifference() {
+    int problem1() {
         Collections.sort(adapters);
         int diff1 = 0;
         int diff3 = 0;
@@ -33,7 +33,7 @@ public class Day10AdapterArray {
         return diff1 * diff3;
     }
 
-    long adapterCombinations2() {
+    long problem2() {
         long combinations = 1;
         Collections.sort(adapters);
 

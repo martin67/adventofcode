@@ -17,7 +17,7 @@ class Day2PasswordPhilosophyTest {
             "603, day2.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day2PasswordPhilosophy(inputLines).validPasswords()).isEqualTo(expected);
+        assertThat(new Day2PasswordPhilosophy(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -25,6 +25,6 @@ class Day2PasswordPhilosophyTest {
             "404, day2.txt"})
     void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day2PasswordPhilosophy(inputLines).validPasswordsNewPolicy()).isEqualTo(expected);
+        assertThat(new Day2PasswordPhilosophy(inputLines).problem2()).isEqualTo(expected);
     }
 }

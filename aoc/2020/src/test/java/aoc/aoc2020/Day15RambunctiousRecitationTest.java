@@ -19,7 +19,7 @@ class Day15RambunctiousRecitationTest {
             "1836, '3,1,2'",
             "870, '11,0,1,10,5,19'"})
     void problem1(long expected, String numbers) {
-        assertThat(new Day15RambunctiousRecitation(numbers).numberSpoken(2020)).isEqualTo(expected);
+        assertThat(new Day15RambunctiousRecitation(numbers).problem(2020)).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -32,6 +32,6 @@ class Day15RambunctiousRecitationTest {
             "362, '3,1,2'",
             "9136, '11,0,1,10,5,19'"})
     void problem2(long expected, String numbers) {
-        assertThat(new Day15RambunctiousRecitation(numbers).numberSpoken(30000000)).isEqualTo(expected);
+        assertThat(new Day15RambunctiousRecitation(numbers).problem(30000000)).isEqualTo(expected);
     }
 }

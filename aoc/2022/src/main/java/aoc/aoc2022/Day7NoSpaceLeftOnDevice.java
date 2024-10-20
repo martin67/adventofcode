@@ -7,10 +7,9 @@ import java.util.*;
 
 @Slf4j
 public class Day7NoSpaceLeftOnDevice {
-
     final Content root;
 
-    public Day7NoSpaceLeftOnDevice(List<String> inputLines) {
+    Day7NoSpaceLeftOnDevice(List<String> inputLines) {
         root = new Content("/", null);
         Content cwd = root;
         for (String line : inputLines) {
@@ -37,7 +36,7 @@ public class Day7NoSpaceLeftOnDevice {
                     String[] s = line.split(" ");
                     String name = s[1];
                     int size = Integer.parseInt(s[0]);
-                    Content file = new Content(name, cwd, size);
+                    var file = new Content(name, cwd, size);
                     if (!cwd.contents.contains(file)) {
                         cwd.contents.add(file);
                         // add to all parent sizes
@@ -79,13 +78,13 @@ public class Day7NoSpaceLeftOnDevice {
         final Content parent;
         final Set<Content> contents = new HashSet<>();
 
-        public Content(String name, Content parent) {
+        Content(String name, Content parent) {
             this.name = name;
             this.type = ContentType.Directory;
             this.parent = parent;
         }
 
-        public Content(String name, Content parent, int size) {
+        Content(String name, Content parent, int size) {
             this.name = name;
             this.type = ContentType.File;
             this.parent = parent;
@@ -94,7 +93,7 @@ public class Day7NoSpaceLeftOnDevice {
 
         Set<Content> getAllContent() {
             Set<Content> result = new HashSet<>(contents);
-            for (Content content : contents) {
+            for (var content : contents) {
                 result.addAll(content.getAllContent());
             }
             return result;

@@ -7,10 +7,9 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class Day12PassagePathing {
+    final Map<String, Cave> caves = new HashMap<>();
 
-    private final Map<String, Cave> caves = new HashMap<>();
-
-    public Day12PassagePathing(List<String> inputLines) {
+    Day12PassagePathing(List<String> inputLines) {
         for (String line : inputLines) {
             String[] s = line.split("-");
             String start = s[0];
@@ -23,11 +22,11 @@ public class Day12PassagePathing {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         return cavePath(caves.get("start"), new ArrayDeque<>());
     }
 
-    private int cavePath(Cave c, Deque<Cave> explored) {
+    int cavePath(Cave c, Deque<Cave> explored) {
         int reachedEnd = 0;
         log.debug("Exploring cave {}", c);
         explored.push(c);
@@ -49,7 +48,7 @@ public class Day12PassagePathing {
         return reachedEnd;
     }
 
-    public int problem2() {
+    int problem2() {
         Set<Cave> smallCaves = caves.values().stream()
                 .filter(Cave::isSmall)
                 .filter(c -> !c.name.equals("start"))
@@ -63,7 +62,7 @@ public class Day12PassagePathing {
         return allPaths.size();
     }
 
-    private void cavePath2(Cave cave, Deque<Cave> explored, Set<String> foundPaths, Cave smallCave) {
+    void cavePath2(Cave cave, Deque<Cave> explored, Set<String> foundPaths, Cave smallCave) {
         log.debug("Exploring cave {}, smallCave: {}", cave, smallCave);
         explored.push(cave);
 
@@ -86,7 +85,7 @@ public class Day12PassagePathing {
         log.debug("Returning from cave {}", cave);
     }
 
-    private String printPath(Deque<Cave> explored) {
+    String printPath(Deque<Cave> explored) {
         Iterator<Cave> it = explored.descendingIterator();
         StringBuilder sb = new StringBuilder();
         while (it.hasNext()) {
@@ -100,7 +99,7 @@ public class Day12PassagePathing {
         final String name;
         final Set<Cave> adjacent = new HashSet<>();
 
-        public Cave(String name) {
+        Cave(String name) {
             this.name = name;
         }
 

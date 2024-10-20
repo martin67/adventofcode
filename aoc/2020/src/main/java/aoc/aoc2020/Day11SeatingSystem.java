@@ -1,17 +1,15 @@
 package aoc.aoc2020;
 
-import aoc.common.Direction;
 import aoc.common.Position;
 
 import java.util.*;
 
 public class Day11SeatingSystem {
+    final Map<Position, Character> seats = new HashMap<>();
+    final int width;
+    final int height;
 
-    private final Map<Position, Character> seats = new HashMap<>();
-    private final int width;
-    private final int height;
-
-    public Day11SeatingSystem(List<String> inputLines) {
+    Day11SeatingSystem(List<String> inputLines) {
         int y = 0;
         for (String line : inputLines) {
             int x = 0;
@@ -35,7 +33,7 @@ public class Day11SeatingSystem {
                 .getY() + 1;
     }
 
-    long seatsOccupied() {
+    long problem1() {
         Map<Position, Character> newSeats = new HashMap<>();
         long previousNumberOfOccupiedSeats = -1;
         long occupiedSeats = 0;
@@ -43,24 +41,24 @@ public class Day11SeatingSystem {
         while (occupiedSeats != previousNumberOfOccupiedSeats) {
             previousNumberOfOccupiedSeats = occupiedSeats;
 
-            for (Position pos : seats.keySet()) {
-                Set<Position> adjacentSeats = pos.allAdjacentIncludingDiagonal();
+            for (var position : seats.keySet()) {
+                Set<Position> adjacentSeats = position.allAdjacentIncludingDiagonal();
                 int occupied = 0;
-                for (Position adj : adjacentSeats) {
-                    if (seats.containsKey(adj) && seats.get(adj) == '#') {
+                for (var adjacent : adjacentSeats) {
+                    if (seats.containsKey(adjacent) && seats.get(adjacent) == '#') {
                         occupied++;
                     }
                 }
-                if (seats.get(pos) == 'L' && occupied == 0) {
-                    newSeats.put(pos, '#');
-                } else if (seats.get(pos) == '#' && occupied >= 4) {
-                    newSeats.put(pos, 'L');
+                if (seats.get(position) == 'L' && occupied == 0) {
+                    newSeats.put(position, '#');
+                } else if (seats.get(position) == '#' && occupied >= 4) {
+                    newSeats.put(position, 'L');
                 } else {
-                    newSeats.put(pos, seats.get(pos));
+                    newSeats.put(position, seats.get(position));
                 }
             }
-            for (Position pos : newSeats.keySet()) {
-                seats.put(pos, newSeats.get(pos));
+            for (var position : newSeats.keySet()) {
+                seats.put(position, newSeats.get(position));
             }
             //printSeats();
             occupiedSeats = seats.values().stream().filter(c -> c == '#').count();
@@ -68,7 +66,7 @@ public class Day11SeatingSystem {
         return occupiedSeats;
     }
 
-    long seatsOccupied2() {
+    long problem2() {
         Map<Position, Character> newSeats = new HashMap<>();
         long previousNumberOfOccupiedSeats = -1;
         long occupiedSeats = 0;
@@ -76,13 +74,11 @@ public class Day11SeatingSystem {
         while (occupiedSeats != previousNumberOfOccupiedSeats) {
             previousNumberOfOccupiedSeats = occupiedSeats;
 
-            for (Position pos : seats.keySet()) {
-
-                Set<Position> adjacentSeats = pos.allAdjacentIncludingDiagonal();
+            for (var position : seats.keySet()) {
                 int occupied = 0;
-                for (Position adj : adjacentSeats) {
-                    Direction dir = pos.directionTo(adj, true);
-                    Position p2 = adj;
+                for (var adjacent : position.allAdjacentIncludingDiagonal()) {
+                    var direction = position.directionTo(adjacent, true);
+                    var p2 = adjacent;
 
                     while (p2.insideSquare(width, height)) {
                         if (seats.containsKey(p2)) {
@@ -91,21 +87,21 @@ public class Day11SeatingSystem {
                             }
                             break;
                         } else {
-                            p2 = p2.adjacent(dir);
+                            p2 = p2.adjacent(direction);
                         }
                     }
                 }
 
-                if (seats.get(pos) == 'L' && occupied == 0) {
-                    newSeats.put(pos, '#');
-                } else if (seats.get(pos) == '#' && occupied >= 5) {
-                    newSeats.put(pos, 'L');
+                if (seats.get(position) == 'L' && occupied == 0) {
+                    newSeats.put(position, '#');
+                } else if (seats.get(position) == '#' && occupied >= 5) {
+                    newSeats.put(position, 'L');
                 } else {
-                    newSeats.put(pos, seats.get(pos));
+                    newSeats.put(position, seats.get(position));
                 }
             }
-            for (Position pos : newSeats.keySet()) {
-                seats.put(pos, newSeats.get(pos));
+            for (var position : newSeats.keySet()) {
+                seats.put(position, newSeats.get(position));
             }
             //printSeats();
             occupiedSeats = seats.values().stream().filter(c -> c == '#').count();
@@ -118,9 +114,9 @@ public class Day11SeatingSystem {
         for (int y = 0; y < height; y++) {
             StringBuilder sb = new StringBuilder();
             for (int x = 0; x < width; x++) {
-                Position p = new Position(x, y);
-                if (seats.containsKey(p)) {
-                    sb.append(seats.get(p));
+                var position = new Position(x, y);
+                if (seats.containsKey(position)) {
+                    sb.append(seats.get(position));
                 } else {
                     sb.append('.');
                 }

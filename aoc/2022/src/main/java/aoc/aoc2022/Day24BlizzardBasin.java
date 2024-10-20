@@ -16,17 +16,17 @@ public class Day24BlizzardBasin {
     int width;
     final int height;
 
-    public Day24BlizzardBasin(List<String> inputLines) {
+    Day24BlizzardBasin(List<String> inputLines) {
         int y = 0;
         for (String line : inputLines) {
             int x = 0;
             for (char c : line.toCharArray()) {
-                Position p = new Position(x, y);
+                var position = new Position(x, y);
                 switch (c) {
-                    case '>' -> map.add(new Blizzard(p, Direction.East));
-                    case '<' -> map.add(new Blizzard(p, Direction.West));
-                    case '^' -> map.add(new Blizzard(p, Direction.North));
-                    case 'v' -> map.add(new Blizzard(p, Direction.South));
+                    case '>' -> map.add(new Blizzard(position, Direction.East));
+                    case '<' -> map.add(new Blizzard(position, Direction.West));
+                    case '^' -> map.add(new Blizzard(position, Direction.North));
+                    case 'v' -> map.add(new Blizzard(position, Direction.South));
                 }
                 x++;
             }
@@ -41,7 +41,7 @@ public class Day24BlizzardBasin {
         Position.printMap(map.stream().map(b -> b.position).collect(Collectors.toSet()), "Start");
 
         for (int i = 0; i < 5; i++) {
-            for (Blizzard blizzard : map) {
+            for (var blizzard : map) {
                 blizzard.move();
             }
             Position.printMap(map.stream().map(b -> b.position).collect(Collectors.toSet()), "Round " + i);

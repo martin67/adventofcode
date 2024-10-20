@@ -7,11 +7,10 @@ import java.util.*;
 
 @Slf4j
 public class Day11MonkeyInTheMiddle {
-
     final List<Monkey> monkeys = new ArrayList<>();
     long lcd = 1;
 
-    public Day11MonkeyInTheMiddle(List<String> inputLines) {
+     Day11MonkeyInTheMiddle(List<String> inputLines) {
         // Create all monkeys in advance;
         int numberOfMonkeys = inputLines.size() / 7 + 1;
         log.info("{} monkeys", numberOfMonkeys);

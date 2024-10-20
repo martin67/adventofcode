@@ -9,12 +9,11 @@ import java.util.Map;
 
 @Slf4j
 public class Day11DumboOctopus {
+    final Map<Position, Octopus> grid = new HashMap<>();
+    final int ySize;
+    int xSize;
 
-    private final Map<Position, Octopus> grid = new HashMap<>();
-    private final int ySize;
-    private int xSize;
-
-    public Day11DumboOctopus(List<String> inputLines) {
+    Day11DumboOctopus(List<String> inputLines) {
         int y = 0;
         for (String line : inputLines) {
             int x = 0;
@@ -29,7 +28,7 @@ public class Day11DumboOctopus {
         ySize = y;
     }
 
-    public int problem1() {
+    int problem1() {
         log.info("Before");
         printGrid();
 
@@ -42,7 +41,7 @@ public class Day11DumboOctopus {
         return grid.values().stream().mapToInt(o -> o.numberOfFlashes++).sum();
     }
 
-    public int problem2() {
+    int problem2() {
         boolean allFlashed = false;
         int steps = 0;
         int finalStep = 0;
@@ -65,7 +64,7 @@ public class Day11DumboOctopus {
         return finalStep;
     }
 
-    private void printGrid() {
+    void printGrid() {
         for (int y = 0; y < ySize; y++) {
             for (int x = 0; x < xSize; x++) {
                 System.out.print(grid.get(new Position(x, y)).energyLevel);
@@ -81,7 +80,7 @@ public class Day11DumboOctopus {
         int numberOfFlashes;
         boolean flashed;
 
-        public Octopus(Position position, int energyLevel) {
+        Octopus(Position position, int energyLevel) {
             this.position = position;
             this.energyLevel = energyLevel;
         }
@@ -92,9 +91,9 @@ public class Day11DumboOctopus {
                     numberOfFlashes++;
                     energyLevel = 0;
                     flashed = true;
-                    for (Position adjacent : position.allAdjacentIncludingDiagonal()) {
+                    for (var adjacent : position.allAdjacentIncludingDiagonal()) {
                         if (grid.containsKey(adjacent)) {
-                            Octopus adjacentOctopus = grid.get(adjacent);
+                            var adjacentOctopus = grid.get(adjacent);
                             if (!adjacentOctopus.flashed) {
                                 adjacentOctopus.energyLevel++;
                             }

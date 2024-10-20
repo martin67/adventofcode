@@ -17,7 +17,7 @@ class Day8HandheldHaltingTest {
             "1915, day8.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day8HandheldHalting(inputLines).accumulatorValue()).isEqualTo(expected);
+        assertThat(new Day8HandheldHalting(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -25,6 +25,6 @@ class Day8HandheldHaltingTest {
             "944, day8.txt"})
     void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day8HandheldHalting(inputLines).accumulatorValueNoLoop()).isEqualTo(expected);
+        assertThat(new Day8HandheldHalting(inputLines).problem2()).isEqualTo(expected);
     }
 }

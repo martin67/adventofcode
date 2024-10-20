@@ -9,7 +9,7 @@ public class Day10CathodeRayTube {
 
     final List<String> instructions;
 
-    public Day10CathodeRayTube(List<String> inputLines) {
+     Day10CathodeRayTube(List<String> inputLines) {
         this.instructions = inputLines;
     }
 

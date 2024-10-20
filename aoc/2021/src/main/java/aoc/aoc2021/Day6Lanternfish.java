@@ -11,16 +11,15 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class Day6Lanternfish {
+    List<Integer> fishes = new ArrayList<>();
 
-    private List<Integer> fishes = new ArrayList<>();
-
-    public Day6Lanternfish(List<String> inputLines) {
+    Day6Lanternfish(List<String> inputLines) {
         inputLines.forEach(line -> fishes = Stream.of(line.split(","))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList()));
     }
 
-    public int problem1() {
+    int problem1() {
         for (int i = 0; i < 80; i++) {
             int newFishes = 0;
 
@@ -39,17 +38,18 @@ public class Day6Lanternfish {
         return fishes.size();
     }
 
-    public long problem2() {
+    long problem2() {
         Map<Integer, Long> fishAges = new HashMap<>();
+
         for (int i = 0; i < 9; i++) {
             fishAges.put(i, 0L);
         }
+
         for (int fish : fishes) {
             fishAges.merge(fish, 1L, Long::sum);
         }
 
         for (int i = 0; i < 256; i++) {
-
             long newFishes = fishAges.get(0);
             for (int j = 0; j < 8; j++) {
                 fishAges.put(j, fishAges.get(j + 1));

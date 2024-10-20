@@ -13,13 +13,11 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day16ProboscideaVolcanium {
-
     final Map<String, Valve> valves = new HashMap<>();
     final Graph<Valve, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
     final DijkstraShortestPath<Valve, DefaultEdge> dijkstraAlg = new DijkstraShortestPath<>(graph);
 
-
-    public Day16ProboscideaVolcanium(List<String> inputLines) {
+    Day16ProboscideaVolcanium(List<String> inputLines) {
         var pattern = Pattern.compile("Valve (\\w+) has flow rate=(\\d+); tunnels? leads? to valves? ((\\w+)(,\\s*\\w+)*)");
 
         for (String line : inputLines) {
@@ -27,28 +25,28 @@ public class Day16ProboscideaVolcanium {
             if (matcher.find()) {
                 String valveName = matcher.group(1);
                 int flowRate = Integer.parseInt((matcher.group(2)));
-                Valve valve = valves.computeIfAbsent(valveName, v -> new Valve(valveName));
+                var valve = valves.computeIfAbsent(valveName, v -> new Valve(valveName));
                 valve.flowRate = flowRate;
                 for (String a : matcher.group(3).split(", ")) {
-                    Valve v = valves.computeIfAbsent(a, vv -> new Valve(a));
+                    var v = valves.computeIfAbsent(a, vv -> new Valve(a));
                     valve.tunnels.add(v);
                 }
             }
         }
         log.info("Valves read: {}", valves.size());
-        for (Valve valve : valves.values()) {
+        for (var valve : valves.values()) {
             graph.addVertex(valve);
         }
-        for (Valve valve : valves.values()) {
+        for (var valve : valves.values()) {
             for (Valve v : valve.tunnels) {
                 graph.addEdge(valve, v);
             }
         }
 
         log.info("Computing all distances");
-        for (Valve valve : valves.values()) {
+        for (var valve : valves.values()) {
             ShortestPathAlgorithm.SingleSourcePaths<Valve, DefaultEdge> paths = dijkstraAlg.getPaths(valve);
-            for (Valve v : valves.values()) {
+            for (var v : valves.values()) {
                 if (v != valve) {
                     int distance = paths.getPath(v).getLength();
                     valve.distances.put(v, distance);
@@ -61,22 +59,22 @@ public class Day16ProboscideaVolcanium {
 
 
     int problem1() {
-        Valve aa = valves.get("AA");
+        var aa = valves.get("AA");
         // Have all 0 valves listed as already open
-        List<Valve> valvesToOpen = valves.values().stream().filter(v -> v.flowRate > 0).toList();
+        var valvesToOpen = valves.values().stream().filter(v -> v.flowRate > 0).toList();
         log.info("Valves that can be opened: {} ({})", valvesToOpen, valvesToOpen.size());
-        for(Valve v : aa.distances.keySet()) {
+        for (var v : aa.distances.keySet()) {
             log.info("Distance from {} to {}: {}", aa, v, aa.distances.get(v));
         }
 
         Collection<List<Valve>> hej = Collections2.permutations(valvesToOpen);
         log.info("Permutations: {}", hej.size());
         int maxFlow = 0;
-        for (List<Valve> path : hej) {
+        for (var path : hej) {
             int totalFlow = 0;
             Valve start = aa;
             int minutes = 30;
-            for (Valve v : path) {
+            for (var v : path) {
                 int distance = start.distances.get(v);
                 totalFlow += (minutes - (distance + 1)) * v.flowRate;
                 minutes -= (distance + 1);
@@ -87,10 +85,10 @@ public class Day16ProboscideaVolcanium {
                 maxFlow = totalFlow;
                 log.info("max flow: {}, path: {}", maxFlow, path);
                 StringBuilder sb = new StringBuilder();
-                sb.append(path.get(0));
+                sb.append(path.getFirst());
                 for (int i = 0; i < path.size() - 1; i++) {
-                    Valve src = path.get(i);
-                    Valve dst = path.get(i + 1);
+                    var src = path.get(i);
+                    var dst = path.get(i + 1);
                     sb.append("->").append(src.distances.get(dst)).append("->").append(dst);
                 }
                 log.info(sb.toString());
@@ -110,7 +108,7 @@ public class Day16ProboscideaVolcanium {
 
     void getDistanceCost(Valve valve, int minutes) {
         ShortestPathAlgorithm.SingleSourcePaths<Valve, DefaultEdge> paths = dijkstraAlg.getPaths(valve);
-        for (Valve v : valves.values()) {
+        for (var v : valves.values()) {
             if (v != valve) {
                 int distance = paths.getPath(v).getLength();
                 log.info("Distance from {} to {}: {}", valve, v, distance);

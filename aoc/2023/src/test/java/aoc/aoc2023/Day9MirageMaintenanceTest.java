@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 @DisplayName("2023: Day 9: Mirage Maintenance")
 class Day9MirageMaintenanceTest {
 

@@ -7,11 +7,11 @@ import java.util.List;
 
 @Slf4j
 public class Day13ShuttleSearch {
-    private final List<Bus> buses = new ArrayList<>();
-    private final List<Long> ids = new ArrayList<>();
-    private int initialDelay;
+    final List<Bus> buses = new ArrayList<>();
+    final List<Long> ids = new ArrayList<>();
+    int initialDelay;
 
-    public Day13ShuttleSearch(List<String> inputLines) {
+    Day13ShuttleSearch(List<String> inputLines) {
         initialDelay = Integer.parseInt(inputLines.get(0));
         int departureDelay = 0;
 
@@ -24,7 +24,7 @@ public class Day13ShuttleSearch {
         }
     }
 
-    public Day13ShuttleSearch(String input) {
+    Day13ShuttleSearch(String input) {
         int departureDelay = 0;
         for (String busId : input.split(",")) {
             if (!busId.equals("x")) {
@@ -39,13 +39,13 @@ public class Day13ShuttleSearch {
         }
     }
 
-    int busWait() {
-        for (Bus bus : buses) {
+    int problem1() {
+        for (var bus : buses) {
             bus.move(initialDelay);
         }
         int delay = initialDelay;
         while (true) {
-            for (Bus bus : buses) {
+            for (var bus : buses) {
                 bus.move(1);
                 if (bus.location == 0) {
                     return bus.roundTripTime * (delay - initialDelay + 1);
@@ -55,10 +55,9 @@ public class Day13ShuttleSearch {
         }
     }
 
-    long earliestTimestamp() {
+    long problem2() {
         boolean found = false;
-
-        long tincrement = buses.get(0).roundTripTime;
+        long tincrement = buses.getFirst().roundTripTime;
         long t = 0;
         int index = 1;
 

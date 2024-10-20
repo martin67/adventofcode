@@ -8,18 +8,18 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class Day21AllergenAssessment {
-    private final List<Food> foods = new ArrayList<>();
-    private final Map<String, Ingredient> ingredients = new HashMap<>();
-    private final Map<String, Allergen> allergens = new HashMap<>();
-    private Set<Ingredient> usedIngredients;
+    final List<Food> foods = new ArrayList<>();
+    final Map<String, Ingredient> ingredients = new HashMap<>();
+    final Map<String, Allergen> allergens = new HashMap<>();
+    Set<Ingredient> usedIngredients;
 
-    public Day21AllergenAssessment(List<String> inputLines) {
+    Day21AllergenAssessment(List<String> inputLines) {
         var pattern = Pattern.compile("^(.*) \\(contains (.*)\\)$");
 
         for (String line : inputLines) {
             var matcher = pattern.matcher(line);
             if (matcher.find()) {
-                Food food = new Food();
+                var food = new Food();
                 for (String name : matcher.group(1).split(" ")) {
                     Ingredient ingredient;
                     if (ingredients.containsKey(name)) {
@@ -45,15 +45,15 @@ public class Day21AllergenAssessment {
                 foods.add(food);
             }
         }
-        for (Food food : foods) {
-            for (Ingredient ingredient : food.ingredients) {
+        for (var food : foods) {
+            for (var ingredient : food.ingredients) {
                 for (Allergen allergen : food.allergens) {
                     ingredient.possibleAllergens.putIfAbsent(allergen, 0);
                     ingredient.possibleAllergens.put(allergen, ingredient.possibleAllergens.get(allergen) + 1);
                 }
             }
-            for (Allergen allergen : food.allergens) {
-                for (Ingredient ingredient : food.ingredients) {
+            for (var allergen : food.allergens) {
+                for (var ingredient : food.ingredients) {
                     allergen.possibleIngredients.putIfAbsent(ingredient, 0);
                     allergen.possibleIngredients.put(ingredient, allergen.possibleIngredients.get(ingredient) + 1);
                 }
@@ -61,12 +61,12 @@ public class Day21AllergenAssessment {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         // Check which allergens that have ingredients that are in every food
         usedIngredients = new HashSet<>(ingredients.values());
 
-        for (Allergen allergen : allergens.values()) {
-            for (Ingredient ingredient : ingredients.values()) {
+        for (var allergen : allergens.values()) {
+            for (var ingredient : ingredients.values()) {
                 if (allergen.possibleIngredients.containsKey(ingredient) && allergen.inFoods.size() == allergen.possibleIngredients.get(ingredient)) {
                     log.debug("Allergen {} exist in all food with ingredient {}", allergen.name, ingredient.name);
                     usedIngredients.remove(ingredient);
@@ -74,9 +74,9 @@ public class Day21AllergenAssessment {
             }
         }
         int appears = 0;
-        for (Ingredient ingredient : usedIngredients) {
+        for (var ingredient : usedIngredients) {
             log.debug("Remaining ingredient: {}", ingredient.name);
-            for (Food food : foods) {
+            for (var food : foods) {
                 if (food.ingredients.contains(ingredient)) {
                     appears++;
                 }
@@ -85,24 +85,24 @@ public class Day21AllergenAssessment {
         return appears;
     }
 
-    public String problem2() {
+    String problem2() {
         problem1();
         // Remove all unused ingredients
         Set<Ingredient> unusedIngredients = new HashSet<>();
         Map<Allergen, Ingredient> dangerousList = new HashMap<>();
 
-        for (Ingredient ingredient : ingredients.values()) {
+        for (var ingredient : ingredients.values()) {
             if (!usedIngredients.contains(ingredient)) {
                 unusedIngredients.add(ingredient);
             }
         }
 
         ingredients.clear();
-        for (Ingredient ingredient : unusedIngredients) {
+        for (var ingredient : unusedIngredients) {
             ingredients.put(ingredient.name, ingredient);
         }
-        for (Ingredient ingredient : usedIngredients) {
-            for (Allergen allergen : allergens.values()) {
+        for (var ingredient : usedIngredients) {
+            for (var allergen : allergens.values()) {
                 allergen.possibleIngredients.remove(ingredient);
             }
         }
@@ -112,14 +112,14 @@ public class Day21AllergenAssessment {
 
         while (!allergens.isEmpty()) {
             // Loop through all allergens and
-            for (Allergen allergen : allergens.values()) {
+            for (var allergen : allergens.values()) {
                 Map<Ingredient, Integer> ingredientFrequency = new HashMap<>();
                 int numberOfFoods = 0;
                 // See how many times each ingredient is present
-                for (Food food : foods) {
+                for (var food : foods) {
                     if (food.allergens.contains(allergen)) {
                         numberOfFoods++;
-                        for (Ingredient ingredient : food.ingredients) {
+                        for (var ingredient : food.ingredients) {
                             ingredientFrequency.putIfAbsent(ingredient, 0);
                             ingredientFrequency.put(ingredient, ingredientFrequency.get(ingredient) + 1);
                         }
@@ -127,7 +127,7 @@ public class Day21AllergenAssessment {
                 }
                 // Check if there is one and only one ingredient that exist in all foods found
                 int numberFound = 0;
-                for (Ingredient ingredient : ingredientFrequency.keySet()) {
+                for (var ingredient : ingredientFrequency.keySet()) {
                     if (ingredientFrequency.get(ingredient) == numberOfFoods) {
                         numberFound++;
                         foundIngredient = ingredient;
@@ -145,13 +145,13 @@ public class Day21AllergenAssessment {
             // Remove found allergen and ingredient from all lists
             log.debug("Removing {} and {}", foundIngredient, foundAllergen);
 
-            for (Ingredient ingredient : ingredients.values()) {
+            for (var ingredient : ingredients.values()) {
                 ingredient.possibleAllergens.remove(foundAllergen);
             }
-            for (Allergen allergen : allergens.values()) {
+            for (var allergen : allergens.values()) {
                 allergen.possibleIngredients.remove(foundIngredient);
             }
-            for (Food food : foods) {
+            for (var food : foods) {
                 food.ingredients.remove(foundIngredient);
                 food.allergens.remove(foundAllergen);
             }

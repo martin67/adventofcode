@@ -12,10 +12,9 @@ import static aoc.aoc2022.Day19NotEnoughMinerals.Mineral.*;
 
 @Slf4j
 public class Day19NotEnoughMinerals {
-
     final List<Blueprint> blueprints = new ArrayList<>();
 
-    public Day19NotEnoughMinerals(List<String> inputLines) {
+    Day19NotEnoughMinerals(List<String> inputLines) {
         var pattern = Pattern.compile("Blueprint (\\d+): Each ore robot costs (\\d+) ore. Each clay robot costs (\\d+) ore. Each obsidian robot costs (\\d+) ore and (\\d+) clay. Each geode robot costs (\\d+) ore and (\\d+) obsidian.");
 
         for (String line : inputLines) {
@@ -38,13 +37,13 @@ public class Day19NotEnoughMinerals {
     }
 
     int problem1() {
-        for (Blueprint blueprint : blueprints) {
+        for (var blueprint : blueprints) {
             Map<Mineral, Integer> minerals = new HashMap<>();
-            for (Mineral mineral : Mineral.values()) {
+            for (var mineral : Mineral.values()) {
                 minerals.put(mineral, 0);
             }
             Map<Mineral, Integer> robots = new HashMap<>();
-            for (Mineral mineral : Mineral.values()) {
+            for (var mineral : Mineral.values()) {
                 robots.put(mineral, 0);
             }
             robots.put(Ore, 1);
@@ -75,7 +74,7 @@ public class Day19NotEnoughMinerals {
                 }
 
                 // Produce
-                for (Mineral mineral : Mineral.values()) {
+                for (var mineral : Mineral.values()) {
                     if (robots.get(mineral) > 0) {
                         log.info("{} {}-collecting robot collects {} {}; you now have {} {}.",
                                 robots.get(mineral), mineral, robots.get(mineral), mineral, minerals.get(mineral) + robots.get(mineral), mineral);
@@ -83,7 +82,7 @@ public class Day19NotEnoughMinerals {
                     }
                 }
 
-                for (Mineral mineral : Mineral.values()) {
+                for (var mineral : Mineral.values()) {
                     if (additionalRobots.containsKey(mineral)) {
                         robots.put(mineral, robots.get(mineral) + additionalRobots.get(mineral));
                     }
@@ -114,13 +113,13 @@ public class Day19NotEnoughMinerals {
         final Mineral produces;
         final Map<Mineral, Integer> buildCost = new HashMap<>();
 
-        public Robot(Mineral produces) {
+        Robot(Mineral produces) {
             this.produces = produces;
         }
 
         boolean canBuild(Map<Mineral, Integer> minerals) {
             boolean canBuild = true;
-            for (Mineral mineral : buildCost.keySet()) {
+            for (var mineral : buildCost.keySet()) {
                 if (buildCost.get(mineral) > minerals.get(mineral)) {
                     canBuild = false;
                 }
@@ -129,7 +128,7 @@ public class Day19NotEnoughMinerals {
         }
 
         Map<Mineral, Integer> build(Map<Mineral, Integer> minerals) {
-            for (Mineral mineral : buildCost.keySet()) {
+            for (var mineral : buildCost.keySet()) {
                 minerals.put(mineral, minerals.get(mineral) - buildCost.get(mineral));
             }
             return minerals;

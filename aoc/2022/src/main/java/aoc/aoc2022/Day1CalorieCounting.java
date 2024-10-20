@@ -5,7 +5,7 @@ import java.util.*;
 public class Day1CalorieCounting {
     final Map<Integer, Integer> elves = new HashMap<>();
 
-    public Day1CalorieCounting(List<String> inputLines) {
+    Day1CalorieCounting(List<String> inputLines) {
         int elv = 1;
         for (String line : inputLines) {
             if (line.isEmpty()) {
@@ -17,11 +17,11 @@ public class Day1CalorieCounting {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         return Collections.max(elves.values());
     }
 
-    public int problem2() {
+    int problem2() {
         List<Integer> sortedCalories = new ArrayList<>(elves.values());
         sortedCalories.sort(Collections.reverseOrder());
         int sum = 0;

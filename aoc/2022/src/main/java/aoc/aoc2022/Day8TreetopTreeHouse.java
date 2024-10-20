@@ -16,7 +16,7 @@ public class Day8TreetopTreeHouse {
     int width;
     final int height;
 
-    public Day8TreetopTreeHouse(List<String> inputLines) {
+    Day8TreetopTreeHouse(List<String> inputLines) {
         int y = 0;
         for (String line : inputLines) {
             int x = 0;
@@ -45,8 +45,8 @@ public class Day8TreetopTreeHouse {
 
         for (int y = 1; y < height - 1; y++) {
             for (int x = 1; x < width - 1; x++) {
-                Position p = new Position(x, y);
-                int treeHeight = trees.get(p);
+                var position = new Position(x, y);
+                int treeHeight = trees.get(position);
                 int viewingDistance = 1;
                 boolean isVisibleInOneDirection = false;
                 boolean isVisible = true;
@@ -67,7 +67,7 @@ public class Day8TreetopTreeHouse {
                     isVisibleInOneDirection = true;
                 }
                 //log.info("Pos: {}, direction up, viewing distance: {}, visible: {}", p, viewingDistance, isVisible);
-                viewingDistances.put(p, viewingDistance);
+                viewingDistances.put(position, viewingDistance);
 
                 // down
                 isVisible = true;
@@ -87,7 +87,7 @@ public class Day8TreetopTreeHouse {
                     isVisibleInOneDirection = true;
                 }
                 //log.info("Pos: {}, direction down, viewing distance: {}, visible: {}", p, viewingDistance, isVisible);
-                viewingDistances.put(p, viewingDistances.get(p) * viewingDistance);
+                viewingDistances.put(position, viewingDistances.get(position) * viewingDistance);
 
                 // left
                 isVisible = true;
@@ -107,7 +107,7 @@ public class Day8TreetopTreeHouse {
                     isVisibleInOneDirection = true;
                 }
                 //log.info("Pos: {}, direction left, viewing distance: {}, visible: {}", p, viewingDistance, isVisible);
-                viewingDistances.put(p, viewingDistances.get(p) * viewingDistance);
+                viewingDistances.put(position, viewingDistances.get(position) * viewingDistance);
 
                 // right
                 isVisible = true;
@@ -127,15 +127,13 @@ public class Day8TreetopTreeHouse {
                     isVisibleInOneDirection = true;
                 }
                 //log.info("Pos: {}, direction right, viewing distance: {}, visible: {}", p, viewingDistance, isVisible);
-                viewingDistances.put(p, viewingDistances.get(p) * viewingDistance);
+                viewingDistances.put(position, viewingDistances.get(position) * viewingDistance);
 
                 if (isVisibleInOneDirection) {
                     visible++;
                 }
             }
-
         }
         return visible;
     }
-
 }

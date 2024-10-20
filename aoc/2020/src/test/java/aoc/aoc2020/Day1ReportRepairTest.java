@@ -17,7 +17,7 @@ class Day1ReportRepairTest {
             "712075, day1.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day1ReportRepair(inputLines).sumAndMultiplyTwoEntries()).isEqualTo(expected);
+        assertThat(new Day1ReportRepair(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -25,6 +25,6 @@ class Day1ReportRepairTest {
             "145245270, day1.txt"})
     void problem2(long expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day1ReportRepair(inputLines).sumAndMultiplyThreeEntries()).isEqualTo(expected);
+        assertThat(new Day1ReportRepair(inputLines).problem2()).isEqualTo(expected);
     }
 }

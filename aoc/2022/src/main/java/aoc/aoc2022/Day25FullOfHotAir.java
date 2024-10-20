@@ -11,7 +11,7 @@ import java.util.Map;
 public class Day25FullOfHotAir {
     final List<String> snafus;
 
-    public Day25FullOfHotAir(List<String> inputLines) {
+    Day25FullOfHotAir(List<String> inputLines) {
         snafus = inputLines;
     }
 

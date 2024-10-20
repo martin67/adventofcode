@@ -9,14 +9,13 @@ import java.util.Stack;
 
 @Slf4j
 public class Day10SyntaxScoring {
+    final List<String> lines;
 
-    private final List<String> lines;
-
-    public Day10SyntaxScoring(List<String> inputLines) {
+    Day10SyntaxScoring(List<String> inputLines) {
         lines = inputLines;
     }
 
-    public int problem1() {
+    int problem1() {
         int points = 0;
         for (String line : lines) {
             points += checkLine(line);
@@ -24,7 +23,7 @@ public class Day10SyntaxScoring {
         return points;
     }
 
-    public long problem2() {
+    long problem2() {
         List<Long> points = new ArrayList<>();
         for (String line : lines) {
             if (checkLine(line) == 0) {
@@ -36,7 +35,7 @@ public class Day10SyntaxScoring {
         return points.get(middle);
     }
 
-    private int checkLine(String line) {
+    int checkLine(String line) {
         char r;
         Stack<Character> stack = new Stack<>();
         for (char c : line.toCharArray()) {
@@ -75,7 +74,7 @@ public class Day10SyntaxScoring {
         return 0;
     }
 
-    private long completeLine(String line) {
+    long completeLine(String line) {
         Stack<Character> stack = new Stack<>();
         for (char c : line.toCharArray()) {
             switch (c) {

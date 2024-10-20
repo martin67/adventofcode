@@ -9,22 +9,21 @@ import java.util.Map;
 
 @Slf4j
 public class Day23CrabCups {
-    private final int start;
+    final int start;
 
-    public Day23CrabCups(int start) {
+    Day23CrabCups(int start) {
         this.start = start;
     }
 
     int problem1(int moves) {
-        Circle circle = new Circle(0);
-
+        var circle = new Circle(0);
 
         for (int move = 0; move < moves; move++) {
             log.info("-- move {} --", move + 1);
             log.info("cups: {}", circle);
-            List<Integer> threeCups = circle.pickUpThreeCups();
+            var threeCups = circle.pickUpThreeCups();
             log.info("pick up: {}, {}, {}", threeCups.get(0), threeCups.get(1), threeCups.get(2));
-            Cup destinationCup = circle.selectDestinationCup(threeCups);
+            var destinationCup = circle.selectDestinationCup(threeCups);
             log.info("destination: {}", destinationCup.value);
             circle.insertThreeCups(destinationCup, threeCups);
             circle.selectNewCurrentCup();
@@ -33,10 +32,10 @@ public class Day23CrabCups {
     }
 
     long problem2(int moves) {
-        Circle circle = new Circle(1000000);
+        var circle = new Circle(1000000);
         for (int move = 0; move < moves; move++) {
-            List<Integer> threeCups = circle.pickUpThreeCups();
-            Cup destinationCup = circle.selectDestinationCup(threeCups);
+            var threeCups = circle.pickUpThreeCups();
+            var destinationCup = circle.selectDestinationCup(threeCups);
             circle.insertThreeCups(destinationCup, threeCups);
             circle.selectNewCurrentCup();
         }
@@ -71,7 +70,7 @@ public class Day23CrabCups {
                 if (value > highestCupValue) {
                     highestCupValue = value;
                 }
-                Cup cup = new Cup(Character.getNumericValue(c));
+                var cup = new Cup(Character.getNumericValue(c));
                 cups.put(cup.value, cup);
                 if (current == null) {
                     current = cup;
@@ -87,7 +86,7 @@ public class Day23CrabCups {
 
             if (extraCups > 0) {
                 for (int i = Integer.toString(start).length() + 1; i <= extraCups; i++) {
-                    Cup cup = new Cup(i);
+                    var cup = new Cup(i);
                     cups.put(cup.value, cup);
                     insert.nextCup = cup;
                     insert = cup;
@@ -102,7 +101,7 @@ public class Day23CrabCups {
             List<Integer> threeCups = new ArrayList<>();
 
             for (int i = 0; i < 3; i++) {
-                Cup cup = current.nextCup;
+                var cup = current.nextCup;
                 cups.remove(cup.value);
                 threeCups.add(cup.value);
                 // remove cup
@@ -127,14 +126,14 @@ public class Day23CrabCups {
         }
 
         void insertThreeCups(Cup destinationCup, List<Integer> cupsPickedUp) {
-            Cup last = destinationCup.nextCup;
-            Cup first = new Cup(cupsPickedUp.get(0));
+            var last = destinationCup.nextCup;
+            var first = new Cup(cupsPickedUp.getFirst());
             cups.put(first.value, first);
             destinationCup.nextCup = first;
-            Cup second = new Cup(cupsPickedUp.get(1));
+            var second = new Cup(cupsPickedUp.get(1));
             cups.put(second.value, second);
             first.nextCup = second;
-            Cup third = new Cup(cupsPickedUp.get(2));
+            var third = new Cup(cupsPickedUp.get(2));
             cups.put(third.value, third);
             second.nextCup = third;
             third.nextCup = last;
@@ -145,13 +144,13 @@ public class Day23CrabCups {
         }
 
         long getFinalResult() {
-            Cup start = cups.get(1);
+            var start = cups.get(1);
             return (long) start.nextCup.value * start.nextCup.nextCup.value;
         }
 
         String finalOrder() {
             StringBuilder sb = new StringBuilder();
-            Cup start = current;
+            var start = current;
             while (start.value != 1) {
                 start = start.nextCup;
             }
@@ -164,7 +163,7 @@ public class Day23CrabCups {
 
         @Override
         public String toString() {
-            Cup c = current;
+            var c = current;
             StringBuilder sb = new StringBuilder();
             while (c.nextCup != current) {
                 sb.append(c.value).append(" ");

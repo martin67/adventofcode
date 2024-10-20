@@ -9,100 +9,100 @@ import java.util.List;
 
 @Slf4j
 public class Day12RainRisk {
-    private final List<Action> actions = new ArrayList<>();
+    final List<Action> actions = new ArrayList<>();
 
-    public Day12RainRisk(List<String> inputLines) {
+    Day12RainRisk(List<String> inputLines) {
         for (String line : inputLines) {
             actions.add(new Action(line.charAt(0), Integer.parseInt(line.substring(1))));
         }
     }
 
-    int distance() {
-        Position pos = new Position(0, 0);
-        Direction dir = Direction.East;
+    int problem1() {
+        var position = new Position(0, 0);
+        var direction = Direction.East;
 
-        for (Action action : actions) {
+        for (var action : actions) {
             switch (action.instruction) {
-                case 'N' -> pos.setY(pos.getY() - action.argument);
-                case 'S' -> pos.setY(pos.getY() + action.argument);
-                case 'E' -> pos.setX(pos.getX() + action.argument);
-                case 'W' -> pos.setX(pos.getX() - action.argument);
-                case 'L' -> dir = dir.turn(Direction.Left, action.argument);
-                case 'R' -> dir = dir.turn(Direction.Right, action.argument);
+                case 'N' -> position.setY(position.getY() - action.argument);
+                case 'S' -> position.setY(position.getY() + action.argument);
+                case 'E' -> position.setX(position.getX() + action.argument);
+                case 'W' -> position.setX(position.getX() - action.argument);
+                case 'L' -> direction = direction.turn(Direction.Left, action.argument);
+                case 'R' -> direction = direction.turn(Direction.Right, action.argument);
                 case 'F' -> {
                     for (int i = 0; i < action.argument; i++) {
-                        pos = pos.adjacent(dir);
+                        position = position.adjacent(direction);
                     }
                 }
             }
         }
-        return pos.distance(new Position(0, 0));
+        return position.distance(new Position(0, 0));
     }
 
-    int distanceWithWaypoint() {
-        Position pos = new Position(0, 0);
-        Position waypoint = new Position(10, -1);
+    int problem2() {
+        var position = new Position(0, 0);
+        var waypoint = new Position(10, -1);
         int dX;
         int dY;
 
-        for (Action action : actions) {
+        for (var action : actions) {
             switch (action.instruction) {
                 case 'N' -> waypoint.setY(waypoint.getY() - action.argument);
                 case 'S' -> waypoint.setY(waypoint.getY() + action.argument);
                 case 'E' -> waypoint.setX(waypoint.getX() + action.argument);
                 case 'W' -> waypoint.setX(waypoint.getX() - action.argument);
                 case 'L', 'R' -> {
-                    dX = Math.abs(waypoint.getX() - pos.getX());
-                    dY = Math.abs(waypoint.getY() - pos.getY());
+                    dX = Math.abs(waypoint.getX() - position.getX());
+                    dY = Math.abs(waypoint.getY() - position.getY());
                     if (action.instruction == 'L' && action.argument == 90 ||
                             action.instruction == 'R' && action.argument == 270) {
-                        if (inUpperRightQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() - dY);
-                            waypoint.setY(pos.getY() - dX);
-                        } else if (inUpperLeftQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() - dY);
-                            waypoint.setY(pos.getY() + dX);
-                        } else if (inLowerLeftQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() + dY);
-                            waypoint.setY(pos.getY() + dX);
-                        } else if (inLowerRightQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() + dY);
-                            waypoint.setY(pos.getY() - dX);
+                        if (inUpperRightQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() - dY);
+                            waypoint.setY(position.getY() - dX);
+                        } else if (inUpperLeftQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() - dY);
+                            waypoint.setY(position.getY() + dX);
+                        } else if (inLowerLeftQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() + dY);
+                            waypoint.setY(position.getY() + dX);
+                        } else if (inLowerRightQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() + dY);
+                            waypoint.setY(position.getY() - dX);
                         } else {
                             log.error("oopsie");
                         }
 
                     } else if (action.instruction == 'R' && action.argument == 90 ||
                             action.instruction == 'L' && action.argument == 270) {
-                        if (inUpperRightQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() + dY);
-                            waypoint.setY(pos.getY() + dX);
-                        } else if (inUpperLeftQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() + dY);
-                            waypoint.setY(pos.getY() - dX);
-                        } else if (inLowerLeftQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() - dY);
-                            waypoint.setY(pos.getY() - dX);
-                        } else if (inLowerRightQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() - dY);
-                            waypoint.setY(pos.getY() + dX);
+                        if (inUpperRightQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() + dY);
+                            waypoint.setY(position.getY() + dX);
+                        } else if (inUpperLeftQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() + dY);
+                            waypoint.setY(position.getY() - dX);
+                        } else if (inLowerLeftQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() - dY);
+                            waypoint.setY(position.getY() - dX);
+                        } else if (inLowerRightQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() - dY);
+                            waypoint.setY(position.getY() + dX);
                         } else {
                             log.error("oopsie");
                         }
 
                     } else if (action.argument == 180) {
-                        if (inUpperRightQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() - dX);
-                            waypoint.setY(pos.getY() + dY);
-                        } else if (inUpperLeftQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() + dX);
-                            waypoint.setY(pos.getY() + dY);
-                        } else if (inLowerLeftQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() + dX);
-                            waypoint.setY(pos.getY() - dY);
-                        } else if (inLowerRightQuadrant(pos, waypoint)) {
-                            waypoint.setX(pos.getX() - dX);
-                            waypoint.setY(pos.getY() - dY);
+                        if (inUpperRightQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() - dX);
+                            waypoint.setY(position.getY() + dY);
+                        } else if (inUpperLeftQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() + dX);
+                            waypoint.setY(position.getY() + dY);
+                        } else if (inLowerLeftQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() + dX);
+                            waypoint.setY(position.getY() - dY);
+                        } else if (inLowerRightQuadrant(position, waypoint)) {
+                            waypoint.setX(position.getX() - dX);
+                            waypoint.setY(position.getY() - dY);
                         } else {
                             log.error("oopsie");
                         }
@@ -112,24 +112,24 @@ public class Day12RainRisk {
                     }
                 }
                 case 'F' -> {
-                    dX = Math.abs(waypoint.getX() - pos.getX());
-                    if (waypoint.getX() < pos.getX()) {
+                    dX = Math.abs(waypoint.getX() - position.getX());
+                    if (waypoint.getX() < position.getX()) {
                         dX = -dX;
                     }
-                    dY = Math.abs(waypoint.getY() - pos.getY());
-                    if (waypoint.getY() < pos.getY()) {
+                    dY = Math.abs(waypoint.getY() - position.getY());
+                    if (waypoint.getY() < position.getY()) {
                         dY = -dY;
                     }
                     for (int i = 0; i < action.argument; i++) {
-                        pos.setX(pos.getX() + dX);
-                        pos.setY(pos.getY() + dY);
+                        position.setX(position.getX() + dX);
+                        position.setY(position.getY() + dY);
                     }
-                    waypoint.setX(pos.getX() + dX);
-                    waypoint.setY(pos.getY() + dY);
+                    waypoint.setX(position.getX() + dX);
+                    waypoint.setY(position.getY() + dY);
                 }
             }
         }
-        return pos.distance(new Position(0, 0));
+        return position.distance(new Position(0, 0));
 
     }
 

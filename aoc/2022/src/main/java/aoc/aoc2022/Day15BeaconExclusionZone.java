@@ -11,12 +11,11 @@ import java.util.regex.Pattern;
 @SuppressWarnings("UnstableApiUsage")
 @Slf4j
 public class Day15BeaconExclusionZone {
-
     final Map<Position, Sensor> sensors = new HashMap<>();
     final Set<Position> beacons = new HashSet<>();
 
-    public Day15BeaconExclusionZone(List<String> inputLines) {
-        var  pattern = Pattern.compile("Sensor at x=(-?\\d+), y=(-?\\d+): closest beacon is at x=(-?\\d+), y=(-?\\d+)");
+    Day15BeaconExclusionZone(List<String> inputLines) {
+        var pattern = Pattern.compile("Sensor at x=(-?\\d+), y=(-?\\d+): closest beacon is at x=(-?\\d+), y=(-?\\d+)");
 
         for (String line : inputLines) {
             var matcher = pattern.matcher(line);
@@ -33,17 +32,17 @@ public class Day15BeaconExclusionZone {
     }
 
     int problem1(int row) {
-        RangeSet<Integer> intervals = getIntegerRangeSet(row);
+        var intervals = getIntegerRangeSet(row);
 
         int size = 0;
-        for (Range<Integer> range : intervals.asRanges()) {
+        for (var range : intervals.asRanges()) {
             size += ContiguousSet.create(range, DiscreteDomain.integers()).size();
         }
         return size;
     }
 
     @NotNull
-    private RangeSet<Integer> getIntegerRangeSet(int row) {
+    RangeSet<Integer> getIntegerRangeSet(int row) {
         RangeSet<Integer> intervals = TreeRangeSet.create();
 
         for (Sensor sensor : sensors.values()) {
@@ -72,7 +71,7 @@ public class Day15BeaconExclusionZone {
             RangeSet<Integer> test = intervals.complement();
             if (test.asRanges().size() == 3) {
                 log.info("Found");
-                for (Range<Integer> r : test.asRanges()) {
+                for (var r : test.asRanges()) {
                     if (r.hasLowerBound() && r.hasUpperBound() &&
                             r.upperEndpoint() - r.lowerEndpoint() == 2) {
                         log.info("r: {} ", r);

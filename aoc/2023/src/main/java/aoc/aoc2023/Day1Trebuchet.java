@@ -10,7 +10,7 @@ public class Day1Trebuchet {
     static final List<String> numbers = List.of("one", "two", "three", "four", "five", "six", "seven", "eight", "nine");
     final List<List<Integer>> calibrationValues = new ArrayList<>();
 
-    public Day1Trebuchet(List<String> inputLines, boolean useStrings) {
+    Day1Trebuchet(List<String> inputLines, boolean useStrings) {
         for (String line : inputLines) {
             List<Integer> value = new ArrayList<>();
             int i = 0;
@@ -33,11 +33,11 @@ public class Day1Trebuchet {
         }
     }
 
-    public int problem() {
+    int problem() {
         int sum = 0;
         for (var cv : calibrationValues) {
-            int first = cv.get(0);
-            int last = cv.get(cv.size() - 1);
+            int first = cv.getFirst();
+            int last = cv.getLast();
             int value = first * 10 + last;
             sum += value;
             log.debug("{} + {} = {}", first, last, value);

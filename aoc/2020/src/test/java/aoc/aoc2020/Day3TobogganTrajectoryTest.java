@@ -17,7 +17,7 @@ class Day3TobogganTrajectoryTest {
             "176, day3.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day3TobogganTrajectory(inputLines).treesEncountered(3, 1)).isEqualTo(expected);
+        assertThat(new Day3TobogganTrajectory(inputLines).problem1(3, 1)).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -25,6 +25,6 @@ class Day3TobogganTrajectoryTest {
             "5872458240, day3.txt"})
     void problem2(long expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day3TobogganTrajectory(inputLines).treesSecondEncounter()).isEqualTo(expected);
+        assertThat(new Day3TobogganTrajectory(inputLines).problem2()).isEqualTo(expected);
     }
 }

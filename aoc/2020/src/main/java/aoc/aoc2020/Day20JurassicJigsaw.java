@@ -14,10 +14,10 @@ import static aoc.common.Direction.*;
 
 @Slf4j
 public class Day20JurassicJigsaw {
-    private final Set<Tile> tiles = new HashSet<>();
-    private final Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+    final Set<Tile> tiles = new HashSet<>();
+    final Graph<Integer, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
 
-    public Day20JurassicJigsaw(List<String> inputLines) {
+    Day20JurassicJigsaw(List<String> inputLines) {
         var pattern = Pattern.compile("^Tile (\\d+):$");
 
         Tile tile = null;
@@ -46,10 +46,10 @@ public class Day20JurassicJigsaw {
         log.info("Number of tiles: {}", tiles.size());
     }
 
-    public long problem1() {
-
+    long problem1() {
         Map<String, Integer> freq = new HashMap<>();
-        for (Tile tile : tiles) {
+
+        for (var tile : tiles) {
             for (String edge : tile.allEdges()) {
                 freq.putIfAbsent(edge, 0);
                 freq.put(edge, freq.get(edge) + 1);
@@ -57,7 +57,7 @@ public class Day20JurassicJigsaw {
         }
 
         long value = 1;
-        for (Tile tile : tiles) {
+        for (var tile : tiles) {
             for (String edge : tile.allEdges()) {
                 if (freq.get(edge) == 1) {
                     log.debug("Tile {}, external edge {}", tile.id, edge);
@@ -74,12 +74,12 @@ public class Day20JurassicJigsaw {
         return value;
     }
 
-    public long problem2() throws Exception {
+    long problem2() throws Exception {
         // Find all edges
         problem1();
 
         // Find first corner
-        Tile firstCorner = tiles.stream().filter(Tile::isCorner).findFirst().orElseThrow(() -> new Exception("hej"));
+        var firstCorner = tiles.stream().filter(Tile::isCorner).findFirst().orElseThrow(() -> new Exception("hej"));
         // Find correct orientation
         log.info("Found first corner on tile {}", firstCorner);
         log.debug("External edges: {}", firstCorner.externalEdges);
@@ -89,7 +89,7 @@ public class Day20JurassicJigsaw {
         Map<Position, Tile> bigMap = new HashMap<>();
         // start in upper left corner
         // which alternative has external edges on left and top? Two will match, pick the first
-        Tile start = firstCorner.alternatives().stream()
+        var start = firstCorner.alternatives().stream()
                 .filter(t -> firstCorner.externalEdges.contains(t.edge(Up)))
                 .filter(t -> firstCorner.externalEdges.contains(t.edge(Left)))
                 .findFirst().orElseThrow();
@@ -99,13 +99,13 @@ public class Day20JurassicJigsaw {
 
 
         // Go down
-        Tile previous = start;
+        var previous = start;
         for (int y = 1; y < Math.sqrt(tiles.size()); y++) {
             log.debug("Going down, checking for edge {}", previous.edge(Down));
             boolean foundIt = false;
-            for (Tile tile : tiles) {
+            for (var tile : tiles) {
                 if (tile.id != previous.id) {
-                    for (Tile alt : tile.alternatives()) {
+                    for (var alt : tile.alternatives()) {
                         if (alt.edge(Up).equals(previous.edge(Down))) {
                             log.debug("Next down: {}", alt);
                             bigMap.put(new Position(0, y), alt);
@@ -126,9 +126,9 @@ public class Day20JurassicJigsaw {
         for (int x = 1; x < Math.sqrt(tiles.size()); x++) {
             log.debug("Going right, checking for edge {}", previous.edge(Right));
             boolean foundIt = false;
-            for (Tile tile : tiles) {
+            for (var tile : tiles) {
                 if (tile.id != previous.id) {
-                    for (Tile alt : tile.alternatives()) {
+                    for (var alt : tile.alternatives()) {
                         if (alt.edge(Left).equals(previous.edge(Right))) {
                             log.debug("Next right: {}", alt);
                             bigMap.put(new Position(x, 0), alt);
@@ -147,12 +147,12 @@ public class Day20JurassicJigsaw {
         // then go from left to right
         for (int y = 1; y < Math.sqrt(tiles.size()); y++) {
             for (int x = 1; x < Math.sqrt(tiles.size()); x++) {
-                Tile leftTile = bigMap.get(new Position(x - 1, y));
+                var leftTile = bigMap.get(new Position(x - 1, y));
                 log.debug("Row {}, column {}, checking for edge {}", y, x, leftTile.edge(Right));
 
-                for (Tile tile : tiles) {
+                for (var tile : tiles) {
                     if (tile.id != leftTile.id) {
-                        for (Tile alt : tile.alternatives()) {
+                        for (var alt : tile.alternatives()) {
                             if (alt.edge(Left).equals(leftTile.edge(Right))) {
                                 log.debug("Next right: {}", alt);
                                 bigMap.put(new Position(x, y), alt);
@@ -167,11 +167,11 @@ public class Day20JurassicJigsaw {
         bigMap.values().forEach(Tile::stripBorder);
 
         int bigMapsize = 8 * (int) Math.sqrt(tiles.size());
-        Tile bigTile = new Tile(1, bigMapsize, bigMapsize);
+        var bigTile = new Tile(1, bigMapsize, bigMapsize);
 
         for (int y = 0; y < Math.sqrt(tiles.size()); y++) {
             for (int x = 0; x < Math.sqrt(tiles.size()); x++) {
-                for (Position position : bigMap.get(new Position(x, y)).positions) {
+                for (var position : bigMap.get(new Position(x, y)).positions) {
                     bigTile.positions.add(new Position((position.getX() - 1) + x * 8, (position.getY() - 1) + y * 8));
                 }
             }
@@ -181,10 +181,10 @@ public class Day20JurassicJigsaw {
         // Find sea monster
         Tile seaMonsterTile = null;
         Set<Set<Position>> seaMonsters = new HashSet<>();
-        for (Tile bt : bigTile.alternatives()) {
+        for (var bt : bigTile.alternatives()) {
             for (int y = 0; y < bigMapsize; y++) {
                 for (int x = 0; x < bigMapsize; x++) {
-                    Set<Position> seaMonster = createSeaMonster(x, y);
+                    var seaMonster = createSeaMonster(x, y);
                     if (bt.positions.containsAll(seaMonster)) {
                         log.info("Sea Monster found at {},{}", x, y);
                         seaMonsterTile = bt;
@@ -195,7 +195,7 @@ public class Day20JurassicJigsaw {
         }
 
         // Strip Sea Monsters
-        for (Set<Position> seaMonster : seaMonsters) {
+        for (var seaMonster : seaMonsters) {
             seaMonsterTile.positions.removeAll(seaMonster);
         }
 
@@ -238,7 +238,7 @@ public class Day20JurassicJigsaw {
 
         Tile rotate(Direction dir) {
             // 3,1 -> 1,6 -> 6,8 -> 8,3
-            Tile t = new Tile(id, width, height);
+            var t = new Tile(id, width, height);
             switch (dir) {
                 case Left -> {
                     for (int y = 0; y < height; y++) {
@@ -342,8 +342,8 @@ public class Day20JurassicJigsaw {
             switch (dir) {
                 case Up:
                     for (int x = 0; x < width; x++) {
-                        Position p = new Position(x, 0);
-                        if (positions.contains(p)) {
+                        var position = new Position(x, 0);
+                        if (positions.contains(position)) {
                             sb.append('#');
                         } else {
                             sb.append('.');
@@ -352,8 +352,8 @@ public class Day20JurassicJigsaw {
                     break;
                 case Down:
                     for (int x = 0; x < width; x++) {
-                        Position p = new Position(x, height - 1);
-                        if (positions.contains(p)) {
+                        var position = new Position(x, height - 1);
+                        if (positions.contains(position)) {
                             sb.append('#');
                         } else {
                             sb.append('.');
@@ -362,8 +362,8 @@ public class Day20JurassicJigsaw {
                     break;
                 case Left:
                     for (int y = 0; y < height; y++) {
-                        Position p = new Position(0, y);
-                        if (positions.contains(p)) {
+                        var position = new Position(0, y);
+                        if (positions.contains(position)) {
                             sb.append('#');
                         } else {
                             sb.append('.');
@@ -372,8 +372,8 @@ public class Day20JurassicJigsaw {
                     break;
                 case Right:
                     for (int y = 0; y < height; y++) {
-                        Position p = new Position(width - 1, y);
-                        if (positions.contains(p)) {
+                        var position = new Position(width - 1, y);
+                        if (positions.contains(position)) {
                             sb.append('#');
                         } else {
                             sb.append('.');
@@ -388,8 +388,8 @@ public class Day20JurassicJigsaw {
             for (int y = 0; y < height; y++) {
                 StringBuilder sb = new StringBuilder();
                 for (int x = 0; x < width; x++) {
-                    Position p = new Position(x, y);
-                    if (positions.contains(p)) {
+                    var position = new Position(x, y);
+                    if (positions.contains(position)) {
                         sb.append('#');
                     } else {
                         sb.append('.');

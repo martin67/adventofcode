@@ -13,7 +13,6 @@ import static aoc.common.Direction.*;
 
 @Slf4j
 public class Day22MonkeyMap {
-
     final Map<Position, Character> map = new HashMap<>();
     final List<Step> path = new ArrayList<>();
     Position start;
@@ -77,9 +76,9 @@ public class Day22MonkeyMap {
     }
 
     int problem1(boolean problem2) {
-        Position position = start;
-        Direction direction = East;
-        for (Step step : path) {
+        var position = start;
+        var direction = East;
+        for (var step : path) {
             if (step.isMove()) {
                 for (int i = 0; i < step.number; i++) {
                     Position next = position.adjacent(direction);
@@ -105,7 +104,7 @@ public class Day22MonkeyMap {
     }
 
     void wrap(Position position, Direction direction) {
-        Position next = new Position();
+        var next = new Position();
         switch (direction) {
             case East -> {
                 next.setY(position.getY());

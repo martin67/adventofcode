@@ -17,7 +17,7 @@ class Day9EncodingErrorTest {
             "373803594, 25, day9.txt"})
     void problem1(long expected, int preamble, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day9EncodingError(preamble, inputLines).invalidNumber()).isEqualTo(expected);
+        assertThat(new Day9EncodingError(preamble, inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -25,6 +25,6 @@ class Day9EncodingErrorTest {
             "51152360, 25, day9.txt"})
     void problem2(long expected, int preamble, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day9EncodingError(preamble, inputLines).encryptionWeakness()).isEqualTo(expected);
+        assertThat(new Day9EncodingError(preamble, inputLines).problem2()).isEqualTo(expected);
     }
 }

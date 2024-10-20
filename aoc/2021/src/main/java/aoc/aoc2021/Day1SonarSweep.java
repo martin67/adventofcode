@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day1SonarSweep {
+    final List<Integer> inputValues = new ArrayList<>();
 
-    private final List<Integer> inputValues = new ArrayList<>();
-
-    public Day1SonarSweep(List<String> inputLines) {
+    Day1SonarSweep(List<String> inputLines) {
         inputLines.forEach(line -> inputValues.add(Integer.parseInt(line)));
     }
 
-    public int problem1() {
+    int problem1() {
         return countIncreases(inputValues);
     }
 
-    public int problem2() {
+    int problem2() {
         List<Integer> slidingWindow = new ArrayList<>();
 
         for (int i = 0; i < inputValues.size(); i++) {
@@ -26,7 +25,7 @@ public class Day1SonarSweep {
         return countIncreases(slidingWindow);
     }
 
-    private int countIncreases(List<Integer> inputValues) {
+    int countIncreases(List<Integer> inputValues) {
         int previousDepth = Integer.MAX_VALUE;
         int increases = 0;
         for (int depth : inputValues) {

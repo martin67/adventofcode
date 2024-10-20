@@ -11,10 +11,10 @@ import java.util.Map;
 
 @Slf4j
 public class Day24LobbyLayout {
-    private final List<List<Direction>> directionList = new ArrayList<>();
-    private Map<HexPositionPointy, Color> tiles = new HashMap<>();
+    final List<List<Direction>> directionList = new ArrayList<>();
+    Map<HexPositionPointy, Color> tiles = new HashMap<>();
 
-    public Day24LobbyLayout(List<String> inputLines) {
+    Day24LobbyLayout(List<String> inputLines) {
         for (String line : inputLines) {
             int index = 0;
             List<Direction> directions = new ArrayList<>();
@@ -48,10 +48,10 @@ public class Day24LobbyLayout {
         }
     }
 
-    public long problem1() {
+    long problem1() {
         for (List<Direction> directions : directionList) {
-            HexPositionPointy targetTile = new HexPositionPointy(0, 0);
-            for (Direction direction : directions) {
+            var targetTile = new HexPositionPointy(0, 0);
+            for (var direction : directions) {
                 targetTile = targetTile.adjacent(direction);
             }
             tiles.putIfAbsent(targetTile, Color.White);
@@ -65,16 +65,16 @@ public class Day24LobbyLayout {
         return tiles.values().stream().filter(t -> t == Color.Black).count();
     }
 
-    public long problem2() {
+    long problem2() {
         problem1();
 
         for (int day = 0; day < 100; day++) {
             Map<HexPositionPointy, Color> nextTiles = new HashMap<>();
             // flip
-            for (HexPositionPointy position : tiles.keySet()) {
-                for (HexPositionPointy positionToCheck : position.allAdjacent()) {
+            for (var position : tiles.keySet()) {
+                for (var positionToCheck : position.allAdjacent()) {
                     int adjacentBlack = 0;
-                    for (HexPositionPointy p : positionToCheck.allAdjacent()) {
+                    for (var p : positionToCheck.allAdjacent()) {
                         if (tiles.containsKey(p) && tiles.get(p) == Color.Black) {
                             adjacentBlack++;
                         }

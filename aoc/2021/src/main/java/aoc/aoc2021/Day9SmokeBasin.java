@@ -7,11 +7,10 @@ import java.util.*;
 
 @Slf4j
 public class Day9SmokeBasin {
+    final Map<Position, Integer> map = new HashMap<>();
+    final Set<Position> lowPoints = new HashSet<>();
 
-    private final Map<Position, Integer> map = new HashMap<>();
-    private final Set<Position> lowPoints = new HashSet<>();
-
-    public Day9SmokeBasin(List<String> inputLines) {
+    Day9SmokeBasin(List<String> inputLines) {
         int y = 0;
         for (String line : inputLines) {
             int x = 0;
@@ -23,33 +22,33 @@ public class Day9SmokeBasin {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         int riskLevel = 0;
-        for (Position p : map.keySet()) {
+        for (var position : map.keySet()) {
             boolean lowPoint = true;
-            for (Position adj : p.allAdjacent()) {
-                if (map.containsKey(adj) && map.get(p) >= map.get(adj)) {
+            for (var adjacent : position.allAdjacent()) {
+                if (map.containsKey(adjacent) && map.get(position) >= map.get(adjacent)) {
                     lowPoint = false;
                 }
             }
             if (lowPoint) {
-                log.debug("Low point at {}", p);
-                riskLevel += map.get(p) + 1;
-                lowPoints.add(p);
+                log.debug("Low point at {}", position);
+                riskLevel += map.get(position) + 1;
+                lowPoints.add(position);
             }
         }
         return riskLevel;
     }
 
-    public int problem2() {
+    int problem2() {
         problem1();
 
         Set<Position> alreadyCounted = new HashSet<>();
         List<Integer> sizes = new ArrayList<>();
-        for (Position p : lowPoints) {
-            int size = getLowPoints(p, alreadyCounted) + 1;
+        for (var position : lowPoints) {
+            int size = getLowPoints(position, alreadyCounted) + 1;
             sizes.add(size);
-            log.debug("Size of low point at {}: {}", p, size);
+            log.debug("Size of low point at {}: {}", position, size);
         }
         sizes.sort(Collections.reverseOrder());
         int result = 1;
@@ -59,13 +58,13 @@ public class Day9SmokeBasin {
         return result;
     }
 
-    private int getLowPoints(Position p, Set<Position> alreadyCounted) {
+    int getLowPoints(Position position, Set<Position> alreadyCounted) {
         int size = 0;
-        for (Position adj : p.allAdjacent()) {
-            if (map.containsKey(adj) && !alreadyCounted.contains(adj) && map.get(adj) != 9 && map.get(adj) > map.get(p)) {
+        for (var adjacent : position.allAdjacent()) {
+            if (map.containsKey(adjacent) && !alreadyCounted.contains(adjacent) && map.get(adjacent) != 9 && map.get(adjacent) > map.get(position)) {
                 size += 1;
-                size += getLowPoints(adj, alreadyCounted);
-                alreadyCounted.add(adj);
+                size += getLowPoints(adjacent, alreadyCounted);
+                alreadyCounted.add(adjacent);
             }
         }
         return size;

@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -13,9 +12,8 @@ public class Day5SupplyStacks {
     final Map<Integer, Deque<Character>> stacks = new HashMap<>();
     final List<Move> moves = new ArrayList<>();
 
-    public Day5SupplyStacks(List<String> inputLines) {
-        Pattern pattern = Pattern.compile("move (\\d+) from (\\d+) to (\\d+)");
-        Matcher matcher;
+    Day5SupplyStacks(List<String> inputLines) {
+        var pattern = Pattern.compile("move (\\d+) from (\\d+) to (\\d+)");
 
         for (String line : inputLines) {
             if (line.contains("[")) {
@@ -33,7 +31,7 @@ public class Day5SupplyStacks {
                     index++;
                 }
             } else if (line.startsWith("move")) {
-                matcher = pattern.matcher(line);
+                var matcher = pattern.matcher(line);
                 if (matcher.find()) {
                     moves.add(new Move(Integer.parseInt(matcher.group(1)),
                             Integer.parseInt(matcher.group(2)),
@@ -44,9 +42,9 @@ public class Day5SupplyStacks {
     }
 
     String problem1() {
-        for (Move move : moves) {
-            Deque<Character> fromStack = stacks.get(move.from);
-            Deque<Character> toStack = stacks.get(move.to);
+        for (var move : moves) {
+            var fromStack = stacks.get(move.from);
+            var toStack = stacks.get(move.to);
             for (int i = 0; i < move.amount; i++) {
                 toStack.push(fromStack.pop());
             }
@@ -55,9 +53,9 @@ public class Day5SupplyStacks {
     }
 
     String problem2() {
-        for (Move move : moves) {
-            Deque<Character> fromStack = stacks.get(move.from);
-            Deque<Character> toStack = stacks.get(move.to);
+        for (var move : moves) {
+            var fromStack = stacks.get(move.from);
+            var toStack = stacks.get(move.to);
             Deque<Character> tempStack = new ArrayDeque<>();
             for (int i = 0; i < move.amount; i++) {
                 tempStack.push(fromStack.pop());

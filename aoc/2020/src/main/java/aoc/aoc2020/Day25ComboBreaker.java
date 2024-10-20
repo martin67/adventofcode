@@ -6,15 +6,15 @@ import java.util.List;
 
 @Slf4j
 public class Day25ComboBreaker {
-    private final int cardPublicKey;
-    private final int doorPublicKey;
+    final int cardPublicKey;
+    final int doorPublicKey;
 
-    public Day25ComboBreaker(List<String> inputLines) {
+    Day25ComboBreaker(List<String> inputLines) {
         cardPublicKey = Integer.parseInt(inputLines.get(0));
         doorPublicKey = Integer.parseInt(inputLines.get(1));
     }
 
-    public int problem1() {
+    int problem1() {
         int cardLoopSize = transform(7, cardPublicKey);
         int doorLoopSize = transform(7, doorPublicKey);
 

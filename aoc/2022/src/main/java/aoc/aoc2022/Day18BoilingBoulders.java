@@ -11,7 +11,7 @@ import java.util.Set;
 public class Day18BoilingBoulders {
     final Set<SpacePosition> cubes = new HashSet<>();
 
-    public Day18BoilingBoulders(List<String> inputLines) {
+     Day18BoilingBoulders(List<String> inputLines) {
         for (String line : inputLines) {
             String[] s = line.split(",");
             cubes.add(new SpacePosition(s[0], s[1], s[2]));

@@ -1,15 +1,14 @@
 package aoc.aoc2020;
 
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day14DockingData {
-    private final Map<Long, Long> memory = new HashMap<>();
-    private final List<String> inputLines;
-    private String mask;
+    final Map<Long, Long> memory = new HashMap<>();
+    final List<String> inputLines;
+    String mask;
 
-    public Day14DockingData(List<String> inputLines) {
+    Day14DockingData(List<String> inputLines) {
         this.inputLines = inputLines;
         mask = "0".repeat(36);
     }
@@ -54,12 +53,11 @@ public class Day14DockingData {
     }
 
     long problem2() {
-        Pattern maskPattern = Pattern.compile("^mask = (\\w+)$");
-        Pattern memPattern = Pattern.compile("^mem\\[(\\d+)] = (\\d+)$");
-        Matcher matcher;
+        var maskPattern = Pattern.compile("^mask = (\\w+)$");
+        var memPattern = Pattern.compile("^mem\\[(\\d+)] = (\\d+)$");
 
         for (String line : inputLines) {
-            matcher = maskPattern.matcher(line);
+            var matcher = maskPattern.matcher(line);
             if (matcher.find()) {
                 mask = matcher.group(1);
             }
@@ -89,7 +87,7 @@ public class Day14DockingData {
                 }
 
                 // generate all possible addresses from addressmask
-                Set<String> addresses = generateAddresses(String.valueOf(addressMask), 0);
+                var addresses = generateAddresses(String.valueOf(addressMask), 0);
                 for (String address : addresses) {
                     long addr = Long.valueOf(address, 2);
                     memory.put(addr, value);

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class Day21MonkeyMath {
     final Map<String, Monkey> monkeys = new HashMap<>();
 
-    public Day21MonkeyMath(List<String> inputLines) {
+    Day21MonkeyMath(List<String> inputLines) {
         Pattern pattern1 = Pattern.compile("(\\w+): (\\w+) (\\W) (\\w+)");
         Pattern pattern2 = Pattern.compile("(\\w+): (\\d+)");
 
@@ -19,7 +19,7 @@ public class Day21MonkeyMath {
             var matcher = pattern1.matcher(line);
             if (matcher.find()) {
                 final String monkeyName = matcher.group(1);
-                Monkey start = monkeys.computeIfAbsent(monkeyName, m -> new Monkey(monkeyName));
+                var start = monkeys.computeIfAbsent(monkeyName, m -> new Monkey(monkeyName));
                 final String monkeyA = matcher.group(2);
                 start.monkeyA = monkeys.computeIfAbsent(monkeyA, m -> new Monkey(monkeyA));
                 final String monkeyB = matcher.group(4);
@@ -29,14 +29,14 @@ public class Day21MonkeyMath {
             matcher = pattern2.matcher(line);
             if (matcher.find()) {
                 final String monkeyName = matcher.group(1);
-                Monkey start = monkeys.computeIfAbsent(monkeyName, m -> new Monkey(monkeyName));
+                var start = monkeys.computeIfAbsent(monkeyName, m -> new Monkey(monkeyName));
                 start.number = Long.parseLong(matcher.group(2));
             }
         }
     }
 
     long problem1() {
-        Monkey root = monkeys.get("root");
+        var root = monkeys.get("root");
         return root.yell();
     }
 
@@ -51,9 +51,9 @@ public class Day21MonkeyMath {
     }
 
     void validate(long x) {
-        Monkey monkeyA = monkeys.get("root").monkeyA;
-        Monkey monkeyB = monkeys.get("root").monkeyB;
-        Monkey humn = monkeys.get("humn");
+        var monkeyA = monkeys.get("root").monkeyA;
+        var monkeyB = monkeys.get("root").monkeyB;
+        var humn = monkeys.get("humn");
         humn.number = x;
 
         log.info("Check. monkey A yell({}) = {}", x, monkeyA.yell());
@@ -61,9 +61,9 @@ public class Day21MonkeyMath {
     }
 
     long f(long x) {
-        Monkey monkeyA = monkeys.get("root").monkeyA;
-        Monkey monkeyB = monkeys.get("root").monkeyB;
-        Monkey humn = monkeys.get("humn");
+        var monkeyA = monkeys.get("root").monkeyA;
+        var monkeyB = monkeys.get("root").monkeyB;
+        var humn = monkeys.get("humn");
         humn.number = x;
         return monkeyA.yell() - monkeyB.yell();
     }

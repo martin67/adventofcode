@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 public class Day3TobogganTrajectory {
-    private final Set<Position> trees = new HashSet<>();
-    private final int width;
-    private final int height;
+    final Set<Position> trees = new HashSet<>();
+    final int width;
+    final int height;
 
-    public Day3TobogganTrajectory(List<String> inputLines) {
+    Day3TobogganTrajectory(List<String> inputLines) {
         int x = 0;
         int y = 0;
 
@@ -29,8 +29,8 @@ public class Day3TobogganTrajectory {
         height = y;
     }
 
-    int treesEncountered(int right, int down) {
-        Position position = new Position(0, 0);
+    int problem1(int right, int down) {
+        var position = new Position(0, 0);
         int numberOfTrees = 0;
 
         while (position.getY() < height) {
@@ -47,14 +47,14 @@ public class Day3TobogganTrajectory {
         return numberOfTrees;
     }
 
-    long treesSecondEncounter() {
+    long problem2() {
         long numberOfTrees;
 
-        numberOfTrees = treesEncountered(1, 1);
-        numberOfTrees *= treesEncountered(3, 1);
-        numberOfTrees *= treesEncountered(5, 1);
-        numberOfTrees *= treesEncountered(7, 1);
-        numberOfTrees *= treesEncountered(1, 2);
+        numberOfTrees = problem1(1, 1);
+        numberOfTrees *= problem1(3, 1);
+        numberOfTrees *= problem1(5, 1);
+        numberOfTrees *= problem1(7, 1);
+        numberOfTrees *= problem1(1, 2);
 
         return numberOfTrees;
     }

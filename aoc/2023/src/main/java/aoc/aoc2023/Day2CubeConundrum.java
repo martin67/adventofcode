@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class Day2CubeConundrum {
     final List<Game> games = new ArrayList<>();
 
-    public Day2CubeConundrum(List<String> inputLines) {
+    Day2CubeConundrum(List<String> inputLines) {
         var pattern = Pattern.compile("(\\d+) (\\w+)");
 
         for (String line : inputLines) {
@@ -46,7 +46,7 @@ public class Day2CubeConundrum {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         int gameIndex = 1;
         int sum = 0;
         for (var game : games) {
@@ -66,7 +66,7 @@ public class Day2CubeConundrum {
         return sum;
     }
 
-    public int problem2() {
+    int problem2() {
         int sum = 0;
         for (var game : games) {
             int maxRed = 0;

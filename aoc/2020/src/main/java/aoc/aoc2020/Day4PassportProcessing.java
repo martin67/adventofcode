@@ -6,16 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 public class Day4PassportProcessing {
-    private final List<Passport> passports = new ArrayList<>();
+    final List<Passport> passports = new ArrayList<>();
 
-    public Day4PassportProcessing(List<String> inputLines) {
+    Day4PassportProcessing(List<String> inputLines) {
         Map<String, String> fields = new HashMap<>();
         for (String line : inputLines) {
             if (line.isEmpty()) {
                 savePassport(fields);
             } else {
-                String[] parts = line.split(" ");
-                for (String part : parts) {
+                for (String part : line.split(" ")) {
                     String[] keyValues = part.split(":");
                     fields.put(keyValues[0], keyValues[1]);
                 }
@@ -24,8 +23,8 @@ public class Day4PassportProcessing {
         savePassport(fields);
     }
 
-    private void savePassport(Map<String, String> fields) {
-        Passport passport = new Passport();
+    void savePassport(Map<String, String> fields) {
+        var passport = new Passport();
         for (String key : fields.keySet()) {
             String value = fields.get(key);
             switch (key) {
@@ -43,11 +42,11 @@ public class Day4PassportProcessing {
         fields.clear();
     }
 
-    long validPassports() {
+    long problem1() {
         return passports.stream().filter(Passport::valid).count();
     }
 
-    long presentAndValidPassports() {
+    long problem2() {
         return passports.stream().filter(Passport::presentAndValid).count();
     }
 

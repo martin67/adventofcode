@@ -17,13 +17,13 @@ class Day5BinaryBoardingTest {
             "911, day5.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day5BinaryBoarding(inputLines).highestId()).isEqualTo(expected);
+        assertThat(new Day5BinaryBoarding(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
     @CsvSource({"629, day5.txt"})
     void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day5BinaryBoarding(inputLines).myId()).isEqualTo(expected);
+        assertThat(new Day5BinaryBoarding(inputLines).problem2()).isEqualTo(expected);
     }
 }

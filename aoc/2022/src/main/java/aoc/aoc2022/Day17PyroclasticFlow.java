@@ -4,7 +4,6 @@ import aoc.common.Direction;
 import aoc.common.Position;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +31,7 @@ public class Day17PyroclasticFlow {
         shapes.add(new Shape(2, 2, Set.of(new Position(0, 0), new Position(1, 0),
                 new Position(0, 1), new Position(1, 1))));
 
-        jets = inputLines.get(0);
+        jets = inputLines.getFirst();
         log.info("Number of jets: {}", jets.length());
     }
 
@@ -74,27 +73,27 @@ public class Day17PyroclasticFlow {
             log.info("1 i: {} {}, highest: {}, diff from previous {}", loop * iterations, loop, highestRock, highestRock - previous);
 
             for (int i = 0; i < loop; i++) {
-                Shape s = new Shape(shapes.get(i % 5));
-                s.position = new Position(2, highestRock - s.height - 3);
+                var shape = new Shape(shapes.get(i % 5));
+                shape.position = new Position(2, highestRock - shape.height - 3);
                 do {
-                    s.moveSideways(getJetDirection());
-                } while (s.moveDown());
-                cave.addAll(s.getPositions());
-                if (s.position.getY() < highestRock) {
-                    highestRock = s.position.getY();
+                    shape.moveSideways(getJetDirection());
+                } while (shape.moveDown());
+                cave.addAll(shape.getPositions());
+                if (shape.position.getY() < highestRock) {
+                    highestRock = shape.position.getY();
                 }
             }
             log.info("2 i: {} {}, highest: {}, diff from previous {}", loop * iterations, loop, highestRock, highestRock - previous);
 
             for (int i = 0; i < 43618; i++) {
-                Shape s = new Shape(shapes.get(i % 5));
-                s.position = new Position(2, highestRock - s.height - 3);
+                var shape = new Shape(shapes.get(i % 5));
+                shape.position = new Position(2, highestRock - shape.height - 3);
                 do {
-                    s.moveSideways(getJetDirection());
-                } while (s.moveDown());
-                cave.addAll(s.getPositions());
-                if (s.position.getY() < highestRock) {
-                    highestRock = s.position.getY();
+                    shape.moveSideways(getJetDirection());
+                } while (shape.moveDown());
+                cave.addAll(shape.getPositions());
+                if (shape.position.getY() < highestRock) {
+                    highestRock = shape.position.getY();
                 }
             }
             log.info("3 i: {} {}, highest: {}, diff from previous {}", loop * iterations, loop, highestRock, highestRock - previous);
@@ -165,7 +164,7 @@ public class Day17PyroclasticFlow {
                 }
             }
             log.info("i: {}, highest: {}, diff from previous {}", i, highestRock, highestRock - previous);
-            delta.add(previous -  highestRock);
+            delta.add(previous - highestRock);
             previous = highestRock;
         }
         return 0;
@@ -177,8 +176,9 @@ public class Day17PyroclasticFlow {
 
         }
     }
+
     Direction getJetDirection() {
-        Direction dir = switch (jets.charAt(jetPosition)) {
+        var direction = switch (jets.charAt(jetPosition)) {
             case '>' -> Direction.Right;
             case '<' -> Direction.Left;
             default -> throw new IllegalStateException("Unexpected value: " + jets.charAt(jetPosition));
@@ -187,7 +187,7 @@ public class Day17PyroclasticFlow {
         if (jetPosition == jets.length()) {
             jetPosition = 0;
         }
-        return dir;
+        return direction;
     }
 
     class Shape {

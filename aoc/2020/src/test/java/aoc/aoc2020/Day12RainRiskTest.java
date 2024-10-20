@@ -17,7 +17,7 @@ class Day12RainRiskTest {
             "636, day12.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day12RainRisk(inputLines).distance()).isEqualTo(expected);
+        assertThat(new Day12RainRisk(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -25,6 +25,6 @@ class Day12RainRiskTest {
             "26841, day12.txt"})
     void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day12RainRisk(inputLines).distanceWithWaypoint()).isEqualTo(expected);
+        assertThat(new Day12RainRisk(inputLines).problem2()).isEqualTo(expected);
     }
 }

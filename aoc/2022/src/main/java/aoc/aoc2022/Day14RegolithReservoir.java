@@ -15,7 +15,7 @@ public class Day14RegolithReservoir {
     int xMax;
     int yMax;
 
-    public Day14RegolithReservoir(List<String> inputLines) {
+    Day14RegolithReservoir(List<String> inputLines) {
         var pattern = Pattern.compile("(\\d+),(\\d+)");
 
         for (String line : inputLines) {

@@ -12,21 +12,21 @@ import lombok.extern.slf4j.Slf4j;
 public class Day7CamelCards {
     final List<Hand> hands = new ArrayList<>();
 
-    public Day7CamelCards(List<String> inputLines) {
+    Day7CamelCards(List<String> inputLines) {
         for (String line : inputLines) {
             String[] s = line.split(" ");
             hands.add(new Hand(s[0], Integer.parseInt(s[1])));
         }
     }
 
-    public int problem1() {
+    int problem1() {
         hands.sort(new BasicHandComparator());
         return hands.stream()
                 .mapToInt(h -> h.bid * (hands.size() - hands.indexOf(h)))
                 .sum();
     }
 
-    public int problem2() {
+    int problem2() {
         hands.sort(new JokerHandComparator());
         return hands.stream()
                 .mapToInt(h -> h.bid * (hands.size() - hands.indexOf(h)))

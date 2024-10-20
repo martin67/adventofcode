@@ -3,13 +3,13 @@ package aoc.aoc2020;
 import java.util.*;
 
 public class Day6CustomCustoms {
-    private final List<String> answers;
+    final List<String> answers;
 
-    public Day6CustomCustoms(List<String> inputLines) {
+    Day6CustomCustoms(List<String> inputLines) {
         answers = inputLines;
     }
 
-    int questionsWithYes() {
+    int problem1() {
         int passwordsOk = 0;
         Set<Character> questions = new HashSet<>();
         for (String line : answers) {
@@ -27,14 +27,14 @@ public class Day6CustomCustoms {
         return passwordsOk;
     }
 
-    int questionsWithEveryoneYes() {
+    int problem2() {
         Map<Character, Integer> questions = new HashMap<>();
         int passwordsOk = 0;
         int personsInGroup = 0;
 
         for (String line : answers) {
             if (line.isEmpty()) {
-                for (Character c : questions.keySet()) {
+                for (char c : questions.keySet()) {
                     if (questions.get(c) == personsInGroup) {
                         passwordsOk++;
                     }
@@ -49,7 +49,7 @@ public class Day6CustomCustoms {
                 personsInGroup++;
             }
         }
-        for (Character c : questions.keySet()) {
+        for (char c : questions.keySet()) {
             if (questions.get(c) == personsInGroup) {
                 passwordsOk++;
             }

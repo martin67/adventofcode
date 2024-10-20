@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day3BinaryDiagnostic {
+    final List<Integer> numbers = new ArrayList<>();
+    int width;
 
-    private final List<Integer> numbers = new ArrayList<>();
-    private int width;
-
-    public Day3BinaryDiagnostic(List<String> inputLines) {
+    Day3BinaryDiagnostic(List<String> inputLines) {
         for (String line : inputLines) {
             width = line.length();
             numbers.add(Integer.parseInt(line, 2));
         }
     }
 
-    public int problem1() {
+    int problem1() {
         int gamma = 0;
         int epsilon = 0;
 
@@ -40,24 +39,24 @@ public class Day3BinaryDiagnostic {
         return gamma * epsilon;
     }
 
-    public int problem2() {
-
+    int problem2() {
         List<Integer> numbersCopy = new ArrayList<>(numbers);
+
         for (int i = 0; i < width; i++) {
             numbersCopy = bitCriteria(numbersCopy, i, true);
         }
-        int oxygen = numbersCopy.get(0);
+        int oxygen = numbersCopy.getFirst();
 
         numbersCopy = new ArrayList<>(numbers);
         for (int i = 0; i < width; i++) {
             numbersCopy = bitCriteria(numbersCopy, i, false);
         }
-        int co2 = numbersCopy.get(0);
+        int co2 = numbersCopy.getFirst();
 
         return oxygen * co2;
     }
 
-    private List<Integer> bitCriteria(List<Integer> in, int position, boolean oxygen) {
+    List<Integer> bitCriteria(List<Integer> in, int position, boolean oxygen) {
         List<Integer> zeros = new ArrayList<>();
         List<Integer> ones = new ArrayList<>();
 

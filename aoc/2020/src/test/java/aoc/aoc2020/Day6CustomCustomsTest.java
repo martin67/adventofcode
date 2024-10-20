@@ -18,7 +18,7 @@ class Day6CustomCustomsTest {
             "6742, day6.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day6CustomCustoms(inputLines).questionsWithYes()).isEqualTo(expected);
+        assertThat(new Day6CustomCustoms(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -27,6 +27,6 @@ class Day6CustomCustomsTest {
             "3447, day6.txt"})
     void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day6CustomCustoms(inputLines).questionsWithEveryoneYes()).isEqualTo(expected);
+        assertThat(new Day6CustomCustoms(inputLines).problem2()).isEqualTo(expected);
     }
 }

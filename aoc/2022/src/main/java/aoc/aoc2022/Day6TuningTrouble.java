@@ -8,11 +8,10 @@ import java.util.Set;
 
 @Slf4j
 public class Day6TuningTrouble {
-
     final String line;
 
-    public Day6TuningTrouble(List<String> inputLines) {
-        line = inputLines.get(0);
+    Day6TuningTrouble(List<String> inputLines) {
+        line = inputLines.getFirst();
     }
 
     int problem(int length) {

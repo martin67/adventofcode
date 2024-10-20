@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Day6WaitForIt {
     final List<Race> races = new ArrayList<>();
 
-    public Day6WaitForIt(List<String> inputLines) {
+    Day6WaitForIt(List<String> inputLines) {
         for (String line : inputLines) {
             String[] s = line.split("\\s+");
 
@@ -28,7 +28,7 @@ public class Day6WaitForIt {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         int totalWins = 1;
         for (var race : races) {
             int wins = 0;
@@ -43,7 +43,7 @@ public class Day6WaitForIt {
         return totalWins;
     }
 
-    public long problem2() {
+    long problem2() {
         var timeString = new StringBuilder();
         var distanceString = new StringBuilder();
 

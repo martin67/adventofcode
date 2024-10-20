@@ -6,20 +6,20 @@ import java.util.List;
 import java.util.Set;
 
 public class Day8HandheldHalting {
-    private final List<Instruction> instructions = new ArrayList<>();
+    final List<Instruction> instructions = new ArrayList<>();
 
-    public Day8HandheldHalting(List<String> inputLines) {
+    Day8HandheldHalting(List<String> inputLines) {
         for (String line : inputLines) {
             String[] s = line.split(" ");
             instructions.add(new Instruction(s[0], Integer.parseInt(s[1])));
         }
     }
 
-    int accumulatorValue() {
+    int problem1() {
         return runProgram(instructions).value;
     }
 
-    private Result runProgram(List<Instruction> program) {
+    Result runProgram(List<Instruction> program) {
         int accumulator = 0;
         int pc = 0;
         Set<Integer> instructionsRun = new HashSet<>();
@@ -42,13 +42,13 @@ public class Day8HandheldHalting {
         return new Result((pc != program.size()), accumulator);
     }
 
-    int accumulatorValueNoLoop() {
+    int problem2() {
         int instructionToChange = 0;
         List<Instruction> modifiedInstructions;
         Result result;
         do {
             modifiedInstructions = new ArrayList<>();
-            for (Instruction instruction : instructions) {
+            for (var instruction : instructions) {
                 modifiedInstructions.add(new Instruction(instruction.operation, instruction.argument));
             }
 

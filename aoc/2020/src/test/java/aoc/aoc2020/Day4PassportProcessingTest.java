@@ -17,7 +17,7 @@ class Day4PassportProcessingTest {
             "219, day4.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day4PassportProcessing(inputLines).validPassports()).isEqualTo(expected);
+        assertThat(new Day4PassportProcessing(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -26,6 +26,6 @@ class Day4PassportProcessingTest {
             "127, day4.txt"})
     void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day4PassportProcessing(inputLines).presentAndValidPassports()).isEqualTo(expected);
+        assertThat(new Day4PassportProcessing(inputLines).problem2()).isEqualTo(expected);
     }
 }

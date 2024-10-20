@@ -7,10 +7,9 @@ import java.util.regex.Pattern;
 
 
 public class Day7HandyHaversacks {
+    final Map<String, Bag> bags = new HashMap<>();
 
-    private final Map<String, Bag> bags = new HashMap<>();
-
-    public Day7HandyHaversacks(List<String> inputLines) {
+    Day7HandyHaversacks(List<String> inputLines) {
         for (String line : inputLines) {
             String[] firstSplit = line.split(" bags contain ");
             String color = firstSplit[0];
@@ -44,11 +43,11 @@ public class Day7HandyHaversacks {
         }
     }
 
-    long numberOfBags() {
+    long problem1() {
         return bags.values().stream().filter(Bag::containsGoldBag).count() - 1;
     }
 
-    long numberOfBagsInside() {
+    long problem2() {
         return bags.get("shiny gold").numberOfBagsInside() - 1;
     }
 
@@ -67,7 +66,7 @@ public class Day7HandyHaversacks {
                 return false;
             } else {
                 boolean found = false;
-                for (Bag bag : content.keySet()) {
+                for (var bag : content.keySet()) {
                     boolean res = bag.containsGoldBag();
                     if (res) {
                         found = true;
@@ -79,7 +78,7 @@ public class Day7HandyHaversacks {
 
         int numberOfBagsInside() {
             int numberOfBags = 1;
-            for (Bag bag : content.keySet()) {
+            for (var bag : content.keySet()) {
                 numberOfBags += content.get(bag) * bag.numberOfBagsInside();
             }
             return numberOfBags;

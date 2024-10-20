@@ -10,10 +10,10 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class Day19MonsterMessages {
-    private final Map<Integer, String> rules = new HashMap<>();
-    private final List<String> messages = new ArrayList<>();
+    final Map<Integer, String> rules = new HashMap<>();
+    final List<String> messages = new ArrayList<>();
 
-    public Day19MonsterMessages(List<String> inputLines) {
+    Day19MonsterMessages(List<String> inputLines) {
         var rulePattern = Pattern.compile("^(\\d+): (.*)$");
         var messagePattern = Pattern.compile("^(\\w+)$");
 
@@ -29,7 +29,7 @@ public class Day19MonsterMessages {
         }
     }
 
-    public long problem1() {
+    long problem1() {
         String regex = rules.get(0);
         while (!regex.matches("^[a-z |()]+$")) {
             StringBuilder builder = new StringBuilder();
@@ -47,7 +47,7 @@ public class Day19MonsterMessages {
         return messages.stream().filter(a -> a.matches(pattern)).count();
     }
 
-    public long problem2() {
+    long problem2() {
         rules.put(8, "42 | 42 8");
         rules.put(11, "42 31 | 42 11 31");
 

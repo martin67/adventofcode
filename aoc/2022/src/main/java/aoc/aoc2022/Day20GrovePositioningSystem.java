@@ -7,11 +7,10 @@ import java.util.List;
 
 @Slf4j
 public class Day20GrovePositioningSystem {
-
     final List<Long> numbers = new ArrayList<>();
     final CircularLinkedList cll = new CircularLinkedList();
 
-    public Day20GrovePositioningSystem(List<String> inputLines) {
+    Day20GrovePositioningSystem(List<String> inputLines) {
         int index = 0;
         for (String line : inputLines) {
             long number = Long.parseLong(line);
@@ -25,10 +24,10 @@ public class Day20GrovePositioningSystem {
         for (int i = 0; i < numbers.size(); i++) {
             cll.move(i, numbers.get(i));
         }
-        Node zeroNode = cll.findNode(0);
-        Node node1 = cll.move(zeroNode, 1000);
-        Node node2 = cll.move(node1, 1000);
-        Node node3 = cll.move(node2, 1000);
+        var zeroNode = cll.findNode(0);
+        var node1 = cll.move(zeroNode, 1000);
+        var node2 = cll.move(node1, 1000);
+        var node3 = cll.move(node2, 1000);
         return node1.value + node2.value + node3.value;
     }
 
@@ -40,10 +39,10 @@ public class Day20GrovePositioningSystem {
                 cll.move(j, numbers.get(j));
             }
         }
-        Node zeroNode = cll.findNode(0);
-        Node node1 = cll.move(zeroNode, 1000);
-        Node node2 = cll.move(node1, 1000);
-        Node node3 = cll.move(node2, 1000);
+        var zeroNode = cll.findNode(0);
+        var node1 = cll.move(zeroNode, 1000);
+        var node2 = cll.move(node1, 1000);
+        var node3 = cll.move(node2, 1000);
         return (node1.value + node2.value + node3.value) * decryptionKey;
     }
 
@@ -63,7 +62,7 @@ public class Day20GrovePositioningSystem {
         private Node head = null;
 
         public void addNode(long value, int index) {
-            Node newNode = new Node(value, index);
+            var newNode = new Node(value, index);
 
             if (head == null) {
                 head = newNode;
@@ -78,7 +77,7 @@ public class Day20GrovePositioningSystem {
         }
 
         public Node findNode(int searchValue) {
-            Node currentNode = head;
+            var currentNode = head;
 
             do {
                 if (currentNode.value == searchValue) {
@@ -90,7 +89,7 @@ public class Day20GrovePositioningSystem {
         }
 
         Node move(Node node, int steps) {
-            Node currentNode = node;
+            var currentNode = node;
             for (int i = 0; i < steps; i++) {
                 currentNode = currentNode.next;
             }
@@ -99,12 +98,12 @@ public class Day20GrovePositioningSystem {
 
         void move(int index, long number) {
             // find node with index == index
-            Node nodeToMove = head;
+            var nodeToMove = head;
             while (nodeToMove.index != index) {
                 nodeToMove = nodeToMove.next;
             }
 
-            Node nodeToInsert = nodeToMove;
+            var nodeToInsert = nodeToMove;
             number = number % (numbers.size() - 1);
 
             if (number < 0) {
@@ -140,5 +139,4 @@ public class Day20GrovePositioningSystem {
             }
         }
     }
-
 }

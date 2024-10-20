@@ -7,10 +7,9 @@ import java.util.*;
 
 @Slf4j
 public class Day13DistressSignal {
-
     final List<PacketPair> packetPairs = new ArrayList<>();
 
-    public Day13DistressSignal(List<String> inputLines) {
+     Day13DistressSignal(List<String> inputLines) {
         String a = null;
         int index = 1;
         for (String line : inputLines) {
@@ -28,7 +27,7 @@ public class Day13DistressSignal {
 
     int problem1() {
         int result = 0;
-        for (PacketPair packetPair : packetPairs) {
+        for (var packetPair : packetPairs) {
 //            log.info("-----------");
 //            List<Packet> myList = new ArrayList<>();
 //            flatten(myList, packetPair.left2);
@@ -251,8 +250,8 @@ public class Day13DistressSignal {
         }
 
         Boolean isInOrder() {
-            Packet leftPacket = left.packets.get(0);
-            Packet rightPacket = right.packets.get(0);
+            Packet leftPacket = left.packets.getFirst();
+            Packet rightPacket = right.packets.getFirst();
             boolean ready = false;
             while (!ready) {
                 if (leftPacket.number != null && rightPacket.number != null) {

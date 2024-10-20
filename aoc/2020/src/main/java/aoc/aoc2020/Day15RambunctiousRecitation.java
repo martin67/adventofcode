@@ -5,11 +5,11 @@ import java.util.Map;
 
 public class Day15RambunctiousRecitation {
     // number, round
-    private final Map<Integer, Integer> lastSpoken = new HashMap<>();
-    private final Map<Integer, Integer> lastSpokenBeforeThen = new HashMap<>();
-    private int spokeLast;
+    final Map<Integer, Integer> lastSpoken = new HashMap<>();
+    final Map<Integer, Integer> lastSpokenBeforeThen = new HashMap<>();
+    int spokeLast;
 
-    public Day15RambunctiousRecitation(String numbers) {
+    Day15RambunctiousRecitation(String numbers) {
         int index = 1;
         for (String s : numbers.split(",")) {
             int number = Integer.parseInt(s);
@@ -20,7 +20,7 @@ public class Day15RambunctiousRecitation {
         }
     }
 
-    int numberSpoken(int rounds) {
+    int problem(int rounds) {
         int lastNumberSpoken;
         for (int turn = lastSpoken.size() + 1; turn < rounds + 1; turn++) {
 

@@ -9,7 +9,7 @@ import java.util.List;
 public class Day9MirageMaintenance {
     List<History> histories = new ArrayList<>();
 
-    public Day9MirageMaintenance(List<String> inputLines) {
+    Day9MirageMaintenance(List<String> inputLines) {
         for (String line : inputLines) {
             var history = new History();
             List<Integer> values = new ArrayList<>();
@@ -21,22 +21,22 @@ public class Day9MirageMaintenance {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         return histories.stream()
                 .mapToInt(h -> {
                     h.createSequences();
                     h.extrapolate();
-                    return h.values.get(0).get(h.values.get(0).size() - 1);
+                    return h.values.getFirst().getLast();
                 })
                 .sum();
     }
 
-    public int problem2() {
+    int problem2() {
         return histories.stream()
                 .mapToInt(h -> {
                     h.createSequences();
                     h.extrapolateBackwards();
-                    return h.values.get(0).get(0);
+                    return h.values.getFirst().getFirst();
                 })
                 .sum();
     }
@@ -45,7 +45,7 @@ public class Day9MirageMaintenance {
         List<List<Integer>> values = new ArrayList<>();
 
         List<Integer> lastValue() {
-            return values.get(values.size() - 1);
+            return values.getLast();
         }
 
         List<Integer> nextSequence() {
@@ -72,7 +72,7 @@ public class Day9MirageMaintenance {
             for (int i = values.size() - 2; i > -1; i--) {
                 var value = values.get(i);
                 var prevValue = values.get(i + 1);
-                value.add(value.get(value.size() - 1) + prevValue.get(prevValue.size() - 1));
+                value.add(value.getLast() + prevValue.getLast());
             }
         }
 
@@ -81,7 +81,7 @@ public class Day9MirageMaintenance {
             for (int i = values.size() - 2; i > -1; i--) {
                 var value = values.get(i);
                 var prevValue = values.get(i + 1);
-                value.add(0, value.get(0) - prevValue.get(0));
+                value.addFirst(value.getFirst() - prevValue.getFirst());
             }
         }
     }

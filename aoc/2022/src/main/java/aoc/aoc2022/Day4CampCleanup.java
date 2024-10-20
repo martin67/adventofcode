@@ -11,7 +11,7 @@ public class Day4CampCleanup {
 
     final List<Pair> pairs = new ArrayList<>();
 
-    public Day4CampCleanup(List<String> inputLines) {
+    Day4CampCleanup(List<String> inputLines) {
         var pattern = Pattern.compile("(\\d+)-(\\d+),(\\d+)-(\\d+)");
 
         for (String line : inputLines) {

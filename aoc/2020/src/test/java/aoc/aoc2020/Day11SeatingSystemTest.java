@@ -17,7 +17,7 @@ class Day11SeatingSystemTest {
             "2204, day11.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day11SeatingSystem(inputLines).seatsOccupied()).isEqualTo(expected);
+        assertThat(new Day11SeatingSystem(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -25,6 +25,6 @@ class Day11SeatingSystemTest {
             "1986, day11.txt"})
     void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day11SeatingSystem(inputLines).seatsOccupied2()).isEqualTo(expected);
+        assertThat(new Day11SeatingSystem(inputLines).problem2()).isEqualTo(expected);
     }
 }

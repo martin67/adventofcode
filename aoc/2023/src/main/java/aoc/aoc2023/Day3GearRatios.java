@@ -15,7 +15,7 @@ public class Day3GearRatios {
     final Set<Position> symbols = new HashSet<>();
     final Set<Position> gears = new HashSet<>();
 
-    public Day3GearRatios(List<String> inputLines) {
+    Day3GearRatios(List<String> inputLines) {
         int y = 0;
         for (String line : inputLines) {
             int x = 0;
@@ -43,7 +43,7 @@ public class Day3GearRatios {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         Set<Number> foundNumbers = new HashSet<>();
 
         for (var position : symbols) {
@@ -58,7 +58,7 @@ public class Day3GearRatios {
         return foundNumbers.stream().mapToInt(Number::getNumber).sum();
     }
 
-    public int problem2() {
+    int problem2() {
         int gearRatios = 0;
 
         for (var position : gears) {

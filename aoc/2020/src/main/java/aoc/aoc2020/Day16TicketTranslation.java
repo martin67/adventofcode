@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class Day16TicketTranslation {
-    private final List<TicketField> ticketFields = new ArrayList<>();
-    private final List<Ticket> tickets = new ArrayList<>();
-    private Ticket myTicket;
+    final List<TicketField> ticketFields = new ArrayList<>();
+    final List<Ticket> tickets = new ArrayList<>();
+    Ticket myTicket;
 
-    public Day16TicketTranslation(List<String> inputLines) {
+    Day16TicketTranslation(List<String> inputLines) {
         var fieldPattern = Pattern.compile("^(.*): (\\d+)-(\\d+) or (\\d+)-(\\d+)$");
         var ticketPattern = Pattern.compile("^((\\d+)(,\\d+)*)$");
 
@@ -43,12 +43,12 @@ public class Day16TicketTranslation {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         int ticketErrorSum = 0;
-        for (Ticket ticket : tickets) {
+        for (var ticket : tickets) {
             for (int number : ticket.numbers) {
                 boolean numberIsOk = false;
-                for (TicketField ticketField : ticketFields) {
+                for (var ticketField : ticketFields) {
                     if (ticketField.validNumber(number)) {
                         numberIsOk = true;
                         break;
@@ -62,14 +62,14 @@ public class Day16TicketTranslation {
         return ticketErrorSum;
     }
 
-    public long problem2() {
+    long problem2() {
         List<Ticket> validTickets = new ArrayList<>();
 
-        for (Ticket ticket : tickets) {
+        for (var ticket : tickets) {
             boolean allNumbersOk = true;
             for (int number : ticket.numbers) {
                 boolean numberIsOk = false;
-                for (TicketField ticketField : ticketFields) {
+                for (var ticketField : ticketFields) {
                     if (ticketField.validNumber(number)) {
                         numberIsOk = true;
                         break;
@@ -89,7 +89,7 @@ public class Day16TicketTranslation {
         for (int i = 0; i < ticketFields.size(); i++) {
             positions.add(new ArrayList<>());
         }
-        for (Ticket ticket : validTickets) {
+        for (var ticket : validTickets) {
             int i = 0;
             for (int number : ticket.numbers) {
                 positions.get(i).add(number);
@@ -108,12 +108,12 @@ public class Day16TicketTranslation {
             List<Integer> finalPosition = null;
 
             // Loopa ett varv på positionerna
-            for (List<Integer> position : positions) {
+            for (var position : positions) {
                 // Kolla om det är någon position som bara kan vara på ett ticketfield. dvs
                 // det finns bara ett ticketfield som är ok för alla numbers i position.
                 List<List<Integer>> positionsWithAllNumbers = new ArrayList<>();
                 TicketField fullTicketField = null;
-                for (TicketField ticketField : ticketFields) {
+                for (var ticketField : ticketFields) {
                     int numberOfOkNumbers = 0;
                     for (int number : position) {
                         if (ticketField.validNumber(number)) {

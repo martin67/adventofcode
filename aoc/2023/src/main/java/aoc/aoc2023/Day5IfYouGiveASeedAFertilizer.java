@@ -23,7 +23,7 @@ public class Day5IfYouGiveASeedAFertilizer {
     final List<Long> seeds = new ArrayList<>();
     final List<Range<Long>> seedRanges = new ArrayList<>();
 
-    public Day5IfYouGiveASeedAFertilizer(List<String> inputLines) {
+    Day5IfYouGiveASeedAFertilizer(List<String> inputLines) {
         var pattern = Pattern.compile("(\\w+)-to-(\\w+) map:");
 
         SeedMap seedMap = null;
@@ -55,7 +55,7 @@ public class Day5IfYouGiveASeedAFertilizer {
         }
     }
 
-    public long problem1() {
+    long problem1() {
         long lowestLocation = Integer.MAX_VALUE;
 
         for (long seed : seeds) {
@@ -74,7 +74,7 @@ public class Day5IfYouGiveASeedAFertilizer {
         return lowestLocation;
     }
 
-    public long problem2() {
+    long problem2() {
         long totalLow = Long.MAX_VALUE;
 
         for (var seedRange : seedRanges) {

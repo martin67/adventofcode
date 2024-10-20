@@ -18,7 +18,7 @@ class Day10AdapterArrayTest {
             "2210, day10.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day10AdapterArray(inputLines).joltDifference()).isEqualTo(expected);
+        assertThat(new Day10AdapterArray(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -27,6 +27,6 @@ class Day10AdapterArrayTest {
             "7086739046912, day10.txt"})
     void problem2(long expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day10AdapterArray(inputLines).adapterCombinations2()).isEqualTo(expected);
+        assertThat(new Day10AdapterArray(inputLines).problem2()).isEqualTo(expected);
     }
 }

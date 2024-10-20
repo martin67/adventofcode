@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day9EncodingError {
-    private final int preamble;
-    private final List<Long> numbers = new ArrayList<>();
+    final int preamble;
+    final List<Long> numbers = new ArrayList<>();
 
-    public Day9EncodingError(int preamble, List<String> inputLines) {
+    Day9EncodingError(int preamble, List<String> inputLines) {
         this.preamble = preamble;
         for (String line : inputLines) {
             numbers.add(Long.parseLong(line));
         }
     }
 
-    long invalidNumber() {
+    long problem1() {
         for (int i = preamble; i < numbers.size(); i++) {
             if (!checkSum(i, numbers.get(i))) {
                 return numbers.get(i);
@@ -23,7 +23,7 @@ public class Day9EncodingError {
         return 0;
     }
 
-    private boolean checkSum(int index, long number) {
+    boolean checkSum(int index, long number) {
         for (int i = index - preamble; i < index; i++) {
             for (int j = index - preamble; j < index; j++) {
                 if (i != j && numbers.get(i) + numbers.get(j) == number) {
@@ -34,8 +34,8 @@ public class Day9EncodingError {
         return false;
     }
 
-    long encryptionWeakness() {
-        long invalidNumber = invalidNumber();
+    long problem2() {
+        long invalidNumber = problem1();
 
         for (int i = 0; i < numbers.size(); i++) {
             int end = findRange(i, invalidNumber);

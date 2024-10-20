@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class Day4Scratchcards {
     final List<Card> cards = new ArrayList<>();
 
-    public Day4Scratchcards(List<String> inputLines) {
+    Day4Scratchcards(List<String> inputLines) {
         var pattern = Pattern.compile("Card\\s+(\\d+):\\s+(.*) \\|\\s+(.*)");
 
         for (String line : inputLines) {
@@ -30,7 +30,7 @@ public class Day4Scratchcards {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         int points = 0;
         for (var card : cards) {
             int hits = 0;
@@ -44,7 +44,7 @@ public class Day4Scratchcards {
         return points;
     }
 
-    public int problem2() {
+    int problem2() {
         for (var card : cards) {
             int hits = 0;
             for (int number : card.numbers) {

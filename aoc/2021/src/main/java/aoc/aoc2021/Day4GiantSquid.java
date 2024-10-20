@@ -9,16 +9,14 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class Day4GiantSquid {
+    final List<Board> boards = new ArrayList<>();
+    List<Integer> draws = new ArrayList<>();
 
-    private final List<Board> boards = new ArrayList<>();
-    private List<Integer> draws = new ArrayList<>();
-
-    public Day4GiantSquid(List<String> inputLines) {
+    Day4GiantSquid(List<String> inputLines) {
         int lineNumber = 0;
         List<String> boardLines = null;
 
         for (String line : inputLines) {
-
             if (lineNumber == 0) {
                 draws = Stream.of(line.split(","))
                         .map(Integer::parseInt)
@@ -35,10 +33,9 @@ public class Day4GiantSquid {
             }
             lineNumber++;
         }
-
     }
 
-    public int problem1() {
+    int problem1() {
         for (int draw : draws) {
             for (Board board : boards) {
                 board.addDraw(draw);
@@ -51,13 +48,13 @@ public class Day4GiantSquid {
         return 0;
     }
 
-    public int problem2() {
+    int problem2() {
         Map<Board, Integer> winnerDraws = new HashMap<>();
         Map<Board, Integer> winnerScores = new HashMap<>();
 
         int round = 0;
         for (int draw : draws) {
-            for (Board board : boards) {
+            for (var board : boards) {
                 board.addDraw(draw);
                 if (board.isBingo()) {
                     if (!winnerDraws.containsKey(board)) {
@@ -70,7 +67,7 @@ public class Day4GiantSquid {
         }
 
         // get the last to win,
-        Board lastWinner = Collections.max(winnerDraws.entrySet(), Map.Entry.comparingByValue()).getKey();
+        var lastWinner = Collections.max(winnerDraws.entrySet(), Map.Entry.comparingByValue()).getKey();
         return winnerScores.get(lastWinner);
     }
 

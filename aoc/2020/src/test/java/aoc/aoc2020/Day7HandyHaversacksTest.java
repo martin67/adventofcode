@@ -17,7 +17,7 @@ class Day7HandyHaversacksTest {
             "185, day7.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day7HandyHaversacks(inputLines).numberOfBags()).isEqualTo(expected);
+        assertThat(new Day7HandyHaversacks(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
@@ -26,6 +26,6 @@ class Day7HandyHaversacksTest {
             "89084, day7.txt"})
     void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day7HandyHaversacks(inputLines).numberOfBagsInside()).isEqualTo(expected);
+        assertThat(new Day7HandyHaversacks(inputLines).problem2()).isEqualTo(expected);
     }
 }

@@ -11,14 +11,13 @@ import java.util.Set;
 
 @Slf4j
 public class Day9RopeBridge {
-
     final List<Motion> motions = new ArrayList<>();
     final Set<Position> tailVisit = new HashSet<>();
 
-    public Day9RopeBridge(List<String> inputLines) {
+    Day9RopeBridge(List<String> inputLines) {
         for (String line : inputLines) {
             String[] s = line.split(" ");
-            Direction direction = switch (s[0]) {
+            var direction = switch (s[0]) {
                 case "U" -> Direction.Up;
                 case "D" -> Direction.Down;
                 case "L" -> Direction.Left;
@@ -31,11 +30,11 @@ public class Day9RopeBridge {
     }
 
     int problem1() {
-        Position head = new Position(0, 0);
-        Position tail = head;
+        var head = new Position(0, 0);
+        var tail = head;
         tailVisit.add(tail);
 
-        for (Motion motion : motions) {
+        for (var motion : motions) {
             for (int i = 0; i < motion.steps; i++) {
                 head = head.adjacent(motion.direction);
                 tail = moveTail(head, tail);
@@ -53,7 +52,7 @@ public class Day9RopeBridge {
         tailVisit.add(new Position(0, 0));
         // head = rope(0), tail = rope(9)
 
-        for (Motion motion : motions) {
+        for (var motion : motions) {
             for (int i = 0; i < motion.steps; i++) {
                 // move head
                 rope.set(0, rope.get(0).adjacent(motion.direction));
@@ -78,8 +77,8 @@ public class Day9RopeBridge {
                 case West -> head.adjacent(Direction.East);
                 case Unknown -> {
                     // move diagonally
-                    Set<Position> adjacentToHead = head.allAdjacent();
-                    Set<Position> allPossibleTailMoves = tail.allAdjacentIncludingDiagonal();
+                    var adjacentToHead = head.allAdjacent();
+                    var allPossibleTailMoves = tail.allAdjacentIncludingDiagonal();
                     allPossibleTailMoves.retainAll(adjacentToHead);
                     if (allPossibleTailMoves.isEmpty()) {
                         // special case for corner

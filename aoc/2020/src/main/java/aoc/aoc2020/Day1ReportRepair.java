@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day1ReportRepair {
-    private static final int SUM = 2020;
-    private final List<Integer> entries = new ArrayList<>();
+     static final int SUM = 2020;
+     final List<Integer> entries = new ArrayList<>();
 
-    public Day1ReportRepair(List<String> inputLines) {
+     Day1ReportRepair(List<String> inputLines) {
         for (String line : inputLines) {
             entries.add(Integer.parseInt(line));
         }
     }
 
-    int sumAndMultiplyTwoEntries() {
+    int problem1() {
         for (int a : entries) {
             for (int b : entries) {
                 if (a + b == SUM) {
@@ -24,7 +24,7 @@ public class Day1ReportRepair {
         return 0;
     }
 
-    long sumAndMultiplyThreeEntries() {
+    long problem2() {
         for (int a : entries) {
             for (int b : entries) {
                 for (int c : entries) {

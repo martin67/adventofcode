@@ -15,7 +15,7 @@ class Day8HauntedWasteland {
     String instructions;
     final List<Node> nodes = new ArrayList<>();
 
-    public Day8HauntedWasteland(List<String> inputLines) {
+    Day8HauntedWasteland(List<String> inputLines) {
         var pattern = Pattern.compile("(\\w+) = \\((\\w+), (\\w+)\\)");
 
         for (String line : inputLines) {
@@ -44,7 +44,7 @@ class Day8HauntedWasteland {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         var start = nodes.stream().filter(n -> n.id.equals("AAA")).findFirst().orElseThrow();
         var end = nodes.stream().filter(n -> n.id.equals("ZZZ")).findFirst().orElseThrow();
         var instructionPointer = new WrappingCounter("Instruction", instructions.length());

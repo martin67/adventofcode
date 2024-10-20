@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class Day2PasswordPhilosophy {
-    private final List<PasswordAndPolicy> passwordAndPolicies = new ArrayList<>();
+    final List<PasswordAndPolicy> passwordAndPolicies = new ArrayList<>();
 
-    public Day2PasswordPhilosophy(List<String> inputLines) {
+    Day2PasswordPhilosophy(List<String> inputLines) {
         var pattern = Pattern.compile("^(\\d+)-(\\d+) (\\w): (\\w+)$");
 
         for (String line : inputLines) {
@@ -25,27 +25,25 @@ public class Day2PasswordPhilosophy {
         }
     }
 
-    long validPasswords() {
+    long problem1() {
         return passwordAndPolicies.stream().filter(PasswordAndPolicy::validPassword).count();
     }
 
-    long validPasswordsNewPolicy() {
+    long problem2() {
         return passwordAndPolicies.stream().filter(PasswordAndPolicy::validPasswordNewPolicy).count();
     }
 
     record PasswordAndPolicy(int min, int max, char letter, String password) {
 
         boolean validPassword() {
-                int frequency = CharMatcher.is(letter).countIn(password);
-
-                return (frequency >= min && frequency <= max);
-            }
-
-            boolean validPasswordNewPolicy() {
-                boolean firstPos = (password.charAt(min - 1) == letter);
-                boolean secondPos = (password.charAt(max - 1) == letter);
-
-                return ((firstPos && !secondPos) || (!firstPos && secondPos));
-            }
+            int frequency = CharMatcher.is(letter).countIn(password);
+            return (frequency >= min && frequency <= max);
         }
+
+        boolean validPasswordNewPolicy() {
+            boolean firstPos = (password.charAt(min - 1) == letter);
+            boolean secondPos = (password.charAt(max - 1) == letter);
+            return ((firstPos && !secondPos) || (!firstPos && secondPos));
+        }
+    }
 }

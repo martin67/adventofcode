@@ -1,16 +1,14 @@
 package aoc.aoc2020;
 
-import lombok.AllArgsConstructor;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Day17ConwayCubes {
-    private Set<Position3D> space3D = new HashSet<>();
-    private Set<Position4D> space4D = new HashSet<>();
+    Set<Position3D> space3D = new HashSet<>();
+    Set<Position4D> space4D = new HashSet<>();
 
-    public Day17ConwayCubes(List<String> inputLines) {
+    Day17ConwayCubes(List<String> inputLines) {
         int y = 0;
         for (String line : inputLines) {
             int x = 0;
@@ -25,18 +23,17 @@ public class Day17ConwayCubes {
         }
     }
 
-    public int problem1() {
+    int problem1() {
         for (int cycle = 0; cycle < 6; cycle++) {
-
             Set<Position3D> nextSpace = new HashSet<>();
             Set<Position3D> spaceToCheck = new HashSet<>();
 
-            for (Position3D position : space3D) {
+            for (var position : space3D) {
                 spaceToCheck.addAll(position.allAdjacent());
             }
 
-            for (Position3D position : spaceToCheck) {
-                Set<Position3D> neighbours = position.allAdjacent();
+            for (var position : spaceToCheck) {
+                var neighbours = position.allAdjacent();
                 long activeNeighbours = neighbours.stream().filter(p -> space3D.contains(p)).count();
                 if (space3D.contains(position)) {
                     if (activeNeighbours == 2 || activeNeighbours == 3) {
@@ -48,24 +45,22 @@ public class Day17ConwayCubes {
                     }
                 }
             }
-
             space3D = nextSpace;
         }
         return space3D.size();
     }
 
-    public int problem2() {
+    int problem2() {
         for (int cycle = 0; cycle < 6; cycle++) {
-
             Set<Position4D> nextSpace = new HashSet<>();
             Set<Position4D> spaceToCheck = new HashSet<>();
 
-            for (Position4D position : space4D) {
+            for (var position : space4D) {
                 spaceToCheck.addAll(position.allAdjacent());
             }
 
-            for (Position4D position : spaceToCheck) {
-                Set<Position4D> neighbours = position.allAdjacent();
+            for (var position : spaceToCheck) {
+                var neighbours = position.allAdjacent();
                 long activeNeighbours = neighbours.stream().filter(p -> space4D.contains(p)).count();
                 if (space4D.contains(position)) {
                     if (activeNeighbours == 2 || activeNeighbours == 3) {
@@ -77,18 +72,13 @@ public class Day17ConwayCubes {
                     }
                 }
             }
-
             space4D = nextSpace;
         }
         return space4D.size();
     }
 
-    @AllArgsConstructor
-    static class Position3D {
-        int x;
-        int y;
-        int z;
 
+    record Position3D(int x, int y, int z) {
         Set<Position3D> allAdjacent() {
             Set<Position3D> adjacent = new HashSet<>();
 
@@ -105,14 +95,7 @@ public class Day17ConwayCubes {
         }
     }
 
-
-    @AllArgsConstructor
-    static class Position4D {
-        int x;
-        int y;
-        int z;
-        int w;
-
+    record Position4D(int x, int y, int z, int w) {
         Set<Position4D> allAdjacent() {
             Set<Position4D> adjacent = new HashSet<>();
 
