@@ -56,68 +56,127 @@ public class Day10PipeMaze {
 
     int problem1() {
         log.info("Loop length: {}", loop.size());
-        log.info("Inside: {}", getInsideLoop(new HashSet<>(loop)));
         return loop.size() / 2;
     }
 
     int problem2() {
         Set<Position> inside = new HashSet<>();
 
-        // replace S with its real value
-        // Start in the upper left corner
-        // check include mode
-        // go right, set include mode on
-        // if the next is not in the loop, add it if include mode is on
-        // if the next is anything other than -, toggle mode
-        // stop when outside
-        // go one row down
+        // Replace the S with a real value
+        var start = loop.getFirst();
+        char c = getStartChar(loop);
+        map.put(start, c);
 
-        return 0;
-    }
+        // go clockwise
+        Position previousPosition = loop.getLast();
 
-    Optional<Set<Position>> getLoop(Position position) {
-        if (!map.containsKey(position)) {
-            return Optional.empty();
-        }
-        return Optional.empty();
-    }
-
-    Set<Position> getInsideLoop(Set<Position> loop) {
-        Position.printMap(loop);
-        Set<Position> inside = new HashSet<>();
-        var upperLeft = Position.upperLeft(loop);
-        var lowerRight = Position.lowerRight(loop);
-        boolean isInside;
-        log.info("ul: {}, lr: {}", upperLeft, lowerRight);
-        for (int y = upperLeft.getY(); y < lowerRight.getY() + 1; y++) {
-            isInside = false;
-            for (int x = upperLeft.getX(); x < lowerRight.getX() + 1; x++) {
-                var position = new Position(x, y);
-                log.info("Pos: {}, value: {}, inside: {}", position, map.get(position), isInside);
-                if (loop.contains(position)) {
-                    if (isInside) {
-                        isInside = switch (map.get(position)) {
-                            case '|' -> false;
-                            case '7', 'J' -> false;
-                            default -> true;
-                        };
+        for (var position : loop) {
+            switch (map.get(position)) {
+                case '|' -> {
+                    if (previousPosition.directionTo(position, false) == Direction.North) {
+                        if (!loop.contains(position.adjacent(Direction.East))) {
+                            inside.add(position.adjacent(Direction.East));
+                        }
                     } else {
-                        isInside = switch (map.get(position)) {
-                            case '|' -> true;
-                            case 'F', 'L' -> true;
-                            default -> false;
-                        };
-                    }
-                    log.info("next inside: {}", isInside);
-                } else {
-                    log.info("pos not on edge: {}", position);
-                    if (isInside) {
-                        inside.add(position);
+                        if (!loop.contains(position.adjacent(Direction.West))) {
+                            inside.add(position.adjacent(Direction.West));
+                        }
                     }
                 }
+                case '-' -> {
+                    if (previousPosition.directionTo(position, false) == Direction.East) {
+                        if (!loop.contains(position.adjacent(Direction.South))) {
+                            inside.add(position.adjacent(Direction.South));
+                        }
+                    } else {
+                        if (!loop.contains(position.adjacent(Direction.North))) {
+                            inside.add(position.adjacent(Direction.North));
+                        }
+                    }
+                }
+                case '7' -> {
+                    if (previousPosition.directionTo(position, false) == Direction.East) {
+                        if (!loop.contains(position.adjacent(Direction.SouthWest))) {
+                            inside.add(position.adjacent(Direction.SouthWest));
+                        }
+                    } else {
+                        if (!loop.contains(position.adjacent(Direction.North))) {
+                            inside.add(position.adjacent(Direction.North));
+                        }
+                        if (!loop.contains(position.adjacent(Direction.NorthEast))) {
+                            inside.add(position.adjacent(Direction.NorthEast));
+                        }
+                        if (!loop.contains(position.adjacent(Direction.East))) {
+                            inside.add(position.adjacent(Direction.East));
+                        }
+                    }
+                }
+                case 'J' -> {
+                    if (previousPosition.directionTo(position, false) == Direction.South) {
+                        if (!loop.contains(position.adjacent(Direction.NorthWest))) {
+                            inside.add(position.adjacent(Direction.NorthWest));
+                        }
+                    } else {
+                        if (!loop.contains(position.adjacent(Direction.South))) {
+                            inside.add(position.adjacent(Direction.South));
+                        }
+                        if (!loop.contains(position.adjacent(Direction.SouthEast))) {
+                            inside.add(position.adjacent(Direction.SouthEast));
+                        }
+                        if (!loop.contains(position.adjacent(Direction.East))) {
+                            inside.add(position.adjacent(Direction.East));
+                        }
+                    }
+                }
+                case 'L' -> {
+                    if (previousPosition.directionTo(position, false) == Direction.West) {
+                        if (!loop.contains(position.adjacent(Direction.NorthEast))) {
+                            inside.add(position.adjacent(Direction.NorthEast));
+                        }
+                    } else {
+                        if (!loop.contains(position.adjacent(Direction.West))) {
+                            inside.add(position.adjacent(Direction.West));
+                        }
+                        if (!loop.contains(position.adjacent(Direction.SouthWest))) {
+                            inside.add(position.adjacent(Direction.SouthWest));
+                        }
+                        if (!loop.contains(position.adjacent(Direction.South))) {
+                            inside.add(position.adjacent(Direction.South));
+                        }
+                    }
+                }
+                case 'F' -> {
+                    if (previousPosition.directionTo(position, false) == Direction.North) {
+                        if (!loop.contains(position.adjacent(Direction.SouthEast))) {
+                            inside.add(position.adjacent(Direction.SouthEast));
+                        }
+                    } else {
+                        if (!loop.contains(position.adjacent(Direction.West))) {
+                            inside.add(position.adjacent(Direction.West));
+                        }
+                        if (!loop.contains(position.adjacent(Direction.NorthWest))) {
+                            inside.add(position.adjacent(Direction.NorthWest));
+                        }
+                        if (!loop.contains(position.adjacent(Direction.North))) {
+                            inside.add(position.adjacent(Direction.North));
+                        }
+                    }
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + map.get(position));
+            }
+            previousPosition = position;
+        }
+
+        // There might be more inside positions
+        Set<Position> allInside = new HashSet<>();
+        for (Position p : inside) {
+            if (!allInside.contains(p)) {
+                Set<Position> positionsToCheck = getConnectedPositions(new HashSet<>(), p);
+                allInside.addAll(positionsToCheck);
             }
         }
-        return inside;
+
+        return allInside.size();
     }
 
     Set<Position> getConnected(Position position, char pipe) {
@@ -138,19 +197,49 @@ public class Day10PipeMaze {
         };
     }
 
-    Set<Position> expand(Position position) {
+    char getStartChar(List<Position> positionList) {
+        Position start = positionList.getFirst();
+        Position next = positionList.get(1);
+        Position previous = positionList.getLast();
+
+        return switch (start.directionTo(next, false)) {
+            case North -> switch (start.directionTo(previous, false)) {
+                case South -> '|';
+                case East -> 'L';
+                case West -> 'J';
+                default -> throw new IllegalStateException("Unexpected value: " + start.directionTo(previous, false));
+            };
+            case East -> switch (start.directionTo(previous, false)) {
+                case South -> 'F';
+                case West -> '-';
+                case North -> 'L';
+                default -> throw new IllegalStateException("Unexpected value: " + start.directionTo(previous, false));
+            };
+            case South -> switch (start.directionTo(previous, false)) {
+                case West -> '7';
+                case North -> '|';
+                case East -> 'F';
+                default -> throw new IllegalStateException("Unexpected value: " + start.directionTo(previous, false));
+            };
+            case West -> switch (start.directionTo(previous, false)) {
+                case North -> 'J';
+                case East -> '-';
+                case South -> '7';
+                default -> throw new IllegalStateException("Unexpected value: " + start.directionTo(previous, false));
+            };
+            default -> throw new IllegalStateException("Unexpected value: " + start.directionTo(next, false));
+        };
+    }
+
+    Set<Position> getConnectedPositions(Set<Position> alreadyVisited, Position position) {
         Set<Position> result = new HashSet<>();
-        for (var p : position.allAdjacent()) {
-            if (!loop.contains(p)) {
-                result.addAll(expand(p));
+        alreadyVisited.add(position);
+        result.add(position);
+        for (Position p : position.allAdjacent()) {
+            if (!alreadyVisited.contains(p) && !loop.contains(p)) {
+                result.addAll(getConnectedPositions(alreadyVisited, p));
             }
         }
         return result;
     }
-
-//    Set<Position> getInsidePositions(Position position) {
-//        return switch (map.get(position) {
-//            case '|' -> Set.of(new Position(position.adjacent(Direction.East)))
-//        }
-//    }
 }

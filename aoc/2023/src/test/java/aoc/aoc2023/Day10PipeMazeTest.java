@@ -27,7 +27,7 @@ class Day10PipeMazeTest {
             "4, day10-demo4.txt",
             "8, day10-demo5.txt",
             "10, day10-demo6.txt",
-            "0, day10.txt"})
+            "453, day10.txt"})
     void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
         assertThat(new Day10PipeMaze(inputLines).problem2()).isEqualTo(expected);
