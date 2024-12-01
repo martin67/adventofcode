@@ -13,3 +13,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 * [2021](https://github.com/martin67/adventofcode/tree/master/aoc/2021/src) - ongoing
 * [2022](https://github.com/martin67/adventofcode/tree/master/aoc/2022/src) - ongoing
 * [2023](https://github.com/martin67/adventofcode/tree/master/aoc/2023/src) - ongoing
+* [2024](https://github.com/martin67/adventofcode/tree/master/aoc/2024/src) - ongoing
