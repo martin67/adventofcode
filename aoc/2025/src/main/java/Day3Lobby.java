@@ -30,26 +30,33 @@ public class Day3Lobby {
 
         int maxJoltage() {
             // find largest that is not at the end
-            int largest = batteries.substring(0, batteries.length() - 1)
-                    .chars()
-                    .map(Character::getNumericValue)
-                    .max()
-                    .orElseThrow(IllegalStateException::new);
+            int largest = largestBattery(0, batteries.length() - 1);
 
             // Second largest, start from largest
             int start = batteries.indexOf(Character.forDigit(largest, 10));
-            int secondLargest = batteries.substring(start + 1)
-                    .chars()
-                    .map(Character::getNumericValue)
-                    .max()
-                    .orElseThrow(IllegalStateException::new);
-
+            int secondLargest = largestBattery(start + 1, batteries.length());
 
             return largest * 10 + secondLargest;
         }
 
         long maxOverrideJoltage() {
-            return 0;
+            int start = 0;
+            var sb = new StringBuilder();
+
+            for (int i = 12; i > 0; i--) {
+                int largest = largestBattery(start, batteries.length() - i + 1);
+                sb.append(Character.forDigit(largest, 10));
+                start = batteries.indexOf(Character.forDigit(largest, 10), start) + 1;
+            }
+            return Long.parseLong(sb.toString());
+        }
+
+        private int largestBattery(int start, int end) {
+            return batteries.substring(start, end)
+                    .chars()
+                    .map(Character::getNumericValue)
+                    .max()
+                    .orElseThrow(IllegalStateException::new);
         }
     }
 }

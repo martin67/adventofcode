@@ -7,22 +7,22 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("2025: Day 3: Lobby")
-class Day3LobbyTest {
+@DisplayName("2025: Day 4: Printing Department")
+class Day4PrintingDepartmentTest {
 
     @ParameterizedTest
-    @CsvSource({"357, day3-demo1.txt",
-            "17766, day3.txt"})
+    @CsvSource({"0, day4-demo1.txt",
+            "0, day4.txt"})
     void problem1(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day3Lobby(inputLines).problem1()).isEqualTo(expected);
+        assertThat(new Day4PrintingDepartment(inputLines).problem1()).isEqualTo(expected);
     }
 
     @ParameterizedTest
-    @CsvSource({"3121910778619, day3-demo1.txt",
-            "176582889354075, day3.txt"})
-    void problem2(long expected, String fileName) throws IOException {
+    @CsvSource({"0, day4-demo1.txt",
+            "0, day4.txt"})
+    void problem2(int expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
-        assertThat(new Day3Lobby(inputLines).problem2()).isEqualTo(expected);
+        assertThat(new Day4PrintingDepartment(inputLines).problem2()).isEqualTo(expected);
     }
 }
