@@ -20,7 +20,7 @@ class Day6TrashCompactorTest {
 
     @ParameterizedTest
     @CsvSource({"3263827, day6-demo1.txt",
-            "0, day6.txt"})
+            "8907730960817, day6.txt"})
     void problem2(long expected, String fileName) throws IOException {
         var inputLines = AocFiles.readAllLines(fileName);
         Assertions.assertThat(new Day6TrashCompactor(inputLines).problem2()).isEqualTo(expected);

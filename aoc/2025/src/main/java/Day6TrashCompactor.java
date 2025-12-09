@@ -1,3 +1,5 @@
+import com.google.common.base.Strings;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,31 +9,63 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class Day6TrashCompactor {
-    List<List<Integer>> rows = new ArrayList<>();
-    List<List<String>> rows2 = new ArrayList<>();
+    List<List<String>> columns = new ArrayList<>();
     List<String> operators = new ArrayList<>();
 
     public Day6TrashCompactor(List<String> inputLines) {
-        for (String line : inputLines) {
-            // odd column
-            // read all spaces and digits. skip one space
-            // even column
+        int start = 0;
+        int pos = 0;
+        var firstLine = inputLines.getFirst();
 
-            String[] s = line.trim().split("\\s+");
-            if (s[0].matches("\\d+")) {
-                List<Integer> nums = new ArrayList<>();
-                for (String numStr : s) {
-                    nums.add(Integer.parseInt(numStr));
+        while (pos < firstLine.length()) {
+            char ch = firstLine.charAt(pos);
+            // continue until we see a space or if it's the end of the line
+            if (pos == firstLine.length() - 1) {
+                // Now we have a column. But we don't know the width of the column. Should be the
+                // longest string in the column.
+                var column = new ArrayList<String>();
+                for (int i = 0; i < inputLines.size() - 1; i++) {
+                    column.add(inputLines.get(i).substring(start));
                 }
-                rows.add(nums);
-            } else if (Pattern.matches("[+\\-*/]", s[0])) {
-                Collections.addAll(operators, s);
+                // get the longest line in the column
+                int longestLineLength = column.stream()
+                        .mapToInt(String::length)
+                        .max()
+                        .orElseThrow();
+                // trim all lines to the longest line length
+                column.replaceAll(string -> Strings.padEnd(string, longestLineLength, ' '));
+                columns.add(column);
+                break;
             }
+
+            if (Character.isWhitespace(ch)) {
+                // Check if all columns below are spaces
+                boolean allBelowAreSpaces = true;
+                for (int i = 1; i < inputLines.size() - 1; i++) {
+                    char belowCh = inputLines.get(i).charAt(pos);
+                    if (!Character.isWhitespace(belowCh)) {
+                        allBelowAreSpaces = false;
+                        break;
+                    }
+                }
+                if (allBelowAreSpaces) {
+                    // Now we have a column
+                    var column = new ArrayList<String>();
+                    for (int i = 0; i < inputLines.size() - 1; i++) {
+                        column.add(inputLines.get(i).substring(start, pos));
+                    }
+                    columns.add(column);
+                    start = pos + 1;
+                }
+            }
+            pos++;
         }
+
+        // Last line is operators
+        Collections.addAll(operators, inputLines.getLast().split("\\s+"));
     }
 
     public long problem1() {
-        int numberOfColumns = operators.size();
         List<Long> results = new ArrayList<>();
 
         // Init results
@@ -43,11 +77,12 @@ class Day6TrashCompactor {
             }
         }
 
-        for (var row : rows) {
-            for (int i = 0; i < numberOfColumns; i++) {
+        for (int i = 0; i < columns.size(); i++) {
+            log.info("Column: {}", columns.get(i));
+            for (String s : columns.get(i)) {
                 switch (operators.get(i)) {
-                    case "+" -> results.set(i, results.get(i) + row.get(i));
-                    case "*" -> results.set(i, results.get(i) * row.get(i));
+                    case "+" -> results.set(i, results.get(i) + Integer.parseInt(s.trim()));
+                    case "*" -> results.set(i, results.get(i) * Integer.parseInt(s.trim()));
                     default -> log.warn("Unknown operator: {}", operators.get(i));
                 }
             }
@@ -57,8 +92,6 @@ class Day6TrashCompactor {
     }
 
     public long problem2() {
-        int numberOfColumns = operators.size();
-        List<List<Integer>> columns = new ArrayList<>();
         List<Long> results = new ArrayList<>();
 
         for (String operator : operators) {
@@ -67,51 +100,30 @@ class Day6TrashCompactor {
                 case "*" -> results.add(1L);
                 default -> log.warn("Unknown operator: {}", operator);
             }
-            columns.add(new ArrayList<>());
-        }
-
-        for (var row : rows) {
-            for (int i = 0; i < numberOfColumns; i++) {
-                columns.get(i).add(row.get(i));
-            }
         }
 
         for (int i = 0; i < columns.size(); i++) {
             var column = columns.get(i);
-            int longestNumber = String.valueOf(column.stream()
-                            .mapToInt(Integer::intValue)
-                            .max()
-                            .orElseThrow())
-                    .length();
-
             List<Integer> newValues = new ArrayList<>();
+
             if (i % 2 == 0) {
-                for (int j = longestNumber - 1; j > -1; j--) {
+                for (int j = 0; j < column.getFirst().length(); j++) {
                     var sb = new StringBuilder();
-                    for (int number : column) {
-                        String numberStr = String.valueOf(number);
-                        //int index = longestNumber - numberStr.length() - j;
-                        int index = j;
-                        if (index < numberStr.length()) {
-                            sb.append(numberStr.charAt(Math.abs(index)));
-                        }
+                    for (var s : column) {
+                        sb.append(s.charAt(j));
                     }
-                    newValues.add(Integer.parseInt(sb.toString()));
+                    newValues.add(Integer.parseInt(sb.toString().trim()));
                 }
             } else {
-                for (int j = 0; j < longestNumber; j++) {
+                for (int j = column.getFirst().length() - 1; j >= 0; j--) {
                     var sb = new StringBuilder();
-                    for (int number : column) {
-                        String numberStr = String.valueOf(number);
-                        if (j < numberStr.length()) {
-                            sb.append(numberStr.charAt(j));
-                        }
+                    for (var s : column) {
+                        sb.append(s.charAt(j));
                     }
-                    newValues.add(Integer.parseInt(sb.toString()));
+                    newValues.add(Integer.parseInt(sb.toString().trim()));
                 }
             }
 
-            log.info("Column {}, values {}", i, newValues);
             for (int value : newValues) {
                 switch (operators.get(i)) {
                     case "+" -> results.set(i, results.get(i) + value);
@@ -119,12 +131,8 @@ class Day6TrashCompactor {
                     default -> log.warn("Unknown operator: {}", operators.get(i));
                 }
             }
-
         }
 
         return results.stream().mapToLong(Long::longValue).sum();
     }
 }
-
-// 8944563019736
-// too high
